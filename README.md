@@ -1,6 +1,6 @@
 # Koalati Application
 
-This is the official repository for the Koalati web application, available at [app.koalati.com]. 
+This is the official repository for the Koalati web application, available at [app.koalati.com](https://app.koalati.com). 
 
 This repository is based on [Kévin Dunglas `symfony-docker`](https://github.com/dunglas/symfony-docker) template.
 
