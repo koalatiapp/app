@@ -1,0 +1,17 @@
+body { font-family: Raleway, sans-serif; font-size: 15px; font-weight: 400; color: var(--color-black); background-color: #eff2ff; background-image: radial-gradient(circle, rgb(255 255 255 / 0.9) 0%, #eff2ff 100%); background-size: 100% 190vh; background-position: center top -75vh; background-repeat: no-repeat; background-attachment: fixed; }
+
+/* Layout */
+/* Layout: header */
+header { width: 270px; height: 100%; padding: 30px; border-right: 1px solid var(--color-gray-light); position: fixed; top: 0; left: 0; }
+header #brand-wrapper { height: 116px; }
+/* Layout: header: navigation */
+header nav { font-weight: 500; }
+header nav li { margin-bottom: 30px; border-radius: 10px; }
+header nav a { display: flex; height: 45px; padding: 0 15px; align-items: center; font-size: 15px; color: var(--color-gray); transition: color .25s ease; }
+header nav a i { display: inline-block; width: 30px; margin-right: 15px; font-size: 20px; text-align: center; }
+header nav a:hover { color: var(--color-black); }
+header nav a:not(:last-child)::after { content: '\f105'; margin-left: auto; font-family: var(--fa-style-family); font-size: 12px; font-weight: 400; }
+header nav li > ul { display: none; }
+header nav li.active { background-color: #F8FAFF; box-shadow: 0 3px 15px 0 rgba(var(--color-shadow), .09); }
+header nav li.active a { color: var(--color-black); }
+header nav li.active > ul { display: block; }

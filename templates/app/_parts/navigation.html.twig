@@ -1,0 +1,69 @@
+{% set currentRoute = app.request.get('_route') %}
+<nav>
+    <ul>
+        <li class="{{ currentRoute in ['dashboard'] ? 'active' : '' }}">
+            <a href="{{ path('dashboard') }}">
+                <i class="far fa-gauge-simple"></i>
+                {% trans %}navigation.dashboard.label{% endtrans %}
+            </a>
+        </li>
+        <li class="{{ currentRoute in ['project'] ? 'active' : '' }}">
+            <a href="{{ path('dashboard') }}">
+                <i class="far fa-laptop-mobile"></i>
+                {% trans %}navigation.project.label{% endtrans %}
+            </a>
+            <ul>
+                <li>
+                    <a href="#">
+                        {% trans %}navigation.project.sublink.overview{% endtrans %}
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        {% trans %}navigation.project.sublink.checklist{% endtrans %}
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        {% trans %}navigation.project.sublink.automated_testing{% endtrans %}
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        {% trans %}navigation.project.sublink.settings{% endtrans %}
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li class="{{ currentRoute in ['resources'] ? 'active' : '' }}">
+            <a href="#">
+                <i class="far fa-toolbox"></i>
+                {% trans %}navigation.resources.label{% endtrans %}
+            </a>
+            <ul>
+            </ul>
+        </li>
+        <li class="{{ currentRoute in ['team'] ? 'active' : '' }}">
+            <a href="#">
+                <i class="far fa-users"></i>
+                {% trans %}navigation.team.label{% endtrans %}
+            </a>
+            <ul>
+            </ul>
+        </li>
+        <li class="{{ currentRoute in ['settings'] ? 'active' : '' }}">
+            <a href="#">
+                <i class="far fa-gear"></i>
+                {% trans %}navigation.settings.label{% endtrans %}
+            </a>
+            <ul>
+            </ul>
+        </li>
+        <li class="{{ currentRoute in ['help'] ? 'active' : '' }}">
+            <a href="#">
+                <i class="far fa-circle-question"></i>
+                {% trans %}navigation.help.label{% endtrans %}
+            </a>
+        </li>
+    </ul>
+</nav>
