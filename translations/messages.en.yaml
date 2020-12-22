@@ -1,0 +1,34 @@
+branding:
+    name: Koalati
+
+dashboard:
+    title: Dashboard
+    tabs:
+        overview: Overview
+        projects: Projects
+        inbox: Inbox
+        news: What's new
+
+navigation:
+    dashboard:
+        label: Dashboard
+
+    project:
+        label: Project
+        sublink:
+            overview: Overview
+            checklist: Checklist
+            automated_testing: Automated testing
+            settings: Settings
+
+    resources:
+        label: Resources
+
+    team:
+        label: Team
+
+    settings:
+        label: Settings
+
+    help:
+        label: Help

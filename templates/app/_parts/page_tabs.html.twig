@@ -1,0 +1,38 @@
+{% set hasActiveTab = false %}
+
+{% if page_tabs is defined and page_tabs|length > 0 %}
+    <ul id="page-tabs">
+        {%- for tab in page_tabs -%}
+            {% set isActiveTab = false %}
+
+            {% if tab.id is defined %}
+                {% set page_tab_href = '#' ~ tab.id %}
+            {% elseif tab.route is defined %}
+                {% if tab.route_params is defined %}
+                    {% set page_tab_href = path(tab.route, tab.route_params) %}
+                {% else %}
+                    {% set page_tab_href = path(tab.route) %}
+                {% endif %}
+
+                {% if tab.route == app.request.get('_route') %}
+                    {% set isActiveTab = true %}
+                    {% set hasActiveTab = true %}
+                {% endif %}
+            {% else %}
+                {% set page_tab_href = '#' %}
+            {% endif %}
+
+            <li class="{{ isActiveTab ? 'active' : '' }}">
+                <a href="{{ page_tab_href }}">
+                    {{ tab.label|trans }}
+                </a>
+            </li>
+        {%- endfor -%}
+    </ul>
+{% endif %}
+
+{% if not hasActiveTab %}
+    <script>
+        document.querySelector('#page-tabs li:first-child')?.classList?.add?.('active');
+    </script>
+{% endif %}

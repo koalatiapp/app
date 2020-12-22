@@ -1,0 +1,15 @@
+{% extends 'app_base.html.twig' %}
+
+{% set page_tabs = [
+    { label: 'dashboard.tabs.overview', route: 'dashboard' },
+    { label: 'dashboard.tabs.projects', route: 'projects' },
+    { label: 'dashboard.tabs.inbox', route: 'inbox' },
+    { label: 'dashboard.tabs.news', route: 'koalati_news' },
+] %}
+
+{% block title %}{% trans %}dashboard.title{% endtrans %}{% endblock %}
+
+{% block body %}
+
+
+{% endblock %}

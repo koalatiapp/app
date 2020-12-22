@@ -1,0 +1,10 @@
+:root {
+    /* Layout */
+    --sidebar-width: 270px;
+
+    /* Colors */
+    --color-black: #13204D;
+    --color-gray: #ADB5D0;
+    --color-gray-light: #E7ECFF;
+    --color-shadow: 17, 39, 119;
+}
