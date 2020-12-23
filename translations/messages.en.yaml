@@ -1,14 +1,6 @@
 branding:
     name: Koalati
 
-dashboard:
-    title: Dashboard
-    tabs:
-        overview: Overview
-        projects: Projects
-        inbox: Inbox
-        news: What's new
-
 navigation:
     dashboard:
         label: Dashboard
@@ -32,3 +24,18 @@ navigation:
 
     help:
         label: Help
+
+dashboard:
+    title: Dashboard
+    tabs:
+        overview: Overview
+        projects: Projects
+        inbox: Inbox
+        news: What's new
+    projects:
+        title: Jump back in
+        view_all: View all projects
+    notifications:
+        title: While you were away...
+    news:
+        title: News and updates

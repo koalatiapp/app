@@ -4,13 +4,13 @@
         <li class="{{ currentRoute in ['dashboard', 'projects', 'inbox', 'koalati_news'] ? 'active' : '' }}">
             <a href="{{ path('dashboard') }}">
                 <i class="far fa-gauge-simple"></i>
-                {% trans %}navigation.dashboard.label{% endtrans %}
+                <span>{% trans %}navigation.dashboard.label{% endtrans %}</span>
             </a>
         </li>
         <li class="{{ currentRoute in ['project'] ? 'active' : '' }}">
             <a href="{{ path('dashboard') }}">
                 <i class="far fa-laptop-mobile"></i>
-                {% trans %}navigation.project.label{% endtrans %}
+                <span>{% trans %}navigation.project.label{% endtrans %}</span>
             </a>
             <ul>
                 <li>
@@ -38,7 +38,7 @@
         <li class="{{ currentRoute in ['resources'] ? 'active' : '' }}">
             <a href="#">
                 <i class="far fa-toolbox"></i>
-                {% trans %}navigation.resources.label{% endtrans %}
+                <span>{% trans %}navigation.resources.label{% endtrans %}</span>
             </a>
             <ul>
             </ul>
@@ -46,7 +46,7 @@
         <li class="{{ currentRoute in ['team'] ? 'active' : '' }}">
             <a href="#">
                 <i class="far fa-users"></i>
-                {% trans %}navigation.team.label{% endtrans %}
+                <span>{% trans %}navigation.team.label{% endtrans %}</span>
             </a>
             <ul>
             </ul>
@@ -54,7 +54,7 @@
         <li class="{{ currentRoute in ['settings'] ? 'active' : '' }}">
             <a href="#">
                 <i class="far fa-gear"></i>
-                {% trans %}navigation.settings.label{% endtrans %}
+                <span>{% trans %}navigation.settings.label{% endtrans %}</span>
             </a>
             <ul>
             </ul>
@@ -62,7 +62,7 @@
         <li class="{{ currentRoute in ['help'] ? 'active' : '' }}">
             <a href="#">
                 <i class="far fa-circle-question"></i>
-                {% trans %}navigation.help.label{% endtrans %}
+                <span>{% trans %}navigation.help.label{% endtrans %}</span>
             </a>
         </li>
     </ul>

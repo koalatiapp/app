@@ -1,0 +1,4 @@
+.grid { display: grid; grid-gap: var(--grid-gap); grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin: 20px auto; }
+.grid.small-fill { grid-template-columns: var(--grid-small-width) auto; }
+.grid.fill-small { grid-template-columns: auto var(--grid-small-width); }
+.grid.small-small-fill { grid-template-columns: repeat(2, var(--grid-small-width)) auto; }

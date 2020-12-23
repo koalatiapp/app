@@ -1,0 +1,23 @@
+/* Card */
+.card { width: 100%; padding: 30px; background-color: var(--card-bg-color); border-radius: 13px; box-shadow: 0 3px 15px 0 rgba(var(--shadow-rgb), 0.05); }
+
+/* Title */
+.card > h2:first-child { margin-bottom: 30px; }
+.card > h3:first-child { margin-bottom: 15px; }
+
+/* Paragraph spacing */
+.card > p:first-child { margin-top: 0; }
+.card > p:last-child { margin-bottom: 0; }
+
+/* Colors */
+/* Color: secondary */
+.card.secondary { background-color: var(--card-secondary-bg-color); }
+.card.secondary > h2:first-child,
+.card.secondary > h3:first-child { color: var(--card-secondary-title-color); }
+/* Color: blue */
+.card.blue { color: var(--color-white); background-color: var(--color-blue); }
+.card.blue > h2:first-child,
+.card.blue > h3:first-child { color: var(--color-white); }
+
+/* Centered content */
+.card.centered { --button-bg-color: var(--color-blue-faded); --button-bg-color-hover: var(--color-blue-dark-faded); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }

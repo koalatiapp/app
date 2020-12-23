@@ -6,7 +6,10 @@
 
         <link rel="stylesheet" href="{{ asset('css/reset.css') }}">
         <link rel="stylesheet" href="{{ asset('css/variables.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/grid.css') }}">
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/component/card.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/component/button.css') }}">
         <link rel="stylesheet" href="{{ asset('ext/fontawesome/css/all.min.css')}}">
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -22,9 +25,17 @@
 
         <div id="top-bar">
             {% include 'app/_parts/page_tabs.html.twig' %}
+            {% include 'app/_parts/global_actions.html.twig' %}
         </div>
 
-        {% block body %}{% endblock %}
+        <div id="page-wrapper">
+            <h1>{{ block('title') }}</h1>
+
+            <div id="page-content">
+                {% block body %}{% endblock %}
+            </div>
+        </div>
+
         {% block javascripts %}{% endblock %}
     </body>
 </html>
