@@ -1,8 +1,8 @@
-if git rev-parse --verify HEAD >/dev/null 2>&1
+if [ -z "$GITHUB_SHA" ]
 then
 	against=HEAD~..HEAD
 else
-	against=$(git hash-object -t tree /dev/null)
+	against="$GITHUB_SHA"
 fi
 
 IFS='
