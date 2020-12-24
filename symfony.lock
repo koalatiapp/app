@@ -41,6 +41,15 @@
     "php-cs-fixer/diff": {
         "version": "v1.3.1"
     },
+    "phpstan/extension-installer": {
+        "version": "1.1.0"
+    },
+    "phpstan/phpstan": {
+        "version": "0.12.64"
+    },
+    "phpstan/phpstan-symfony": {
+        "version": "0.12.12"
+    },
     "psr/cache": {
         "version": "1.0.1"
     },
