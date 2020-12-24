@@ -26,7 +26,7 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
             - name: Install JS dependencies (npm install)
-              run: npm i --ignore-scripts
+              run: npm i --ignore-scripts --production=false
             - name: PHP CS Fixer
               run: DEV/ci/php-cs-fixer.sh
             - name: PHP Stan
