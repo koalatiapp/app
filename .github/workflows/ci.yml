@@ -9,6 +9,8 @@ jobs:
         name: Coding standards
         runs-on: ubuntu-latest
         steps:
+            - name: Checkout
+              uses: actions/checkout@v2
             - name: PHP CS Fixer
               run: DEV/ci/php-cs-fixer.sh
             - name: PHP Stan
