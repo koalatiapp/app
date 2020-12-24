@@ -5,6 +5,15 @@ on:
     pull_request:
 
 jobs:
+    coding-standards:
+        name: Coding standards
+        runs-on: ubuntu-latest
+        steps:
+            - name: PHP CS Fixer
+              run: DEV/ci/php-cs-fixer.sh
+            - name: PHP Stan
+              run: DEV/ci/phpstan.sh
+
     build:
         name: Docker build
         runs-on: ubuntu-latest
@@ -31,12 +40,3 @@ jobs:
               run: curl http://localhost
             - name: Check HTTPS reachability
               run: curl -k https://localhost
-
-    coding-standards:
-        name: Coding standards
-        runs-on: unbuntu-latest
-        steps:
-            - name: PHP CS Fixer
-              run: DEV/ci/php-cs-fixer.sh
-            - name: PHP Stan
-              run: DEV/ci/phpstan.sh
