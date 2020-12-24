@@ -8,6 +8,9 @@ jobs:
     coding-standards:
         name: Coding standards
         runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                node-version: [12.x]
         steps:
             - name: Checkout
               uses: actions/checkout@v2
@@ -16,8 +19,14 @@ jobs:
               with:
                   path: /tmp/composer-cache
                   key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
-            - name: Install dependencies
+            - name: Install PHP dependencies (composer install)
               uses: php-actions/composer@v5
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v1
+              with:
+                  node-version: ${{ matrix.node-version }}
+            - name: Install JS dependencies (npm install)
+              run: npm i --ignore-scripts
             - name: PHP CS Fixer
               run: DEV/ci/php-cs-fixer.sh
             - name: PHP Stan
