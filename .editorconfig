@@ -14,3 +14,6 @@ trim_trailing_whitespace = false
 
 [*.{yml,yaml,php,html,twig,js,css}]
 indent_size = 4
+
+[*.{yml,yaml}]
+indent_style = space
