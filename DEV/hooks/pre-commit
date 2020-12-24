@@ -1,10 +1,14 @@
 #!/bin/sh
 BASEDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../.."
 
-# PHPCS-fixer
+# PHP-CS-fixer
 echo "Running PHP-CS-fixer..."
 ${BASEDIR}/DEV/ci/php-cs-fixer.sh
 
-# PHPCS-fixer
+# PHPStan
 echo "Running PHPStan..."
 ${BASEDIR}/DEV/ci/phpstan.sh
+
+# PHPMD
+echo "Running PHPMD..."
+${BASEDIR}/DEV/ci/phpmd.sh

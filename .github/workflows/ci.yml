@@ -22,6 +22,8 @@ jobs:
               run: DEV/ci/php-cs-fixer.sh
             - name: PHP Stan
               run: DEV/ci/phpstan.sh
+            - name: PHP MD
+              run: DEV/ci/phpmd.sh
 
     build:
         name: Docker build
