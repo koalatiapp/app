@@ -34,7 +34,7 @@ jobs:
 
     coding-standards:
         name: Coding standards
-        runs-on: unbuntu latest
+        runs-on: unbuntu-latest
         steps:
             - name: PHP CS Fixer
               run: DEV/ci/php-cs-fixer
