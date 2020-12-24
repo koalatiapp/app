@@ -2,8 +2,8 @@
 BASEDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../.."
 
 # Define CI scripts to run
-CI_SCRIPTS=("php-cs-fixer.sh" "phpstan.sh" "phpmd.sh" "stylelint.sh")
-CI_SCRIPT_NAMES=("PHP-CS-Fixer" "PHPStan" "PHPMD" "CSS stylelint")
+CI_SCRIPTS=("php-cs-fixer.sh" "phpstan.sh" "phpmd.sh" "stylelint.sh" "eslint.sh")
+CI_SCRIPT_NAMES=("PHP-CS-Fixer" "PHPStan" "PHPMD" "CSS stylelint" "ESLint")
 scriptCount=${#CI_SCRIPTS[@]}
 
 # Utility functions
@@ -41,13 +41,12 @@ for ((i=0; i < ${scriptCount}; i++)); do
 	label=${CI_SCRIPT_NAMES[$i]}
 
 	verbose "Running ${label}..." "info"
-	output=$(${BASEDIR}/DEV/ci/${filename} 2>/dev/null \
-		-1)
+	output=$(${BASEDIR}/DEV/ci/${filename} 2>&1)
 
 	if [ $? -ne 0 ]; then
-			echo " ❌\n"
+			printf " ❌\n"
 			verbose "Failed CI test ${label} (DEV/ci/${filename}). View output below." "error" 1
-			echo $output
+			printf "$output"
 			exit 1
 	else
 		echo " ✅"

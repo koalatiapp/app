@@ -35,6 +35,8 @@ jobs:
               run: DEV/ci/phpmd.sh
             - name: CSS stylelint
               run: DEV/ci/stylelint.sh
+            - name: ESLint (JS)
+              run: DEV/ci/eslint.sh
 
     build:
         name: Docker build

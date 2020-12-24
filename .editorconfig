@@ -12,7 +12,7 @@ indent_style = tab
 [*.md]
 trim_trailing_whitespace = false
 
-[*.{yml,yaml,php,html,twig,js,css}]
+[*.{yml,yaml,php,html,twig,js,css,json}]
 indent_size = 4
 
 [*.{yml,yaml}]
