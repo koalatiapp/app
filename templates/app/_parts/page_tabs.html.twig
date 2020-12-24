@@ -1,9 +1,9 @@
-{% set hasActiveTab = false %}
+{% set has_active_tab = false %}
 
 {% if page_tabs is defined and page_tabs|length > 0 %}
     <ul id="page-tabs">
         {%- for tab in page_tabs -%}
-            {% set isActiveTab = false %}
+            {% set is_active_tab = false %}
 
             {% if tab.id is defined %}
                 {% set page_tab_href = '#' ~ tab.id %}
@@ -15,14 +15,14 @@
                 {% endif %}
 
                 {% if tab.route == app.request.get('_route') %}
-                    {% set isActiveTab = true %}
-                    {% set hasActiveTab = true %}
+                    {% set is_active_tab = true %}
+                    {% set has_active_tab = true %}
                 {% endif %}
             {% else %}
                 {% set page_tab_href = '#' %}
             {% endif %}
 
-            <li class="{{ isActiveTab ? 'active' : '' }}">
+            <li class="{{ is_active_tab ? 'active' : '' }}">
                 <a href="{{ page_tab_href }}">
                     {{ tab.label|trans }}
                 </a>
@@ -31,7 +31,7 @@
     </ul>
 {% endif %}
 
-{% if not hasActiveTab %}
+{% if not has_active_tab %}
     <script>
         document.querySelector('#page-tabs li:first-child')?.classList?.add?.('active');
     </script>

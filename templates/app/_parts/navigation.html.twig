@@ -1,13 +1,13 @@
-{% set currentRoute = app.request.get('_route') %}
+{% set current_route = app.request.get('_route') %}
 <nav>
     <ul>
-        <li class="{{ currentRoute in ['dashboard', 'projects', 'inbox', 'koalati_news'] ? 'active' : '' }}">
+        <li class="{{ current_route in ['dashboard', 'projects', 'inbox', 'koalati_news'] ? 'active' : '' }}">
             <a href="{{ path('dashboard') }}">
                 <i class="far fa-gauge-simple"></i>
                 <span>{% trans %}navigation.dashboard.label{% endtrans %}</span>
             </a>
         </li>
-        <li class="{{ currentRoute in ['project'] ? 'active' : '' }}">
+        <li class="{{ current_route in ['project'] ? 'active' : '' }}">
             <a href="{{ path('dashboard') }}">
                 <i class="far fa-laptop-mobile"></i>
                 <span>{% trans %}navigation.project.label{% endtrans %}</span>
@@ -35,7 +35,7 @@
                 </li>
             </ul>
         </li>
-        <li class="{{ currentRoute in ['resources'] ? 'active' : '' }}">
+        <li class="{{ current_route in ['resources'] ? 'active' : '' }}">
             <a href="#">
                 <i class="far fa-toolbox"></i>
                 <span>{% trans %}navigation.resources.label{% endtrans %}</span>
@@ -43,7 +43,7 @@
             <ul>
             </ul>
         </li>
-        <li class="{{ currentRoute in ['team'] ? 'active' : '' }}">
+        <li class="{{ current_route in ['team'] ? 'active' : '' }}">
             <a href="#">
                 <i class="far fa-users"></i>
                 <span>{% trans %}navigation.team.label{% endtrans %}</span>
@@ -51,7 +51,7 @@
             <ul>
             </ul>
         </li>
-        <li class="{{ currentRoute in ['settings'] ? 'active' : '' }}">
+        <li class="{{ current_route in ['settings'] ? 'active' : '' }}">
             <a href="#">
                 <i class="far fa-gear"></i>
                 <span>{% trans %}navigation.settings.label{% endtrans %}</span>
@@ -59,7 +59,7 @@
             <ul>
             </ul>
         </li>
-        <li class="{{ currentRoute in ['help'] ? 'active' : '' }}">
+        <li class="{{ current_route in ['help'] ? 'active' : '' }}">
             <a href="#">
                 <i class="far fa-circle-question"></i>
                 <span>{% trans %}navigation.help.label{% endtrans %}</span>
