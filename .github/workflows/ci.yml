@@ -31,3 +31,10 @@ jobs:
               run: curl http://localhost
             - name: Check HTTPS reachability
               run: curl -k https://localhost
+
+    coding-standards:
+        name: Coding standards
+        runs-on: unbuntu latest
+        steps:
+            - name: PHP CS Fixer
+              run: DEV/ci/php-cs-fixer

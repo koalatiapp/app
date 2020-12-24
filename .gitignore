@@ -8,6 +8,13 @@
 /vendor/
 ###< symfony/framework-bundle ###
 
+# Linting / CI
+.php_cs.cache
 
 # OS specifics
 .DS_STORE
+
+###> friendsofphp/php-cs-fixer ###
+/.php_cs
+/.php_cs.cache
+###< friendsofphp/php-cs-fixer ###

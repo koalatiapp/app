@@ -14,7 +14,6 @@ class DashboardController extends AbstractController
     public function overview(): Response
     {
         return $this->render('app/dashboard/index.html.twig', [
-
         ]);
     }
 
@@ -24,7 +23,6 @@ class DashboardController extends AbstractController
     public function projects(): Response
     {
         return $this->render('app/dashboard/index.html.twig', [
-
         ]);
     }
 
@@ -34,7 +32,6 @@ class DashboardController extends AbstractController
     public function inbox(): Response
     {
         return $this->render('app/dashboard/index.html.twig', [
-
         ]);
     }
 
@@ -44,7 +41,6 @@ class DashboardController extends AbstractController
     public function whatsNew(): Response
     {
         return $this->render('app/dashboard/index.html.twig', [
-
         ]);
     }
 }

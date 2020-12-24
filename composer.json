@@ -19,6 +19,7 @@
     "symfony/yaml": "5.2.*"
   },
   "require-dev": {
+    "friendsofphp/php-cs-fixer": "^2.17",
     "symfony/maker-bundle": "^1.26",
     "symfony/stopwatch": "^5.2",
     "symfony/web-profiler-bundle": "^5.2"
