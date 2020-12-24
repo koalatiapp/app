@@ -1,45 +1,46 @@
+/* stylelint-disable block-opening-brace-newline-after, block-closing-brace-newline-before, declaration-block-semicolon-newline-after */
 :root {
-    /* Layout */
-    --sidebar-width: 270px;
+	/* Layout */
+	--sidebar-width: 270px;
 
-    /* Colors */
-    --color-white: #fff;
-    --color-black: #13204D;
-    --color-gray: #ADB5D0;
-    --color-gray-light: #E7ECFF;
-    --color-gray-dark: #3b497b;
-    --color-blue: #2751E6;
-    --color-blue-faded: #5074F2;
-    --color-blue-dark-faded: #415BB5;
-    --color-red: #e23b3b;
-    --color-red-faded: #ea6666;
-    --color-orange: #e2803b;
-    --color-orange-faded: #f19e65;
+	/* Colors */
+	--color-white: #fff;
+	--color-black: #13204D;
+	--color-gray: #ADB5D0;
+	--color-gray-light: #E7ECFF;
+	--color-gray-dark: #3b497b;
+	--color-blue: #2751E6;
+	--color-blue-faded: #5074F2;
+	--color-blue-dark-faded: #415BB5;
+	--color-red: #e23b3b;
+	--color-red-faded: #ea6666;
+	--color-orange: #e2803b;
+	--color-orange-faded: #f19e65;
 
-    /* Shadows */
-    --shadow-rgb: 17, 39, 119;
+	/* Shadows */
+	--shadow-rgb: 17, 39, 119;
 
-    /* Grid */
-    --grid-gap: 30px;
-    --grid-small-width: minmax(200px, max(390px, 35%));
+	/* Grid */
+	--grid-gap: 30px;
+	--grid-small-width: minmax(200px, max(390px, 35%));
 
-    /* Cards */
-    --card-bg-color: var(--color-white);
-    --card-secondary-bg-color: #fbfbff;
-    --card-secondary-title-color: var(--color-blue-dark-faded);
+	/* Cards */
+	--card-bg-color: var(--color-white);
+	--card-secondary-bg-color: #fbfbff;
+	--card-secondary-title-color: var(--color-blue-dark-faded);
 
-    /* Buttons */
-    --button-bg-color: var(--color-blue);
-    --button-bg-color-hover: var(--color-blue-faded);
+	/* Buttons */
+	--button-bg-color: var(--color-blue);
+	--button-bg-color-hover: var(--color-blue-faded);
 
-    /* Notifications */
-    --notification-bg-color: #E8F1FF;
-    --notification-icon-color: #667ED4;
-    --notification-text-color: var(--color-black);
-    --notification-warning-bg-color: #fff2e8;
-    --notification-warning-icon-color: #d68259;
-    --notification-warning-text-color: #4d2813;
-    --notification-danger-bg-color: #FFE8E8;
-    --notification-danger-icon-color: #D46666;
-    --notification-danger-text-color: #4D1313;
+	/* Notifications */
+	--notification-bg-color: #E8F1FF;
+	--notification-icon-color: #667ED4;
+	--notification-text-color: var(--color-black);
+	--notification-warning-bg-color: #fff2e8;
+	--notification-warning-icon-color: #d68259;
+	--notification-warning-text-color: #4d2813;
+	--notification-danger-bg-color: #FFE8E8;
+	--notification-danger-icon-color: #D46666;
+	--notification-danger-text-color: #4D1313;
 }

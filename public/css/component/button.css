@@ -1,12 +1,12 @@
 /* Default */
 input[type="button"],
 button,
-.button { display: inline-flex; justify-content: center; align-items: center; padding: 16px 30px; font-size: 15px; font-weight: 700; text-align: center; color: var(--color-white); background-color: var(--button-bg-color); border-radius: 13px; box-shadow: 0 2px 10px 0 rgba(var(--shadow-rgb), 0.15); transition: background .25s ease, box-shadow .25s ease; }
+.button { display: inline-flex; justify-content: center; align-items: center; padding: 16px 30px; font-size: 15px; font-weight: 700; text-align: center; color: var(--color-white); background-color: var(--button-bg-color); border-radius: 13px; box-shadow: 0 2px 10px 0 rgba(var(--shadow-rgb), .15); transition: background .25s ease, box-shadow .25s ease; }
 
 /* Hover */
 input[type="button"]:hover,
 button:hover,
-.button:hover { background-color: var(--button-bg-color-hover); box-shadow: 0 3px 15px 0 rgba(var(--shadow-rgb), 0.25); }
+.button:hover { background-color: var(--button-bg-color-hover); box-shadow: 0 3px 15px 0 rgba(var(--shadow-rgb), .25); }
 
 /* Danger */
 input[type="button"].danger,
@@ -27,5 +27,5 @@ button.gray,
 .button-container.right { justify-content: flex-end; }
 /* Button container: fix for unsupported flexbox gap in Safari */
 @supports not ((gap: 10px) with (display: flex)) {
-    .button-container > * { margin: 0 15px; }
+	.button-container > * { margin: 0 15px; }
 }

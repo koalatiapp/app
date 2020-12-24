@@ -5,13 +5,13 @@
 .notification .message { font-size: 14px; font-weight: 500; }
 
 .notification.warning {
-    --notification-bg-color: var(--notification-warning-bg-color);
-    --notification-icon-color: var(--notification-warning-icon-color);
-    --notification-text-color: var(--notification-warning-text-color);
- }
+	--notification-bg-color: var(--notification-warning-bg-color);
+	--notification-icon-color: var(--notification-warning-icon-color);
+	--notification-text-color: var(--notification-warning-text-color);
+}
 
 .notification.danger {
-    --notification-bg-color: var(--notification-danger-bg-color);
-    --notification-icon-color: var(--notification-danger-icon-color);
-    --notification-text-color: var(--notification-danger-text-color);
- }
+	--notification-bg-color: var(--notification-danger-bg-color);
+	--notification-icon-color: var(--notification-danger-icon-color);
+	--notification-text-color: var(--notification-danger-text-color);
+}

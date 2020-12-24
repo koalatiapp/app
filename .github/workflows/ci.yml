@@ -24,6 +24,8 @@ jobs:
               run: DEV/ci/phpstan.sh
             - name: PHP MD
               run: DEV/ci/phpmd.sh
+            - name: CSS stylelint
+              run: DEV/ci/stylelint.sh
 
     build:
         name: Docker build
