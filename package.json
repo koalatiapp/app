@@ -1,0 +1,16 @@
+{
+  "name": "@koalati/app",
+  "dependencies": {},
+  "devDependencies": {
+    "stylelint": "^13.8.0",
+    "stylelint-config-standard": "^20.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/koalatiapp/app.git"
+  },
+  "bugs": {
+    "url": "https://github.com/koalatiapp/app/issues"
+  },
+  "homepage": "https://github.com/koalatiapp/app#readme"
+}
