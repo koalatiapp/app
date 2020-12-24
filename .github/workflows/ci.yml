@@ -37,4 +37,6 @@ jobs:
         runs-on: unbuntu-latest
         steps:
             - name: PHP CS Fixer
-              run: DEV/ci/php-cs-fixer
+              run: DEV/ci/php-cs-fixer.sh
+            - name: PHP Stan
+              run: DEV/ci/phpstan.sh
