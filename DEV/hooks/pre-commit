@@ -1,14 +1,58 @@
 #!/bin/sh
 BASEDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../.."
 
-# PHP-CS-fixer
-echo "Running PHP-CS-fixer..."
-${BASEDIR}/DEV/ci/php-cs-fixer.sh
+# Define CI scripts to run
+CI_SCRIPTS=("php-cs-fixer.sh" "phpstan.sh" "phpmd.sh")
+CI_SCRIPT_NAMES=("PHP-CS-Fixer" "PHPStan" "PHPMD")
+scriptCount=${#CI_SCRIPTS[@]}
 
-# PHPStan
-echo "Running PHPStan..."
-${BASEDIR}/DEV/ci/phpstan.sh
+# Utility functions
+verbose()
+{
+    msg=${1}
+    type=${2:-""}
+    addTrailingNewline=${3:-0}
 
-# PHPMD
-echo "Running PHPMD..."
-${BASEDIR}/DEV/ci/phpmd.sh
+    if [ "${type}" = "error" ]; then
+			msg="\033[1m\e[41m${msg}\e[0m"
+    elif [ "${type}" = "success" ]; then
+      msg="\033[1m\e[42m${msg}\e[0m"
+    elif [ "${type}" = "info" ]; then
+			msg="\e[44m${msg}\e[0m"
+    fi
+
+		endNewline=""
+		if [ ${addTrailingNewline} -eq 1 ]; then
+			endNewline="\n"
+		fi
+
+    if [ "${type}" = "error" ]; then
+      >&2 printf "${msg}${endNewline}"
+		else
+			printf "${msg}${endNewline}"
+    fi
+}
+
+# Loop through scripts and execute them
+# If no error is thrown, mute all outputs.
+# Otherwise, stop execution and output the error(s).
+for ((i=0; i < ${scriptCount}; i++)); do
+	filename=${CI_SCRIPTS[$i]}
+	label=${CI_SCRIPT_NAMES[$i]}
+
+	verbose "Running ${label}..." "info"
+	output=$(${BASEDIR}/DEV/ci/${filename} 2>/dev/null \
+		-1)
+
+	if [ $? -ne 0 ]; then
+			echo " ❌\n"
+			verbose "Failed CI test ${label} (DEV/ci/${filename}). View output below." "error" 1
+			echo $output
+			exit 1
+	else
+		echo " ✅"
+	fi
+done
+
+# All systems go: tests ran without errors!
+verbose "Tests passed with flying colors: all systems go!\e[0m 🚀" "success" 1
