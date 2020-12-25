@@ -26,6 +26,9 @@
     "doctrine/common": {
         "version": "3.1.0"
     },
+    "doctrine/data-fixtures": {
+        "version": "1.4.4"
+    },
     "doctrine/dbal": {
         "version": "2.12.1"
     },
@@ -42,6 +45,18 @@
             "config/packages/prod/doctrine.yaml",
             "src/Entity/.gitignore",
             "src/Repository/.gitignore"
+        ]
+    },
+    "doctrine/doctrine-fixtures-bundle": {
+        "version": "3.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.0",
+            "ref": "e5b542d4ef47d8a003c91beb35650c76907f7e53"
+        },
+        "files": [
+            "src/DataFixtures/AppFixtures.php"
         ]
     },
     "doctrine/doctrine-migrations-bundle": {
@@ -269,6 +284,12 @@
     "symfony/profiler-pack": {
         "version": "v1.0.5"
     },
+    "symfony/property-access": {
+        "version": "v5.2.1"
+    },
+    "symfony/property-info": {
+        "version": "v5.2.1"
+    },
     "symfony/proxy-manager-bridge": {
         "version": "v5.2.1"
     },
@@ -285,6 +306,30 @@
             "config/packages/routing.yaml",
             "config/routes.yaml"
         ]
+    },
+    "symfony/security-bundle": {
+        "version": "5.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "5.1",
+            "ref": "0a4bae19389d3b9cba1ca0102e3b2bccea724603"
+        },
+        "files": [
+            "config/packages/security.yaml"
+        ]
+    },
+    "symfony/security-core": {
+        "version": "v5.2.1"
+    },
+    "symfony/security-csrf": {
+        "version": "v5.2.1"
+    },
+    "symfony/security-guard": {
+        "version": "v5.2.1"
+    },
+    "symfony/security-http": {
+        "version": "v5.2.1"
     },
     "symfony/service-contracts": {
         "version": "v2.2.0"
