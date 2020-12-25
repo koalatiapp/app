@@ -1,0 +1,5 @@
+/* Field wrappers */
+fieldset { display: flex; padding: 0; margin: 0; border: none; flex-direction: column; }
+fieldset label { font-size: 1rem; font-weight: 600; }
+fieldset input { margin: 5px 0; }
+fieldset + fieldset { margin-top: 15px; }

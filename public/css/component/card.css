@@ -2,6 +2,7 @@
 .card { width: 100%; padding: 30px; background-color: var(--card-bg-color); border-radius: 13px; box-shadow: 0 3px 15px 0 rgba(var(--shadow-rgb), .05); }
 
 /* Title */
+.card > h1:first-child,
 .card > h2:first-child { margin-bottom: 30px; }
 .card > h3:first-child { margin-bottom: 15px; }
 
