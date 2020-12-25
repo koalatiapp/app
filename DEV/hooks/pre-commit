@@ -33,6 +33,9 @@ verbose()
     fi
 }
 
+# Run PHP-CS-Fixer with automatic fixes
+vendor/bin/php-cs-fixer fix --config=.php_cs.dist -q
+
 # Loop through scripts and execute them
 # If no error is thrown, mute all outputs.
 # Otherwise, stop execution and output the error(s).
@@ -46,7 +49,7 @@ for ((i=0; i < ${scriptCount}; i++)); do
 	if [ $? -ne 0 ]; then
 			printf " ❌\n"
 			verbose "Failed CI test ${label} (DEV/ci/${filename}). View output below." "error" 1
-			printf "$output"
+			printf "%s\n" "${output}"
 			exit 1
 	else
 		echo " ✅"
