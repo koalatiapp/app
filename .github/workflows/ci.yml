@@ -64,3 +64,34 @@ jobs:
               run: curl http://localhost
             - name: Check HTTPS reachability
               run: curl -k https://localhost
+
+
+
+    unit-tests:
+        name: Tests
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                node-version: [12.x]
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+            - name: Cache Composer dependencies
+              uses: actions/cache@v2
+                  with:
+                      path: /tmp/composer-cache
+                      key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+            - name: Install PHP dependencies (composer install)
+              uses: php-actions/composer@v5
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v1
+              with:
+                  node-version: ${{ matrix.node-version }}
+            - name: Install JS dependencies (npm install)
+              run: npm i --ignore-scripts --production=false
+            - name: PHPUnit tests
+              uses: php-actions/phpunit@v2
+              with:
+                  configuration: phpunit.xml.dist
+                  php_version: 8.0
+                  php_extensions: ctype iconv json pcre session simplexml tokenizer

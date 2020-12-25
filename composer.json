@@ -32,6 +32,7 @@
     "phpstan/phpstan": "^0.12.64",
     "phpstan/phpstan-symfony": "^0.12.12",
     "symfony/maker-bundle": "^1.26",
+    "symfony/phpunit-bridge": "^5.2",
     "symfony/stopwatch": "^5.2",
     "symfony/web-profiler-bundle": "^5.2"
   },
