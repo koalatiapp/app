@@ -16,9 +16,9 @@
 .card.secondary > h2:first-child,
 .card.secondary > h3:first-child { color: var(--card-secondary-title-color); }
 /* Color: blue */
-.card.blue { color: var(--color-white); background-color: var(--color-blue); }
+.card.blue { color: var(--color-white); background-color: var(--color-blue); --button-bg-color: var(--color-blue-faded); --button-bg-color-hover: var(--color-blue-light); }
 .card.blue > h2:first-child,
 .card.blue > h3:first-child { color: var(--color-white); }
 
 /* Centered content */
-.card.centered { --button-bg-color: var(--color-blue-faded); --button-bg-color-hover: var(--color-blue-dark-faded); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+.card.centered { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }

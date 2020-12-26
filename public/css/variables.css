@@ -11,6 +11,7 @@
 	--color-gray-dark: #3b497b;
 	--color-blue: #2751E6;
 	--color-blue-faded: #5074F2;
+	--color-blue-light: #6687ff;
 	--color-blue-dark-faded: #415BB5;
 	--color-red: #e23b3b;
 	--color-red-faded: #ea6666;
@@ -32,6 +33,8 @@
 	/* Buttons */
 	--button-bg-color: var(--color-blue);
 	--button-bg-color-hover: var(--color-blue-faded);
+	--button-text-color: var(--color-white);
+	--button-text-color-hover: var(--color-white);
 
 	/* Notifications */
 	--notification-bg-color: #E8F1FF;
