@@ -10,6 +10,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Project
 {
+	public const STATUS_NEW = 'NEW';
+	public const STATUS_IN_PROGRESS = 'IN_PROGRESS';
+	public const STATUS_COMPLETED = 'COMPLETED';
+
 	/**
 	 * @var int
 	 * @ORM\Id
@@ -42,9 +46,16 @@ class Project
 	 */
 	private $url;
 
+	/**
+	 * @var string
+	 * @ORM\Column(type="string", length=32)
+	 */
+	private $status;
+
 	public function __construct()
 	{
 		$this->dateCreated = new \DateTime();
+		$this->status = self::STATUS_NEW;
 	}
 
 	public function getId(): ?int
@@ -96,6 +107,18 @@ class Project
 	public function setUrl(string $url): self
 	{
 		$this->url = $url;
+
+		return $this;
+	}
+
+	public function getStatus(): string
+	{
+		return $this->status;
+	}
+
+	public function setStatus(string $status): self
+	{
+		$this->status = $status;
 
 		return $this;
 	}
