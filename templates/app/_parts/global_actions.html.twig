@@ -6,7 +6,7 @@
         <i class="far fa-bell"></i>
     </a>
     <div href="#" id="profile-toggle">
-        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNs/Q8AAg8Bhso7688AAAAASUVORK5CYII=">
+        <img src="{{ gravatar(app.user.email) }}">
 		<ul class="floating-dropdown reveal-on-hover text-center">
 			<li><a href="#">{% trans %}global_actions.profile{% endtrans %}</a></li>
 			<li><a href="{{ path('logout') }}">{% trans %}global_actions.logout{% endtrans %}</a></li>

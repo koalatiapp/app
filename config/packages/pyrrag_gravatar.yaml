@@ -1,0 +1,5 @@
+pyrrah_gravatar:
+    rating: g
+    size: 70
+    default: retro
+    secure: true

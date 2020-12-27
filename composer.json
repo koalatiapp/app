@@ -13,6 +13,7 @@
     "doctrine/doctrine-migrations-bundle": "^3.0",
     "doctrine/orm": "^2.8",
     "friendsofsymfony/jsrouting-bundle": "^2.7",
+    "pyrrah/gravatar-bundle": "^1.1",
     "symfony/asset": "5.2.*",
     "symfony/config": "5.2.*",
     "symfony/console": "5.2.*",
