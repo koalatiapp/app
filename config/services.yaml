@@ -29,3 +29,16 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\Storage\AbstractStorage:
+        arguments:
+            - '%env(STORAGE_REGION)%'
+            - '%env(STORAGE_VERSION)%'
+            - '%env(STORAGE_ENDPOINT)%'
+            - '%env(STORAGE_AUTH_KEY)%'
+            - '%env(STORAGE_AUTH_SECRET)%'
+            - '%env(STORAGE_BUCKET)%'
+            - '%env(STORAGE_CDN_URL)%'
+
+    App\Storage\ProjectStorage:
+        parent:  App\Storage\AbstractStorage
