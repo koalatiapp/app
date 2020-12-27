@@ -47,10 +47,11 @@ header nav li.active > ul { display: block; }
 #page-tabs li.active a { color: var(--color-black); border-bottom: 2px solid; }
 /* Layout: top bar: global actions */
 #global-actions { display: flex; align-items: center; }
-#global-actions > a { display: inline-block; padding: 10px 12px; margin-left: 20px; font-size: 20px; color: var(--color-gray); transition: color .25s ease; position: relative; }
-#global-actions > a:hover { color: var(--color-black); }
+#global-actions > * { display: inline-block; padding: 10px 12px; margin-left: 20px; font-size: 20px; color: var(--color-gray); cursor: pointer; transition: color .25s ease; position: relative; }
+#global-actions > *:hover { color: var(--color-black); }
 #global-actions > #profile-toggle { padding: 0; padding-left: 12px; font-size: 0; line-height: 0; }
 #global-actions > #profile-toggle img { width: 34px; height: 34px; object-fit: cover; object-position: center; border-radius: 50%; }
+#global-actions > #profile-toggle ul { font-size: .9rem; line-height: 1.3; color: var(--color-black); top: 100%; right: -5px; }
 
 /* Layout: page wrapper */
 #page-wrapper { margin-top: 40px; }
