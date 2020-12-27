@@ -5,6 +5,7 @@ BASEDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../.."
 CI_SCRIPTS=("php-cs-fixer.sh" "phpstan.sh" "phpmd.sh" "stylelint.sh" "eslint.sh")
 CI_SCRIPT_NAMES=("PHP-CS-Fixer" "PHPStan" "PHPMD" "CSS stylelint" "ESLint")
 scriptCount=${#CI_SCRIPTS[@]}
+addedFiles=$(git diff --diff-filter=d --cached --name-only)
 
 # Utility functions
 verbose()
@@ -35,6 +36,7 @@ verbose()
 
 # Run PHP-CS-Fixer with automatic fixes
 PHP_CS_FIXER_IGNORE_ENV=1 vendor/bin/php-cs-fixer fix --config=.php_cs.dist -q
+git add $addedFiles
 
 # Loop through scripts and execute them
 # If no error is thrown, mute all outputs.
