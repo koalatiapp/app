@@ -20,6 +20,10 @@ button.warning,
 input[type="button"].gray,
 button.gray,
 .button.gray { --button-bg-color: #d9ddea; --button-bg-color-hover: var(--color-gray); color: var(--color-gray-dark); }
+/* Dark */
+input[type="button"].dark,
+button.dark,
+.button.dark { --button-bg-color: var(--color-blue-dark); }
 
 /* Button container */
 .button-container { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 30px; }

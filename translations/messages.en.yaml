@@ -1,3 +1,6 @@
+generic:
+    cancel: Cancel
+
 branding:
     name: Koalati
 
@@ -28,6 +31,11 @@ navigation:
 quick_actions:
     add_team_member: Add a team member
     create_project: Create a project
+
+search:
+    label: Quick search
+    placeholder: Search throughout Koalati
+    empty_state: No results were found.
 
 dashboard:
     title: Dashboard

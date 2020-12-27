@@ -14,11 +14,15 @@
         <link rel="stylesheet" href="{{ asset('css/component/button.css') }}">
         <link rel="stylesheet" href="{{ asset('css/component/notice.css') }}">
         <link rel="stylesheet" href="{{ asset('css/component/notification.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/component/search-overlay.css') }}">
         <link rel="stylesheet" href="{{ asset('ext/fontawesome/css/all.min.css') }}">
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
         {% block head %}{% endblock %}
+
+		<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+		<script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
     </head>
     <body>
         <header>
@@ -41,7 +45,12 @@
             </div>
         </div>
 
+        {% include 'app/_parts/search-overlay.html.twig' %}
+
+		<script src="https://unpkg.com/wretch"></script>
 		<script src="{{ asset('js/base/quick-actions.js') }}"></script>
+		<script src="{{ asset('js/base/search-overlay.js') }}"></script>
+
         {% block javascripts %}{% endblock %}
     </body>
 </html>
