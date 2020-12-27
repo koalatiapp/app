@@ -22,7 +22,10 @@ class DashboardController extends AbstractController
 	 */
 	public function projects(): Response
 	{
+		$projects = $this->getUser()->getProjects();
+
 		return $this->render('app/dashboard/index.html.twig', [
+			'projects' => $projects,
 		]);
 	}
 

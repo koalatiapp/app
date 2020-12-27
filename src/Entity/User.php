@@ -61,6 +61,7 @@ class User implements UserInterface
 	/**
 	 * @var \Doctrine\Common\Collections\Collection<int, Project>
 	 * @ORM\OneToMany(targetEntity=Project::class, mappedBy="ownerUser")
+	 * @ORM\OrderBy({"dateCreated" = "ASC"})
 	 */
 	private $projects;
 
