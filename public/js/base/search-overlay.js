@@ -9,6 +9,7 @@
 	const searchResultWrapper = searchOverlay.querySelector(".search-results");
 	const searchToggle = document.querySelector("#search-toggle");
 	const resultsCache = {};
+	const controller = new AbortController();
 	let searchOverlayIsOpen = false;
 	let originalFocusTarget = null;
 
@@ -78,6 +79,12 @@
 	 */
 	async function updateSearchResults() {
 		const query = searchInput.value.trim();
+
+		if (!query.length) {
+			searchResultWrapper.innerHTML = "";
+			return;
+		}
+
 		const results = await fetchSearchResults(query);
 		searchResultWrapper.innerHTML = "";
 
@@ -111,6 +118,10 @@
 	 * @return {Promise<Object[]>}
 	 */
 	function fetchSearchResults(query) {
+		// Abort any pending search request
+		controller.abort();
+
+		// Return a promise, in which the search results will be fetched and returned
 		return new Promise((resolve) => {
 			// If the results for that query are available in the client-side cache, use them
 			if (query in resultsCache) {
@@ -120,6 +131,7 @@
 
 			// Query the server for the search results
 			wretch(Routing.generate("json_search"))
+				.signal(controller)
 				.formUrl({ query })
 				.post()
 				.json()
