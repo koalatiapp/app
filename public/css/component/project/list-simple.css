@@ -1,0 +1,8 @@
+.project-list-simple { display: flex; flex-direction: column; }
+.project-list-simple a { display: flex; padding: 12px; justify-content: flex-start; align-items: center; transition: opacity .25s ease; }
+.project-list-simple a + a { margin-top: 10px; }
+.project-list-simple .favicon { flex: 0 0 24px; width: 24px; height: 24px; margin-right: 20px; object-fit: cover; object-position: center; border-radius: 8px; overflow: hidden; }
+.project-list-simple .name {margin-right: 30px; font-size: 16px; font-weight: 700; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+.project-list-simple i { flex: 0 0 10px; transition: transform .25s ease; }
+.project-list-simple a:hover { opacity: .7; }
+.project-list-simple a:hover i { transform: translateX(5px); }

@@ -50,7 +50,9 @@ dashboard:
         news: What's new
     projects:
         title: Jump back in
+        empty_state: You don't have any projects yet.
         view_all: View all projects
+        create_first: Create your first project
     notifications:
         title: While you were away...
     news:

@@ -7,9 +7,13 @@ hr,
 .spacer { width: 100%; height: 1px; margin: 30px auto; background-color: #F4F4F4; border: none; }
 .spacer { height: 0; }
 
+/* Text alignment */
 .text-center { text-align: center; }
 .text-left { text-align: left; }
 .text-right { text-align: right; }
+
+/* Text color */
+.text-gray { color: var(--color-gray); }
 
 /* Layout */
 /* Layout: header */
