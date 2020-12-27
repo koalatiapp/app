@@ -25,6 +25,7 @@
             <div id="brand-wrapper"></div>
 
             {% include 'app/_parts/navigation.html.twig' %}
+            {% include 'app/_parts/quick_actions.html.twig' %}
         </header>
 
         <div id="top-bar">
@@ -40,6 +41,7 @@
             </div>
         </div>
 
+		<script src="{{ asset('js/base/quick-actions.js') }}"></script>
         {% block javascripts %}{% endblock %}
     </body>
 </html>

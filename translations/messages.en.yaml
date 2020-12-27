@@ -25,6 +25,10 @@ navigation:
     help:
         label: Help
 
+quick_actions:
+    add_team_member: Add a team member
+    create_project: Create a project
+
 dashboard:
     title: Dashboard
     tabs:

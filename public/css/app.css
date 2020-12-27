@@ -26,6 +26,16 @@ header nav li > ul { display: none; }
 header nav li.active { background-color: #F8FAFF; box-shadow: 0 3px 15px 0 rgba(var(--shadow-rgb), .09); }
 header nav li.active a { color: var(--color-black); }
 header nav li.active > ul { display: block; }
+/* Layout: header: quick actions */
+#quick-actions { position: absolute; bottom: 40px; left: 40px; }
+#quick-actions .toggle { display: grid; width: 50px; height: 50px; place-items: center; font-size: 24px; color: var(--color-white); background-color: var(--color-blue); border-radius: 50%; box-shadow: 0 3px 15px rgba(var(--shadow-rgb), .35); transition: color .25s ease, background .25s ease, box-shadow .25s ease; }
+#quick-actions .toggle i { transform: rotate(0deg); transition: transform .25s ease; }
+#quick-actions .toggle:hover { background-color: var(--color-blue-faded); }
+#quick-actions .actions { width: 200px; position: absolute; bottom: 100%; left: 100%; pointer-events: none; opacity: 0; transform: scale(0); transform-origin: bottom left; transition: opacity .25s ease, transform .25s ease; }
+#quick-actions .actions a { display: block; padding: 10px; margin-top: 12px; font-size: 1rem; font-weight: 500; text-align: center; background-color: var(--color-white); border-radius: 10px; box-shadow: 0 3px 10px rgba(var(--shadow-rgb), .1); transition: color .25s ease, background-color .25s ease, box-shadow .25s ease; }
+#quick-actions .actions a:hover { color: var(--color-white); background-color: var(--color-blue); box-shadow: 0 3px 15px rgba(var(--shadow-rgb), .35); }
+#quick-actions.open .toggle i { transform: rotate(45deg); }
+#quick-actions.open .actions { opacity: 1; transform: scale(1); pointer-events: auto; }
 
 /* Layout: top bar */
 #top-bar { display: flex; justify-content: space-between; align-items: center; }
