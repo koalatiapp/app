@@ -34,7 +34,7 @@ verbose()
 }
 
 # Run PHP-CS-Fixer with automatic fixes
-vendor/bin/php-cs-fixer fix --config=.php_cs.dist -q
+PHP_CS_FIXER_IGNORE_ENV=1 vendor/bin/php-cs-fixer fix --config=.php_cs.dist -q
 
 # Loop through scripts and execute them
 # If no error is thrown, mute all outputs.

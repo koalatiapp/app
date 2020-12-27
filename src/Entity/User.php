@@ -58,16 +58,16 @@ class User implements UserInterface
 	 */
 	private $jobTitle;
 
-    /**
+	/**
 	 * @var \Doctrine\Common\Collections\Collection<int, Project>
-     * @ORM\OneToMany(targetEntity=Project::class, mappedBy="ownerUser")
-     */
-    private $projects;
+	 * @ORM\OneToMany(targetEntity=Project::class, mappedBy="ownerUser")
+	 */
+	private $projects;
 
-    public function __construct()
-    {
-        $this->projects = new ArrayCollection();
-    }
+	public function __construct()
+	{
+		$this->projects = new ArrayCollection();
+	}
 
 	public function getId(): ?int
 	{
@@ -186,33 +186,33 @@ class User implements UserInterface
 		return $this;
 	}
 
-    /**
-     * @return Collection<int, Project>
-     */
-    public function getProjects(): Collection
-    {
-        return $this->projects;
-    }
+	/**
+	 * @return Collection<int, Project>
+	 */
+	public function getProjects(): Collection
+	{
+		return $this->projects;
+	}
 
-    public function addProject(Project $project): self
-    {
-        if (!$this->projects->contains($project)) {
-            $this->projects[] = $project;
-            $project->setOwnerUser($this);
-        }
+	public function addProject(Project $project): self
+	{
+		if (!$this->projects->contains($project)) {
+			$this->projects[] = $project;
+			$project->setOwnerUser($this);
+		}
 
-        return $this;
-    }
+		return $this;
+	}
 
-    public function removeProject(Project $project): self
-    {
-        if ($this->projects->removeElement($project)) {
-            // set the owning side to null (unless already changed)
-            if ($project->getOwnerUser() === $this) {
-                $project->setOwnerUser(null);
-            }
-        }
+	public function removeProject(Project $project): self
+	{
+		if ($this->projects->removeElement($project)) {
+			// set the owning side to null (unless already changed)
+			if ($project->getOwnerUser() === $this) {
+				$project->setOwnerUser(null);
+			}
+		}
 
-        return $this;
-    }
+		return $this;
+	}
 }
