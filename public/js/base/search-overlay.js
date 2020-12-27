@@ -9,7 +9,7 @@
 	const searchResultWrapper = searchOverlay.querySelector(".search-results");
 	const searchToggle = document.querySelector("#search-toggle");
 	const resultsCache = {};
-	const controller = new AbortController();
+	let controller = new AbortController();
 	let searchOverlayIsOpen = false;
 	let originalFocusTarget = null;
 
@@ -88,7 +88,9 @@
 		const results = await fetchSearchResults(query);
 		searchResultWrapper.innerHTML = "";
 
-		if (results.length) {
+		if (typeof results == "undefined") {
+			// Do nothing: the previous request was simply aborted.
+		} else if (results.length) {
 			const fragment = document.createDocumentFragment();
 
 			for (const result of results) {
@@ -120,6 +122,7 @@
 	function fetchSearchResults(query) {
 		// Abort any pending search request
 		controller.abort();
+		controller = new AbortController();
 
 		// Return a promise, in which the search results will be fetched and returned
 		return new Promise((resolve) => {
@@ -134,8 +137,14 @@
 				.signal(controller)
 				.formUrl({ query })
 				.post()
+				.onAbort(() => {})
 				.json()
 				.then(response => {
+					if (typeof response == "undefined") {
+						resolve();
+						return;
+					}
+
 					resultsCache[query] = response.results;
 					resolve(response.results);
 				})
@@ -150,5 +159,8 @@
 	function selectSearchResult(element) {
 		searchResultWrapper.querySelector("a.selected")?.classList.remove("selected");
 		element.classList.add("selected");
+		element.scrollIntoView({
+			block: "center"
+		});
 	}
 })();
