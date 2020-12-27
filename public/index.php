@@ -10,9 +10,9 @@ require dirname(__DIR__).'/vendor/autoload.php';
 (new Dotenv())->bootEnv(dirname(__DIR__).'/.env');
 
 if ($_SERVER['APP_DEBUG']) {
-    umask(0000);
+	umask(0000);
 
-    Debug::enable();
+	Debug::enable();
 }
 
 $kernel = new Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);

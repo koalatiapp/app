@@ -12,4 +12,5 @@ return $config->setRules([
         'yoda_style' => ['equal' => false, 'identical' => false],
         'increment_style' => ['style' => 'post'],
     ])
+    ->setIndent("\t")
     ->setFinder($finder);

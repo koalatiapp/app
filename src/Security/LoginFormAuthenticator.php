@@ -18,43 +18,43 @@ use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 {
-    use TargetPathTrait;
+	use TargetPathTrait;
 
-    public const LOGIN_ROUTE = 'login';
+	public const LOGIN_ROUTE = 'login';
 
-    private UrlGeneratorInterface $urlGenerator;
+	private UrlGeneratorInterface $urlGenerator;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
-    {
-        $this->urlGenerator = $urlGenerator;
-    }
+	public function __construct(UrlGeneratorInterface $urlGenerator)
+	{
+		$this->urlGenerator = $urlGenerator;
+	}
 
-    public function authenticate(Request $request): PassportInterface
-    {
-        $Email = $request->request->get('email', '');
+	public function authenticate(Request $request): PassportInterface
+	{
+		$Email = $request->request->get('email', '');
 
-        $request->getSession()->set(Security::LAST_USERNAME, $Email);
+		$request->getSession()->set(Security::LAST_USERNAME, $Email);
 
-        return new Passport(
-            new UserBadge($Email),
-            new PasswordCredentials($request->request->get('password', '')),
-            [
-                new CsrfTokenBadge('authenticate', $request->get('_csrf_token')),
-            ]
-        );
-    }
+		return new Passport(
+			new UserBadge($Email),
+			new PasswordCredentials($request->request->get('password', '')),
+			[
+				new CsrfTokenBadge('authenticate', $request->get('_csrf_token')),
+			]
+		);
+	}
 
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
-    {
-        if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
-            return new RedirectResponse($targetPath);
-        }
+	public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
+	{
+		if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
+			return new RedirectResponse($targetPath);
+		}
 
-        return new RedirectResponse($this->urlGenerator->generate('dashboard'));
-    }
+		return new RedirectResponse($this->urlGenerator->generate('dashboard'));
+	}
 
-    protected function getLoginUrl(Request $request): string
-    {
-        return $this->urlGenerator->generate(self::LOGIN_ROUTE);
-    }
+	protected function getLoginUrl(Request $request): string
+	{
+		return $this->urlGenerator->generate(self::LOGIN_ROUTE);
+	}
 }
