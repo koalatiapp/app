@@ -39,4 +39,19 @@ class SecurityControllerTest extends WebTestCase
 		$this->assertResponseIsSuccessful('Login is successful');
 		$this->assertRouteSame('dashboard', [], 'Successful login redirects to the dashboard');
 	}
+
+	public function testLogout()
+	{
+		$client = static::createClient();
+		$client->followRedirects();
+		$userRepository = static::$container->get(UserRepository::class);
+		$testUser = $userRepository->findOneByEmail('name@email.com');
+		$client->loginUser($testUser);
+
+		$client->request('GET', '/');
+		$this->assertResponseIsSuccessful();
+
+		$client->request('GET', '/logout');
+		$this->assertRouteSame('login', [], 'Logout successfully redirects to login page.');
+	}
 }
