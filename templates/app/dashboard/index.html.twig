@@ -1,4 +1,9 @@
 {% extends 'app_base.html.twig' %}
+{% from 'app/_macros/project.html.twig' import project_list_simple %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ asset('css/component/project/list-simple.css') }}">
+{% endblock %}
 
 {% block title %}{% trans %}dashboard.tabs.overview{% endtrans %}{% endblock %}
 
@@ -16,18 +21,10 @@
         <div class="card">
             <h2>{% trans %}dashboard.projects.title{% endtrans %}</h2>
 			{% if projects|length %}
-				<div class="project-list-simple">
-					{% for project in projects %}
-						<a href="#">
-							<img src="{{ projectStorage.faviconUrl(project) }}" class="favicon">
-							<div class="name">{{ project.name }}</div>
-							<i class="far fa-angle-right"></i>
-						</a>
-					{% endfor %}
-				</div>
+				{{ project_list_simple(projects) }}
 				<hr>
 				<div class="button-container">
-					<a href="#" class="button">{% trans %}dashboard.projects.view_all{% endtrans %}</a>
+					<a href="{{ path('projects') }}" class="button">{% trans %}dashboard.projects.view_all{% endtrans %}</a>
 				</div>
 			{% else %}
 				<div class="text-gray">

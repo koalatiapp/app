@@ -1,0 +1,29 @@
+{# Grid of project thumnbails #}
+{% macro project_thumbnails(projects) %}
+	<div class="grid cols-4">
+		{% for project in projects %}
+			<a href="#" class="project-thumbnail">
+				<div class="thumbnail">
+					<img src="{{ project|thumbnail }}">
+				</div>
+				<div class="info">
+					<div class="name">{{ project.name }}</div>
+					<i class="far fa-angle-right"></i>
+				</div>
+			</a>
+		{% endfor %}
+	</div>
+{% endmacro %}
+
+{# Simple list of projects with nanme and favicon #}
+{% macro project_list_simple(projects) %}
+	<div class="project-list-simple">
+		{% for project in projects %}
+			<a href="#">
+				<img src="{{ project|favicon }}" class="favicon">
+				<div class="name">{{ project.name }}</div>
+				<i class="far fa-angle-right"></i>
+			</a>
+		{% endfor %}
+	</div>
+{% endmacro %}

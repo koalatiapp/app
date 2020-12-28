@@ -1,0 +1,21 @@
+{% extends 'app_base.html.twig' %}
+{% from 'app/_macros/project.html.twig' import project_thumbnails %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ asset('css/component/project/thumbnail.css') }}">
+{% endblock %}
+
+{% block title %}{% trans %}dashboard.tabs.projects{% endtrans %}{% endblock %}
+
+{% block page_tabs %}
+	{% include 'app/_parts/page_tabs.html.twig' with {page_tabs: [
+	    {label: 'dashboard.tabs.overview', route: 'dashboard'},
+	    {label: 'dashboard.tabs.projects', route: 'projects'},
+	    {label: 'dashboard.tabs.inbox', route: 'inbox'},
+	    {label: 'dashboard.tabs.news', route: 'koalati_news'},
+	]} %}
+{% endblock %}
+
+{% block body %}
+	{{ project_thumbnails(projects|slice(0, 4)) }}
+{% endblock %}
