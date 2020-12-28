@@ -8,9 +8,6 @@ jobs:
     coding-standards:
         name: Coding standards
         runs-on: ubuntu-latest
-        strategy:
-            matrix:
-                node-version: [12.x]
         steps:
             - name: Checkout
               uses: actions/checkout@v2
@@ -21,10 +18,10 @@ jobs:
                   key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
             - name: Install PHP dependencies (composer install)
               uses: php-actions/composer@v5
-            - name: Use Node.js ${{ matrix.node-version }}
+            - name: Use Node.js 12.x
               uses: actions/setup-node@v1
               with:
-                  node-version: ${{ matrix.node-version }}
+                  node-version: 12.x
             - name: Install JS dependencies (npm install)
               run: npm i --ignore-scripts --production=false
             - name: PHP CS Fixer
@@ -39,7 +36,7 @@ jobs:
               run: DEV/ci/eslint.sh
 
     build:
-        name: Docker build
+        name: Docker build and tests
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
@@ -64,31 +61,8 @@ jobs:
               run: curl http://localhost
             - name: Check HTTPS reachability
               run: curl -k https://localhost
-
-
-
-    unit-tests:
-        name: Tests
-        runs-on: ubuntu-latest
-        strategy:
-            matrix:
-                node-version: [12.x]
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v2
-            - name: Cache Composer dependencies
-              uses: actions/cache@v2
-              with:
-                  path: /tmp/composer-cache
-                  key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
-            - name: Install PHP dependencies (composer install)
-              uses: php-actions/composer@v5
-            - name: Use Node.js ${{ matrix.node-version }}
-              uses: actions/setup-node@v1
-              with:
-                  node-version: ${{ matrix.node-version }}
-            - name: Install JS dependencies (npm install)
-              run: npm i --ignore-scripts --production=false
+            - name: Generate entity fixtures
+              run: bin/console doctrine:fixtures:load -n --purge-with-truncate
             - name: PHPUnit tests
               uses: php-actions/phpunit@v2
               with:

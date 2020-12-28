@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2eee023beae557d40bdc52d898945a0a",
+    "content-hash": "6624cd19616be77f64e623a2aece33f5",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -6751,6 +6751,69 @@
                 }
             ],
             "time": "2020-11-13T08:04:11+00:00"
+        },
+        {
+            "name": "dama/doctrine-test-bundle",
+            "version": "v6.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dmaicher/doctrine-test-bundle.git",
+                "reference": "a43f79239f446bb85ffa34e799878156a43b590b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dmaicher/doctrine-test-bundle/zipball/a43f79239f446bb85ffa34e799878156a43b590b",
+                "reference": "a43f79239f446bb85ffa34e799878156a43b590b",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/dbal": "^2.9.3 || ^3.0",
+                "doctrine/doctrine-bundle": "^1.11 || ^2.0",
+                "php": "^7.1 || ^8.0",
+                "symfony/framework-bundle": "^3.4 || ^4.4 || ^5.1"
+            },
+            "require-dev": {
+                "behat/behat": "^3.0",
+                "phpstan/phpstan": "^0.12",
+                "phpunit/phpunit": "^7.0 || ^8.0 || ^9.0",
+                "symfony/phpunit-bridge": "^5.1",
+                "symfony/process": "^3.4 || ^4.4 || ^5.1",
+                "symfony/yaml": "^3.4 || ^4.4 || ^5.1"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "7.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "DAMA\\DoctrineTestBundle\\": "src/DAMA/DoctrineTestBundle"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "David Maicher",
+                    "email": "mail@dmaicher.de"
+                }
+            ],
+            "description": "Symfony bundle to isolate doctrine database tests and improve test performance",
+            "keywords": [
+                "doctrine",
+                "isolation",
+                "performance",
+                "symfony",
+                "tests"
+            ],
+            "support": {
+                "issues": "https://github.com/dmaicher/doctrine-test-bundle/issues",
+                "source": "https://github.com/dmaicher/doctrine-test-bundle/tree/v6.5.0"
+            },
+            "time": "2020-12-12T16:34:54+00:00"
         },
         {
             "name": "doctrine/data-fixtures",

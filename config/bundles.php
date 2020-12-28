@@ -11,4 +11,5 @@ return [
 	Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle::class => ['dev' => true, 'test' => true],
 	FOS\JsRoutingBundle\FOSJsRoutingBundle::class => ['all' => true],
 	Pyrrah\GravatarBundle\PyrrahGravatarBundle::class => ['all' => true],
+	DAMA\DoctrineTestBundle\DAMADoctrineTestBundle::class => ['test' => true],
 ];
