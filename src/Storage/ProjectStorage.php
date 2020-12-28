@@ -16,6 +16,9 @@ class ProjectStorage extends AbstractStorage
 	 */
 	protected const DIRECTORY = 'project';
 
+	/**
+	 * Return the URL of a project's favicon.
+	 */
 	public function faviconUrl(Project $project): string
 	{
 		$faviconPath = implode('/', [
@@ -25,5 +28,19 @@ class ProjectStorage extends AbstractStorage
 		]);
 
 		return $this->generateUrl($faviconPath, false);
+	}
+
+	/**
+	 * Return the URL of a project's thumbnail.
+	 */
+	public function thumbnailUrl(Project $project): string
+	{
+		$thumbnailPath = implode('/', [
+			self::DIRECTORY,
+			'thumbnail',
+			md5($project->getUrl()),
+		]);
+
+		return $this->generateUrl($thumbnailPath, false);
 	}
 }
