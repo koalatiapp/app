@@ -60,3 +60,7 @@ header nav li.active > ul { display: block; }
 /* Layout: page wrapper */
 #page-wrapper { margin-top: 40px; }
 #page-content { margin-top: 20px; }
+
+/* Page title */
+#section-title { margin-bottom: 0; margin-top: -1em; font-size: 13px; font-weight: 500; line-height: 1; color: var(--color-gray); }
+#section-title::after { content: '\f054'; margin-left: 5px; font-family: var(--fa-style-family); font-size: .7em; font-weight: 400; line-height: 1; position: relative; top: -1px; }
