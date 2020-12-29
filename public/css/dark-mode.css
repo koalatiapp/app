@@ -1,1 +1,21 @@
-body.dark { background-color: #333; }
+body.dark {
+	--color-white: #22252F;
+	--color-black: #f1f1f1;
+	--color-gray-light: #373D51;
+	--color-blue: #304CAC;
+	--card-bg-color: var(--color-white);
+	--card-secondary-bg-color: var(--color-white);
+	--button-bg-color: var(--color-blue);
+	--notification-bg-color: #394557;
+	--notification-text-color: #d5ddf5;
+	--notification-warning-bg-color: #463419;
+	--notification-warning-text-color: #d6bf9c;
+	--notification-danger-bg-color: #463030;
+	--notification-danger-text-color: #e0a2a2;
+
+	background-color: #050505;
+	background-image: radial-gradient(circle, rgba(200, 221, 255, .05) 0%, rgba(237, 240, 255, .1) 100%);
+}
+body.dark hr,
+body.dark .spacer { background-color: var(--color-gray-light); }
+body.dark header nav li.active { background-color: var(--color-gray-light); }
