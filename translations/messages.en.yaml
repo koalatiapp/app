@@ -1,5 +1,6 @@
 generic:
     cancel: Cancel
+    just_now: Just now
 
 branding:
     name: Koalati
@@ -48,6 +49,9 @@ dashboard:
         projects: Projects
         inbox: Inbox
         news: What's new
+    actions:
+        new_project: New project
+        search_project: Search for a project
     projects:
         title: Jump back in
         empty_state: You don't have any projects yet.
@@ -57,3 +61,13 @@ dashboard:
         title: While you were away...
     news:
         title: News and updates
+
+entity:
+    project:
+        name: Title
+        date_created: Created
+        status: Status
+        status:NEW: New
+        status:IN_PROGRESS: In progress
+        status:COMPLETED: Completed
+

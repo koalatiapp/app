@@ -12,4 +12,5 @@ return [
 	FOS\JsRoutingBundle\FOSJsRoutingBundle::class => ['all' => true],
 	Pyrrah\GravatarBundle\PyrrahGravatarBundle::class => ['all' => true],
 	DAMA\DoctrineTestBundle\DAMADoctrineTestBundle::class => ['test' => true],
+	Knp\Bundle\TimeBundle\KnpTimeBundle::class => ['all' => true],
 ];

@@ -1,0 +1,7 @@
+.project-list .list-headings,
+.project-list .list-row { grid-template-columns: 24px 1.5fr 150px 1fr 30px; }
+.project-list .status { color: var(--color-gray); }
+.project-list .status.new { color: var(--color-green); }
+.project-list .status.in_progress { color: var(--color-yellow); }
+.project-list i { transition: transform .25s ease; }
+.project-list .list-row:hover i { transform: translateX(3px); }

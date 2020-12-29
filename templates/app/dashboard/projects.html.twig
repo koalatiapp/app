@@ -1,8 +1,9 @@
 {% extends 'app_base.html.twig' %}
-{% from 'app/_macros/project.html.twig' import project_thumbnails %}
+{% from 'app/_macros/project.html.twig' import project_thumbnails, project_list %}
 
 {% block head %}
     <link rel="stylesheet" href="{{ asset('css/component/project/thumbnail.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/component/project/list.css') }}">
 {% endblock %}
 
 {% block section_title %}{% trans %}dashboard.title{% endtrans %}{% endblock %}
@@ -17,6 +18,18 @@
 	]} %}
 {% endblock %}
 
+{% block page_actions %}
+	<div class="typed-input">
+        <input type="text" name="search" placeholder="{% trans %}dashboard.actions.search_project{% endtrans %}" autofocus>
+        <span class="type">
+			<i class="far fa-magnifying-glass text-gray"></i>
+		</span>
+    </div>
+	<a href="#" class="button">{% trans %}dashboard.actions.new_project{% endtrans %}</a>
+{% endblock %}
+
 {% block body %}
 	{{ project_thumbnails(projects|slice(0, 4)) }}
+	<hr class="spacer">
+	{{ project_list(projects) }}
 {% endblock %}

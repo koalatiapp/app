@@ -15,6 +15,7 @@
         <link rel="stylesheet" href="{{ asset('css/component/notice.css') }}">
         <link rel="stylesheet" href="{{ asset('css/component/notification.css') }}">
         <link rel="stylesheet" href="{{ asset('css/component/floating-dropdown.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/component/list.css') }}">
         <link rel="stylesheet" href="{{ asset('css/component/search-overlay.css') }}">
         <link rel="stylesheet" href="{{ asset('css/dark-mode.css') }}">
         <link rel="stylesheet" href="{{ asset('ext/fontawesome/css/all.min.css') }}">
@@ -40,8 +41,15 @@
         </div>
 
         <div id="page-wrapper">
-			<div id="section-title">{% block section_title %}{% endblock %}</div>
-            <h1>{{ block('title') }}</h1>
+			<div id="page-header">
+				<div class="info">
+					<div id="section-title">{% block section_title %}{% endblock %}</div>
+					<h1>{{ block('title') }}</h1>
+				</div>
+				<div id="page-actions">
+                	{% block page_actions %}{% endblock %}
+				</div>
+			</div>
 
             <div id="page-content">
                 {% block body %}{% endblock %}

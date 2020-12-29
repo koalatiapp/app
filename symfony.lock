@@ -147,6 +147,9 @@
     "guzzlehttp/psr7": {
         "version": "1.7.0"
     },
+    "knplabs/knp-time-bundle": {
+        "version": "v1.14.0"
+    },
     "laminas/laminas-code": {
         "version": "3.5.1"
     },
