@@ -308,6 +308,9 @@
             "src/Kernel.php"
         ]
     },
+    "symfony/http-client": {
+        "version": "v5.2.1"
+    },
     "symfony/http-client-contracts": {
         "version": "v2.3.1"
     },
@@ -491,6 +494,12 @@
     },
     "twig/twig": {
         "version": "v3.1.1"
+    },
+    "vdb/php-spider": {
+        "version": "v0.5.2"
+    },
+    "vdb/uri": {
+        "version": "v0.2.4"
     },
     "willdurand/jsonp-callback-validator": {
         "version": "v1.1.0"
