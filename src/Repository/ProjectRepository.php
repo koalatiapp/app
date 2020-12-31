@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Project;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,32 +20,41 @@ class ProjectRepository extends ServiceEntityRepository
 		parent::__construct($registry, Project::class);
 	}
 
-	// /**
-	//  * @return Project[] Returns an array of Project objects
-	//  */
-	/*
-	public function findByExampleField($value)
+	/**
+	 * Finds projects from a user's search query.
+	 *
+	 * @param array<string> $queryParts
+	 *
+	 * @return array<Project>
+	 */
+	public function findBySearchQuery(array $queryParts, User $requestingUser)
 	{
-		return $this->createQueryBuilder('p')
-			->andWhere('p.exampleField = :val')
-			->setParameter('val', $value)
-			->orderBy('p.id', 'ASC')
-			->setMaxResults(10)
-			->getQuery()
-			->getResult()
-		;
-	}
-	*/
+		if (!$queryParts) {
+			return [];
+		}
 
-	/*
-	public function findOneBySomeField($value): ?Project
+		$qb = $this->createQueryBuilder('p')
+			->andWhere('p.ownerUser = :user')
+			->setParameter('user', $requestingUser)
+			->orderBy('p.dateCreated', 'DESC');
+
+		foreach ($queryParts as $index => $part) {
+			$qb->andWhere('p.name LIKE :namePart'.$index)
+				->setParameter('namePart'.$index, '%'.addcslashes($part, '%_').'%');
+		}
+
+		return $qb->getQuery()->getResult();
+	}
+
+	public function findById(int $id, User $requestingUser): ?Project
 	{
 		return $this->createQueryBuilder('p')
-			->andWhere('p.exampleField = :val')
-			->setParameter('val', $value)
+			->andWhere('p.id = :id')
+			->andWhere('p.ownerUser = :user')
+			->setParameter('id', $id)
+			->setParameter('user', $requestingUser)
 			->getQuery()
 			->getOneOrNullResult()
 		;
 	}
-	*/
 }

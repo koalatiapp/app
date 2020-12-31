@@ -97,7 +97,8 @@
 				const link = document.createElement("a");
 				link.href = result.url;
 				link.className = fragment.childElementCount ? "" : "selected";
-				link.innerHTML = `<span class="title">${result.title}</span> - <span class="snippet">${result.snippet || ""}</span>`;
+				// @TODO: Change the string here for a translation message using willdurand/js-translation-bundle (when it starts supporting PHP 8)
+				link.innerHTML = `<span class="title">${result.title}</span> - <span class="snippet">${result.snippet || "<i>No description or preview available.</i>"}</span>`;
 				link.onfocus = (e) => { selectSearchResult(e.target); };
 				fragment.appendChild(link);
 			}

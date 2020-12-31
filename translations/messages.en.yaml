@@ -41,6 +41,7 @@ search:
     label: Quick search
     placeholder: Search throughout Koalati
     empty_state: No results were found.
+    result_snippet_empty_state: No description or preview available.
 
 dashboard:
     title: Dashboard
