@@ -16,7 +16,7 @@ services:
       start_period: 30s
     environment:
       # Run "composer require symfony/orm-pack" to install and configure Doctrine ORM
-      DATABASE_URL: postgresql://${POSTGRES_USER:-symfony}:${POSTGRES_PASSWORD:-ChangeMe}@${POSTGRES_HOST:-database}:${POSTGRES_PORT:-5432)/${POSTGRES_DB:-app}?serverVersion=${POSTGRES_VERSION:-13}
+      #DATABASE_URL: mysql://${MYSQL_USER:-symfony}:${MYSQL_PASSWORD:-ChangeMe}@${MYSQL_HOST:-database}:${MYSQL_PORT:-3306)/${MYSQL_DATABASE:-app}?serverVersion=${MYSQL_VERSION:-8.0}
       # Run "composer require symfony/mercure-bundle" to install and configure the Mercure integration
       MERCURE_PUBLISH_URL: ${MERCURE_URL:-http://caddy/.well-known/mercure}
       SYMFONY_VERSION:
@@ -38,36 +38,16 @@ services:
       - caddy_config:/config
 
   database:
-    image: postgres:${POSTGRES_VERSION:-13}-alpine
+    image: mysql:${MYSQL_VERSION:-8.0}
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-app}
-      # You should definitely change the password in production
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ChangeMe}
-      POSTGRES_USER: ${POSTGRES_USER:-symfony}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-app}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-ChangeMe}
+      MYSQL_USER: ${MYSQL_USER:-symfony}
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
     volumes:
-      - db-data:/var/lib/postgresql/data:rw
-      # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
-      # - ./docker/db/data:/var/lib/postgresql/data:rw
-
-###> doctrine/doctrine-bundle ###
-  database:
-    image: postgres:${POSTGRES_VERSION:-13}-alpine
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB:-app}
-      # You should definitely change the password in production
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ChangeMe}
-      POSTGRES_USER: ${POSTGRES_USER:-symfony}
-    volumes:
-      - db-data:/var/lib/postgresql/data:rw
-      # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
-      # - ./docker/db/data:/var/lib/postgresql/data:rw
-###< doctrine/doctrine-bundle ###
+      - db-data:/var/lib/mysql:rw
 
 volumes:
   caddy_data:
   caddy_config:
   db-data:
-
-###> doctrine/doctrine-bundle ###
-  db-data:
-###< doctrine/doctrine-bundle ###

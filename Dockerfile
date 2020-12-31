@@ -82,14 +82,11 @@ ARG SYMFONY_VERSION=""
 RUN composer create-project "symfony/skeleton ${SYMFONY_VERSION}" . --stability=$STABILITY --prefer-dist --no-dev --no-progress --no-interaction; \
 	composer clear-cache
 
-###> recipes ###
-###> doctrine/doctrine-bundle ###
-RUN apk add --no-cache --virtual .pgsql-deps postgresql-dev; \
-	docker-php-ext-install -j$(nproc) pdo_pgsql; \
+RUN apk add --no-cache --virtual .pgsql-deps; \
+	docker-php-ext-install -j$(nproc) mysqli pdo pdo_mysql; \
+	docker-php-ext-enable pdo_mysql; \
 	apk add --no-cache --virtual .pgsql-rundeps so:libpq.so.5; \
 	apk del .pgsql-deps
-###< doctrine/doctrine-bundle ###
-###< recipes ###
 
 COPY . .
 
