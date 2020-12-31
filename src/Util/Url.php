@@ -63,13 +63,19 @@ class Url
 
 	/**
 	 * Standardizes an URL, ensuring the "https(s)://" protocol is defined.
+	 *
+	 * @param bool $forceHttps when $forceHttps is set to true, the URL will be changed to use HTTPS
 	 */
-	public function standardize(string $url): string
+	public function standardize(string $url, bool $forceHttps = false): string
 	{
 		$url = strtolower($url);
 
 		if (!preg_match('#(https?:)?//.+#', $url)) {
 			$url = 'http://'.$url;
+		}
+
+		if ($forceHttps && preg_match('~^http://~', $url)) {
+			$url = preg_replace('~((?:^https?:)//).+~', '$1', $url);
 		}
 
 		return $url;
