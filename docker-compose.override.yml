@@ -15,3 +15,16 @@ services:
     volumes:
       - ./docker/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
       - ./public:/srv/app/public:ro
+
+  database:
+    image: mysql:${MYSQL_VERSION:-8.0}
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-app}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-ChangeMe}
+      MYSQL_USER: ${MYSQL_USER:-symfony}
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+    volumes:
+      - db-data:/var/lib/mysql:rw
+
+volumes:
+  db-data:
