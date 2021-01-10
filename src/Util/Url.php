@@ -30,9 +30,13 @@ class Url
 	 */
 	public function exists(string $url): bool
 	{
-		$response = $this->client->request('GET', $url);
-		$code = (string) $response->getStatusCode();
-		$response->cancel();
+		try {
+			$response = $this->client->request('GET', $url);
+			$code = (string) $response->getStatusCode();
+			$response->cancel();
+		} catch (\Symfony\Component\HttpClient\Exception\TransportException $e) {
+			$code = '404';
+		}
 
 		return $code[0] == 2;
 	}
@@ -42,11 +46,15 @@ class Url
 	 */
 	public function isXML(string $url): bool
 	{
-		$response = $this->client->request('GET', $url);
-		$type = $response->getHeaders()['content-type'][0] ?? '';
-		$response->cancel();
+		try {
+			$response = $this->client->request('GET', $url);
+			$type = $response->getHeaders()['content-type'][0] ?? '';
+			$response->cancel();
+		} catch (\Symfony\Component\HttpClient\Exception\TransportException $e) {
+			$type = null;
+		}
 
-		return (bool) preg_match('~^.+\/(.+[+-])?xml([+-].+)?$~', $type);
+		return (bool) preg_match('~^.+\/(.+[+-])?xml([+-].+)?.*$~', $type);
 	}
 
 	/**
@@ -54,11 +62,15 @@ class Url
 	 */
 	public function isHTML(string $url): bool
 	{
-		$response = $this->client->request('GET', $url);
-		$type = $response->getHeaders()['content-type'][0] ?? '';
-		$response->cancel();
+		try {
+			$response = $this->client->request('GET', $url);
+			$type = $response->getHeaders()['content-type'][0] ?? '';
+			$response->cancel();
+		} catch (\Symfony\Component\HttpClient\Exception\TransportException $e) {
+			$type = '';
+		}
 
-		return $type == 'text/html';
+		return str_contains($type, 'text/html');
 	}
 
 	/**
@@ -75,7 +87,7 @@ class Url
 		}
 
 		if ($forceHttps && preg_match('~^http://~', $url)) {
-			$url = preg_replace('~((?:^https?:)//).+~', '$1', $url);
+			$url = preg_replace('~(?:^https?:)//(.+)~', 'https://$1', $url);
 		}
 
 		return $url;
@@ -101,79 +113,14 @@ class Url
 	}
 
 	/**
-	 * Generates an absolute URL.
-	 */
-	public function absolute(string $url, string $domain, ?string $currentUrl = null): string
-	{
-		if ($currentUrl) {
-			$parsedCurrentUrl = parse_url($currentUrl);
-
-			if (isset($parsedCurrentUrl['scheme']) && isset($parsedCurrentUrl['host'])) {
-				if (strpos($url, '/') === 0) {
-					return $parsedCurrentUrl['scheme'].'://'.$parsedCurrentUrl['host'].$url;
-				} elseif ((strpos($url, '../') === 0 || strpos($url, '?') === 0 || strpos($url, '#') === 0) && isset($parsedCurrentUrl['path'])) {
-					return $parsedCurrentUrl['scheme'].'://'.$parsedCurrentUrl['host'].$parsedCurrentUrl['path'].$url;
-				} elseif (strpos($url, '../') === 0 || strpos($url, '?') === 0 || strpos($url, '#') === 0) {
-					return $parsedCurrentUrl['scheme'].'://'.$parsedCurrentUrl['host'].$url;
-				} elseif (strpos($url, 'http://') === 0 || strpos($url, 'https://') === 0 || strpos($url, 'mailto:') === 0 || strpos($url, 'tel:') === 0 || strpos($url, 'fax:') === 0 || strpos($url, 'javascript:') === 0) {
-					return $url;
-				} elseif (isset($parsedCurrentUrl['path']) && strlen($parsedCurrentUrl['path']) && substr($parsedCurrentUrl['path'], -1) == '/') {
-					return $parsedCurrentUrl['scheme'].'://'.$parsedCurrentUrl['host'].$parsedCurrentUrl['path'].$url;
-				} elseif (isset($parsedCurrentUrl['path'])) {
-					return $parsedCurrentUrl['scheme'].'://'.$parsedCurrentUrl['host'].substr($parsedCurrentUrl['path'], 0, strrpos($parsedCurrentUrl['path'], '/')).'/'.$url;
-				} else {
-					return $parsedCurrentUrl['scheme'].'://'.$parsedCurrentUrl['host'].'/'.$url;
-				}
-			}
-		}
-
-		$parsed_domain = parse_url($domain);
-
-		if (strpos($url, '//') === 0) {
-			$absolute = 'http://'.substr($url, 2);
-		} elseif (strpos($url, 'http://') === 0 || strpos($url, 'https://') === 0) {
-			$absolute = $url;
-		} elseif (strpos($url, 'www.') === 0) {
-			$absolute = 'http://'.$url;
-		} elseif (strpos($url, '/') === 0 && isset($parsed_domain['scheme']) && isset($parsed_domain['host'])) {
-			$absolute = $parsed_domain['scheme'].'://'.$parsed_domain['host'].$url;
-		} elseif (strrpos($domain, '/') != strlen($domain) - 1) {
-			$absolute = $domain.'/'.$url;
-		} else {
-			$absolute = $domain.$url;
-		}
-
-		return $absolute;
-	}
-
-	/**
-	 * Checks if an URL is from a provided domain name.
-	 */
-	public function isFromDomain(string $url, string $domain): bool
-	{
-		return strpos($url, $domain) !== false;
-	}
-
-	/**
 	 * Extract the domain name from an URL.
 	 */
 	public function domain(string $url): string
 	{
-		return substr($url, 0, (strpos($url, '/', 8 <= strlen($url) ? 8 : strlen($url)) ?: strlen($url)));
-	}
+		$url = $this->standardize($url);
+		$urlData = parse_url($url);
 
-	/**
-	 * Extracts the root domain name from an URL.
-	 */
-	public function rootDomain(string $url): ?string
-	{
-		$url_data = parse_url($url);
-
-		if (!$url_data || !isset($url_data['host'])) {
-			return null;
-		}
-
-		return str_replace('www.', '', $url_data['host']);
+		return $urlData['host'];
 	}
 
 	/**
@@ -182,26 +129,6 @@ class Url
 	public function guessSitemap(string $url): string
 	{
 		return $this->rootUrl($url).'/sitemap.xml';
-	}
-
-	/**
-	 * Extracts the page URL from an URL.
-	 */
-	public function slug(string $url): string
-	{
-		if (substr($url, 0, 1) == '/') {
-			return $url;
-		}
-
-		if (preg_match('#^((https?:)?//).+#', $url)) {
-			$url = preg_replace('#^((https?:)?//)#', '', $url);
-		}
-
-		if (strpos($url, '/') !== false) {
-			return substr($url, strpos($url, '/'));
-		}
-
-		return $url;
 	}
 
 	/**
