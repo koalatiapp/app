@@ -46,28 +46,28 @@ class Config
 			$locator = new FileLocator([$this->configDirPath]);
 			$extensions = ['json', 'yml', 'php'];
 
-			$filename = null;
+			$fullFilename = null;
 			foreach ($extensions as $extension) {
 				try {
-					$filename = $locator->locate($filename.'.'.$extension, null, true);
+					$fullFilename = $locator->locate($filename.'.'.$extension, null, true);
 					break;
 				} catch (\Exception $exception) {
 					// Nothing to do, just keep moving along and try to other extensions.
 				}
 			}
 
-			if (!$filename) {
+			if (!$fullFilename) {
 				return null;
 			} else {
 				switch ($extension) {
 					case 'json':
-						$data = json_decode(file_get_contents($filename), true);
+						$data = json_decode(file_get_contents($fullFilename), true);
 						break;
 					case 'php':
-						$data = include $filename;
+						$data = include $fullFilename;
 						break;
 					case 'yml':
-						$data = Yaml::parse(file_get_contents($filename));
+						$data = Yaml::parse(file_get_contents($fullFilename));
 						break;
 					default:
 						$data = null;
