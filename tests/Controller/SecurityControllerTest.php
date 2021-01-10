@@ -7,34 +7,36 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class SecurityControllerTest extends WebTestCase
 {
+	public function setup()
+	{
+		$this->client = static::createClient();
+	}
+
 	public function testUnauthorizedRedirection()
 	{
-		$client = static::createClient();
-		$client->request('GET', '/');
+		$this->client->request('GET', '/');
 		$this->assertResponseRedirects('/login', 302, 'Redirection to login for non-logged user');
 	}
 
 	public function testAlreadyLoggedRedirection()
 	{
-		$client = static::createClient();
 		$userRepository = static::$container->get(UserRepository::class);
 		$testUser = $userRepository->findOneByEmail('name@email.com');
-		$client->loginUser($testUser);
+		$this->client->loginUser($testUser);
 
-		$client->request('GET', '/login');
+		$this->client->request('GET', '/login');
 		$this->assertResponseRedirects('/', 302, 'Redirection to dashboard when accessing login page while already logged in');
 	}
 
 	public function testLogin()
 	{
-		$client = static::createClient();
-		$client->followRedirects();
-		$crawler = $client->request('GET', '/login');
+		$this->client->followRedirects();
+		$crawler = $this->client->request('GET', '/login');
 
 		$form = $crawler->selectButton('submit')->form();
 		$form['email'] = 'name@email.com';
 		$form['password'] = '123456';
-		$crawler = $client->submit($form);
+		$crawler = $this->client->submit($form);
 
 		$this->assertResponseIsSuccessful('Login is successful');
 		$this->assertRouteSame('dashboard', [], 'Successful login redirects to the dashboard');
@@ -42,16 +44,15 @@ class SecurityControllerTest extends WebTestCase
 
 	public function testLogout()
 	{
-		$client = static::createClient();
-		$client->followRedirects();
+		$this->client->followRedirects();
 		$userRepository = static::$container->get(UserRepository::class);
 		$testUser = $userRepository->findOneByEmail('name@email.com');
-		$client->loginUser($testUser);
+		$this->client->loginUser($testUser);
 
-		$client->request('GET', '/');
+		$this->client->request('GET', '/');
 		$this->assertResponseIsSuccessful();
 
-		$client->request('GET', '/logout');
+		$this->client->request('GET', '/logout');
 		$this->assertRouteSame('login', [], 'Logout successfully redirects to login page.');
 	}
 }
