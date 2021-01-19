@@ -6,6 +6,15 @@ generic:
 branding:
     name: Koalati
 
+login:
+    form:
+        title: Sign in
+        submit_label: Sign in
+        field:
+            email: Email
+            password: Password
+            remember_me: Keep me signed in
+
 navigation:
     dashboard:
         label: Dashboard

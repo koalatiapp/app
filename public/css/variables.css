@@ -29,6 +29,9 @@
 	--grid-small-width: minmax(200px, max(390px, 35%));
 
 	/* Cards */
+	--card-width-small: 400px;
+	--card-width-medium: 600px;
+	--card-width-large: 850px;
 	--card-bg-color: var(--color-white);
 	--card-secondary-bg-color: #fbfbff;
 	--card-secondary-title-color: var(--color-blue-dark-faded);

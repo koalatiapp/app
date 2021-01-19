@@ -1,5 +1,5 @@
 /* Card */
-.card { width: 100%; padding: 30px; background-color: var(--card-bg-color); border-radius: 13px; box-shadow: 0 3px 15px 0 rgba(var(--shadow-rgb), .05); }
+.card { width: 100%; max-width: 100%; padding: 30px; background-color: var(--card-bg-color); border-radius: 13px; box-shadow: 0 3px 15px 0 rgba(var(--shadow-rgb), .05); }
 
 /* Title */
 .card > h1:first-child,
@@ -22,3 +22,8 @@
 
 /* Centered content */
 .card.centered { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+
+/* Sizes */
+.card.small { width: var(--card-width-small); }
+.card.medium { width: var(--card-width-medium); }
+.card.large { width: var(--card-width-large); }
