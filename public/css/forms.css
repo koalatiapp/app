@@ -1,5 +1,8 @@
 /* Field wrappers */
 fieldset { display: flex; padding: 0; margin: 0; border: none; flex-direction: column; }
-fieldset label { font-size: 1rem; font-weight: 600; }
-fieldset input { margin: 5px 0; }
+fieldset label { font-size: 1rem; font-weight: 600; color: var(--color-gray-dark); }
+fieldset input { margin: 6px 0; }
 fieldset + fieldset { margin-top: 15px; }
+/* Errors */
+fieldset .error { display: block; padding: 12px; padding-right: 42px; margin: 5px 0; font-size: .85rem; font-weight: 600; color: var(--notification-danger-icon-color); background-color: var(--notification-danger-bg-color); border-radius: 8px; position: relative; }
+fieldset .error::after { content: '\f06a'; font-family: var(--fa-style-family); font-size: 22px; font-weight: 600; line-height: 1rem; position: absolute; top: 12px; right: 12px; }

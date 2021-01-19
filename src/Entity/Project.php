@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ProjectRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ProjectRepository::class)
@@ -24,12 +25,15 @@ class Project
 
 	/**
 	 * @var string
+	 * @Assert\NotBlank
+	 * @Assert\Length(max = 255)
 	 * @ORM\Column(type="string", length=255)
 	 */
 	private $name;
 
 	/**
 	 * @var \App\Entity\User|null
+	 * @Assert\NotBlank
 	 * @ORM\ManyToOne(targetEntity=User::class, inversedBy="projects")
 	 */
 	private $ownerUser;
@@ -42,6 +46,8 @@ class Project
 
 	/**
 	 * @var string
+	 * @Assert\NotBlank
+	 * @Assert\Url(relativeProtocol = true)
 	 * @ORM\Column(type="string", length=512)
 	 */
 	private $url;

@@ -1,2 +1,3 @@
 twig:
     default_path: '%kernel.project_dir%/templates'
+    form_themes: ['_form/fieldset_layout.html.twig', '_form/errors.html.twig']

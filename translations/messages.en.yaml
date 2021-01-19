@@ -1,6 +1,7 @@
 generic:
     cancel: Cancel
     just_now: Just now
+    back_to_dashboard: Back to your dashboard
 
 branding:
     name: Koalati
@@ -62,6 +63,21 @@ dashboard:
         title: While you were away...
     news:
         title: News and updates
+
+project_creation:
+    title: Create a project
+    form:
+        title: Website information
+        submit_label: Create project
+        field:
+            name:
+                label: Give your project a name
+                placeholder: My awesome project
+            url:
+                label: Enter your website's URL
+                placeholder: www.domain.com
+    flash:
+        created_successfully: Your project "{name}" has been created successfully!
 
 entity:
     project:

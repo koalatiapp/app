@@ -1,0 +1,11 @@
+{% extends 'app_base.html.twig' %}
+
+{% block title %}{% trans %}project_creation.title{% endtrans %}{% endblock %}
+
+{% block body %}
+    <div class="grid small-fill">
+        <div class="card">
+			{{ form(form) }}
+		</div>
+	</div>
+{% endblock %}
