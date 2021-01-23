@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ProjectRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -58,10 +60,25 @@ class Project
 	 */
 	private $status;
 
+	/**
+	 * @var Collection<int, Page>
+	 * @ORM\ManyToMany(targetEntity=Page::class)
+	 */
+	private $pages;
+
+	/**
+	 * @var Collection<int, Page>
+	 * @ORM\ManyToMany(targetEntity=Page::class)
+	 * @ORM\JoinTable(name="project_ignored_page")
+	 */
+	private $ignoredPages;
+
 	public function __construct()
 	{
 		$this->dateCreated = new \DateTime();
 		$this->status = self::STATUS_NEW;
+		$this->pages = new ArrayCollection();
+		$this->ignoredPages = new ArrayCollection();
 	}
 
 	public function getId(): ?int
@@ -127,5 +144,71 @@ class Project
 		$this->status = $status;
 
 		return $this;
+	}
+
+	/**
+	 * @return Collection<int, Page>
+	 */
+	public function getPages(): Collection
+	{
+		return $this->pages;
+	}
+
+	public function addPage(Page $page): self
+	{
+		if (!$this->pages->contains($page)) {
+			$this->pages[] = $page;
+		}
+
+		return $this;
+	}
+
+	public function removePage(Page $page): self
+	{
+		$this->pages->removeElement($page);
+
+		return $this;
+	}
+
+	/**
+	 * @return Collection<int, Page>
+	 */
+	public function getIgnoredPages(): Collection
+	{
+		return $this->ignoredPages;
+	}
+
+	public function addIgnoredPage(Page $ignoredPage): self
+	{
+		if (!$this->ignoredPages->contains($ignoredPage)) {
+			$this->ignoredPages[] = $ignoredPage;
+		}
+
+		return $this;
+	}
+
+	public function removeIgnoredPage(Page $ignoredPage): self
+	{
+		$this->ignoredPages->removeElement($ignoredPage);
+
+		return $this;
+	}
+
+	/**
+	 * @return Collection<int, Page>
+	 */
+	public function getActivePages(): Collection
+	{
+		$pageArray = [];
+
+		foreach ($this->getPages() as $page) {
+			$pageArray[$page->getId()] = $page;
+		}
+
+		foreach ($this->getIgnoredPages() as $ignoredPage) {
+			unset($pageArray[$ignoredPage->getId()]);
+		}
+
+		return new ArrayCollection(array_values($pageArray));
 	}
 }
