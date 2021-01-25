@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Project;
 use App\Form\NewProjectType;
+use App\Message\SitemapRequest;
 use App\Util\Url;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
@@ -46,18 +47,23 @@ class ProjectController extends AbstractController
 		$form->handleRequest($request);
 
 		if ($form->isSubmitted() && $form->isValid()) {
-			if (!$urlHelper->exists($urlHelper->standardize($project->getUrl()))) {
+			$websiteUrl = $urlHelper->standardize($project->getUrl());
+
+			// Check if the provided website URL exists
+			if (!$urlHelper->exists($websiteUrl)) {
 				$form->get('url')->addError(new FormError('This URL is invalid or unreachable.'));
 			}
 
 			if ($form->isValid()) {
+				$project->setUrl($websiteUrl);
 				$em = $this->getDoctrine()->getManager();
 				$em->persist($project);
 				$em->flush();
 
+				$this->dispatchMessage(new SitemapRequest($websiteUrl, $project->getId()));
 				$this->addFlash('success', $translator->trans('project_creation.flash.created_successfully', ['name' => $project->getName()]));
 
-				return $this->redirectToRoute('dashboard');
+				return $this->redirectToRoute('project_dashboard', ['id' => $project->getId()]);
 			}
 		}
 
@@ -72,6 +78,10 @@ class ProjectController extends AbstractController
 	public function projectDashboard(int $id): Response
 	{
 		$project = $this->getProject($id);
+
+		foreach ($project->getActivePages() as $page) {
+			dump($page);
+		}
 
 		return new Response('Not yet implemented; project '.$project->getName());
 	}

@@ -57,4 +57,18 @@ class ProjectRepository extends ServiceEntityRepository
 			->getOneOrNullResult()
 		;
 	}
+
+	/**
+	 * Finds projects corresponding to a provided URL.
+	 *
+	 * @return Project[]
+	 */
+	public function findByUrl(string $url): array
+	{
+		return $this->createQueryBuilder('p')
+			->where('p.url = :url')
+			->setParameter('url', $url)
+			->getQuery()
+			->getResult();
+	}
 }

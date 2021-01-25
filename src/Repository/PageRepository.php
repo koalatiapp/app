@@ -19,32 +19,33 @@ class PageRepository extends ServiceEntityRepository
 		parent::__construct($registry, Page::class);
 	}
 
-	// /**
-	//  * @return Page[] Returns an array of Page objects
-	//  */
-	/*
-	public function findByExampleField($value)
+	/**
+	 * Finds pages corresponding to a provided list of URLs.
+	 *
+	 * @param string[] $urls
+	 *
+	 * @return Page[]
+	 */
+	public function findByUrls(array $urls)
 	{
-		return $this->createQueryBuilder('p')
-			->andWhere('p.exampleField = :val')
-			->setParameter('val', $value)
-			->orderBy('p.id', 'ASC')
-			->setMaxResults(10)
-			->getQuery()
-			->getResult()
-		;
-	}
-	*/
+		$urls = array_values($urls);
 
-	/*
-	public function findOneBySomeField($value): ?Page
+		return $this->createQueryBuilder('p')
+			->where('p.url IN (:urls)')
+			->setParameter('urls', $urls)
+			->getQuery()
+			->getResult();
+	}
+
+	/**
+	 * Finds a page corresponding to a provided URL.
+	 */
+	public function findOneByUrl(string $url): ?Page
 	{
 		return $this->createQueryBuilder('p')
-			->andWhere('p.exampleField = :val')
-			->setParameter('val', $value)
+			->where('p.url = :url')
+			->setParameter('url', $url)
 			->getQuery()
-			->getOneOrNullResult()
-		;
+			->getOneOrNullResult();
 	}
-	*/
 }

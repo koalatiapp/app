@@ -157,7 +157,7 @@ class Project
 	public function addPage(Page $page): self
 	{
 		if (!$this->pages->contains($page)) {
-			$this->pages[] = $page;
+			$this->pages->add($page);
 		}
 
 		return $this;
@@ -181,7 +181,7 @@ class Project
 	public function addIgnoredPage(Page $ignoredPage): self
 	{
 		if (!$this->ignoredPages->contains($ignoredPage)) {
-			$this->ignoredPages[] = $ignoredPage;
+			$this->ignoredPages->add($ignoredPage);
 		}
 
 		return $this;

@@ -32,6 +32,16 @@ class Builder
 	}
 
 	/**
+	 * Returns the locations of the sitemap.
+	 *
+	 * @return array<string, \App\Util\Sitemap\Location>
+	 */
+	public function getLocations(): array
+	{
+		return $this->locations;
+	}
+
+	/**
 	 * Builds a sitemap from a website's URL.
 	 * The website's sitemap, if available, is fetched and scanned.
 	 * If the $crawlWebsite parameter is set to true, the website will also be crawled to generate a more complete sitemap.
@@ -57,6 +67,8 @@ class Builder
 		if ($crawlWebsite) {
 			$this->crawlWebsite($websiteUrl);
 		}
+
+		$this->standardizeProtocols();
 
 		return $this;
 	}
@@ -206,6 +218,36 @@ class Builder
 			$this->locations[$url] = new Location($url, $title);
 		} elseif ($title !== null) {
 			$this->locations[$url]->title = $title;
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Standardizes the protocol of the URLs in the sitemap.
+	 * If one or more URL use HTTPS, all URLs will be converted to use it.
+	 */
+	protected function standardizeProtocols(): self
+	{
+		$useHttps = false;
+
+		foreach ($this->locations as $url => $location) {
+			if (stripos($url, 'https://') === 0) {
+				$useHttps = true;
+				break;
+			}
+		}
+
+		if ($useHttps) {
+			$newLocations = [];
+
+			foreach ($this->locations as $url => $location) {
+				$newUrl = $this->urlHelper->standardize($url, true);
+				$location->url = $newUrl;
+				$newLocations[$newUrl] = $location;
+			}
+
+			$this->locations = $newLocations;
 		}
 
 		return $this;

@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=PageRepository::class)
+ * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="unique_url", columns={"url"})})
  */
 class Page
 {
@@ -23,9 +24,9 @@ class Page
 	private ?string $title;
 
 	/**
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="string", length=510)
 	 */
-	private ?string $url;
+	private string $url;
 
 	/**
 	 * @ORM\Column(type="datetime")
@@ -41,6 +42,14 @@ class Page
 	 * @ORM\Column(type="integer", nullable=true)
 	 */
 	private ?int $httpCode;
+
+	public function __construct(string $url, ?string $title = null)
+	{
+		$this->url = $url;
+		$this->title = $title;
+		$this->dateCreated = new \DateTime();
+		$this->dateUpdated = new \DateTime();
+	}
 
 	public function getId(): ?int
 	{
@@ -59,7 +68,7 @@ class Page
 		return $this;
 	}
 
-	public function getUrl(): ?string
+	public function getUrl(): string
 	{
 		return $this->url;
 	}
