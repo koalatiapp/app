@@ -15,12 +15,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ProjectController extends AbstractController
 {
+	protected const CURRENT_PROJECT_SESSION_KEY = 'koalati_current_project_id';
+
 	/**
 	 * Loads the target project and checks for user privileges.
-	 *
-	 * @return \App\Entity\Project
 	 */
-	protected function getProject(int $id)
+	protected function getProject(int $id): ?Project
 	{
 		/**
 		 * @var \App\Repository\ProjectRepository
@@ -32,7 +32,29 @@ class ProjectController extends AbstractController
 			throw $this->createNotFoundException('Project not found');
 		}
 
+		// Save the project to session as the "current project". This is used in the projectShortcut() method.
+		$this->get('session')->set(static::CURRENT_PROJECT_SESSION_KEY, $project->getId());
+
 		return $project;
+	}
+
+	/**
+	 * Redirects to the overview page for the last project opened.
+	 * If no project was last opened, redirect to the Projects tab of the dashboaard.
+	 *
+	 * @Route("/project/current", name="project_shortcut")
+	 */
+	public function projectShortcut(Request $request): Response
+	{
+		if ($currentProjectId = $request->getSession()->get(static::CURRENT_PROJECT_SESSION_KEY)) {
+			$project = $this->getProject($currentProjectId);
+
+			if ($project) {
+				return $this->redirectToRoute('project_dashboard', ['id' => $project->getId()]);
+			}
+		}
+
+		return $this->redirectToRoute('projects');
 	}
 
 	/**
@@ -61,7 +83,7 @@ class ProjectController extends AbstractController
 				$em->flush();
 
 				$this->dispatchMessage(new SitemapRequest($websiteUrl, $project->getId()));
-				$this->addFlash('success', $translator->trans('project_creation.flash.created_successfully', ['name' => $project->getName()]));
+				$this->addFlash('success', $translator->trans('project_creation.flash.created_successfully', ['%name%' => $project->getName()]));
 
 				return $this->redirectToRoute('project_dashboard', ['id' => $project->getId()]);
 			}
@@ -79,10 +101,8 @@ class ProjectController extends AbstractController
 	{
 		$project = $this->getProject($id);
 
-		foreach ($project->getActivePages() as $page) {
-			dump($page);
-		}
-
-		return new Response('Not yet implemented; project '.$project->getName());
+		return $this->render('app/project/dashboard.html.twig', [
+			'project' => $project,
+		]);
 	}
 }

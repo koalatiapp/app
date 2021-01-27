@@ -6,15 +6,19 @@ header { width: var(--sidebar-width); height: 100%; padding: 30px; border-right:
 header #brand-wrapper { height: 100px; }
 /* Layout: header: navigation */
 header nav { font-weight: 500; }
-header nav li { margin-bottom: 20px; border-radius: 10px; }
-header nav a { display: flex; height: 45px; padding: 0 15px; align-items: center; font-size: 15px; color: var(--color-gray); transition: color .25s ease; }
-header nav a i { display: inline-block; width: 30px; margin-right: 15px; font-size: 20px; text-align: center; }
-header nav a:hover { color: var(--color-black); }
-header nav a:not(:last-child)::after { content: '\f105'; margin-left: auto; font-family: var(--fa-style-family); font-size: 12px; font-weight: 400; }
-header nav li > ul { display: none; }
-header nav li.active { background-color: #F8FAFF; box-shadow: 0 3px 15px 0 rgba(var(--shadow-rgb), .09); }
-header nav li.active a { color: var(--color-black); }
-header nav li.active > ul { display: block; }
+header nav > ul > li { margin-bottom: 20px; border-radius: 10px; }
+header nav > ul > li > a { display: flex; height: 45px; padding: 0 15px; align-items: center; font-size: 15px; color: var(--color-gray); transition: color .25s ease; }
+header nav > ul > li > a i { display: inline-block; width: 30px; margin-right: 15px; font-size: 20px; text-align: center; }
+header nav > ul > li > a:hover { color: var(--color-black); }
+header nav > ul > li > a:not(:last-child)::after { content: '\f105'; margin-left: auto; font-family: var(--fa-style-family); font-size: 12px; font-weight: 400; }
+header nav > ul > li > ul { display: none; padding-left: 45px; padding-bottom: 10px; }
+header nav > ul > li > ul > li a { display: block; padding: 6px 10px; font-size: .9rem; color: var(--color-gray); transition: color .25s ease; }
+header nav > ul > li > ul > li a:hover,
+header nav > ul > li > ul > li.active a { color: var(--color-black); }
+header nav > ul > li.active { background-color: #F8FAFF; box-shadow: 0 3px 15px 0 rgba(var(--shadow-rgb), .09); }
+header nav > ul > li.active > a { color: var(--color-black); }
+header nav > ul > li.active > a:not(:last-child)::after { transform: rotate(90deg); }
+header nav > ul > li.active > ul { display: block; }
 /* Layout: header: quick actions */
 #quick-actions { position: absolute; bottom: 40px; left: 40px; }
 #quick-actions .toggle { display: grid; width: 50px; height: 50px; place-items: center; font-size: 24px; color: #fff; background-color: var(--color-blue); border-radius: 50%; box-shadow: 0 3px 15px rgba(var(--shadow-rgb), .35); transition: color .25s ease, background .25s ease, box-shadow .25s ease; }

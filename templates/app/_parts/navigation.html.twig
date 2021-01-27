@@ -7,13 +7,13 @@
                 <span>{% trans %}navigation.dashboard.label{% endtrans %}</span>
             </a>
         </li>
-        <li class="{{ current_route in ['project'] ? 'active' : '' }}">
-            <a href="{{ path('dashboard') }}">
+        <li class="{{ current_route in ['project_dashboard'] ? 'active' : '' }}">
+            <a href="{{ project is defined ? path('project_dashboard', {id: project.id}) : path('project_shortcut') }}">
                 <i class="far fa-laptop-mobile"></i>
                 <span>{% trans %}navigation.project.label{% endtrans %}</span>
             </a>
             <ul>
-                <li>
+                <li class="{{ current_route in ['project_dashboard'] ? 'active' : '' }}">
                     <a href="#">
                         {% trans %}navigation.project.sublink.overview{% endtrans %}
                     </a>
