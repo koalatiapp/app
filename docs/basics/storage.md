@@ -33,7 +33,7 @@ Once you have a license, you can install the Fake S3 server by running the follo
 
 ```bash
 gem install fakes3
-``` 
+```
 
 Once the installation is completed, you can start your local Fake S3 server:
 
