@@ -101,7 +101,7 @@ VOLUME /srv/app/var
 COPY docker/php/docker-healthcheck.sh /usr/local/bin/docker-healthcheck
 RUN chmod +x /usr/local/bin/docker-healthcheck
 
-HEALTHCHECK --interval=15s --timeout=5s --retries=3 CMD ["docker-healthcheck"]
+HEALTHCHECK --interval=15s --timeout=15s --retries=3 CMD ["docker-healthcheck"]
 
 COPY docker/php/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
 RUN chmod +x /usr/local/bin/docker-entrypoint
