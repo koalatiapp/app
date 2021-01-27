@@ -50,6 +50,7 @@ jobs:
             - name: Wait for services
               run: |
                   while status="$(docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" "$(docker-compose ps -q php)")"; do
+                    echo "[DEBUG] Status: $status"
                     case $status in
                       starting) sleep 1;;
                       healthy) exit 0;;
