@@ -10,6 +10,8 @@ services:
       # - ./var:/srv/app/var:rw
     environment:
       APP_ENV: dev
+    depends_on:
+      - database
 
   caddy:
     volumes:
