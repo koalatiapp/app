@@ -13,7 +13,7 @@ services:
       interval: 15s
       timeout: 3s
       retries: 5
-      start_period: 60s
+      start_period: 420s
     environment:
       # Run "composer require symfony/orm-pack" to install and configure Doctrine ORM
       #DATABASE_URL: mysql://${MYSQL_USER:-symfony}:${MYSQL_PASSWORD:-ChangeMe}@${MYSQL_HOST:-database}:${MYSQL_PORT:-3306)/${MYSQL_DATABASE:-app}?serverVersion=${MYSQL_VERSION:-8.0}
