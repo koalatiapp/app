@@ -211,4 +211,35 @@ class Project
 
 		return new ArrayCollection(array_values($pageArray));
 	}
+
+	/**
+	 * Returns the list of Koalati automated tools to run for this project.
+	 *
+	 * @TODO: Check the project/user/organization's settings to get the list of tools (replacing this method stub)
+	 *
+	 * @return string[]
+	 */
+	public function getEnabledAutomatedTools(): array
+	{
+		return [
+			'@koalati/tool-seo',
+			'@koalati/tool-accessibility',
+			'@koalati/tool-console',
+			'@koalati/tool-loading-speed',
+			'@koalati/tool-responsive',
+			'@koalati/tool-social',
+		];
+	}
+
+	/**
+	 * Returns the priority of this project's processing requests.
+	 * The higher the number, the higher the priority.
+	 * The default priority for free users is `1`.
+	 *
+	 * @TODO: Check the project/user/organization's subscription plan (replacing this method stub)
+	 */
+	public function getPriority(): int
+	{
+		return 1;
+	}
 }
