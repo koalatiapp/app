@@ -2,54 +2,82 @@
 
 namespace App\Tests\Util;
 
+use App\Util\Config;
+use App\Util\Url;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\MockResponse;
 
+/**
+ * @covers \Url::
+ */
 class UrlTest extends WebTestCase
 {
-	/**
-	 * @var \App\Util\Url;
-	 */
-	private $urlHelper;
+	private Url $urlHelper;
+	private Config $configHelper;
+	private string $stubsDir;
 
 	public function setup()
 	{
 		self::bootKernel();
 		$this->urlHelper = self::$container->get('App\\Util\\Url');
+		$this->configHelper = self::$container->get('App\\Util\\Config');
+		$this->stubsDir = self::$container->getParameter('test_stub_dir');
 	}
 
 	/**
 	 * Checks if a URL exists and returns a valid HTTP code (2xx).
+	 *
+	 * @covers \Url::exists
 	 */
 	public function testExists()
 	{
-		$this->assertTrue($this->urlHelper->exists('https://google.com'), 'Existing URL exists');
-		$this->assertFalse($this->urlHelper->exists(sprintf('http://randomdomain%s.com', rand(10, 10000))), 'Non-existing URL does not exist');
+		$mockHttpClient = new MockHttpClient([
+			new MockResponse(),
+			new MockResponse('', ['http_code' => 404]),
+		]);
+		$urlHelper = new Url($this->configHelper, $mockHttpClient);
+		$this->assertTrue($urlHelper->exists('https://domain.com'), 'Existing URL exists');
+		$this->assertFalse($urlHelper->exists('https://bad-domain.com'), 'Non-existing URL does not exist');
 	}
 
 	/**
 	 * Checks if a URL is an XML document.
+	 *
+	 * @covers \Url::isXml
 	 */
-	public function testIsXML()
+	public function testIsXml()
 	{
-		return $this->assertTrue($this->urlHelper->isXML('https://www.google.com/sitemap.xml'), 'XML page/document is XML');
-
-		return $this->assertFalse($this->urlHelper->isXML('https://www.google.com'), 'HTML page/document is not XML');
+		$mockHttpClient = new MockHttpClient([
+			new MockResponse(file_get_contents($this->stubsDir.'/sitemap.xml'), ['response_headers' => ['Content-Type' => 'application/xml']]),
+			new MockResponse(file_get_contents($this->stubsDir.'/webpage.html'), ['response_headers' => ['Content-Type' => 'text/html']]),
+		]);
+		$urlHelper = new Url($this->configHelper, $mockHttpClient);
+		$this->assertTrue($urlHelper->isXML('https://www.domain.com/sitemap.xml'), 'XML page/document is XML');
+		$this->assertFalse($urlHelper->isXML('https://www.domain.com'), 'HTML page/document is not XML');
 	}
 
 	/**
 	 * Checks if a URL is an HTML document.
+	 *
+	 * @covers \Url::isHtml
 	 */
-	public function testIsHTML()
+	public function testIsHtml()
 	{
-		return $this->assertTrue($this->urlHelper->isHTML('https://www.google.com'), 'HTML page/document is HTML');
-
-		return $this->assertFalse($this->urlHelper->isHTML('https://www.google.com/sitemap.xml'), 'Non-HTML page/document is not HTML');
+		$mockHttpClient = new MockHttpClient([
+			new MockResponse(file_get_contents($this->stubsDir.'/webpage.html'), ['response_headers' => ['Content-Type' => 'text/html']]),
+			new MockResponse(file_get_contents($this->stubsDir.'/image.png'), ['response_headers' => ['Content-Type' => 'image/png']]),
+		]);
+		$urlHelper = new Url($this->configHelper, $mockHttpClient);
+		$this->assertTrue($urlHelper->isHTML('https://www.domain.com'), 'HTML page/document is HTML');
+		$this->assertFalse($urlHelper->isHTML('https://www.domain.com/sitemap.xml'), 'Non-HTML page/document is not HTML');
 	}
 
 	/**
 	 * Standardizes an URL, ensuring the "https(s)://" protocol is defined.
 	 *
 	 * @param bool $forceHttps when $forceHttps is set to true, the URL will be changed to use HTTPS
+	 * @covers \Url::standardize
 	 */
 	public function testStandardize()
 	{
@@ -67,6 +95,8 @@ class UrlTest extends WebTestCase
 
 	/**
 	 * Removes the query string, anchor and trailing slash from an URL.
+	 *
+	 * @covers \Url::rootUrl
 	 */
 	public function testRootUrl()
 	{
@@ -82,6 +112,8 @@ class UrlTest extends WebTestCase
 
 	/**
 	 * Extract the domain name from an URL.
+	 *
+	 * @covers \Url::domain
 	 */
 	public function testDomain()
 	{
@@ -97,6 +129,8 @@ class UrlTest extends WebTestCase
 
 	/**
 	 * Suggests the standard sitemap URL for the provided website URL.
+	 *
+	 * @covers \Url::guessSitemap
 	 */
 	public function testGuessSitemap()
 	{
@@ -113,6 +147,8 @@ class UrlTest extends WebTestCase
 
 	/**
 	 * Returns the message for an HTTP code.
+	 *
+	 * @covers \Url::httpCodeMessage
 	 */
 	public function testHttpCodeMessage()
 	{

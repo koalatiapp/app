@@ -81,7 +81,7 @@ class Builder
 	{
 		$defaultSitemapUrl = $this->urlHelper->guessSitemap($websiteUrl);
 
-		if ($this->urlHelper->exists($defaultSitemapUrl) && $this->urlHelper->isXML($defaultSitemapUrl)) {
+		if ($this->urlHelper->exists($defaultSitemapUrl) && $this->urlHelper->isXml($defaultSitemapUrl)) {
 			return $defaultSitemapUrl;
 		}
 

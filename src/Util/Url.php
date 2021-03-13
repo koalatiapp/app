@@ -44,7 +44,7 @@ class Url
 	/**
 	 * Checks if a URL is an XML document.
 	 */
-	public function isXML(string $url): bool
+	public function isXml(string $url): bool
 	{
 		try {
 			$response = $this->client->request('GET', $url);
@@ -60,7 +60,7 @@ class Url
 	/**
 	 * Checks if a URL is an HTML document.
 	 */
-	public function isHTML(string $url): bool
+	public function isHtml(string $url): bool
 	{
 		try {
 			$response = $this->client->request('GET', $url);
