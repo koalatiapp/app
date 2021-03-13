@@ -118,9 +118,18 @@ class Url
 	public function domain(string $url): string
 	{
 		$url = $this->standardize($url);
-		$urlData = parse_url($url);
 
-		return $urlData['host'];
+		return parse_url($url, PHP_URL_HOST);
+	}
+
+	/**
+	 * Extract the path/slug from an URL.
+	 */
+	public function path(string $url): string
+	{
+		$url = $this->standardize($url);
+
+		return parse_url($url, PHP_URL_PATH) ?? '';
 	}
 
 	/**

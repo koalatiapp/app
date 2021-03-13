@@ -128,6 +128,20 @@ class UrlTest extends WebTestCase
 	}
 
 	/**
+	 * Extract the path/sluug from an URL.
+	 *
+	 * @covers \Url::path
+	 */
+	public function testPath()
+	{
+		$this->assertSame('/my-page', $this->urlHelper->path('domain.com/my-page?foo=bar#anchor'), 'Root domain without protocol');
+		$this->assertSame('/my-page', $this->urlHelper->path('http://domain.com/my-page?foo=bar#anchor'), 'Root domain with protocol (HTTP)');
+		$this->assertSame('/dir/my-page', $this->urlHelper->path('https://domain.com/dir/my-page'), 'Domain with multi-level path');
+		$this->assertSame('/', $this->urlHelper->path('https://domain.com/'), 'Domain with trailing slash');
+		$this->assertSame('', $this->urlHelper->path('https://domain.com'), 'Domain without trailing slash');
+	}
+
+	/**
 	 * Suggests the standard sitemap URL for the provided website URL.
 	 *
 	 * @covers \Url::guessSitemap
