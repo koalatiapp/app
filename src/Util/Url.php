@@ -10,16 +10,16 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class Url
 {
 	/**
-	 * @var \App\Util\Config;
+	 * @var \App\Util\Config|null;
 	 */
 	private $config;
 
 	/**
-	 * @var \Symfony\Contracts\HttpClient\HttpClientInterface;
+	 * @var \Symfony\Contracts\HttpClient\HttpClientInterface|null;
 	 */
 	private $client;
 
-	public function __construct(Config $config, HttpClientInterface $client)
+	public function __construct(?Config $config = null, ?HttpClientInterface $client = null)
 	{
 		$this->config = $config;
 		$this->client = $client;
@@ -78,7 +78,7 @@ class Url
 	 *
 	 * @param bool $forceHttps when $forceHttps is set to true, the URL will be changed to use HTTPS
 	 */
-	public function standardize(string $url, bool $forceHttps = false): string
+	public static function standardize(string $url, bool $forceHttps = false): string
 	{
 		$url = strtolower($url);
 
@@ -96,9 +96,9 @@ class Url
 	/**
 	 * Removes the query string, anchor and trailing slash from an URL.
 	 */
-	public function rootUrl(string $url): string
+	public static function rootUrl(string $url): string
 	{
-		$url = $this->standardize($url);
+		$url = static::standardize($url);
 
 		// Trim URL queries and anchor hash
 		$url = explode('?', $url)[0];
@@ -115,9 +115,9 @@ class Url
 	/**
 	 * Extract the domain name from an URL.
 	 */
-	public function domain(string $url): string
+	public static function domain(string $url): string
 	{
-		$url = $this->standardize($url);
+		$url = static::standardize($url);
 
 		return parse_url($url, PHP_URL_HOST);
 	}
@@ -125,9 +125,9 @@ class Url
 	/**
 	 * Extract the path/slug from an URL.
 	 */
-	public function path(string $url): string
+	public static function path(string $url): string
 	{
-		$url = $this->standardize($url);
+		$url = static::standardize($url);
 
 		return parse_url($url, PHP_URL_PATH) ?? '';
 	}
@@ -135,9 +135,9 @@ class Url
 	/**
 	 * Suggests the standard sitemap URL for the provided website URL.
 	 */
-	public function guessSitemap(string $url): string
+	public static function guessSitemap(string $url): string
 	{
-		return $this->rootUrl($url).'/sitemap.xml';
+		return static::rootUrl($url).'/sitemap.xml';
 	}
 
 	/**
