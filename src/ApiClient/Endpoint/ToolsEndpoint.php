@@ -4,7 +4,7 @@ namespace App\ApiClient\Endpoint;
 
 use App\ApiClient\Exception\ToolsRequestFailedException;
 
-class ToolsEndpoint extends AbstractEndpoint
+final class ToolsEndpoint extends AbstractEndpoint
 {
 	/**
 	 * Enqueues a processing request.

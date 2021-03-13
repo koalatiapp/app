@@ -6,7 +6,7 @@ use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class Client implements ClientInterface
+final class Client implements ClientInterface
 {
 	/**
 	 * @var \Symfony\Contracts\HttpClient\HttpClientInterface;

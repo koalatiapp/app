@@ -2,7 +2,7 @@
 
 namespace App\ApiClient\Endpoint;
 
-class StatusEndpoint extends AbstractEndpoint
+final class StatusEndpoint extends AbstractEndpoint
 {
 	/**
 	 * Checks whether the tools API is up or down and returns its status.
