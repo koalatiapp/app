@@ -2,6 +2,8 @@
 
 namespace App\ApiClient\Endpoint;
 
+use App\ApiClient\Exception\ToolsRequestFailedException;
+
 class ToolsEndpoint extends AbstractEndpoint
 {
 	/**
@@ -11,9 +13,9 @@ class ToolsEndpoint extends AbstractEndpoint
 	 * @param string|string[] $tool     Tool(s) on which to run the provided tools. The tool names are usually npm package names.
 	 * @param int             $priority Priority of the request. The higher the number, the higher the priority.
 	 *
-	 * @return bool whether the request has successfully been added to the queue
+	 * @throws ToolsRequestFailedException
 	 */
-	public function request(string | array $url, string | array $tool, int $priority = 1): bool
+	public function request(string | array $url, string | array $tool, int $priority = 1): void
 	{
 		$response = $this->client->request('POST', '/tools/request', [
 			'url' => $url,
@@ -21,6 +23,8 @@ class ToolsEndpoint extends AbstractEndpoint
 			'priority' => $priority,
 		]);
 
-		return $response['success'];
+		if (!$response['success']) {
+			throw new ToolsRequestFailedException();
+		}
 	}
 }
