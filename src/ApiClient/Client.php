@@ -2,6 +2,8 @@
 
 namespace App\ApiClient;
 
+use App\ApiClient\Exception\ToolsApiBadResponseException;
+use App\ApiClient\Exception\ToolsApiConfigurationException;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -24,14 +26,14 @@ class Client implements ClientInterface
 	/**
 	 * Ensure that the required environment variables are defined to ues the client.
 	 *
-	 * @throws \Exception
+	 * @throws ToolsApiConfigurationException
 	 *
 	 * @return void
 	 */
 	private function validateConfiguration()
 	{
 		if (empty($_ENV['TOOLS_API_URL']) || empty($_ENV['TOOLS_API_BEARER_TOKEN'])) {
-			throw new \Exception('The "TOOLS_API_URL" and "TOOLS_API_BEARER_TOKEN" environment variables must be defined to use the tools API client.');
+			throw new ToolsApiConfigurationException();
 		}
 	}
 
@@ -41,6 +43,11 @@ class Client implements ClientInterface
 	 * @param string       $method   HTTP method of the request (GET, POST, PUT or DELETE)
 	 * @param string       $endpoint API endpoint to query
 	 * @param array<mixed> $body     Body of the request
+	 *
+	 * @throws ToolsApiBadResponseException
+	 * @throws AccessDeniedHttpException
+	 * @throws NotFoundHttpException
+	 * @throws \Exception
 	 *
 	 * @return array<mixed>
 	 */
@@ -58,6 +65,12 @@ class Client implements ClientInterface
 			throw new NotFoundHttpException(sprintf('The tools API endpoint "%s" could not be found. Make sure to provide a valid API URL in the "TOOLS_API_URL" environment variable.', $endpoint));
 		} elseif ($statusCode != 200) {
 			throw new \Exception(sprintf('An unknown error (code %s) occured in a request to the tools API endpoint "%s".', $statusCode, $endpoint), $statusCode);
+		}
+
+		$decodedResponse = $response->toArray();
+
+		if (!$decodedResponse['success']) {
+			throw new ToolsApiBadResponseException($decodedResponse['message'] ?? 'No error message was provided by the API.');
 		}
 
 		return $response->toArray();
