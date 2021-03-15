@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\ApiClient\Endpoint;
+namespace App\Tests\Unit\ApiClient\Endpoint;
 
 use App\ApiClient\Endpoint\ToolsEndpoint;
 use App\ApiClient\MockClient;

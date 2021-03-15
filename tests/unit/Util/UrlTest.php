@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Util;
+namespace App\Tests\Unit\Util;
 
 use App\Util\Config;
 use App\Util\Url;
