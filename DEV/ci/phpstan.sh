@@ -1,4 +1,4 @@
-addedFiles=$(git diff --diff-filter=d --cached --name-only)
+addedFiles=$(git diff --diff-filter=d --cached --name-only ":!tests")
 
 if [ -z "$addedFiles" ];
 then
