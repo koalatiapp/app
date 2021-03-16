@@ -63,11 +63,25 @@ class User implements UserInterface
 	 * @ORM\OneToMany(targetEntity=Project::class, mappedBy="ownerUser")
 	 * @ORM\OrderBy({"dateCreated" = "ASC"})
 	 */
-	private $projects;
+	private $personalProjects;
+
+	/**
+	 * @var \Doctrine\Common\Collections\Collection<int, OrganizationMember>
+	 * @ORM\OneToMany(targetEntity=OrganizationMember::class, mappedBy="user", orphanRemoval=true)
+	 */
+	private $organizationLinks;
+
+	/**
+	 * @var \Doctrine\Common\Collections\Collection<int, ProjectMember>
+	 * @ORM\OneToMany(targetEntity=ProjectMember::class, mappedBy="user")
+	 */
+	private $projectLinks;
 
 	public function __construct()
 	{
-		$this->projects = new ArrayCollection();
+		$this->personalProjects = new ArrayCollection();
+		$this->organizationLinks = new ArrayCollection();
+		$this->projectLinks = new ArrayCollection();
 	}
 
 	public function getId(): ?int
@@ -190,28 +204,115 @@ class User implements UserInterface
 	/**
 	 * @return Collection<int, Project>
 	 */
-	public function getProjects(): Collection
+	public function getAllProjects(): Collection
 	{
-		return $this->projects;
+		// Start by adding personal projects
+		$projects = $this->getPersonalProjects();
+
+		// Add all projects in which the user is a member
+		foreach ($this->getProjectLinks() as $projectLink) {
+			$projects->add($projectLink->getProject());
+		}
+
+		// Add all projects of organizations where the user is an admin
+		foreach ($this->getOrganizationLinks() as $organizationLink) {
+			$organization = $organizationLink->getOrganization();
+			$isAdminWithinOrg = in_array(OrganizationMember::ROLE_ADMIN, $organizationLink->getRoles());
+
+			if ($isAdminWithinOrg) {
+				foreach ($organization->getProjects() as $organizationProject) {
+					if (!$projects->contains($organizationProject)) {
+						$projects->add($organizationProject);
+					}
+				}
+			}
+		}
+
+		return $projects;
 	}
 
-	public function addProject(Project $project): self
+	/**
+	 * @return Collection<int, Project>
+	 */
+	public function getPersonalProjects(): Collection
 	{
-		if (!$this->projects->contains($project)) {
-			$this->projects[] = $project;
+		return $this->personalProjects;
+	}
+
+	public function addPersonalProject(Project $project): self
+	{
+		if (!$this->personalProjects->contains($project)) {
+			$this->personalProjects[] = $project;
 			$project->setOwnerUser($this);
 		}
 
 		return $this;
 	}
 
-	public function removeProject(Project $project): self
+	public function removePersonalProject(Project $project): self
 	{
-		if ($this->projects->removeElement($project)) {
+		if ($this->personalProjects->removeElement($project)) {
 			// set the owning side to null (unless already changed)
 			if ($project->getOwnerUser() === $this) {
 				$project->setOwnerUser(null);
 			}
+		}
+
+		return $this;
+	}
+
+	/**
+	 * @return Collection<int, OrganizationMember>
+	 */
+	public function getOrganizationLinks(): Collection
+	{
+		return $this->organizationLinks;
+	}
+
+	public function addOrganizationLink(OrganizationMember $organizationLink): self
+	{
+		if (!$this->organizationLinks->contains($organizationLink)) {
+			$this->organizationLinks[] = $organizationLink;
+			$organizationLink->setUser($this);
+		}
+
+		return $this;
+	}
+
+	public function removeOrganizationLink(OrganizationMember $organizationLink): self
+	{
+		if ($this->organizationLinks->removeElement($organizationLink)) {
+			// set the owning side to null (unless already changed)
+			if ($organizationLink->getUser() === $this) {
+				$organizationLink->setUser(null);
+			}
+		}
+
+		return $this;
+	}
+
+	/**
+	 * @return Collection<int, ProjectMember>
+	 */
+	public function getProjectLinks(): Collection
+	{
+		return $this->projectLinks;
+	}
+
+	public function addProjectLink(ProjectMember $projectLink): self
+	{
+		if (!$this->projectLinks->contains($projectLink)) {
+			$this->projectLinks[] = $projectLink;
+			$projectLink->addUser($this);
+		}
+
+		return $this;
+	}
+
+	public function removeProjectLink(ProjectMember $projectLink): self
+	{
+		if ($this->projectLinks->removeElement($projectLink)) {
+			$projectLink->setUser(null);
 		}
 
 		return $this;

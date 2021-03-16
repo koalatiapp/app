@@ -35,10 +35,15 @@ class Project
 
 	/**
 	 * @var \App\Entity\User|null
-	 * @Assert\NotBlank
-	 * @ORM\ManyToOne(targetEntity=User::class, inversedBy="projects")
+	 * @ORM\ManyToOne(targetEntity=User::class, inversedBy="personalProjects")
 	 */
 	private $ownerUser;
+
+	/**
+	 * @var \App\Entity\Organization|null
+	 * @ORM\ManyToOne(targetEntity=Organization::class, inversedBy="projects")
+	 */
+	private $ownerOrganization;
 
 	/**
 	 * @var \DateTimeInterface
@@ -73,12 +78,19 @@ class Project
 	 */
 	private $ignoredPages;
 
+	/**
+	 * @var Collection<int, ProjectMember>
+	 * @ORM\OneToMany(targetEntity=ProjectMember::class, mappedBy="project")
+	 */
+	private $teamMembers;
+
 	public function __construct()
 	{
 		$this->dateCreated = new \DateTime();
 		$this->status = self::STATUS_NEW;
 		$this->pages = new ArrayCollection();
 		$this->ignoredPages = new ArrayCollection();
+		$this->teamMembers = new ArrayCollection();
 	}
 
 	public function getId(): ?int
@@ -241,5 +253,47 @@ class Project
 	public function getPriority(): int
 	{
 		return 1;
+	}
+
+	public function getOwnerOrganization(): ?Organization
+	{
+		return $this->ownerOrganization;
+	}
+
+	public function setOwnerOrganization(?Organization $ownerOrganization): self
+	{
+		$this->ownerOrganization = $ownerOrganization;
+
+		return $this;
+	}
+
+	/**
+	 * @return Collection<int, ProjectMember>
+	 */
+	public function getTeamMembers(): Collection
+	{
+		return $this->teamMembers;
+	}
+
+	public function addTeamMember(ProjectMember $teamMember): self
+	{
+		if (!$this->teamMembers->contains($teamMember)) {
+			$this->teamMembers[] = $teamMember;
+			$teamMember->setProject($this);
+		}
+
+		return $this;
+	}
+
+	public function removeTeamMember(ProjectMember $teamMember): self
+	{
+		if ($this->teamMembers->removeElement($teamMember)) {
+			// set the owning side to null (unless already changed)
+			if ($teamMember->getProject() === $this) {
+				$teamMember->setProject(null);
+			}
+		}
+
+		return $this;
 	}
 }

@@ -13,7 +13,7 @@ class DashboardController extends AbstractController
 	 */
 	public function overview(): Response
 	{
-		$projects = $this->getUser()->getProjects();
+		$projects = $this->getUser()->getAllProjects();
 
 		return $this->render('app/dashboard/index.html.twig', [
 			'projects' => $projects->slice(0, 3),
@@ -25,7 +25,7 @@ class DashboardController extends AbstractController
 	 */
 	public function projects(): Response
 	{
-		$projects = $this->getUser()->getProjects();
+		$projects = $this->getUser()->getAllProjects();
 
 		return $this->render('app/dashboard/projects.html.twig', [
 			'projects' => $projects,
