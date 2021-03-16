@@ -52,4 +52,10 @@
 	--notification-danger-bg-color: #FFE8E8;
 	--notification-danger-icon-color: #D46666;
 	--notification-danger-text-color: #4D1313;
+
+	/* Tabbed page container */
+	--tabbed-page-navigation-bg-color: #E8ECFD;
+	--tabbed-page-navigation-text-color: #7781A5;
+	--tabbed-page-navigation-text-color-hover: var(--color-black);
+	--tabbed-page-navigation-text-color-active: var(--color-blue);
 }
