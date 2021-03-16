@@ -1,1 +1,2 @@
 body { font-family: Raleway, sans-serif; font-size: 15px; font-weight: 400; color: var(--color-black); background-color: #eff2ff; background-image: radial-gradient(circle, rgba(255, 255, 255, .9) 0%, #eff2ff 100%); background-size: 100% 190vh; background-position: center top -75vh; background-repeat: no-repeat; background-attachment: fixed; }
+section { padding: 75px 0; }

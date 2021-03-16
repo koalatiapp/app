@@ -2,6 +2,8 @@ generic:
     cancel: Cancel
     just_now: Just now
     back_to_dashboard: Back to your dashboard
+    project_section_title: 'Project: %name%'
+    not_yet_implemented: This will be implemented in a future update of the Koalati platform.
 
 branding:
     name: Koalati
@@ -90,7 +92,26 @@ project_creation:
 
 project_dashboard:
     title: Overview
-    section_title: 'Project: %name%'
+
+project_settings:
+    title: Project settings
+    tabs:
+        basic_information: Basic information
+        team: Team and roles
+        automated_testing: Automated testing
+        checklist: Checklist
+    form:
+        title: Website information
+        submit_label: Update project
+        field:
+            name:
+                label: Project name
+                placeholder: My awesome project
+            url:
+                label: Website URL
+                placeholder: www.domain.com
+    flash:
+        updated_successfully: Your project "%name%" has been updated successfully!
 
 entity:
     project:

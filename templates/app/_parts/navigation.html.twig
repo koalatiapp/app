@@ -7,33 +7,35 @@
                 <span>{% trans %}navigation.dashboard.label{% endtrans %}</span>
             </a>
         </li>
-        <li class="{{ current_route in ['project_dashboard'] ? 'active' : '' }}">
-            <a href="{{ project is defined ? path('project_dashboard', {id: project.id}) : path('project_shortcut') }}">
+        <li class="{{ current_route in ['project_dashboard', 'project_settings'] ? 'active' : '' }}">
+            <a href="{{ project is defined and project.id ? path('project_dashboard', {id: project.id}) : path('project_shortcut') }}">
                 <i class="far fa-laptop-mobile"></i>
                 <span>{% trans %}navigation.project.label{% endtrans %}</span>
             </a>
-            <ul>
-                <li class="{{ current_route in ['project_dashboard'] ? 'active' : '' }}">
-                    <a href="#">
-                        {% trans %}navigation.project.sublink.overview{% endtrans %}
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        {% trans %}navigation.project.sublink.checklist{% endtrans %}
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        {% trans %}navigation.project.sublink.automated_testing{% endtrans %}
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        {% trans %}navigation.project.sublink.settings{% endtrans %}
-                    </a>
-                </li>
-            </ul>
+			{% if project is defined and project.id %}
+				<ul>
+					<li class="{{ current_route in ['project_dashboard'] ? 'active' : '' }}">
+						<a href="{{ path('project_dashboard', {id: project.id}) }}">
+							{% trans %}navigation.project.sublink.overview{% endtrans %}
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							{% trans %}navigation.project.sublink.checklist{% endtrans %}
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							{% trans %}navigation.project.sublink.automated_testing{% endtrans %}
+						</a>
+					</li>
+					<li class="{{ current_route in ['project_settings'] ? 'active' : '' }}">
+						<a href="{{ path('project_settings', {id: project.id}) }}">
+							{% trans %}navigation.project.sublink.settings{% endtrans %}
+						</a>
+					</li>
+				</ul>
+			{% endif %}
         </li>
         <li class="{{ current_route in ['resources'] ? 'active' : '' }}">
             <a href="#">

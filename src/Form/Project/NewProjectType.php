@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Form;
+namespace App\Form\Project;
 
 use App\Entity\Project;
 use Symfony\Component\Form\AbstractType;
@@ -17,11 +17,11 @@ class NewProjectType extends AbstractType
 		$builder
 			->add('name', TextType::class, [
 				'label' => 'project_creation.form.field.name.label',
-				'attr' => ['placeholder' => 'project_creation.form.field.name.placeholder', 'autofocus' => 'true'],
+				'attr' => ['placeholder' => 'project_creation.form.field.name.placeholder', 'autofocus' => 'true', 'class' => 'medium'],
 			])
 			->add('url', UrlType::class, [
 				'label' => 'project_creation.form.field.url.label',
-				'attr' => ['placeholder' => 'project_creation.form.field.url.placeholder'],
+				'attr' => ['placeholder' => 'project_creation.form.field.url.placeholder', 'class' => 'medium'],
 			])
 			->add('save', SubmitType::class, [
 				'label' => 'project_creation.form.submit_label',

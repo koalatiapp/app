@@ -17,6 +17,3 @@
 .container.space-between { justify-content: space-between; }
 .container.align-center { align-items: center; }
 .container.column { flex-direction: column; }
-
-/* Sections */
-section { padding: 75px 0; }
