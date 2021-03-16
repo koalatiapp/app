@@ -3,61 +3,39 @@
 {% block title %}{% trans %}project_settings.title{% endtrans %}{% endblock %}
 {% block section_title %}{{ 'generic.project_section_title'|trans({'%name%':project.name}) }}{% endblock %}
 
+{% block javascripts %}
+	<script src="{{ asset("components/tabbed-container/component.js") }}"></script>
+{% endblock %}
+
 {% block body %}
 	{{ form_start(form) }}
 		{% set submitButton = form_row(form.save) %}
 
-		<div class="tabbed-page-wrapper">
-			<nav>
-				<ul>
-					<li>
-						<a href="#basic-information" class="active">
-							{% trans %}project_settings.tabs.basic_information{% endtrans %}
-						</a>
-					</li>
-					<li>
-						<a href="#team-and-roles">
-							{% trans %}project_settings.tabs.team{% endtrans %}
-						</a>
-					</li>
-					<li>
-						<a href="#automated-testing">
-							{% trans %}project_settings.tabs.automated_testing{% endtrans %}
-						</a>
-					</li>
-					<li>
-						<a href="#checklist">
-							{% trans %}project_settings.tabs.checklist{% endtrans %}
-						</a>
-					</li>
-				</ul>
-			</nav>
-			<main>
-				<div id="basic-information" class="card active">
-					<h2>{% trans %}project_settings.tabs.basic_information{% endtrans %}</h2>
-					{{ form_row(form.name) }}
-					{{ form_row(form.url) }}
-					{{ submitButton|raw }}
-				</div>
+		<tabbed-container>
+			<div id="basic-information">
+				<h2>{% trans %}project_settings.tabs.basic_information{% endtrans %}</h2>
+				{{ form_row(form.name) }}
+				{{ form_row(form.url) }}
+				{{ submitButton|raw }}
+			</div>
 
-				<div id="team-and-roles" class="card">
-					<h2>{% trans %}project_settings.tabs.team{% endtrans %}</h2>
-					{% trans %}generic.not_yet_implemented{% endtrans %}
-					{{ submitButton|raw }}
-				</div>
+			<div id="team-and-roles">
+				<h2>{% trans %}project_settings.tabs.team{% endtrans %}</h2>
+				{% trans %}generic.not_yet_implemented{% endtrans %}
+				{{ submitButton|raw }}
+			</div>
 
-				<div id="automated-testing" class="card">
-					<h2>{% trans %}project_settings.tabs.automated_testing{% endtrans %}</h2>
-					{% trans %}generic.not_yet_implemented{% endtrans %}
-					{{ submitButton|raw }}
-				</div>
+			<div id="automated-testing">
+				<h2>{% trans %}project_settings.tabs.automated_testing{% endtrans %}</h2>
+				{% trans %}generic.not_yet_implemented{% endtrans %}
+				{{ submitButton|raw }}
+			</div>
 
-				<div id="checklist" class="card">
-					<h2>{% trans %}project_settings.tabs.checklist{% endtrans %}</h2>
-					{% trans %}generic.not_yet_implemented{% endtrans %}
-					{{ submitButton|raw }}
-				</div>
-			</main>
-		</div>
+			<div id="checklist">
+				<h2>{% trans %}project_settings.tabs.checklist{% endtrans %}</h2>
+				{% trans %}generic.not_yet_implemented{% endtrans %}
+				{{ submitButton|raw }}
+			</div>
+		</tabbed-container>
 	{{ form_end(form) }}
 {% endblock %}
