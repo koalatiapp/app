@@ -67,6 +67,9 @@ customElements.define(
 				e.preventDefault();
 				const targetSectionId = e.target.getAttribute("href").replace("#", "");
 
+				// Update anchor in URL
+				history.replaceState({}, document.title, "#" + targetSectionId);
+
 				// Toggle active class on appropriate nav links
 				shadowRoot.querySelector("nav a.active")?.classList.remove("active");
 				e.target.classList.add("active");
