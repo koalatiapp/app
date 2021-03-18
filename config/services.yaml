@@ -45,3 +45,7 @@ services:
         parent:  App\Storage\AbstractStorage
 
     App\ApiClient\ClientInterface: '@App\ApiClient\Client'
+
+    App\Util\Screenshot\Driver\ApiFlash:
+        arguments:
+            - '%env(APIFLASH_ACCESS_KEY)%'

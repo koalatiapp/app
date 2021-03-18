@@ -2,12 +2,12 @@
 
 namespace App\Util\Screenshot;
 
-interface ScreenshotInterface
+use App\Util\Screenshot\Driver\ScreenshotDriverInterface;
+use App\Util\Url;
+
+interface ScreenshotGeneratorInterface
 {
-	/**
-	 * @param string|null $driver The driver class to use for the screenshot generation. If `null`, a driver will automatically be selected.
-	 */
-	public function __construct(?string $driver = null);
+	public function __construct(ScreenshotDriverInterface $driver, Url $urlHelper);
 
 	/**
 	 * Toggles the fullpage screenshot mode.
@@ -23,24 +23,31 @@ interface ScreenshotInterface
 	public function setRenderWidth(?int $width = null): self;
 
 	/**
+	 * Defines the scale factor to use for the screenshot generation.
+	 * A value of `2` will generate images suitable for retina displays.
+	 * The default value is `1`.
+	 */
+	public function setRenderScale(int $scale): self;
+
+	/**
 	 * Takes a screenshot using a mobile resolution and
 	 * returns the resulting image content.
 	 *
 	 * @param bool $fresh whether to force a refresh or allow cached images
 	 */
-	public function mobile(bool $fresh = false): string;
+	public function renderMobile(string $url, bool $fresh = false): string;
 
 	/**
-	 * Takes a screenshot using a custom resolution and
+	 * Takes a screenshot using a desktop resolution and
 	 * returns the resulting image content.
 	 *
 	 * @param bool $fresh whether to force a refresh or allow cached images
 	 */
-	public function desktop(bool $fresh = false): string;
+	public function renderDesktop(string $url, bool $fresh = false): string;
 
 	/**
 	 * Takes a screenshot using the provided resolution and
 	 * returns the resulting image content.
 	 */
-	public function custom(int $viewportWidth, int $viewportHeight, bool $fresh = false): string;
+	public function renderCustom(string $url, int $viewportWidth, int $viewportHeight, bool $fresh = false): string;
 }
