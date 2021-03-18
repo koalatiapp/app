@@ -121,3 +121,14 @@
         {{- form_widget(form) -}}
     </div>
 {%- endblock button_row -%}
+
+{%- block checkbox_row -%}
+    <fieldset{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %}>
+        {{- form_errors(form) -}}
+        <div class="standalone-checkbox">
+			{{- form_widget(form) -}}
+        	{{- form_label(form) -}}
+		</div>
+        {{- form_help(form) -}}
+    </fieldset>
+{%- endblock checkbox_row -%}
