@@ -36,6 +36,13 @@
 				{% trans %}generic.not_yet_implemented{% endtrans %}
 				{{ submitButton|raw }}
 			</div>
+
+			<div id="delete">
+				<h2>{% trans %}project_settings.tabs.delete{% endtrans %}</h2>
+				<p>{% trans %}project_settings.delete.warning_text{% endtrans %}</p>
+				{{ form_row(form.deleteConfirmation) }}
+				{{ form_row(form.delete) }}
+			</div>
 		</tabbed-container>
 	{{ form_end(form) }}
 {% endblock %}

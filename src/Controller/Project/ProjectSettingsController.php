@@ -20,26 +20,46 @@ class ProjectSettingsController extends AbstractProjectController
 		$project = $this->getProject($id);
 		$originalProject = clone $project;
 
+		/**
+		 * @var \Symfony\Component\Form\Form $form
+		 */
 		$form = $this->createForm(ProjectSettingsType::class, $project);
 		$form->handleRequest($request);
 
-		if ($form->isSubmitted() && $form->isValid()) {
-			$websiteUrl = $urlHelper->standardize($project->getUrl());
+		if ($form->isSubmitted()) {
+			// Handle deletion first without regular form validation
+			if ($form->getClickedButton()->getName() == 'delete' && $this->isCsrfTokenValid($form->getName(), $request->request->get($form->getName())['_token'] ?? null)) {
+				if ($form->get('deleteConfirmation')->getData() === true) {
+					$em = $this->getDoctrine()->getManager();
+					$em->remove($project);
+					$em->flush();
 
-			if ($originalProject->getUrl() != $project->getUrl()) {
-				// Check if the provided website URL exists
-				if (!$urlHelper->exists($websiteUrl)) {
-					$form->get('url')->addError(new FormError('This URL is invalid or unreachable.'));
+					$this->addFlash('success', $translator->trans('project_settings.flash.deleted_successfully', ['%name%' => $project->getName()]));
+
+					return $this->redirectToRoute('dashboard');
+				} else {
+					$form->get('deleteConfirmation')->addError(new FormError($translator->trans('project_settings.delete.error_confirmation')));
 				}
 			}
+			// Handle the good old form settings form regularly
+			elseif ($form->isValid()) {
+				$websiteUrl = $urlHelper->standardize($project->getUrl());
 
-			if ($form->isValid()) {
-				$project->setUrl($websiteUrl);
-				$em = $this->getDoctrine()->getManager();
-				$em->persist($project);
-				$em->flush();
+				if ($originalProject->getUrl() != $project->getUrl()) {
+					// Check if the provided website URL exists
+					if (!$urlHelper->exists($websiteUrl)) {
+						$form->get('url')->addError(new FormError($translator->trans('project_settings.form.field.url.error_unreachable')));
+					}
+				}
 
-				$this->addFlash('success', $translator->trans('project_settings.flash.updated_successfully', ['%name%' => $project->getName()]));
+				if ($form->isValid()) {
+					$project->setUrl($websiteUrl);
+					$em = $this->getDoctrine()->getManager();
+					$em->persist($project);
+					$em->flush();
+
+					$this->addFlash('success', $translator->trans('project_settings.flash.updated_successfully', ['%name%' => $project->getName()]));
+				}
 			}
 		}
 

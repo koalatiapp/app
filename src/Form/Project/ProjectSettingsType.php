@@ -4,6 +4,7 @@ namespace App\Form\Project;
 
 use App\Entity\Project;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
@@ -25,6 +26,18 @@ class ProjectSettingsType extends AbstractType
 			])
 			->add('save', SubmitType::class, [
 				'label' => 'project_settings.form.submit_label',
+			])
+			->add('deleteConfirmation', CheckboxType::class, [
+				'label' => 'project_settings.delete.confirmation_label',
+				'label_translation_parameters' => [
+					'%name%' => $builder->getData()->getName(),
+				],
+				'required' => false,
+				'mapped' => false,
+			])
+			->add('delete', SubmitType::class, [
+				'label' => 'project_settings.delete.button_label',
+				'attr' => ['class' => 'danger'],
 			]);
 	}
 
