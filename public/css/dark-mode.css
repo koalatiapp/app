@@ -19,3 +19,7 @@ body.dark {
 body.dark hr,
 body.dark .spacer { background-color: var(--color-gray-light); }
 body.dark header nav li.active { background-color: var(--color-gray-light); }
+
+/* Component: Project: Thumbnail */
+body.dark .project-thumbnail .thumbnail::after { background-color: black; }
+body.dark .project-thumbnail .thumbnail img { filter: brightness(.75); }
