@@ -3,6 +3,8 @@
 namespace App\Storage;
 
 use App\Entity\Project;
+use League\Flysystem\Config as FlysystemConfig;
+use League\Flysystem\Visibility;
 
 /**
  * Storage service for project-related storage operations (favicons, screenshots, etc.).
@@ -30,17 +32,32 @@ class ProjectStorage extends AbstractStorage
 		return $this->generateUrl($faviconPath, false);
 	}
 
+	private function getThumbnailPath(Project $project): string
+	{
+		return implode('/', [
+			self::DIRECTORY,
+			'thumbnail',
+			md5($project->getUrl()),
+		]);
+	}
+
 	/**
 	 * Return the URL of a project's thumbnail.
 	 */
 	public function thumbnailUrl(Project $project): string
 	{
-		$thumbnailPath = implode('/', [
-			self::DIRECTORY,
-			'thumbnail',
-			md5($project->getUrl()),
-		]);
+		return $this->generateUrl($this->getThumbnailPath($project), false);
+	}
 
-		return $this->generateUrl($thumbnailPath, false);
+	/**
+	 * Uploads a project thumbnail.
+	 */
+	public function uploadThumbnail(Project $project, string $contents): void
+	{
+		$this->filesystem->write(
+			$this->getThumbnailPath($project),
+			$contents,
+			[FlysystemConfig::OPTION_VISIBILITY => Visibility::PUBLIC]
+		);
 	}
 }
