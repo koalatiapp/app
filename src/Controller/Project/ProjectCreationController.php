@@ -4,6 +4,7 @@ namespace App\Controller\Project;
 
 use App\Entity\Project;
 use App\Form\Project\NewProjectType;
+use App\Message\ScreenshotRequest;
 use App\Message\SitemapRequest;
 use App\Util\Url;
 use Symfony\Component\Form\FormError;
@@ -39,6 +40,7 @@ class ProjectCreationController extends AbstractProjectController
 				$em->persist($project);
 				$em->flush();
 
+				$this->dispatchMessage(new ScreenshotRequest($project->getId()));
 				$this->dispatchMessage(new SitemapRequest($websiteUrl, $project->getId()));
 				$this->addFlash('success', $translator->trans('project_creation.flash.created_successfully', ['%name%' => $project->getName()]));
 

@@ -3,6 +3,7 @@
 namespace App\Controller\Project;
 
 use App\Form\Project\ProjectSettingsType;
+use App\Message\ScreenshotRequest;
 use App\Util\Url;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
@@ -59,6 +60,7 @@ class ProjectSettingsController extends AbstractProjectController
 					$em->flush();
 
 					$this->addFlash('success', $translator->trans('project_settings.flash.updated_successfully', ['%name%' => $project->getName()]));
+					$this->dispatchMessage(new ScreenshotRequest($project->getId()));
 				}
 			}
 		}
