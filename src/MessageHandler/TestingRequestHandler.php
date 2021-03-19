@@ -28,6 +28,11 @@ class TestingRequestHandler implements MessageHandlerInterface
 	public function __invoke(TestingRequest $message): void
 	{
 		$project = $this->projectRepository->find($message->getProjectId());
+
+		if (!$project) {
+			return;
+		}
+
 		$tools = $project->getEnabledAutomatedTools();
 		$pageUrls = $project->getActivePages()->map(fn ($page) => $page->getUrl())->toArray();
 		$priority = $project->getPriority();
