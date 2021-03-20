@@ -13,4 +13,5 @@ return [
 	Pyrrah\GravatarBundle\PyrrahGravatarBundle::class => ['all' => true],
 	DAMA\DoctrineTestBundle\DAMADoctrineTestBundle::class => ['test' => true],
 	Knp\Bundle\TimeBundle\KnpTimeBundle::class => ['all' => true],
+	Bazinga\Bundle\JsTranslationBundle\BazingaJsTranslationBundle::class => ['all' => true],
 ];

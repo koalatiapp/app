@@ -5,6 +5,7 @@
 	},
 	"globals": {
 		"Routing": "readonly",
+		"Translator": "readonly",
 		"wretch": "readonly"
 	},
     "extends": [

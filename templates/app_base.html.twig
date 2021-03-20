@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{ app.request.locale|split('_')[0] }}">
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}{% endblock %} - {% trans %}branding.name{% endtrans %}</title>
@@ -17,6 +17,7 @@
         <link rel="stylesheet" href="{{ asset('css/component/notification.css') }}">
         <link rel="stylesheet" href="{{ asset('css/component/floating-dropdown.css') }}">
         <link rel="stylesheet" href="{{ asset('css/component/list.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/component/flash.css') }}">
         <link rel="stylesheet" href="{{ asset('css/component/search-overlay.css') }}">
         <link rel="stylesheet" href="{{ asset('ext/fontawesome/css/all.min.css') }}">
         <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -26,9 +27,13 @@
 
 		<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
 		<script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+		<script src="{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}"></script>
+		<script src="{{ url('bazinga_jstranslation_js') }}"></script>
         <link rel="stylesheet" href="{{ asset('css/dark-mode.css') }}">
     </head>
     <body>
+        {% include 'app/_parts/flash_messages.html.twig' %}
+
         <header>
             <div id="brand-wrapper"></div>
 
@@ -62,6 +67,7 @@
         {% include 'app/_parts/search_overlay.html.twig' %}
 
 		<script src="https://unpkg.com/wretch"></script>
+		<script type="module" src="{{ asset('js/base/flash-messages.js') }}"></script>
 		<script src="{{ asset('js/base/quick-actions.js') }}"></script>
 		<script src="{{ asset('js/base/search-overlay.js') }}"></script>
 

@@ -10,6 +10,7 @@
 		"indentation": "tab",
 		"number-leading-zero": "never",
 		"no-descending-specificity": null,
-		"rule-empty-line-before": null
+		"rule-empty-line-before": null,
+		"font-family-no-missing-generic-family-keyword": null
   }
 }

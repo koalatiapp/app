@@ -1,0 +1,20 @@
+<div id="flash-messages">
+	{% for type, messages in app.flashes %}
+		{% for message in messages %}
+			<div class="flash-message {{ type }}">
+				<span class="icon">
+					{% if type == "success" %}
+						<i class="fad fa-check-circle"></i>
+					{% elseif type == "error" %}
+						<i class="fad fa-times-circle"></i>
+					{% elseif type == "warning" %}
+						<i class="fad fa-exclamation-circle"></i>
+					{% else %}
+						<i class="fad fa-info-circle"></i>
+					{% endif %}
+				</span>
+				<span class="content">{{ message }}</span>
+			</div>
+		{% endfor %}
+	{% endfor %}
+</div>

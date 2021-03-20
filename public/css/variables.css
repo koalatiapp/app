@@ -53,6 +53,12 @@
 	--notification-danger-icon-color: #D46666;
 	--notification-danger-text-color: #4D1313;
 
+	/* Flash messages */
+	--flash-bg-color: var(--notification-icon-color);
+	--flash-success-bg-color: #7bc18a;
+	--flash-warning-bg-color: var(--notification-warning-icon-color);
+	--flash-danger-bg-color: var(--notification-danger-icon-color);
+
 	/* Tabbed page container */
 	--tabbed-page-navigation-bg-color: #E8ECFD;
 	--tabbed-page-navigation-text-color: #7781A5;

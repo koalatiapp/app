@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{ app.request.locale|split('_')[0] }}">
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}{% endblock %} - {% trans %}branding.name{% endtrans %}</title>
@@ -20,6 +20,9 @@
         <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
         {% block head %}{% endblock %}
+
+		<script src="{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}"></script>
+		<script src="{{ url('bazinga_jstranslation_js') }}"></script>
     </head>
     <body>
         {% block body %}{% endblock %}
