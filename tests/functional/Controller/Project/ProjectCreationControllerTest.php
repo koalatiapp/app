@@ -18,7 +18,7 @@ class ProjectCreationControllerTest extends WebTestCase
 		$this->client->loginUser($testUser);
 	}
 
-	public function testCreation()
+	public function testSuccessfulCreation()
 	{
 		$crawler = $this->client->request('GET', '/project/create');
 
@@ -29,5 +29,20 @@ class ProjectCreationControllerTest extends WebTestCase
 
 		$this->assertResponseIsSuccessful();
 		$this->assertRouteSame('project_dashboard', [], 'Successfully redirects to the project dashboard after the creation');
+	}
+
+	public function testUnreachableUrlCreation()
+	{
+		$crawler = $this->client->request('GET', '/project/create');
+
+		$form = $crawler->selectButton('new_project[save]')->form();
+		$form['new_project[name]'] = 'My Test Project';
+		$form['new_project[url]'] = 'https://doesnotexist.koalati.com';
+		$crawler = $this->client->submit($form);
+
+		$errorMessage = $crawler->filter("form .errors .error")->first()?->text();
+
+		$this->assertRouteSame('project_creation', []);
+		$this->assertSame("This URL is invalid or unreachable.", $errorMessage, "Displayed an error message for invalid URL.");
 	}
 }
