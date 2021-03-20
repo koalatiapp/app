@@ -8,7 +8,7 @@ use App\Storage\ProjectStorage;
 use App\Util\Favicon\FaviconFetcherInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
-class ScreenshotRequestHandler implements MessageHandlerInterface
+class FaviconRequestHandler implements MessageHandlerInterface
 {
 	/**
 	 * @var ProjectRepository
