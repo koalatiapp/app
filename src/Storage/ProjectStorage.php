@@ -18,18 +18,33 @@ class ProjectStorage extends AbstractStorage
 	 */
 	protected const DIRECTORY = 'project';
 
+	private function getFaviconPath(Project $project): string
+	{
+		return implode('/', [
+			self::DIRECTORY,
+			'favicon',
+			md5($project->getUrl()),
+		]);
+	}
+
 	/**
 	 * Return the URL of a project's favicon.
 	 */
 	public function faviconUrl(Project $project): string
 	{
-		$faviconPath = implode('/', [
-			self::DIRECTORY,
-			'favicon',
-			md5($project->getUrl()),
-		]);
+		return $this->generateUrl($this->getFaviconPath($project), false);
+	}
 
-		return $this->generateUrl($faviconPath, false);
+	/**
+	 * Uploads a project's favicon image.
+	 */
+	public function uploadFavicon(Project $project, string $contents): void
+	{
+		$this->filesystem->write(
+			$this->getFaviconPath($project),
+			$contents,
+			[FlysystemConfig::OPTION_VISIBILITY => Visibility::PUBLIC]
+		);
 	}
 
 	private function getThumbnailPath(Project $project): string

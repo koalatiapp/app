@@ -3,6 +3,7 @@
 namespace App\Controller\Project;
 
 use App\Form\Project\ProjectSettingsType;
+use App\Message\FaviconRequest;
 use App\Message\ScreenshotRequest;
 use App\Util\Url;
 use Symfony\Component\Form\FormError;
@@ -61,6 +62,7 @@ class ProjectSettingsController extends AbstractProjectController
 
 					$this->addFlash('success', $translator->trans('project_settings.flash.updated_successfully', ['%name%' => $project->getName()]));
 					$this->dispatchMessage(new ScreenshotRequest($project->getId()));
+					$this->dispatchMessage(new FaviconRequest($project->getId()));
 				}
 			}
 		}
