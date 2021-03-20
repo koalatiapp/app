@@ -24,9 +24,6 @@ class ProjectSettingsTest extends AbstractAppTestCase
 		$this->project = $project;
 	}
 
-	/**
-	 * @Depends ProjectCreationTest::testSuccessfulCreation
-	 */
 	public function testProjectNameChange()
 	{
 		$crawler = $this->client->request('GET', '/project/'.$this->project->getId().'/settings');
@@ -44,20 +41,28 @@ class ProjectSettingsTest extends AbstractAppTestCase
 		$this->assertGreaterThanOrEqual(1, $successMessageCount, 'Form submission results in a success message.');
 	}
 
-	/*
-		public function testUnreachableUrlCreation()
-		{
-			$crawler = $this->client->request('GET', '/project/create');
+	public function testProjectDeletion()
+	{
+		$crawler = $this->client->request('GET', '/project/'.$this->project->getId().'/settings');
 
-			$form = $crawler->selectButton('new_project[save]')->form();
-			$form['new_project[name]'] = 'My Test Project';
-			$form['new_project[url]'] = 'https://doesnotexist.koalati.com';
-			$crawler = $this->client->submit($form);
+		$form = $crawler->selectButton('project_settings[delete]')->form();
+		$crawler = $this->client->submit($form);
+		$errorMessage = $crawler->filter("#delete li.error")->first()?->text();
 
-			$errorMessage = $crawler->filter("form .errors .error")->first()?->text();
+		$this->assertRouteSame('project_settings', ['id' => $this->project->getId()]);
+		$this->assertSame("You must check this box to proceed with the deletion of this project.", $errorMessage, "Prevents project deletion without checking the confirmation box.");
 
-			$this->assertRouteSame('project_creation', []);
-			$this->assertSame("This URL is invalid or unreachable.", $errorMessage, "Displayed an error message for invalid URL.");
-		}
-		*/
+		$form = $crawler->selectButton('project_settings[delete]')->form();
+		$form['project_settings[deleteConfirmation]'] = '1';
+		$crawler = $this->client->submit($form);
+		$successMessageCount = $crawler->filter('#flash-messages .flash-message.success')->count();
+
+		$this->assertRouteSame('dashboard', [], "Redirects to dashboard after project deletion");
+		$this->assertGreaterThanOrEqual(1, $successMessageCount, "Displays a success notice after project deletion.");
+
+		$this->reloadUser();
+		$latestProject = $this->user->getPersonalProjects()->first();
+
+		$this->assertNotEquals($this->project->getId(), $latestProject->getId(), "Project has been deleted from the database.");
+	}
 }
