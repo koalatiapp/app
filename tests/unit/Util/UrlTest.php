@@ -50,7 +50,7 @@ class UrlTest extends WebTestCase
 	{
 		$mockHttpClient = new MockHttpClient([
 			new MockResponse(file_get_contents($this->stubsDir.'/sitemap.xml'), ['response_headers' => ['Content-Type' => 'application/xml']]),
-			new MockResponse(file_get_contents($this->stubsDir.'/webpage.html'), ['response_headers' => ['Content-Type' => 'text/html']]),
+			new MockResponse(file_get_contents($this->stubsDir.'/website/index.html'), ['response_headers' => ['Content-Type' => 'text/html']]),
 		]);
 		$urlHelper = new Url($this->configHelper, $mockHttpClient);
 		$this->assertTrue($urlHelper->isXML('https://www.domain.com/sitemap.xml'), 'XML page/document is XML');
@@ -65,7 +65,7 @@ class UrlTest extends WebTestCase
 	public function testIsHtml()
 	{
 		$mockHttpClient = new MockHttpClient([
-			new MockResponse(file_get_contents($this->stubsDir.'/webpage.html'), ['response_headers' => ['Content-Type' => 'text/html']]),
+			new MockResponse(file_get_contents($this->stubsDir.'/website/index.html'), ['response_headers' => ['Content-Type' => 'text/html']]),
 			new MockResponse(file_get_contents($this->stubsDir.'/image.png'), ['response_headers' => ['Content-Type' => 'image/png']]),
 		]);
 		$urlHelper = new Url($this->configHelper, $mockHttpClient);
