@@ -1,25 +1,48 @@
-body.dark {
-	--color-white: #22252F;
-	--color-black: #f1f1f1;
-	--color-gray-light: #373D51;
-	--color-blue: #304CAC;
-	--card-bg-color: var(--color-white);
-	--card-secondary-bg-color: var(--color-white);
-	--button-bg-color: var(--color-blue);
-	--notification-bg-color: #394557;
-	--notification-text-color: #d5ddf5;
-	--notification-warning-bg-color: #463419;
-	--notification-warning-text-color: #d6bf9c;
-	--notification-danger-bg-color: #463030;
-	--notification-danger-text-color: #e0a2a2;
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-white: #22252F;
+		--color-black: #cfd1d8;
+		--color-gray-light: #373D51;
+		--color-blue: #304CAC;
+		--color-red: #851414;
+		--color-red-faded: #b41818;
+		--card-bg-color: var(--color-white);
+		--card-secondary-bg-color: var(--color-white);
+		--button-text-color: var(--color-black);
+		--button-text-color-hover: var(--color-black);
+		--button-bg-color: var(--color-blue);
+		--notification-bg-color: #394557;
+		--notification-text-color: #d5ddf5;
+		--notification-warning-bg-color: #463419;
+		--notification-warning-text-color: #d6bf9c;
+		--notification-danger-bg-color: #463030;
+		--notification-danger-text-color: #e0a2a2;
+		--tabbed-page-navigation-bg-color: #202538;
+		--tabbed-page-navigation-text-color: var(--color-gray);
+		--tabbed-page-navigation-text-color-hover: var(--color-black);
+		--tabbed-page-navigation-text-color-active: var(--color-blue-light);
+		--tabbed-page-content-bg-color: var(--color-white);
+	}
+	body { background-color: #050505; background-image: radial-gradient(circle, rgba(200, 221, 255, .05) 0%, rgba(237, 240, 255, .1) 100%); }
+	hr,
+	.spacer { background-color: var(--color-gray-light); }
 
-	background-color: #050505;
-	background-image: radial-gradient(circle, rgba(200, 221, 255, .05) 0%, rgba(237, 240, 255, .1) 100%);
+	/* Navigation */
+	header nav > ul > li.active { background-color: var(--color-gray-light); }
+
+	/* Forms */
+	fieldset label { color: var(--color-gray); }
+	:is(.standalone-checkbox, .standalone-radio) label { color: var(--color-gray); }
+
+	/* Inputs */
+	input,
+	textarea,
+	select { color: var(--color-black); }
+
+	/* Component: Project: Thumbnail */
+	.project-thumbnail .thumbnail::after { background-color: black; }
+	.project-thumbnail .thumbnail img { filter: brightness(.75); }
+
+	/* Lists */
+	.list-headings { color: var(--color-gray); }
 }
-body.dark hr,
-body.dark .spacer { background-color: var(--color-gray-light); }
-body.dark header nav li.active { background-color: var(--color-gray-light); }
-
-/* Component: Project: Thumbnail */
-body.dark .project-thumbnail .thumbnail::after { background-color: black; }
-body.dark .project-thumbnail .thumbnail img { filter: brightness(.75); }
