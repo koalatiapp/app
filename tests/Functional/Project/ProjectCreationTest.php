@@ -1,23 +1,11 @@
 <?php
 
-namespace App\Tests\Functional\Controller\Project;
+namespace App\Tests\Functional\Project;
 
-use App\Repository\UserRepository;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use App\Tests\Functional\AbstractAppTestCase;
 
-class ProjectCreationControllerTest extends WebTestCase
+class ProjectCreationTest extends AbstractAppTestCase
 {
-	public function setup()
-	{
-		$this->client = static::createClient();
-		$this->client->followRedirects();
-
-		// Log user in
-		$userRepository = static::$container->get(UserRepository::class);
-		$testUser = $userRepository->findOneByEmail('name@email.com');
-		$this->client->loginUser($testUser);
-	}
-
 	public function testSuccessfulCreation()
 	{
 		$crawler = $this->client->request('GET', '/project/create');
@@ -26,9 +14,12 @@ class ProjectCreationControllerTest extends WebTestCase
 		$form['new_project[name]'] = 'My Test Project';
 		$form['new_project[url]'] = 'https://docs.koalati.com';
 		$crawler = $this->client->submit($form);
+		$this->reloadUser();
+		$project = $this->user->getPersonalProjects()->first();
 
 		$this->assertResponseIsSuccessful();
 		$this->assertRouteSame('project_dashboard', [], 'Successfully redirects to the project dashboard after the creation');
+		$this->assertSame('My Test Project', $project->getName(), 'Project was created in the database.');
 	}
 
 	public function testUnreachableUrlCreation()
