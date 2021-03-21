@@ -79,4 +79,4 @@ jobs:
             - name: Check HTTPS reachability
               run: curl -k https://localhost
             - name: PHPUnit tests
-              run: docker-compose exec -T ./DEV/ci/run-tests.sh
+              run: docker-compose exec -T php ./bin/phpunit
