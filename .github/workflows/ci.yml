@@ -79,8 +79,4 @@ jobs:
             - name: Check HTTPS reachability
               run: curl -k https://localhost
             - name: PHPUnit tests
-              uses: php-actions/phpunit@v2
-              with:
-                  configuration: phpunit.xml.dist
-                  php_version: 8.0
-                  php_extensions: ctype iconv json pcre session simplexml tokenizer
+              run: docker-compose exec php ./DEV/ci/run-tests.sh
