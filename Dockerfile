@@ -12,57 +12,67 @@ FROM php:${PHP_VERSION}-fpm-alpine AS symfony_php
 
 # persistent / runtime deps
 RUN apk add --no-cache \
-        acl \
-        fcgi \
-        file \
-        gettext \
-        git \
-        jq \
-    ;
+		acl \
+		fcgi \
+		file \
+		gettext \
+		git \
+		jq \
+	;
 
 ARG APCU_VERSION=5.1.19
 RUN set -eux; \
 	apk add --no-cache --virtual .build-deps \
-	    $PHPIZE_DEPS \
-	    icu-dev \
-	    libzip-dev \
-	    zlib-dev \
+		$PHPIZE_DEPS \
+		icu-dev \
+		libzip-dev \
+		zlib-dev \
 	; \
 	\
 	docker-php-ext-configure zip; \
 	docker-php-ext-install -j$(nproc) \
-	    intl \
-	    zip \
+		intl \
+		zip \
+		mysqli \
+		pdo \
+		pdo_mysql \
 	; \
 	pecl install \
-	    apcu-${APCU_VERSION} \
+		apcu-${APCU_VERSION} \
 	; \
 	pecl clear-cache; \
 	docker-php-ext-enable \
-	    apcu \
-	    opcache \
+		apcu \
+		opcache \
+		pdo_mysql \
 	; \
 	\
 	runDeps="$( \
-	    scanelf --needed --nobanner --format '%n#p' --recursive /usr/local/lib/php/extensions \
-	        | tr ',' '\n' \
-	        | sort -u \
-	        | awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
+		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local/lib/php/extensions \
+			| tr ',' '\n' \
+			| sort -u \
+			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
 	)"; \
 	apk add --no-cache --virtual .phpexts-rundeps $runDeps; \
 	\
 	apk del .build-deps
 
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY docker/php/docker-healthcheck.sh /usr/local/bin/docker-healthcheck
+RUN chmod +x /usr/local/bin/docker-healthcheck
+
+HEALTHCHECK --interval=10s --timeout=3s --retries=3 CMD ["docker-healthcheck"]
 
 RUN ln -s $PHP_INI_DIR/php.ini-production $PHP_INI_DIR/php.ini
 COPY docker/php/conf.d/symfony.prod.ini $PHP_INI_DIR/conf.d/symfony.ini
 
-RUN set -eux; \
-	{ \
-		echo '[www]'; \
-		echo 'ping.path = /ping'; \
-	} | tee /usr/local/etc/php-fpm.d/docker-healthcheck.conf
+COPY docker/php/php-fpm.d/zz-docker.conf /usr/local/etc/php-fpm.d/zz-docker.conf
+
+COPY docker/php/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
+RUN chmod +x /usr/local/bin/docker-entrypoint
+
+VOLUME /var/run/php
+
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # https://getcomposer.org/doc/03-cli.md#composer-allow-superuser
 ENV COMPOSER_ALLOW_SUPERUSER=1
@@ -82,11 +92,8 @@ ARG SYMFONY_VERSION=""
 RUN composer create-project "symfony/skeleton ${SYMFONY_VERSION}" . --stability=$STABILITY --prefer-dist --no-dev --no-progress --no-interaction; \
 	composer clear-cache
 
-RUN apk add --no-cache --virtual .pgsql-deps; \
-	docker-php-ext-install -j$(nproc) mysqli pdo pdo_mysql; \
-	docker-php-ext-enable pdo_mysql; \
-	apk add --no-cache --virtual .pgsql-rundeps so:libpq.so.5; \
-	apk del .pgsql-deps
+###> recipes ###
+###< recipes ###
 
 COPY . .
 
@@ -95,16 +102,9 @@ RUN set -eux; \
 	composer install --prefer-dist --no-dev --no-progress --no-scripts --no-interaction; \
 	composer dump-autoload --classmap-authoritative --no-dev; \
 	composer symfony:dump-env prod; \
-	composer run-script --no-dev post-install-cmd; sync
+	composer run-script --no-dev post-install-cmd; \
+	chmod +x bin/console; sync
 VOLUME /srv/app/var
-
-COPY docker/php/docker-healthcheck.sh /usr/local/bin/docker-healthcheck
-RUN chmod +x /usr/local/bin/docker-healthcheck
-
-HEALTHCHECK --start-period=420s --interval=20s --timeout=20s --retries=3 CMD ["docker-healthcheck"]
-
-COPY docker/php/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
-RUN chmod +x /usr/local/bin/docker-entrypoint
 
 ENTRYPOINT ["docker-entrypoint"]
 CMD ["php-fpm"]
@@ -112,15 +112,14 @@ CMD ["php-fpm"]
 FROM caddy:${CADDY_VERSION}-builder-alpine AS symfony_caddy_builder
 
 RUN xcaddy build \
-    --with github.com/dunglas/mercure@main \
-    --with github.com/dunglas/mercure/caddy@main \
-    --with github.com/dunglas/vulcain/caddy
+	--with github.com/dunglas/mercure@main \
+	--with github.com/dunglas/mercure/caddy@main \
+	--with github.com/dunglas/vulcain/caddy
 
 FROM caddy:${CADDY_VERSION} AS symfony_caddy
 
 WORKDIR /srv/app
 
-ENV MERCURE_DEMO="demo /srv/mercure-assets/"
 COPY --from=dunglas/mercure:v0.11 /srv/public /srv/mercure-assets/
 COPY --from=symfony_caddy_builder /usr/bin/caddy /usr/bin/caddy
 COPY --from=symfony_php /srv/app/public public/
