@@ -54,6 +54,10 @@ if [ "$1" = 'php-fpm' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 		if ls -A migrations/*.php >/dev/null 2>&1; then
 			bin/console doctrine:migrations:migrate --no-interaction
 		fi
+
+		if [ -n "$GITHUB_JOB" ] then
+			bin/console doctrine:fixtures:load -n --purge-with-truncate
+		fi
 	fi
 
 	setfacl -R -m u:www-data:rwX -m u:"$(whoami)":rwX var

@@ -55,11 +55,11 @@ jobs:
               run: docker-compose up --build -d
             - name: Wait for services
               run: |
-                  UNHEALTHY_ALLOWANCE_LEFT=20
+                  UNHEALTHY_ALLOWANCE_LEFT=30
                   while status="$(docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" "$(docker-compose ps -q php)")"; do
                     case $status in
                       starting)
-                        UNHEALTHY_ALLOWANCE_LEFT=20
+                        UNHEALTHY_ALLOWANCE_LEFT=30
                         sleep 1;;
                       healthy)
                         sleep 30
@@ -69,7 +69,7 @@ jobs:
                           exit 1
                         else
                           UNHEALTHY_ALLOWANCE_LEFT=$((UNHEALTHY_ALLOWANCE_LEFT - 1))
-                          sleep 2
+                          sleep 3
                         fi;;
                     esac
                   done
@@ -78,8 +78,6 @@ jobs:
               run: curl http://localhost
             - name: Check HTTPS reachability
               run: curl -k https://localhost
-            - name: Generate entity fixtures
-              run: bin/console doctrine:fixtures:load -n --purge-with-truncate
             - name: PHPUnit tests
               uses: php-actions/phpunit@v2
               with:
