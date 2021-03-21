@@ -52,7 +52,7 @@ jobs:
                 restore-keys: |
                   ${{ github.workflow }}-${{ env.WEEK }}-
             - name: Start services
-              run: docker-compose up --build
+              run: docker-compose up --build -d
             - name: Wait for services
               run: |
                   UNHEALTHY_ALLOWANCE_LEFT=20
