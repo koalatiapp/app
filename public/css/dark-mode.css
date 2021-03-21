@@ -17,6 +17,10 @@
 		--notification-warning-text-color: #d6bf9c;
 		--notification-danger-bg-color: #463030;
 		--notification-danger-text-color: #e0a2a2;
+		--flash-bg-color: #384988;
+		--flash-success-bg-color: #3b7347;
+		--flash-warning-bg-color: #b36038;
+		--flash-danger-bg-color: #9f3838;
 		--tabbed-page-navigation-bg-color: #202538;
 		--tabbed-page-navigation-text-color: var(--color-gray);
 		--tabbed-page-navigation-text-color-hover: var(--color-black);
