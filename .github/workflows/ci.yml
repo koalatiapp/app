@@ -55,7 +55,7 @@ jobs:
               run: docker-compose up --build -d
             - name: Wait for services
               run: |
-		          UNHEALTHY_ALLOWANCE_LEFT=20
+                  UNHEALTHY_ALLOWANCE_LEFT=20
                   while status="$(docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" "$(docker-compose ps -q php)")"; do
                     echo "[DEBUG] Status: $status"
                     case $status in
