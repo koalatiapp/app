@@ -44,7 +44,6 @@ RUN set -eux; \
 	docker-php-ext-enable \
 		apcu \
 		opcache \
-		pdo_mysql \
 	; \
 	\
 	runDeps="$( \
