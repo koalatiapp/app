@@ -57,18 +57,19 @@ jobs:
               run: |
                   UNHEALTHY_ALLOWANCE_LEFT=20
                   while status="$(docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" "$(docker-compose ps -q php)")"; do
-                    echo "[DEBUG] Status: $status"
                     case $status in
                       starting)
+                        UNHEALTHY_ALLOWANCE_LEFT=20
                         sleep 1;;
                       healthy)
+                        sleep 30
                         exit 0;;
                       unhealthy)
-                        if [ UNHEALTHY_ALLOWANCE_LEFT -eq 0 ]; then
+                        if [ $UNHEALTHY_ALLOWANCE_LEFT -eq 0 ]; then
                           exit 1
                         else
                           UNHEALTHY_ALLOWANCE_LEFT=$((UNHEALTHY_ALLOWANCE_LEFT - 1))
-                          sleep 1
+                          sleep 2
                         fi;;
                     esac
                   done
