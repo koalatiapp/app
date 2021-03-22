@@ -14,4 +14,5 @@ return [
 	DAMA\DoctrineTestBundle\DAMADoctrineTestBundle::class => ['test' => true],
 	Knp\Bundle\TimeBundle\KnpTimeBundle::class => ['all' => true],
 	Bazinga\Bundle\JsTranslationBundle\BazingaJsTranslationBundle::class => ['all' => true],
+	Symfony\Bundle\MercureBundle\MercureBundle::class => ['all' => true],
 ];
