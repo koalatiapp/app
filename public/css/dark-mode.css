@@ -49,4 +49,9 @@
 
 	/* Lists */
 	.list-headings { color: var(--color-gray); }
+
+	/* Search overlay */
+	#search-inner .search-label,
+	#search-inner .search-results .empty-state,
+	#search-inner .search-results a.selected { color: var(--color-gray); }
 }
