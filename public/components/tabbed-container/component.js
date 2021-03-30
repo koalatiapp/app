@@ -86,7 +86,7 @@ customElements.define(
 			const template = document.createElement("template");
 			template.innerHTML = `
 				<style>
-					:host { display: grid; grid-template-columns: 220px minmax(0, 1fr); contain: content; box-sizing: border-box; }
+					:host { display: grid; grid-template-columns: 220px minmax(0, 1fr); box-sizing: border-box; }
 					* { font-family: inherit; font-size: inherit; box-sizing: inherit; }
 					nav { width: calc(100% + 15px); background-color: var(--tabbed-page-navigation-bg-color); border-top-left-radius: 13px; border-bottom-left-radius: 13px; box-shadow: 0 3px 15px 0 rgba(var(--shadow-rgb), .05); }
 					nav ul { padding: 25px; padding-right: 40px; margin: 0; list-style: none; position: sticky; top: 0; }
