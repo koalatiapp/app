@@ -1,8 +1,8 @@
 @media (prefers-color-scheme: dark) {
 	:root {
-		--color-white: #22252F;
+		--color-white: #14171f;
 		--color-black: #cfd1d8;
-		--color-gray-light: #373D51;
+		--color-gray-light: #1e212b;
 		--color-blue: #304CAC;
 		--color-red: #851414;
 		--color-red-faded: #b41818;
@@ -11,12 +11,12 @@
 		--button-text-color: var(--color-black);
 		--button-text-color-hover: var(--color-black);
 		--button-bg-color: var(--color-blue);
-		--notification-bg-color: #394557;
+		--notification-bg-color: #1f2a3c;
 		--notification-text-color: #d5ddf5;
-		--notification-warning-bg-color: #463419;
-		--notification-warning-text-color: #d6bf9c;
-		--notification-danger-bg-color: #463030;
-		--notification-danger-text-color: #e0a2a2;
+		--notification-warning-bg-color: #56401d;
+		--notification-warning-text-color: #dcc6a4;
+		--notification-danger-bg-color: #402929;
+		--notification-danger-text-color: #e2b3b3;
 		--flash-bg-color: #384988;
 		--flash-success-bg-color: #3b7347;
 		--flash-warning-bg-color: #b36038;
@@ -27,7 +27,7 @@
 		--tabbed-page-navigation-text-color-active: var(--color-blue-light);
 		--tabbed-page-content-bg-color: var(--color-white);
 	}
-	body { background-color: #050505; background-image: radial-gradient(circle, rgba(200, 221, 255, .05) 0%, rgba(237, 240, 255, .1) 100%); }
+	body { background-color: #050505; background-image: radial-gradient(circle, rgb(17 103 243 / 5%) 0%, rgb(128 135 171 / 10%) 100%); }
 	hr,
 	.spacer { background-color: var(--color-gray-light); }
 
