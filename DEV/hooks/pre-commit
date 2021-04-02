@@ -36,7 +36,12 @@ verbose()
 
 # Run PHP-CS-Fixer with automatic fixes
 vendor/bin/php-cs-fixer fix --config=.php_cs.dist -q
-git add $addedFiles
+
+# If there were any added files, re-add them after the automatic fixes
+if [ -n "$addedFiles" ]
+then
+	git add $addedFiles
+fi
 
 # Loop through scripts and execute them
 # If no error is thrown, mute all outputs.
