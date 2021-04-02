@@ -31,9 +31,9 @@ class ProjectCreationTest extends AbstractAppTestCase
 		$form['new_project[url]'] = 'https://doesnotexist.koalati.com';
 		$crawler = $this->client->submit($form);
 
-		$errorMessage = $crawler->filter("form .errors .error")->first()?->text();
+		$errorMessage = $crawler->filter('form .errors .error')->first()?->text();
 
 		$this->assertRouteSame('project_creation', []);
-		$this->assertSame("This URL is invalid or unreachable.", $errorMessage, "Displayed an error message for invalid URL.");
+		$this->assertSame('This URL is invalid or unreachable.', $errorMessage, 'Displayed an error message for invalid URL.');
 	}
 }

@@ -47,22 +47,22 @@ class ProjectSettingsTest extends AbstractAppTestCase
 
 		$form = $crawler->selectButton('project_settings[delete]')->form();
 		$crawler = $this->client->submit($form);
-		$errorMessage = $crawler->filter("#delete li.error")->first()?->text();
+		$errorMessage = $crawler->filter('#delete li.error')->first()?->text();
 
 		$this->assertRouteSame('project_settings', ['id' => $this->project->getId()]);
-		$this->assertSame("You must check this box to proceed with the deletion of this project.", $errorMessage, "Prevents project deletion without checking the confirmation box.");
+		$this->assertSame('You must check this box to proceed with the deletion of this project.', $errorMessage, 'Prevents project deletion without checking the confirmation box.');
 
 		$form = $crawler->selectButton('project_settings[delete]')->form();
 		$form['project_settings[deleteConfirmation]'] = '1';
 		$crawler = $this->client->submit($form);
 		$successMessageCount = $crawler->filter('#flash-messages .flash-message.success')->count();
 
-		$this->assertRouteSame('dashboard', [], "Redirects to dashboard after project deletion");
-		$this->assertGreaterThanOrEqual(1, $successMessageCount, "Displays a success notice after project deletion.");
+		$this->assertRouteSame('dashboard', [], 'Redirects to dashboard after project deletion');
+		$this->assertGreaterThanOrEqual(1, $successMessageCount, 'Displays a success notice after project deletion.');
 
 		$this->reloadUser();
 		$latestProject = $this->user->getPersonalProjects()->first();
 
-		$this->assertNotEquals($this->project->getId(), $latestProject->getId(), "Project has been deleted from the database.");
+		$this->assertNotEquals($this->project->getId(), $latestProject->getId(), 'Project has been deleted from the database.');
 	}
 }
