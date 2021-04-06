@@ -10,5 +10,28 @@ hr,
 .text-left { text-align: left; }
 .text-right { text-align: right; }
 
+/* Text sizes */
+.text-smaller { font-size: .75rem; }
+.text-small { font-size: .85rem; }
+.text-large { font-size: 1.05rem; }
+.text-larger { font-size: 1.15rem; }
+
 /* Text color */
+.text-blue { color: var(--color-blue); }
+.text-blue-light { color: var(--color-blue-light); }
+.text-blue-faded { color: var(--color-blue-faded); }
+.text-blue-gray { color: var(--color-gray-dark); }
 .text-gray { color: var(--color-gray); }
+.text-red { color: var(--color-red); }
+.text-orange { color: var(--color-orange); }
+.text-green { color: var(--color-green); }
+
+/* Textual link */
+a.text-link { font-weight: 500; color: var(--color-blue); text-decoration: none; cursor: pointer; transition: all .15s ease; }
+a.text-link i { font-size: 1.15em; vertical-align: middle; }
+a.text-link:hover { color: var(--color-gray-dark); }
+
+/* Bullet lists */
+ul.bullet-list { padding-left: 1rem; list-style: disc; }
+ul.bullet-list li { line-height: 1.5; }
+ul.bullet-list li + li { margin-top: .5em; }

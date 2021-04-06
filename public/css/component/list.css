@@ -1,7 +1,9 @@
 .list-headings { display: grid; gap: 20px; padding: 0 10px; margin-bottom: 10px; font-size: .9rem; font-weight: 500; color: rgba(0, 0, 0, .57); }
 .list-row { display: grid; gap: 20px; align-items: center; padding: 10px 10px; margin-bottom: 15px; font-size: .85rem; font-weight: 500; line-height: 1.5; white-space: nowrap; color: #888; background-color: var(--color-white); border-radius: 12px; box-shadow: 0 2px 10px rgba(var(--shadow-rgb), .05); transition: box-shadow .25s ease; }
 .list-row > * { text-overflow: ellipsis; overflow: hidden; }
+.list-row > *:last-child { overflow: visible; }
 .list-row img { width: 100%; height: 100%; object-fit: contain; object-position: center; }
 .list-row strong { font-size: 1.05rem; font-weight: 600; color: var(--color-black); }
-.list-row i { color: var(--color-black); }
+.list-row > i { color: var(--color-black); }
 a.list-row:hover { box-shadow: 0 2px 15px rgba(var(--shadow-rgb), .15); }
+:is(.list-headings, .list-row) > *:first-child:not(img) { margin-left: .5rem; }

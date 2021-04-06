@@ -12,7 +12,7 @@
 
 /* Colors */
 /* Color: secondary */
-.card.secondary { background-color: var(--card-secondary-bg-color); }
+.card.secondary { background-color: var(--card-secondary-bg-color); border: 1px solid var(--color-gray-light); }
 .card.secondary > h2:first-child,
 .card.secondary > h3:first-child { color: var(--card-secondary-title-color); }
 /* Color: blue */

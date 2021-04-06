@@ -7,6 +7,7 @@
 		--color-red: #851414;
 		--color-red-faded: #b41818;
 		--card-bg-color: var(--color-white);
+		--card-secondary-title-color: #6584ef;
 		--card-secondary-bg-color: var(--color-white);
 		--button-text-color: var(--color-black);
 		--button-text-color-hover: var(--color-black);
@@ -42,6 +43,17 @@
 	input,
 	textarea,
 	select { color: var(--color-black); }
+
+	/* Buttons */
+	:is(input[type="button"], button, .button).gray { --button-bg-color: #24283e; --button-bg-color-hover: #31385a; color: #afb4bf; }
+
+	/* Text links */
+	a.text-link { color: var(--color-blue-light); }
+
+	/* Text colors */
+	.text-red { color: #d65757; }
+	.text-blue-faded { color: #6481e6; }
+	.text-blue-gray { color: #9ca8d6; }
 
 	/* Component: Project: Thumbnail */
 	.project-thumbnail .thumbnail::after { background-color: black; }
