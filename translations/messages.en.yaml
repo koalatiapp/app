@@ -93,6 +93,9 @@ project_creation:
 project_dashboard:
     title: Overview
 
+project_testing:
+    title: Automated testing
+
 project_settings:
     title: Project settings
     tabs:

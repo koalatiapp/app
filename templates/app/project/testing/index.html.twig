@@ -1,0 +1,102 @@
+{% extends 'app_base.html.twig' %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ asset('css/component/testing/recommendations.css') }}">
+{% endblock %}
+
+{% block title %}{% trans %}project_testing.title{% endtrans %}{% endblock %}
+{% block section_title %}{{ 'generic.project_section_title'|trans({'%name%':project.name}) }}{% endblock %}
+
+{% block body %}
+    <div class="grid small-fill">
+        <div class="card">
+			<h3>Next recommendation</h3>
+			<p>Add an alt attribute to all of your &lt;img&gt; tags to describe their contents. <a href="#" class="text-link">View more details</a></p>
+			<div class="button-container right margin-top small">
+				<button type="button" class="small gray">Ignore</button>
+				<button type="button" class="small ">Mark as done</button>
+			</div>
+		</div>
+        <div class="card secondary">
+			<h3>How does this work?</h3>
+			<p>Koalati analyzes your website to find problems and potential improvements.</p>
+			<ul class="bullet-list">
+				<li><strong class="text-red">Issues</strong> are problems that should be fixed right away.</li>
+				<li><strong class="text-blue-faded">Essentials</strong> are improvements with a good impact on user experience or SEO. </li>
+				<li><strong class="text-blue-gray">Optimizations</strong> are additional improvement recommandations that should only be done once the issues and essentials are covered.</li>
+			</ul>
+		</div>
+	</div>
+
+	<hr class="spacer">
+
+	<div class="recommendation-list">
+		<div class="list-headings">
+			<div>Recommendation</div>
+			<div>Type</div>
+			<div></div>
+		</div>
+		<div class="list">
+			<div class="list-row">
+				<div>
+					<strong class="name">Add an alt attribute to all of your &lt;img&gt; tags to describe their contents.</strong>
+					<br>
+					<a class="text-link text-smaller">
+						<i class="fad fa-circle-info"></i>&nbsp;
+						View more details
+					</a>
+				</div>
+				<div class="type text-red">Issue</div>
+				<div class="actions text-right">
+					<button type="button" class="small gray">Ignore</button>
+					<button type="button" class="small icon-only"><i class="fas fa-check"></i></button>
+				</div>
+			</div>
+			<div class="list-row">
+				<div>
+					<strong class="name">Add an alt attribute to all of your &lt;img&gt; tags to describe their contents.</strong>
+					<br>
+					<a class="text-link text-smaller">
+						<i class="fad fa-circle-info"></i>&nbsp;
+						View more details
+					</a>
+				</div>
+				<div class="type text-blue-faded">Essential</div>
+				<div class="actions text-right">
+					<button type="button" class="small gray">Ignore</button>
+					<button type="button" class="small icon-only"><i class="fas fa-check"></i></button>
+				</div>
+			</div>
+			<div class="list-row">
+				<div>
+					<strong class="name">Add an alt attribute to all of your &lt;img&gt; tags to describe their contents.</strong>
+					<br>
+					<a class="text-link text-smaller">
+						<i class="fad fa-circle-info"></i>&nbsp;
+						View more details
+					</a>
+				</div>
+				<div class="type text-blue-faded">Essential</div>
+				<div class="actions text-right">
+					<button type="button" class="small gray">Ignore</button>
+					<button type="button" class="small icon-only"><i class="fas fa-check"></i></button>
+				</div>
+			</div>
+			<div class="list-row">
+				<div>
+					<strong class="name">Add an alt attribute to all of your &lt;img&gt; tags to describe their contents.</strong>
+					<br>
+					<a class="text-link text-smaller">
+						<i class="fad fa-circle-info"></i>&nbsp;
+						View more details
+					</a>
+				</div>
+				<div class="type text-blue-gray">Optimization</div>
+				<div class="actions text-right">
+					<button type="button" class="small gray">Ignore</button>
+					<button type="button" class="small icon-only"><i class="fas fa-check"></i></button>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
