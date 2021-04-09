@@ -25,6 +25,8 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD:-ChangeMe}
       MYSQL_USER: ${MYSQL_USER:-symfony}
       MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+    cap_add:
+      - SYS_NICE  # CAP_SYS_NICE
     volumes:
       - db-data:/var/lib/mysql:rw
 

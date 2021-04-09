@@ -2,7 +2,10 @@
 
 namespace App\Entity;
 
+use App\Entity\Testing\Recommendation;
 use App\Repository\PageRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -43,12 +46,20 @@ class Page
 	 */
 	private ?int $httpCode;
 
+	/**
+	 * @ORM\OneToMany(targetEntity=Recommendation::class, mappedBy="relatedPage", orphanRemoval=true)
+	 *
+	 * @var Collection<int,Recommendation>
+	 */
+	private Collection $recommendations;
+
 	public function __construct(string $url, ?string $title = null)
 	{
 		$this->url = $url;
 		$this->title = $title;
 		$this->dateCreated = new \DateTime();
 		$this->dateUpdated = new \DateTime();
+		$this->recommendations = new ArrayCollection();
 	}
 
 	public function getId(): ?int
@@ -112,6 +123,36 @@ class Page
 	public function setHttpCode(?int $httpCode): self
 	{
 		$this->httpCode = $httpCode;
+
+		return $this;
+	}
+
+	/**
+	 * @return Collection<int,Recommendation>
+	 */
+	public function getRecommendations(): Collection
+	{
+		return $this->recommendations;
+	}
+
+	public function addRecommendation(Recommendation $recommendation): self
+	{
+		if (!$this->recommendations->contains($recommendation)) {
+			$this->recommendations[] = $recommendation;
+			$recommendation->setRelatedPage($this);
+		}
+
+		return $this;
+	}
+
+	public function removeRecommendation(Recommendation $recommendation): self
+	{
+		if ($this->recommendations->removeElement($recommendation)) {
+			// set the owning side to null (unless already changed)
+			if ($recommendation->getRelatedPage() === $this) {
+				$recommendation->setRelatedPage(null);
+			}
+		}
 
 		return $this;
 	}
