@@ -1,5 +1,5 @@
 {% extends 'app_base.html.twig' %}
-{% from 'app/_macros/testing.html.twig' import recommendation_card %}
+{% from 'app/_macros/testing.html.twig' import recommendation_card, recommendation_list %}
 
 {% block head %}
     <link rel="stylesheet" href="{{ asset('css/component/testing/recommendations.css') }}">
@@ -31,73 +31,5 @@
 
 	<hr class="spacer">
 
-	<div class="recommendation-list">
-		<div class="list-headings">
-			<div>Recommendation</div>
-			<div>Type</div>
-			<div></div>
-		</div>
-		<div class="list">
-			<div class="list-row">
-				<div>
-					<strong class="name">Add an alt attribute to all of your &lt;img&gt; tags to describe their contents.</strong>
-					<br>
-					<a class="text-link text-smaller">
-						<i class="fad fa-circle-info"></i>&nbsp;
-						View more details
-					</a>
-				</div>
-				<div class="type text-red">Issue</div>
-				<div class="actions text-right">
-					<button type="button" class="small gray">Ignore</button>
-					<button type="button" class="small icon-only"><i class="fas fa-check"></i></button>
-				</div>
-			</div>
-			<div class="list-row">
-				<div>
-					<strong class="name">Add an alt attribute to all of your &lt;img&gt; tags to describe their contents.</strong>
-					<br>
-					<a class="text-link text-smaller">
-						<i class="fad fa-circle-info"></i>&nbsp;
-						View more details
-					</a>
-				</div>
-				<div class="type text-blue-faded">Essential</div>
-				<div class="actions text-right">
-					<button type="button" class="small gray">Ignore</button>
-					<button type="button" class="small icon-only"><i class="fas fa-check"></i></button>
-				</div>
-			</div>
-			<div class="list-row">
-				<div>
-					<strong class="name">Add an alt attribute to all of your &lt;img&gt; tags to describe their contents.</strong>
-					<br>
-					<a class="text-link text-smaller">
-						<i class="fad fa-circle-info"></i>&nbsp;
-						View more details
-					</a>
-				</div>
-				<div class="type text-blue-faded">Essential</div>
-				<div class="actions text-right">
-					<button type="button" class="small gray">Ignore</button>
-					<button type="button" class="small icon-only"><i class="fas fa-check"></i></button>
-				</div>
-			</div>
-			<div class="list-row">
-				<div>
-					<strong class="name">Add an alt attribute to all of your &lt;img&gt; tags to describe their contents.</strong>
-					<br>
-					<a class="text-link text-smaller">
-						<i class="fad fa-circle-info"></i>&nbsp;
-						View more details
-					</a>
-				</div>
-				<div class="type text-blue-gray">Optimization</div>
-				<div class="actions text-right">
-					<button type="button" class="small gray">Ignore</button>
-					<button type="button" class="small icon-only"><i class="fas fa-check"></i></button>
-				</div>
-			</div>
-		</div>
-	</div>
+	{{ recommendation_list(project.activeRecommendations) }}
 {% endblock %}

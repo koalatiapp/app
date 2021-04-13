@@ -1,3 +1,9 @@
+{# Recommendation type (color) #}
+{%- macro recommendation_type(type, tag = "span") -%}
+	{% set typeColorClasses = { ISSUE: "text-red", ESSENTIAL: "text-blue-faded", OPTIMIZATION: "text-blue-gray" } %}
+	<{{ tag }} class="{{ typeColorClasses[type] }} recommendation-type="{{ type }}">{{ ("recommendation.type." ~ type|lower)|trans }}</{{ tag }}>
+{%- endmacro -%}
+
 {# Recommendation card #}
 {% macro recommendation_card(recommendation, title = "") %}
 	<div class="card">
@@ -13,6 +19,38 @@
 		<div class="button-container right margin-top small">
 			<button type="button" class="small gray">{% trans %}recommendation.ignore{% endtrans %}</button>
 			<button type="button" class="small ">{% trans %}recommendation.mark_as_done{% endtrans %}</button>
+		</div>
+	</div>
+{% endmacro %}
+
+{# Recommendation list #}
+{% macro recommendation_list(recommendations) %}
+	{% from _self import recommendation_type %}
+
+	<div class="recommendation-list">
+		<div class="list-headings">
+			<div>{% trans %}recommendation.listing.title{% endtrans %}</div>
+			<div>{% trans %}recommendation.listing.type{% endtrans %}</div>
+			<div></div>
+		</div>
+		<div class="list">
+			{% for recommendation in recommendations %}
+				<div class="list-row recommendation" recommendation-id="{{ recommendation.id }}">
+				<div>
+					<strong class="name">{{ recommendation.title }}</strong>
+					<br>
+					<a class="text-link text-smaller">
+						<i class="fad fa-circle-info"></i>&nbsp;
+						{% trans %}recommendation.view_more{% endtrans %}
+					</a>
+				</div>
+				<div class="type text-red">{{ recommendation_type(recommendation.type) }}</div>
+				<div class="actions text-right">
+					<button type="button" class="small gray">{% trans %}recommendation.ignore{% endtrans %}</button>
+					<button type="button" class="small icon-only"><i class="fas fa-check"></i></button>
+				</div>
+			</div>
+			{% endfor %}
 		</div>
 	</div>
 {% endmacro %}
