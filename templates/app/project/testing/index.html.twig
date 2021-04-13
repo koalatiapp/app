@@ -1,4 +1,5 @@
 {% extends 'app_base.html.twig' %}
+{% from 'app/_macros/testing.html.twig' import recommendation_card %}
 
 {% block head %}
     <link rel="stylesheet" href="{{ asset('css/component/testing/recommendations.css') }}">
@@ -9,14 +10,14 @@
 
 {% block body %}
     <div class="grid small-fill">
-        <div class="card">
-			<h3>Next recommendation</h3>
-			<p>Add an alt attribute to all of your &lt;img&gt; tags to describe their contents. <a href="#" class="text-link">View more details</a></p>
-			<div class="button-container right margin-top small">
-				<button type="button" class="small gray">Ignore</button>
-				<button type="button" class="small ">Mark as done</button>
+		{% if project.activeRecommendations|length %}
+			{{ recommendation_card(project.activeRecommendations[0], "recommendation.next"|trans) }}
+		{% else %}
+			<div class="card empty-state">
+				<h3>{% trans %}recommendation.empty_state.title{% endtrans %}</h3>
+				<p>{% trans %}recommendation.empty_state.explanation{% endtrans %}</p>
 			</div>
-		</div>
+		{% endif %}
         <div class="card secondary">
 			<h3>How does this work?</h3>
 			<p>Koalati analyzes your website to find problems and potential improvements.</p>

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Testing\Recommendation;
 use App\Repository\ProjectRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -84,6 +85,12 @@ class Project
 	 */
 	private $teamMembers;
 
+	/**
+	 * @var Collection<int, Recommendation>
+	 * @ORM\OneToMany(targetEntity=Recommendation::class, mappedBy="project", orphanRemoval=true)
+	 */
+	private Collection $recommendations;
+
 	public function __construct()
 	{
 		$this->dateCreated = new \DateTime();
@@ -91,6 +98,7 @@ class Project
 		$this->pages = new ArrayCollection();
 		$this->ignoredPages = new ArrayCollection();
 		$this->teamMembers = new ArrayCollection();
+		$this->recommendations = new ArrayCollection();
 	}
 
 	public function getId(): ?int
@@ -295,5 +303,61 @@ class Project
 		}
 
 		return $this;
+	}
+
+	/**
+	 * @return Collection<int,Recommendation>
+	 */
+	public function getRecommendations(): Collection
+	{
+		return $this->recommendations;
+	}
+
+	public function addRecommendation(Recommendation $recommendation): self
+	{
+		if (!$this->recommendations->contains($recommendation)) {
+			$this->recommendations[] = $recommendation;
+			$recommendation->setProject($this);
+		}
+
+		return $this;
+	}
+
+	public function removeRecommendation(Recommendation $recommendation): self
+	{
+		if ($this->recommendations->removeElement($recommendation)) {
+			// set the owning side to null (unless already changed)
+			if ($recommendation->getProject() === $this) {
+				$recommendation->setProject(null);
+			}
+		}
+
+		return $this;
+	}
+
+	/**
+	 * @return Collection<int,Recommendation>
+	 */
+	public function getSortedRecommendations(): Collection
+	{
+		/**
+		 * @var \ArrayIterator<int, Recommendation> $recommendationIterator
+		 */
+		$recommendationIterator = $this->recommendations->getIterator();
+		$recommendationIterator->uasort(function ($a, $b) {
+			$priorities = Recommendation::TYPE_PRIORITIES;
+
+			return $priorities[$a->getType()] > $priorities[$b->getType()] ? 1 : -1;
+		});
+
+		return new ArrayCollection(iterator_to_array($recommendationIterator));
+	}
+
+	/**
+	 * @return Collection<int,Recommendation>
+	 */
+	public function getActiveRecommendations(): Collection
+	{
+		return $this->getSortedRecommendations()->filter(fn ($recommendation) => $recommendation->getIsCompleted());
 	}
 }

@@ -3,6 +3,7 @@
 namespace App\Entity\Testing;
 
 use App\Entity\Page;
+use App\Entity\Project;
 use App\Entity\User;
 use App\Repository\Testing\RecommendationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -17,10 +18,10 @@ class Recommendation
 	public const TYPE_ISSUE = 'ISSUE';
 	public const TYPE_ESSENTIAL = 'ESSENTIAL';
 	public const TYPE_OPTIMIZATION = 'OPTIMIZATION';
-	public const TYPES = [
-		Recommendation::TYPE_ISSUE,
-		Recommendation::TYPE_ESSENTIAL,
-		Recommendation::TYPE_OPTIMIZATION,
+	public const TYPE_PRIORITIES = [
+		Recommendation::TYPE_ISSUE => 5,
+		Recommendation::TYPE_ESSENTIAL => 10,
+		Recommendation::TYPE_OPTIMIZATION => 20,
 	];
 
 	/**
@@ -92,6 +93,12 @@ class Recommendation
 	 */
 	private bool $isIgnored;
 
+	/**
+	 * @ORM\ManyToOne(targetEntity=Project::class, inversedBy="recommendations")
+	 * @ORM\JoinColumn(nullable=false)
+	 */
+	private Project $project;
+
 	public function __construct()
 	{
 		$this->parentResults = new ArrayCollection();
@@ -151,8 +158,10 @@ class Recommendation
 
 	public function setType(string $type): self
 	{
-		if (!in_array($type, static::TYPES)) {
-			throw new \Exception(sprintf('%s is not a valid recommendation type. Accecpted types are %s', $type, implode(', ', static::TYPES)));
+		$allowedTypes = array_keys(static::TYPE_PRIORITIES);
+
+		if (!in_array($type, $allowedTypes)) {
+			throw new \Exception(sprintf('%s is not a valid recommendation type. Accecpted types are %s', $type, implode(', ', $allowedTypes)));
 		}
 
 		$this->type = $type;
@@ -252,6 +261,18 @@ class Recommendation
 	public function setIsIgnored(bool $isIgnored): self
 	{
 		$this->isIgnored = $isIgnored;
+
+		return $this;
+	}
+
+	public function getProject(): ?Project
+	{
+		return $this->project;
+	}
+
+	public function setProject(?Project $project): self
+	{
+		$this->project = $project;
 
 		return $this;
 	}

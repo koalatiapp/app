@@ -55,6 +55,21 @@ search:
     empty_state: No results were found.
     result_snippet_empty_state: No description or preview available.
 
+recommendation:
+    label: Recommendation
+    next: Next recommendation
+    view_more: View more details
+    ignore: Ignore
+    mark_as_done: Mark as done
+    type:
+        label: Type
+        issue: Issue
+        essential: Essential
+        optimization: Optimization
+    empty_state:
+        title: We don't have any recommendations.
+        explanation: You've either done a great job with the site, or you simply haven't ran any automated tests yet. Either way, we've got nothing for you right now 🤷‍♂️
+
 dashboard:
     title: Dashboard
     tabs:

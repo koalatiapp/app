@@ -1,0 +1,18 @@
+{# Recommendation card #}
+{% macro recommendation_card(recommendation, title = "") %}
+	<div class="card">
+		{% if title %}
+			<h3>{{ title }}</h3>
+		{% endif %}
+
+		<p>
+			{{ recommendation.title }}
+			<a href="#" class="text-link">{% trans %}recommendation.view_more{% endtrans %}</a>
+		</p>
+
+		<div class="button-container right margin-top small">
+			<button type="button" class="small gray">{% trans %}recommendation.ignore{% endtrans %}</button>
+			<button type="button" class="small ">{% trans %}recommendation.mark_as_done{% endtrans %}</button>
+		</div>
+	</div>
+{% endmacro %}
