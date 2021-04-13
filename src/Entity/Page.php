@@ -53,13 +53,24 @@ class Page
 	 */
 	private Collection $recommendations;
 
-	public function __construct(string $url, ?string $title = null)
+	/**
+	 * @ORM\ManyToOne(targetEntity=Project::class, inversedBy="pages")
+	 */
+	private Project $project;
+
+	/**
+	 * @ORM\Column(type="boolean")
+	 */
+	private bool $isIgnored = false;
+
+	public function __construct(Project $project, string $url, ?string $title = null)
 	{
 		$this->url = $url;
 		$this->title = $title;
 		$this->dateCreated = new \DateTime();
 		$this->dateUpdated = new \DateTime();
 		$this->recommendations = new ArrayCollection();
+		$this->setProject($project);
 	}
 
 	public function getId(): ?int
@@ -153,6 +164,31 @@ class Page
 				$recommendation->setRelatedPage(null);
 			}
 		}
+
+		return $this;
+	}
+
+	public function setProject(Project $project): self
+	{
+		$this->project = $project;
+		$project->addPage($this);
+
+		return $this;
+	}
+
+	public function getProject(): Project
+	{
+		return $this->project;
+	}
+
+	public function getIsIgnored(): ?bool
+	{
+		return $this->isIgnored;
+	}
+
+	public function setIsIgnored(bool $isIgnored): self
+	{
+		$this->isIgnored = $isIgnored;
 
 		return $this;
 	}

@@ -57,14 +57,19 @@ class SitemapRequestHandler implements MessageHandlerInterface
 
 	public function __invoke(SitemapRequest $message): void
 	{
+		$project = $this->projectRepository->find($message->getProjectId());
+
+		if (!$project) {
+			return;
+		}
+
 		// Crawl website to generate the sitemap
-		$websiteUrl = $this->urlHelper->standardize($message->getWebsiteUrl());
+		$websiteUrl = $this->urlHelper->standardize($project->getUrl());
 		$locations = $this->sitemapBuilder->buildFromWebsiteUrl($websiteUrl)->getLocations();
-		$existingPages = $this->pageRepository->findByUrls(array_keys($locations));
 		$pagesByUrl = [];
 		$allPages = [];
 
-		foreach ($existingPages as $page) {
+		foreach ($project->getPages() as $page) {
 			$pagesByUrl[$page->getUrl()] = $page;
 		}
 
@@ -83,7 +88,7 @@ class SitemapRequestHandler implements MessageHandlerInterface
 			}
 			// Otherwise, create the new page
 			else {
-				$page = new Page($location->url, $location->title);
+				$page = new Page($project, $location->url, $location->title);
 				$this->em->persist($page);
 				$allPages[] = $page;
 			}
@@ -91,19 +96,9 @@ class SitemapRequestHandler implements MessageHandlerInterface
 
 		// @TODO: Check to delete / deactivate pages that aren't reachable anymore
 
-		// Ensure all projects for this website have their pages updated
-		$matchingProjects = $this->projectRepository->findByUrl($websiteUrl);
-		foreach ($matchingProjects as $project) {
-			foreach ($allPages as $page) {
-				$project->addPage($page);
-			}
-			$this->em->persist($project);
-		}
 		$this->em->flush();
 
 		// If a project ID was provided in the message, dispatch a new message to refresh that project's results
-		if ($projectId = $message->getProjectId()) {
-			$this->bus->dispatch(new TestingRequest($projectId));
-		}
+		$this->bus->dispatch(new TestingRequest($message->getProjectId()));
 	}
 }

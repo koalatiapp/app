@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Page;
 use App\Entity\Project;
 use App\Repository\UserRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -29,6 +30,15 @@ class ProjectFixtures extends Fixture implements DependentFixtureInterface
 			$project->setName('Koalati');
 			$project->setUrl('https://koalati.com');
 			$project->setOwnerUser($user);
+
+			$homePage = new Page($project, 'https://koalati.com', 'Homepage - Koalati');
+			$project->addPage($homePage);
+			$manager->persist($homePage);
+
+			$aboutPage = new Page($project, 'https://koalati.com/about', 'About - Koalati');
+			$project->addPage($aboutPage);
+			$manager->persist($aboutPage);
+
 			$manager->persist($project);
 		}
 

@@ -86,12 +86,12 @@ class Recommendation
 	/**
 	 * @ORM\Column(type="boolean")
 	 */
-	private bool $isCompleted;
+	private bool $isCompleted = false;
 
 	/**
 	 * @ORM\Column(type="boolean")
 	 */
-	private bool $isIgnored;
+	private bool $isIgnored = false;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=Project::class, inversedBy="recommendations")
@@ -102,6 +102,9 @@ class Recommendation
 	public function __construct()
 	{
 		$this->parentResults = new ArrayCollection();
+		$this->dateCreated = new \DateTime();
+		$this->dateLastOccured = new \DateTime();
+		$this->dateCompleted = new \DateTime();
 	}
 
 	public function getId(): ?int
@@ -137,6 +140,11 @@ class Recommendation
 		$this->parameters = $parameters;
 
 		return $this;
+	}
+
+	public function getTitle(): string
+	{
+		return strtr($this->getTemplate(), $this->getParameters());
 	}
 
 	public function getRelatedPage(): ?Page

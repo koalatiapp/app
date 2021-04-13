@@ -6,6 +6,7 @@ use App\Entity\Testing\Recommendation;
 use App\Repository\ProjectRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -68,16 +69,9 @@ class Project
 
 	/**
 	 * @var Collection<int, Page>
-	 * @ORM\ManyToMany(targetEntity=Page::class)
+	 * @ORM\OneToMany(targetEntity=Page::class, mappedBy="project")
 	 */
 	private $pages;
-
-	/**
-	 * @var Collection<int, Page>
-	 * @ORM\ManyToMany(targetEntity=Page::class)
-	 * @ORM\JoinTable(name="project_ignored_page")
-	 */
-	private $ignoredPages;
 
 	/**
 	 * @var Collection<int, ProjectMember>
@@ -96,7 +90,6 @@ class Project
 		$this->dateCreated = new \DateTime();
 		$this->status = self::STATUS_NEW;
 		$this->pages = new ArrayCollection();
-		$this->ignoredPages = new ArrayCollection();
 		$this->teamMembers = new ArrayCollection();
 		$this->recommendations = new ArrayCollection();
 	}
@@ -167,7 +160,7 @@ class Project
 	}
 
 	/**
-	 * @return Collection<int, Page>
+	 * @return ArrayCollection<int, Page>
 	 */
 	public function getPages(): Collection
 	{
@@ -178,6 +171,7 @@ class Project
 	{
 		if (!$this->pages->contains($page)) {
 			$this->pages->add($page);
+			$page->setProject($this);
 		}
 
 		return $this;
@@ -193,43 +187,11 @@ class Project
 	/**
 	 * @return Collection<int, Page>
 	 */
-	public function getIgnoredPages(): Collection
-	{
-		return $this->ignoredPages;
-	}
-
-	public function addIgnoredPage(Page $ignoredPage): self
-	{
-		if (!$this->ignoredPages->contains($ignoredPage)) {
-			$this->ignoredPages->add($ignoredPage);
-		}
-
-		return $this;
-	}
-
-	public function removeIgnoredPage(Page $ignoredPage): self
-	{
-		$this->ignoredPages->removeElement($ignoredPage);
-
-		return $this;
-	}
-
-	/**
-	 * @return Collection<int, Page>
-	 */
 	public function getActivePages(): Collection
 	{
-		$pageArray = [];
+		$criteria = Criteria::create()->where(Criteria::expr()->eq('isIgnored', false));
 
-		foreach ($this->getPages() as $page) {
-			$pageArray[$page->getId()] = $page;
-		}
-
-		foreach ($this->getIgnoredPages() as $ignoredPage) {
-			unset($pageArray[$ignoredPage->getId()]);
-		}
-
-		return new ArrayCollection(array_values($pageArray));
+		return $this->getPages()->matching($criteria);
 	}
 
 	/**
@@ -358,6 +320,6 @@ class Project
 	 */
 	public function getActiveRecommendations(): Collection
 	{
-		return $this->getSortedRecommendations()->filter(fn ($recommendation) => $recommendation->getIsCompleted());
+		return $this->getSortedRecommendations()->filter(fn ($recommendation) => !$recommendation->getIsCompleted());
 	}
 }
