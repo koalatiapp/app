@@ -14,6 +14,15 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Recommendation
 {
+	public const TYPE_ISSUE = 'ISSUE';
+	public const TYPE_ESSENTIAL = 'ESSENTIAL';
+	public const TYPE_OPTIMIZATION = 'OPTIMIZATION';
+	public const TYPES = [
+		Recommendation::TYPE_ISSUE,
+		Recommendation::TYPE_ESSENTIAL,
+		Recommendation::TYPE_OPTIMIZATION,
+	];
+
 	/**
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
@@ -142,6 +151,10 @@ class Recommendation
 
 	public function setType(string $type): self
 	{
+		if (!in_array($type, static::TYPES)) {
+			throw new \Exception(sprintf('%s is not a valid recommendation type. Accecpted types are %s', $type, implode(', ', static::TYPES)));
+		}
+
 		$this->type = $type;
 
 		return $this;
