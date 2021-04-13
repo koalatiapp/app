@@ -320,6 +320,10 @@ class Project
 	 */
 	public function getActiveRecommendations(): Collection
 	{
-		return $this->getSortedRecommendations()->filter(fn ($recommendation) => !$recommendation->getIsCompleted());
+		return $this->getSortedRecommendations()->filter(function ($recommendation) {
+			return !$recommendation->getIsCompleted()
+				&& !$recommendation->getIsIgnored()
+				&& !$recommendation->getRelatedPage()->getIsIgnored();
+		});
 	}
 }
