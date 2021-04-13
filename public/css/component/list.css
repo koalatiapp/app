@@ -7,3 +7,7 @@
 .list-row > i { color: var(--color-black); }
 a.list-row:hover { box-shadow: 0 2px 15px rgba(var(--shadow-rgb), .15); }
 :is(.list-headings, .list-row) > *:first-child:not(img) { margin-left: .5rem; }
+
+/* Empty states */
+.list-row.empty-state { grid-template-columns: 1fr !important; }
+.list-row.empty-state:not(:only-child) { display: none !important; }
