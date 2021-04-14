@@ -38,6 +38,11 @@ class Flash
 			</span>
 			<span class="content">${translatedMessage}</div>
 		`;
+
+		if (["warning", "error"].indexOf(type) != -1) {
+			messageNode.setAttribute("role", "alert");
+		}
+
 		this.wrapper.appendChild(messageNode);
 
 		if (!sticky) {
