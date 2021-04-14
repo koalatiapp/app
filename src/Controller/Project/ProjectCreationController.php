@@ -43,7 +43,7 @@ class ProjectCreationController extends AbstractProjectController
 
 				$this->dispatchMessage(new ScreenshotRequest($project->getId()));
 				$this->dispatchMessage(new FaviconRequest($project->getId()));
-				$this->dispatchMessage(new SitemapRequest($websiteUrl, $project->getId()));
+				$this->dispatchMessage(new SitemapRequest($project->getId()));
 				$this->addFlash('success', $translator->trans('project_creation.flash.created_successfully', ['%name%' => $project->getName()]));
 
 				return $this->redirectToRoute('project_dashboard', ['id' => $project->getId()]);
