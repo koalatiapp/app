@@ -284,4 +284,13 @@ class Recommendation
 
 		return $this;
 	}
+
+	/**
+	 * @TODO: Implement the Recommendation::getUniqueName() method with an actual property,
+	 * with a fallback on the template when it is missing or empty.
+	 */
+	public function getUniqueName(): ?string
+	{
+		return $this->template;
+	}
 }

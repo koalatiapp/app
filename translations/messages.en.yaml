@@ -70,6 +70,7 @@ recommendation:
     listing:
         title: Recommendation
         type: Type
+        occurences: Occurences
         empty_state: There are no recommendations for you at the moment.
 
 dashboard:

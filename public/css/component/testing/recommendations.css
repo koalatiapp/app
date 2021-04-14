@@ -1,1 +1,1 @@
-.recommendation-list :is(.list-headings, .list-row) { grid-template-columns: 1fr 12rem 9rem; }
+.recommendation-list :is(.list-headings, .list-row) { grid-template-columns: 1fr 10rem 10ch 12rem; }

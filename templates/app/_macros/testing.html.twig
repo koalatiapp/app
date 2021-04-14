@@ -24,28 +24,30 @@
 {% endmacro %}
 
 {# Recommendation list #}
-{% macro recommendation_list(recommendations) %}
+{% macro recommendation_grouped_list(recommendationGroups) %}
 	{% from _self import recommendation_type %}
 
 	<div class="recommendation-list">
 		<div class="list-headings">
 			<div>{% trans %}recommendation.listing.title{% endtrans %}</div>
 			<div>{% trans %}recommendation.listing.type{% endtrans %}</div>
+			<div class="text-center">{% trans %}recommendation.listing.occurences{% endtrans %}</div>
 			<div></div>
 		</div>
 		<div class="list">
-			{% if recommendations|length %}
-				{% for recommendation in recommendations %}
-					<div class="list-row recommendation" recommendation-id="{{ recommendation.id }}">
+			{% if recommendationGroups|length %}
+				{% for recommendationGroup in recommendationGroups %}
+					<div class="list-row recommendation" recommendation-sample-id="{{ recommendationGroup.sample.id }}">
 						<div>
-							<strong class="name">{{ recommendation.title }}</strong>
+							<strong class="name">{{ recommendationGroup.title }}</strong>
 							<br>
 							<a class="text-link text-smaller">
 								<i class="fad fa-circle-info"></i>&nbsp;
 								{% trans %}recommendation.view_more{% endtrans %}
 							</a>
 						</div>
-						<div class="type text-red">{{ recommendation_type(recommendation.type) }}</div>
+						<div class="type">{{ recommendation_type(recommendationGroup.type) }}</div>
+						<div class="occurences text-center">{{ recommendationGroup|length }}</div>
 						<div class="actions text-right">
 							<button type="button" class="small gray">{% trans %}recommendation.ignore{% endtrans %}</button>
 							<button type="button" class="small icon-only"><i class="fas fa-check"></i></button>

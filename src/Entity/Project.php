@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Entity\Testing\Recommendation;
 use App\Repository\ProjectRepository;
+use App\Util\Testing\RecommendationGroup;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
@@ -325,5 +326,15 @@ class Project
 				&& !$recommendation->getIsIgnored()
 				&& !$recommendation->getRelatedPage()->getIsIgnored();
 		});
+	}
+
+	/**
+	 * @return Collection<int,RecommendationGroup>
+	 */
+	public function getActiveRecommendationGroups(): Collection
+	{
+		$groups = RecommendationGroup::fromLooseRecommendations($this->getActiveRecommendations());
+
+		return new ArrayCollection($groups);
 	}
 }
