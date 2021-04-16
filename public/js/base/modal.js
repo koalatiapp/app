@@ -178,11 +178,15 @@ export default class Modal {
 			// @TODO: Check for confirmation before closing
 		}
 
-		// @TODO: Close the modal
-		// @TODO: Show previous modal (if any)
+		// Close the modal
+		this.dialogElement.setAttribute("aria-hidden", "true");
+		modalStack.pop();
 
 		// Restore focus
 		this.originalFocus?.focus();
+
+		// Remove the nodes from the document
+		setTimeout(() => { this.wrapperElement.remove(); }, 1000);
 
 		// @TODO: Return a promise with a boolean indicating if the modal is closed or not
 	}
