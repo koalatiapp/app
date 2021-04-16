@@ -4,6 +4,11 @@
  * @type {Modal[]}
  */
 const modalStack = [];
+const escapeKeyupCallback = function(e) {
+	if (e.code == "Escape") {
+		Modal.closeCurrent();
+	}
+};
 
 /**
  * A modal window that displays content in a standalone dialog box over the rest of the page.
@@ -152,6 +157,11 @@ export default class Modal {
 		});
 
 		// @TODO: Add tab-targeting trap to prevent focus outside of modal
+
+		// Add Escape event listener if this is the first modal of the stack
+		if (!modalStack.length) {
+			window.addEventListener("keydown", escapeKeyupCallback);
+		}
 	}
 
 	/**
@@ -189,6 +199,11 @@ export default class Modal {
 
 		// Remove the nodes from the document
 		setTimeout(() => { this.wrapperElement.remove(); }, 1000);
+
+		// Remove the Escape listener if there is no more modal
+		if (!modalStack.length) {
+			Modal._removeEscapeEventListener();
+		}
 
 		// @TODO: Return a promise with a boolean indicating if the modal is closed or not
 	}
@@ -231,5 +246,25 @@ export default class Modal {
 	static getCurrent()
 	{
 		return modalStack[modalStack.length - 1] ?? null;
+	}
+
+	/**
+	 * Closes the currently active modal
+	 */
+	static closeCurrent()
+	{
+		Modal.getCurrent()?.close();
+	}
+
+	/**
+	 * Removes the Esc key event listener, which triggers the Close function.
+	 */
+	static _removeEscapeEventListener()
+	{
+		if (Modal.getCurrent()) {
+			return;
+		}
+
+		window.removeEventListener("keydown", escapeKeyupCallback);
 	}
 }
