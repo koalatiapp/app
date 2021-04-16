@@ -1,0 +1,14 @@
+.modal-wrapper { display: flex; justify-content: center; align-items: center; position: fixed; top: 0; left: 0; right: 0; bottom: 0; }
+.modal-backdrop { background-color: rgba(0, 0, 0, .5); position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 1000; transition: opacity .5s ease-in-out; }
+.modal { width: 600px; background-color: var(--modal-bg-color, white); border-radius: 12px; overflow: hidden; position: relative; z-index: 1001; transition: opacity .35s ease-in-out .2s, transform .35s ease-in-out .2s; }
+.modal-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; border-bottom: 2px solid var(--modal-header-separator-color, #f5f5f5); }
+.modal-title { font-size: 1.25rem; font-weight: 600; }
+.modal-content { min-height: 200px; max-height: min(75vh, 600px); padding: 20px; overflow: auto; position: relative; }
+
+/* Toggling */
+.modal[aria-hidden="true"] { transform: translateY(-100px); opacity: 0; pointer-events: none; transition: opacity .35s ease-in-out, transform .35s ease-in-out; }
+.modal[aria-hidden="true"] + .modal-backdrop { opacity: 0; }
+
+/* Loading overlay */
+.modal-content[aria-busy="true"]::before { content: ' '; display: block; background-color: var(--modal-loading-overlay-bg-color, white); opacity: .75; backdrop-filter: blur(5px); position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 100; }
+.modal-content[aria-busy="true"]::after { content: '\f1ce'; display: inline-block; font-family: var(--fa-style-family); font-size: 2.5rem; color: var(--modal-loading-overlay-spinner-color, var(--color-blue-light)); animation: fa-spin 2s linear infinite; position: absolute; top: calc(50% - .5em); left: calc(50% - .5em); z-index: 101; }

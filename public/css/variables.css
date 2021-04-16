@@ -59,6 +59,12 @@
 	--flash-warning-bg-color: var(--notification-warning-icon-color);
 	--flash-danger-bg-color: var(--notification-danger-icon-color);
 
+	/* Modals */
+	--modal-bg-color: var(--color-white);
+	--modal-header-separator-color: var(--color-white);
+	--modal-loading-overlay-bg-color: var(--color-white);
+	--modal-loading-overlay-spinner-color: var(--color-blue-light);
+
 	/* Tabbed page container */
 	--tabbed-page-navigation-bg-color: #E8ECFD;
 	--tabbed-page-navigation-text-color: #7781A5;
