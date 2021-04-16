@@ -150,6 +150,8 @@ export default class Modal {
 			e.preventDefault();
 			this.close();
 		});
+
+		// @TODO: Add tab-targeting trap to prevent focus outside of modal
 	}
 
 	/**
