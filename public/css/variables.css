@@ -61,7 +61,7 @@
 
 	/* Modals */
 	--modal-bg-color: var(--color-white);
-	--modal-header-separator-color: var(--color-white);
+	--modal-header-separator-color: var(--color-gray-light);
 	--modal-loading-overlay-bg-color: var(--color-white);
 	--modal-loading-overlay-spinner-color: var(--color-blue-light);
 

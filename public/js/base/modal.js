@@ -4,11 +4,57 @@
  * @type {Modal[]}
  */
 const modalStack = [];
-const escapeKeyupCallback = function(e) {
+
+/**
+ * Callback for the `keydown` event listener that handles closing the modals via the Escape key.
+ */
+const escapeKeydownCallback = function(e) {
 	if (e.code == "Escape") {
 		Modal.closeCurrent();
 	}
 };
+
+/**
+ * Selector for the focusable elements within a modal
+ */
+const focusableSelector = `
+	:is(
+		button, [href], input,
+		select, textarea, details,
+		[contenteditable], [tabindex]:not([tabindex='-1'])
+	):not([disabled]):not([readonly])
+`;
+
+/**
+ * Callback for the `keydown` event listener that handles the focus trap for modals.
+ */
+const focusTrapKeydownCallback = function(e) {
+	const isTabPressed = e.key === "Tab" || e.keyCode === 9;
+	const modalInstance = Modal.getCurrent();
+
+	if (!isTabPressed || !modalInstance) {
+		return;
+	}
+
+	const modal = modalInstance.dialogElement;
+	const firstFocusableElement = modal.querySelectorAll(focusableSelector)[0];
+	const focusableElements = modal.querySelectorAll(focusableSelector);
+	const lastFocusableElement = focusableElements[focusableElements.length - 1];
+
+	if (e.shiftKey) {
+		if (document.activeElement === firstFocusableElement) {
+			lastFocusableElement.focus();
+			e.preventDefault();
+		}
+	} else {
+		if (document.activeElement === lastFocusableElement) {
+			firstFocusableElement.focus();
+			e.preventDefault();
+		}
+	}
+};
+
+
 
 /**
  * A modal window that displays content in a standalone dialog box over the rest of the page.
@@ -55,6 +101,8 @@ export default class Modal {
 		if (["undefined", "string"].indexOf(typeof options.content) == -1) {
 			options.content = Promise.resolve(options.content);
 		}
+
+		options.confirmClose = options.confirmClose ?? false;
 
 		return Object.freeze(options);
 	}
@@ -156,11 +204,10 @@ export default class Modal {
 			this.close();
 		});
 
-		// @TODO: Add tab-targeting trap to prevent focus outside of modal
-
-		// Add Escape event listener if this is the first modal of the stack
+		// Initialize document-wide event listener if this is the first modal of the stack
 		if (!modalStack.length) {
-			window.addEventListener("keydown", escapeKeyupCallback);
+			window.addEventListener("keydown", escapeKeydownCallback);
+			window.addEventListener("keydown", focusTrapKeydownCallback);
 		}
 	}
 
@@ -174,14 +221,9 @@ export default class Modal {
 		this.dialogElement.setAttribute("aria-hidden", "false");
 
 		// Focus the first focusable element in the modal
-		const firstFocusableElement = this.dialogElement.querySelector(`
-			:is(
-				button, [href], input,
-				select, textarea, details,
-				[contenteditable], [tabindex]:not([tabindex='-1'])
-			):not([disabled]):not([readonly]):not(.modal-close)
-		`);
+		const firstFocusableElement = this.dialogElement.querySelector(`${focusableSelector}:not(.modal-close)`);
 		firstFocusableElement.focus();
+
 	}
 
 	/**
@@ -194,7 +236,7 @@ export default class Modal {
 	 */
 	close(skipConfirm = false)
 	{
-		if (!skipConfirm) {
+		if (!skipConfirm && this.options.confirmClose) {
 			// @TODO: Check for confirmation before closing
 		}
 
@@ -211,9 +253,11 @@ export default class Modal {
 		// Remove the Escape listener if there is no more modal
 		if (!modalStack.length) {
 			Modal._removeEscapeEventListener();
+			Modal._removeFocusTrap();
 		}
 
 		// @TODO: Return a promise with a boolean indicating if the modal is closed or not
+		return Promise.resolve(true);
 	}
 
 	/**
@@ -238,12 +282,22 @@ export default class Modal {
 	 * Closes every active modal.
 	 *
 	 * @param {boolean} [skipConfirm=false] - Whether confirmations should be skipped when closing modals that require confirmation on-close.
-	 * @returns {Promise<boolean>} Returns a `Promise<boolean>` indicating if the modal was closed (`true`) or not (`false`).
+	 * @returns {Promise<boolean>} Returns a `Promise<boolean>` indicating if the modals were successfully closed (`true`) or not (`false`).
 	 */
 	static closeAll(skipConfirm = false)
 	{
-		// @TODO: Loop over every modal in the `modalStack`, calling and awaiting `close(skipConfirm)` for each of them
-		// @TODO: Return a promise with a boolean indicating if the modal is closed or not
+		if (!Modal.getCurrent()) {
+			return Promise.resolve(true);
+		}
+
+		// Recursively loop over every modal in the `modalStack`, calling and awaiting `close(skipConfirm)` for each of them
+		return Modal.getCurrent().close(skipConfirm).then(async (closed) => {
+			if (closed) {
+				return await Modal.closeAll(skipConfirm);
+			} else {
+				return false;
+			}
+		});
 	}
 
 	/**
@@ -273,6 +327,15 @@ export default class Modal {
 			return;
 		}
 
-		window.removeEventListener("keydown", escapeKeyupCallback);
+		window.removeEventListener("keydown", escapeKeydownCallback);
+	}
+
+	static _removeFocusTrap()
+	{
+		if (Modal.getCurrent()) {
+			return;
+		}
+
+		window.removeEventListener("keydown", focusTrapKeydownCallback);
 	}
 }
