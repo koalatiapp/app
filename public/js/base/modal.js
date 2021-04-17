@@ -39,7 +39,7 @@ export default class Modal {
 
 		modalStack.push(this);
 
-		setTimeout(() => { this.show(); }, 10);
+		setTimeout(() => { this.show(); }, 30);
 	}
 
 	/**
@@ -170,10 +170,18 @@ export default class Modal {
 	 */
 	show()
 	{
-		// @TODO: Open the modal
+		// Open the modal
 		this.dialogElement.setAttribute("aria-hidden", "false");
 
-		// @TODO: Focus the first focusable element in the modal
+		// Focus the first focusable element in the modal
+		const firstFocusableElement = this.dialogElement.querySelector(`
+			:is(
+				button, [href], input,
+				select, textarea, details,
+				[contenteditable], [tabindex]:not([tabindex='-1'])
+			):not([disabled]):not([readonly]):not(.modal-close)
+		`);
+		firstFocusableElement.focus();
 	}
 
 	/**
