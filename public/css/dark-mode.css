@@ -27,13 +27,14 @@
 		--tabbed-page-navigation-text-color-hover: var(--color-black);
 		--tabbed-page-navigation-text-color-active: var(--color-blue-light);
 		--tabbed-page-content-bg-color: var(--color-white);
+		--modal-header-separator-color: var(--color-gray-light);
 	}
 	body { background-color: #050505; background-image: radial-gradient(circle, rgb(17 103 243 / 5%) 0%, rgb(128 135 171 / 10%) 100%); }
 	hr,
 	.spacer { background-color: var(--color-gray-light); }
 
 	/* Navigation */
-	header nav > ul > li.active { background-color: var(--color-gray-light); }
+	#sidebar nav > ul > li.active { background-color: var(--color-gray-light); }
 
 	/* Forms */
 	fieldset label { color: var(--color-gray); }
