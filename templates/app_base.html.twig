@@ -19,6 +19,7 @@
         <link rel="stylesheet" href="{{ asset('css/component/list.css') }}">
         <link rel="stylesheet" href="{{ asset('css/component/flash.css') }}">
         <link rel="stylesheet" href="{{ asset('css/component/search-overlay.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/component/modal.css') }}">
         <link rel="stylesheet" href="{{ asset('ext/fontawesome/css/all.min.css') }}">
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -34,7 +35,7 @@
     <body>
         {% include 'app/_parts/flash_messages.html.twig' %}
 
-        <header>
+        <header id="sidebar">
             <div id="brand-wrapper"></div>
 
             {% include 'app/_parts/navigation.html.twig' %}
