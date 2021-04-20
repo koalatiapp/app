@@ -1,12 +1,19 @@
 {
   "name": "@koalati/app",
-  "dependencies": {},
+  "dependencies": {
+    "core-js": "^3.10.2",
+    "lit-element": "^2.4.0"
+  },
   "devDependencies": {
+    "@symfony/webpack-encore": "^1.1.2",
     "eslint": "^7.16.0",
     "eslint-plugin-html": "^6.1.1",
     "eslint-plugin-vue": "^7.3.0",
     "stylelint": "^13.8.0",
     "stylelint-config-standard": "^20.0.0"
+  },
+  "scripts": {
+    "encore": "encore"
   },
   "repository": {
     "type": "git",

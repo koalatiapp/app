@@ -12,6 +12,7 @@
     "doctrine/doctrine-bundle": "^2.2",
     "doctrine/doctrine-migrations-bundle": "^3.0",
     "doctrine/orm": "^2.8",
+    "erusev/parsedown": "^1.7",
     "friendsofsymfony/jsrouting-bundle": "^2.7",
     "knplabs/knp-time-bundle": "^1.14",
     "league/flysystem-aws-s3-v3": "^2.0",
@@ -31,7 +32,10 @@
     "symfony/translation": "5.2.*",
     "symfony/twig-bundle": "5.2.*",
     "symfony/validator": "5.2.*",
+    "symfony/webpack-encore-bundle": "^1.11",
     "symfony/yaml": "5.2.*",
+    "twig/extra-bundle": "^3.3",
+    "twig/markdown-extra": "^3.3",
     "vdb/php-spider": "^0.5.2",
     "willdurand/js-translation-bundle": "^4.0"
   },

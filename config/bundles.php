@@ -15,4 +15,6 @@ return [
 	Knp\Bundle\TimeBundle\KnpTimeBundle::class => ['all' => true],
 	Bazinga\Bundle\JsTranslationBundle\BazingaJsTranslationBundle::class => ['all' => true],
 	Symfony\Bundle\MercureBundle\MercureBundle::class => ['all' => true],
+	Twig\Extra\TwigExtraBundle\TwigExtraBundle::class => ['all' => true],
+	Symfony\WebpackEncoreBundle\WebpackEncoreBundle::class => ['all' => true],
 ];
