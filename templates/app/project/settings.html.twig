@@ -3,10 +3,6 @@
 {% block title %}{% trans %}project_settings.title{% endtrans %}{% endblock %}
 {% block section_title %}{{ 'generic.project_section_title'|trans({'%name%':project.name}) }}{% endblock %}
 
-{% block javascripts %}
-	<script src="{{ asset("components/tabbed-container/component.js") }}"></script>
-{% endblock %}
-
 {% block body %}
 	{{ form_start(form) }}
 		{% set submitButton = form_row(form.save) %}

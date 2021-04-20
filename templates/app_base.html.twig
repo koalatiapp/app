@@ -23,6 +23,7 @@
         <link rel="stylesheet" href="{{ asset('ext/fontawesome/css/all.min.css') }}">
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+ 		{{ encore_entry_link_tags('app') }}
 
         {% block head %}{% endblock %}
 
@@ -67,6 +68,7 @@
 
         {% include 'app/_parts/search_overlay.html.twig' %}
 
+        {{ encore_entry_script_tags('app') }}
 		<script src="https://unpkg.com/wretch"></script>
 		<script type="module" src="{{ asset('js/base/flash-messages.js') }}"></script>
 		<script src="{{ asset('js/base/quick-actions.js') }}"></script>

@@ -6,8 +6,8 @@
 const modalStack = [];
 
 /**
- * Callback for the `keydown` event listener that handles closing the modals via the Escape key.
- */
+  * Callback for the `keydown` event listener that handles closing the modals via the Escape key.
+  */
 const escapeKeydownCallback = function(e) {
 	if (e.code == "Escape") {
 		Modal.closeCurrent();
@@ -15,19 +15,13 @@ const escapeKeydownCallback = function(e) {
 };
 
 /**
- * Selector for the focusable elements within a modal
- */
-const focusableSelector = `
-	:is(
-		button, [href], input,
-		select, textarea, details,
-		[contenteditable], [tabindex]:not([tabindex='-1'])
-	):not([disabled]):not([readonly])
-`;
+  * Selector for the focusable elements within a modal
+  */
+const focusableSelector = ":is(button, a, input, select, textarea, details, [contenteditable], [tabindex]:not([tabindex='-1'])):not([disabled]):not([readonly])";
 
 /**
- * Callback for the `keydown` event listener that handles the focus trap for modals.
- */
+  * Callback for the `keydown` event listener that handles the focus trap for modals.
+  */
 const focusTrapKeydownCallback = function(e) {
 	const isTabPressed = e.key === "Tab" || e.keyCode === 9;
 	const modalInstance = Modal.getCurrent();
@@ -54,11 +48,9 @@ const focusTrapKeydownCallback = function(e) {
 	}
 };
 
-
-
 /**
- * A modal window that displays content in a standalone dialog box over the rest of the page.
- */
+  * A modal window that displays content in a standalone dialog box over the rest of the page.
+  */
 export default class Modal {
 	/**
 	 *
@@ -74,7 +66,7 @@ export default class Modal {
 			throw new Error("You must provide either the `content` or the `contentUrl` option when creating a modal.");
 		}
 
-		this.originalFocus = document.activeElement;
+		this.originalFocus = window.document.activeElement;
 		this.guid = this._generateGuid();
 		this.options = this._standardizeOptions(options);
 		this.wrapperElement = this._createWrapper();
@@ -187,6 +179,8 @@ export default class Modal {
 
 		contentPromise.then(content => {
 			contentElement.innerHTML = content;
+			this._focusFirstElement();
+			this.dialogElement.dispatchEvent(new CustomEvent("content-loaded"));
 		}).catch(() => {
 			contentElement.innerHTML = "Sorry, an error occured while loading this content. Please try again.";
 		}).finally(() => {
@@ -219,11 +213,7 @@ export default class Modal {
 	{
 		// Open the modal
 		this.dialogElement.setAttribute("aria-hidden", "false");
-
-		// Focus the first focusable element in the modal
-		const firstFocusableElement = this.dialogElement.querySelector(`${focusableSelector}:not(.modal-close)`);
-		firstFocusableElement.focus();
-
+		this._focusFirstElement();
 	}
 
 	/**
@@ -276,6 +266,15 @@ export default class Modal {
 		}
 
 		this.contentElement.setAttribute("aria-busy", isLoading ? "true" : "false");
+	}
+
+	/*
+	 * Focuses the first focusable element in the modal (except the close button)
+	*/
+	_focusFirstElement()
+	{
+		const firstFocusableElement = this.dialogElement.querySelector(`${focusableSelector}:not(.modal-close, .modal-close *)`);
+		firstFocusableElement?.focus();
 	}
 
 	/**

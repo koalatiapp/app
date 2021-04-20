@@ -11,7 +11,7 @@
 {% block body %}
     <div class="grid small-fill">
 		{% if project.activeRecommendationGroups|length %}
-			{{ recommendation_card(project.activeRecommendationGroups[0].sample, "recommendation.next"|trans) }}
+			{{ recommendation_card((project.activeRecommendationGroups|first).sample, "recommendation.next"|trans) }}
 		{% else %}
 			<div class="card empty-state">
 				<h3>{% trans %}recommendation.empty_state.title{% endtrans %}</h3>
@@ -32,4 +32,8 @@
 	<hr class="spacer">
 
 	{{ recommendation_grouped_list(project.activeRecommendationGroups) }}
+{% endblock %}
+
+{% block javascripts %}
+	{{ encore_entry_script_tags('testing') }}
 {% endblock %}

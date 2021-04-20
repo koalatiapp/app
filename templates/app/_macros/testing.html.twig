@@ -13,7 +13,9 @@
 
 		<p>
 			{{ recommendation.title }}
-			<a href="#" class="text-link">{% trans %}recommendation.view_more{% endtrans %}</a>
+			<recommendation-details-link recommendation-id="{{ recommendation.id }}">
+				{% trans %}recommendation.view_more{% endtrans %}
+			</recommendation-details-link>
 		</p>
 
 		<div class="button-container right margin-top small">
@@ -41,10 +43,10 @@
 						<div>
 							<strong class="name">{{ recommendationGroup.title }}</strong>
 							<br>
-							<a class="text-link text-smaller">
+							<recommendation-details-link recommendation-id="{{ recommendationGroup.sample.id }}">
 								<i class="fad fa-circle-info"></i>&nbsp;
 								{% trans %}recommendation.view_more{% endtrans %}
-							</a>
+							</recommendation-details-link>
 						</div>
 						<div class="type">{{ recommendation_type(recommendationGroup.type) }}</div>
 						<div class="occurences text-center">{{ recommendationGroup|length }}</div>
