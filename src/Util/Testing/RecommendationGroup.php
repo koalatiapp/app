@@ -87,7 +87,7 @@ class RecommendationGroup implements Countable, IteratorAggregate
 	}
 
 	/**
-	 * Groups the provided recommendations by type..
+	 * Groups the provided recommendations by type.
 	 *
 	 * @param ArrayCollection<int, Recommendation> $recommendations
 	 *
@@ -107,6 +107,6 @@ class RecommendationGroup implements Countable, IteratorAggregate
 			$groups[$uniqueName]->add($recommendation);
 		}
 
-		return array_values($groups);
+		return $groups;
 	}
 }

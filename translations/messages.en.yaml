@@ -72,6 +72,11 @@ recommendation:
         type: Type
         occurences: Occurences
         empty_state: There are no recommendations for you at the moment.
+    modal:
+        title: Recommendation details
+        description_heading: What is this about?
+        learn_more: Learn more about this
+        pages_heading: Details for each page
 
 dashboard:
     title: Dashboard

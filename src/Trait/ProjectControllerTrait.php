@@ -3,6 +3,7 @@
 namespace App\Trait;
 
 use App\Entity\Project;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 trait ProjectControllerTrait
 {
@@ -32,5 +33,25 @@ trait ProjectControllerTrait
 		$this->get('session')->set(static::getCurrentProjectSessionKey(), $project->getId());
 
 		return $project;
+	}
+
+	protected function hasProjectAccess(Project $project): bool
+	{
+		$user = $this->getUser();
+
+		if ($project->getTeamMembers()->contains($user) ||
+			$project->getOwnerUser() == $user ||
+			($project->getOwnerOrganization() && $project->getOwnerOrganization()->getMembers()->contains($user))) {
+			return true;
+		}
+
+		return false;
+	}
+
+	protected function checkProjectAccess(Project $project): void
+	{
+		if (!$this->hasProjectAccess($project)) {
+			throw new AccessDeniedException();
+		}
 	}
 }
