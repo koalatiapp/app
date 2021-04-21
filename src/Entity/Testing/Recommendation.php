@@ -6,9 +6,9 @@ use App\Entity\Page;
 use App\Entity\Project;
 use App\Entity\User;
 use App\Repository\Testing\RecommendationRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 /**
  * @ORM\Entity(repositoryClass=RecommendationRepository::class)
@@ -28,6 +28,7 @@ class Recommendation
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
 	 * @ORM\Column(type="integer")
+	 * @Groups({"default"})
 	 */
 	private int $id;
 
@@ -46,50 +47,56 @@ class Recommendation
 	/**
 	 * @ORM\ManyToOne(targetEntity=Page::class, inversedBy="recommendations")
 	 * @ORM\JoinColumn(nullable=false)
-	 *
-	 * @var Page
 	 */
-	private $relatedPage;
+	private Page $relatedPage;
 
 	/**
 	 * @ORM\Column(type="string", length=255)
+	 * @Groups({"default"})
 	 */
 	private string $type;
 
 	/**
-	 * @ORM\ManyToMany(targetEntity=TestResult::class, inversedBy="recommendations")
-	 *
-	 * @var Collection<int,TestResult>
+	 * @ORM\ManyToOne(targetEntity=TestResult::class, inversedBy="recommendations")
+	 * @ORM\JoinColumn(nullable=false)
+	 * @Groups({"default"})
+	 * @MaxDepth(1)
 	 */
-	private $parentResults;
+	private TestResult $parentResult;
 
 	/**
 	 * @ORM\Column(type="datetime")
+	 * @Groups({"default"})
 	 */
 	private \DateTimeInterface $dateCreated;
 
 	/**
 	 * @ORM\Column(type="datetime")
+	 * @Groups({"default"})
 	 */
 	private \DateTimeInterface $dateLastOccured;
 
 	/**
 	 * @ORM\Column(type="datetime", nullable=true)
+	 * @Groups({"default"})
 	 */
 	private \DateTimeInterface $dateCompleted;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=User::class)
+	 * @Groups({"default"})
 	 */
 	private ?User $completedBy;
 
 	/**
 	 * @ORM\Column(type="boolean")
+	 * @Groups({"default"})
 	 */
 	private bool $isCompleted = false;
 
 	/**
 	 * @ORM\Column(type="boolean")
+	 * @Groups({"default"})
 	 */
 	private bool $isIgnored = false;
 
@@ -101,7 +108,6 @@ class Recommendation
 
 	public function __construct()
 	{
-		$this->parentResults = new ArrayCollection();
 		$this->dateCreated = new \DateTime();
 		$this->dateLastOccured = new \DateTime();
 		$this->dateCompleted = new \DateTime();
@@ -142,6 +148,9 @@ class Recommendation
 		return $this;
 	}
 
+	/**
+	 * @Groups({"default"})
+	 */
 	public function getTitle(): string
 	{
 		return strtr($this->getTemplate(), $this->getParameters());
@@ -177,26 +186,14 @@ class Recommendation
 		return $this;
 	}
 
-	/**
-	 * @return Collection<int,TestResult>
-	 */
-	public function getParentResults(): Collection
+	public function getParentResult(): TestResult
 	{
-		return $this->parentResults;
+		return $this->parentResult;
 	}
 
-	public function addParentResult(TestResult $parentResult): self
+	public function setParentResult(TestResult $parentResult): self
 	{
-		if (!$this->parentResults->contains($parentResult)) {
-			$this->parentResults[] = $parentResult;
-		}
-
-		return $this;
-	}
-
-	public function removeParentResult(TestResult $parentResult): self
-	{
-		$this->parentResults->removeElement($parentResult);
+		$this->parentResult = $parentResult;
 
 		return $this;
 	}
@@ -286,6 +283,7 @@ class Recommendation
 	}
 
 	/**
+	 * @Groups({"default"})
 	 * @TODO: Implement the Recommendation::getUniqueName() method with an actual property,
 	 * with a fallback on the template when it is missing or empty.
 	 */

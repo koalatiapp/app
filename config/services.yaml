@@ -28,6 +28,24 @@ services:
         resource: '../src/Controller/'
         tags: ['controller.service_arguments']
 
+    # Configure the serializer for entities by default
+    Symfony\Component\Serializer\SerializerInterface:
+        class: Symfony\Component\Serializer\Serializer
+        arguments:
+            - ['@DateTimeNormalizer', '@GetSetMethodNormalizer']
+            - ['@JsonEncoder']
+
+    GetSetMethodNormalizer:
+        class: Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer
+        tags: [serializer.normalizer]
+
+    DateTimeNormalizer:
+        class: Symfony\Component\Serializer\Normalizer\DateTimeNormalizer
+        tags: [serializer.normalizer]
+
+    JsonEncoder:
+        class: Symfony\Component\Serializer\Encoder\JsonEncoder
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 

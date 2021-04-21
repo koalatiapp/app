@@ -6,6 +6,8 @@ use App\Repository\OrganizationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 /**
  * @ORM\Entity(repositoryClass=OrganizationRepository::class)
@@ -16,28 +18,35 @@ class Organization
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
 	 * @ORM\Column(type="integer")
+	 * @Groups({"default"})
 	 */
 	private ?int $id;
 
 	/**
 	 * @ORM\Column(type="string", length=255)
+	 * @Groups({"default"})
 	 */
 	private ?string $name;
 
 	/**
 	 * @ORM\Column(type="string", length=255)
+	 * @Groups({"default"})
 	 */
 	private ?string $slug;
 
 	/**
 	 * @var \Doctrine\Common\Collections\Collection<int, OrganizationMember>
 	 * @ORM\OneToMany(targetEntity=OrganizationMember::class, mappedBy="organization", orphanRemoval=true)
+	 * @Groups({"default"})
+	 * @MaxDepth(1)
 	 */
 	private $members;
 
 	/**
 	 * @var \Doctrine\Common\Collections\Collection<int, Project>
 	 * @ORM\OneToMany(targetEntity=Project::class, mappedBy="ownerOrganization")
+	 * @Groups({"default"})
+	 * @MaxDepth(1)
 	 */
 	private $projects;
 

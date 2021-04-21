@@ -6,6 +6,7 @@ use App\Repository\ToolResponseRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ToolResponseRepository::class)
@@ -16,26 +17,31 @@ class ToolResponse
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
 	 * @ORM\Column(type="integer")
+	 * @Groups({"default"})
 	 */
 	private int $id;
 
 	/**
 	 * @ORM\Column(type="string", length=255)
+	 * @Groups({"default"})
 	 */
 	private string $tool;
 
 	/**
 	 * @ORM\Column(type="string", length=1024)
+	 * @Groups({"default"})
 	 */
 	private string $url;
 
 	/**
 	 * @ORM\Column(type="datetime")
+	 * @Groups({"default"})
 	 */
 	private \DateTimeInterface $dateReceived;
 
 	/**
 	 * @ORM\Column(type="integer")
+	 * @Groups({"default"})
 	 */
 	private int $processingTime;
 

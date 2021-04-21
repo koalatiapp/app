@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -15,67 +16,68 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class User implements UserInterface
 {
 	/**
-	 * @var int
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
 	 * @ORM\Column(type="integer")
+	 * @Groups({"default"})
 	 */
-	private $id;
+	private int $id;
 
 	/**
-	 * @var string|null
 	 * @ORM\Column(type="string", length=180, unique=true)
+	 * @Groups({"default"})
 	 */
-	private $email;
+	private ?string $email;
 
 	/**
 	 * @var array<string>
 	 * @ORM\Column(type="json")
+	 * @Groups({"default"})
 	 */
-	private $roles = [];
+	private array $roles = [];
 
 	/**
 	 * @var string The hashed password
 	 * @ORM\Column(type="string")
 	 */
-	private $password;
+	private string $password;
 
 	/**
-	 * @var string|null
 	 * @ORM\Column(type="string", length=255, nullable=true)
+	 * @Groups({"default"})
 	 */
-	private $firstName;
+	private ?string $firstName;
 
 	/**
-	 * @var string|null
 	 * @ORM\Column(type="string", length=255)
+	 * @Groups({"default"})
 	 */
-	private $lastName;
+	private ?string $lastName;
 
 	/**
-	 * @var string|null
 	 * @ORM\Column(type="string", length=255, nullable=true)
+	 * @Groups({"default"})
 	 */
-	private $jobTitle;
+	private ?string $jobTitle;
 
 	/**
-	 * @var \Doctrine\Common\Collections\Collection<int, Project>
+	 * @var Collection<int, Project>
 	 * @ORM\OneToMany(targetEntity=Project::class, mappedBy="ownerUser")
 	 * @ORM\OrderBy({"dateCreated" = "DESC"})
 	 */
-	private $personalProjects;
+	private Collection $personalProjects;
 
 	/**
-	 * @var \Doctrine\Common\Collections\Collection<int, OrganizationMember>
+	 * @var Collection<int, OrganizationMember>
 	 * @ORM\OneToMany(targetEntity=OrganizationMember::class, mappedBy="user", orphanRemoval=true)
 	 */
-	private $organizationLinks;
+	private Collection $organizationLinks;
 
 	/**
-	 * @var \Doctrine\Common\Collections\Collection<int, ProjectMember>
+	 * @var Collection<int, ProjectMember>
 	 * @ORM\OneToMany(targetEntity=ProjectMember::class, mappedBy="user")
 	 */
-	private $projectLinks;
+	private Collection $projectLinks;
 
 	public function __construct()
 	{

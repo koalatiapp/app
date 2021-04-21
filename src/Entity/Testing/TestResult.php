@@ -6,6 +6,8 @@ use App\Repository\Testing\TestResultRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 /**
  * @ORM\Entity(repositoryClass=TestResultRepository::class)
@@ -16,36 +18,43 @@ class TestResult
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
 	 * @ORM\Column(type="integer")
+	 * @Groups({"default"})
 	 */
 	private int $id;
 
 	/**
 	 * @ORM\Column(type="string", length=255)
+	 * @Groups({"default"})
 	 */
 	private string $uniqueName;
 
 	/**
 	 * @ORM\Column(type="string", length=512)
+	 * @Groups({"default"})
 	 */
 	private string $title;
 
 	/**
 	 * @ORM\Column(type="text")
+	 * @Groups({"default"})
 	 */
 	private string $description;
 
 	/**
 	 * @ORM\Column(type="float", nullable=true)
+	 * @Groups({"default"})
 	 */
 	private float $weight;
 
 	/**
 	 * @ORM\Column(type="float")
+	 * @Groups({"default"})
 	 */
 	private float $score;
 
 	/**
 	 * @ORM\Column(type="array", nullable=true)
+	 * @Groups({"default"})
 	 *
 	 * @var array<int,mixed>|null
 	 */
@@ -53,6 +62,7 @@ class TestResult
 
 	/**
 	 * @ORM\Column(type="array", nullable=true)
+	 * @Groups({"default"})
 	 *
 	 * @var array<int,array>
 	 */
@@ -65,7 +75,8 @@ class TestResult
 	private ToolResponse $parentResponse;
 
 	/**
-	 * @ORM\ManyToMany(targetEntity=Recommendation::class, mappedBy="parentResults")
+	 * @ORM\OneToMany(targetEntity=Recommendation::class, mappedBy="parentResult")
+	 * @MaxDepth(1)
 	 *
 	 * @var Collection<int,Recommendation>
 	 */
@@ -201,16 +212,7 @@ class TestResult
 	{
 		if (!$this->recommendations->contains($recommendation)) {
 			$this->recommendations[] = $recommendation;
-			$recommendation->addParentResult($this);
-		}
-
-		return $this;
-	}
-
-	public function removeRecommendation(Recommendation $recommendation): self
-	{
-		if ($this->recommendations->removeElement($recommendation)) {
-			$recommendation->removeParentResult($this);
+			$recommendation->setParentResult($this);
 		}
 
 		return $this;

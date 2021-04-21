@@ -9,6 +9,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -19,12 +21,17 @@ class Project
 	public const STATUS_NEW = 'NEW';
 	public const STATUS_IN_PROGRESS = 'IN_PROGRESS';
 	public const STATUS_COMPLETED = 'COMPLETED';
+	public const ROLE_ADMIN = 'ROLE_ADMIN';
+	public const ROLE_MANAGE = 'ROLE_MANAGE';
+	public const ROLE_USER = 'ROLE_USER';
+	public const ROLE_INVITED = 'ROLE_INVITED';
 
 	/**
 	 * @var int
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
 	 * @ORM\Column(type="integer")
+	 * @Groups({"default"})
 	 */
 	private $id;
 
@@ -33,24 +40,28 @@ class Project
 	 * @Assert\NotBlank
 	 * @Assert\Length(max = 255)
 	 * @ORM\Column(type="string", length=255)
+	 * @Groups({"default"})
 	 */
 	private $name;
 
 	/**
 	 * @var \App\Entity\User|null
 	 * @ORM\ManyToOne(targetEntity=User::class, inversedBy="personalProjects")
+	 * @Groups({"default"})
 	 */
 	private $ownerUser;
 
 	/**
 	 * @var \App\Entity\Organization|null
 	 * @ORM\ManyToOne(targetEntity=Organization::class, inversedBy="projects")
+	 * @Groups({"default"})
 	 */
 	private $ownerOrganization;
 
 	/**
 	 * @var \DateTimeInterface
 	 * @ORM\Column(type="datetime")
+	 * @Groups({"default"})
 	 */
 	private $dateCreated;
 
@@ -59,30 +70,38 @@ class Project
 	 * @Assert\NotBlank
 	 * @Assert\Url(relativeProtocol = true)
 	 * @ORM\Column(type="string", length=512)
+	 * @Groups({"default"})
 	 */
 	private $url;
 
 	/**
 	 * @var string
 	 * @ORM\Column(type="string", length=32)
+	 * @Groups({"default"})
 	 */
 	private $status;
 
 	/**
 	 * @var Collection<int, Page>
 	 * @ORM\OneToMany(targetEntity=Page::class, mappedBy="project")
+	 * @Groups({"default"})
+	 * @MaxDepth(1)
 	 */
 	private $pages;
 
 	/**
 	 * @var Collection<int, ProjectMember>
 	 * @ORM\OneToMany(targetEntity=ProjectMember::class, mappedBy="project")
+	 * @Groups({"default"})
+	 * @MaxDepth(1)
 	 */
 	private $teamMembers;
 
 	/**
 	 * @var Collection<int, Recommendation>
 	 * @ORM\OneToMany(targetEntity=Recommendation::class, mappedBy="project", orphanRemoval=true)
+	 * @Groups({"default"})
+	 * @MaxDepth(1)
 	 */
 	private Collection $recommendations;
 

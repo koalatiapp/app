@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\OrganizationMemberRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=OrganizationMemberRepository::class)
@@ -18,29 +19,34 @@ class OrganizationMember
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
 	 * @ORM\Column(type="integer")
+	 * @Groups({"default"})
 	 */
 	private ?int $id;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=Organization::class, inversedBy="members")
 	 * @ORM\JoinColumn(nullable=false)
+	 * @Groups({"default"})
 	 */
 	private Organization $organization;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=User::class, inversedBy="organizationLinks")
 	 * @ORM\JoinColumn(nullable=false)
+	 * @Groups({"default"})
 	 */
 	private User $user;
 
 	/**
 	 * @var array<string>
 	 * @ORM\Column(type="json")
+	 * @Groups({"default"})
 	 */
 	private array $roles = [];
 
 	/**
 	 * @ORM\Column(type="datetime")
+	 * @Groups({"default"})
 	 */
 	private \DateTimeInterface $dateCreated;
 

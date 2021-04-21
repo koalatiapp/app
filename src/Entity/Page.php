@@ -7,6 +7,8 @@ use App\Repository\PageRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 /**
  * @ORM\Entity(repositoryClass=PageRepository::class)
@@ -18,36 +20,44 @@ class Page
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
 	 * @ORM\Column(type="integer")
+	 * @Groups({"default"})
 	 */
 	private int $id;
 
 	/**
 	 * @ORM\Column(type="string", length=255, nullable=true)
+	 * @Groups({"default"})
 	 */
 	private ?string $title;
 
 	/**
 	 * @ORM\Column(type="string", length=510)
+	 * @Groups({"default"})
 	 */
 	private string $url;
 
 	/**
 	 * @ORM\Column(type="datetime")
+	 * @Groups({"default"})
 	 */
 	private \DateTimeInterface $dateCreated;
 
 	/**
 	 * @ORM\Column(type="datetime")
+	 * @Groups({"default"})
 	 */
 	private \DateTimeInterface $dateUpdated;
 
 	/**
 	 * @ORM\Column(type="integer", nullable=true)
+	 * @Groups({"default"})
 	 */
 	private ?int $httpCode;
 
 	/**
 	 * @ORM\OneToMany(targetEntity=Recommendation::class, mappedBy="relatedPage", orphanRemoval=true)
+	 * @Groups({"default"})
+	 * @MaxDepth(1)
 	 *
 	 * @var Collection<int,Recommendation>
 	 */
@@ -55,11 +65,14 @@ class Page
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=Project::class, inversedBy="pages")
+	 * @Groups({"default"})
+	 * @MaxDepth(1)
 	 */
 	private Project $project;
 
 	/**
 	 * @ORM\Column(type="boolean")
+	 * @Groups({"default"})
 	 */
 	private bool $isIgnored = false;
 
