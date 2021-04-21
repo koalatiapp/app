@@ -16,7 +16,7 @@ class ProjectOverviewController extends AbstractProjectController
 	 */
 	public function projectShortcut(Request $request): Response
 	{
-		if ($currentProjectId = $request->getSession()->get(static::CURRENT_PROJECT_SESSION_KEY)) {
+		if ($currentProjectId = $request->getSession()->get(static::getCurrentProjectSessionKey())) {
 			$project = $this->getProject($currentProjectId);
 
 			if ($project) {
