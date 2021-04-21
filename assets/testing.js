@@ -1,1 +1,1 @@
-import "./components/testing/recommendation-details-link.js";
+import "./components/app/recommendation-details-link";

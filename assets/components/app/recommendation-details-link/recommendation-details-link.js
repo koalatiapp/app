@@ -1,5 +1,5 @@
 import { LitElement, html, css } from "lit-element";
-import Modal from "../../utils/modal.js";
+import Modal from "../../../utils/modal.js";
 
 export class RecommendationDetailsLink extends LitElement {
 	constructor()
