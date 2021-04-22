@@ -143,9 +143,9 @@ export default class Modal {
 			<header class="modal-header">
 				<div class="modal-title" id="modal-title-${this.guid}">${this.options.title ?? ""}</div>
 				<div class="modal-actions">
-					<button type="button" class="modal-close small icon-only" aria-label="Close this dialog">
-						<i class="far fa-times" aria-hidden="true"></i>
-					</button>
+					<nb-icon-button class="modal-close" size="small">
+						<i class="far fa-times" aria-label="Close this dialog"></i>
+					</nb-icon-button>
 				</div>
 			</header>
 			<div class="modal-content" id="modal-content-${this.guid}">${this.options.content instanceof Promise ? "" : (this.options?.content ?? "")}</div>
@@ -193,7 +193,7 @@ export default class Modal {
 	 */
 	_initEventListeners()
 	{
-		this.dialogElement.querySelector("button.modal-close").addEventListener("click", (e) => {
+		this.dialogElement.querySelector(".modal-close").addEventListener("click", (e) => {
 			e.preventDefault();
 			this.close();
 		});

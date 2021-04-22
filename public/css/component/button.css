@@ -1,25 +1,3 @@
-/* Default */
-:is(input[type="button"], button, .button) { display: inline-flex; justify-content: center; align-items: center; padding: 16px 30px; font-size: 15px; font-weight: 700; text-align: center; color: var(--button-text-color); background-color: var(--button-bg-color); border: none; border-radius: 13px; box-shadow: 0 2px 10px 0 rgba(var(--shadow-rgb), .15); cursor: pointer; transition: background .25s ease, box-shadow .25s ease; }
-
-/* Small */
-:is(input[type="button"], button, .button).small { padding: 10px 20px; font-weight: 600; }
-
-/* Icon only */
-:is(input[type="button"], button, .button).icon-only { width: 3rem; padding: 11px; font-size: 1.6rem; line-height: 1; }
-:is(input[type="button"], button, .button).icon-only.small { width: 2.2rem; padding: 11px; font-size: .85rem; }
-
-/* Hover */
-:is(input[type="button"], button, .button):hover { color: var(--button-text-color-hover); background-color: var(--button-bg-color-hover); box-shadow: 0 3px 15px 0 rgba(var(--shadow-rgb), .25); }
-
-/* Danger */
-:is(input[type="button"], button, .button).danger { --button-bg-color: var(--color-red); --button-bg-color-hover: var(--color-red-faded); }
-/* Warning */
-:is(input[type="button"], button, .button).warning { --button-bg-color: var(--color-orange); --button-bg-color-hover: var(--color-orange-faded); }
-/* Gray */
-:is(input[type="button"], button, .button).gray { --button-bg-color: #d9ddea; --button-bg-color-hover: var(--color-gray); color: var(--color-gray-dark); }
-/* Dark */
-:is(input[type="button"], button, .button).dark { --button-bg-color: var(--color-blue-dark); }
-
 /* Button container */
 .button-container { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 30px; }
 .button-container.small { gap: 20px; }

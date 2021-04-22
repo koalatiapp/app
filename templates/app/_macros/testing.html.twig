@@ -19,7 +19,7 @@
 		</p>
 
 		<div class="button-container right margin-top small">
-			<button type="button" class="small gray">{% trans %}recommendation.ignore{% endtrans %}</button>
+			<nb-button size="small" color="gray">{% trans %}recommendation.ignore{% endtrans %}</nb-button>
 			<recommendation-complete-button size="small">{% trans %}recommendation.mark_as_done{% endtrans %}</recommendation-complete-button>
 		</div>
 	</div>
@@ -51,8 +51,8 @@
 						<div class="type">{{ recommendation_type(recommendationGroup.type) }}</div>
 						<div class="occurences text-center">{{ recommendationGroup|length }}</div>
 						<div class="actions text-right">
-							<button type="button" class="small gray">{% trans %}recommendation.ignore{% endtrans %}</button>
-							<button type="button" class="small icon-only"><i class="fas fa-check"></i></button>
+							<nb-button size="small" color="gray">{% trans %}recommendation.ignore{% endtrans %}</nb-button>
+							<nb-icon-button size="small"><i class="fas fa-check"></i></nb-icon-button>
 						</div>
 					</div>
 				{% endfor %}

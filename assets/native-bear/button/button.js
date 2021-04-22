@@ -4,7 +4,8 @@ export default class NbButton extends LitElement {
 	static get styles()
 	{
 		return css`
-			.button { display: flex; justify-content: center; align-items: center; padding: 16px 30px; font-family: inherit; font-size: 15px; font-weight: 700; text-align: center; color: var(--button-text-color, #fff); background-color: var(--button-bg-color, #2751e6); border: none; border-radius: 13px; box-shadow: 0 2px 10px 0 rgba(var(--shadow-rgb, "0, 0, 0"), .15); cursor: pointer; transition: background .25s ease, box-shadow .25s ease; }
+			:host { display: inline-block; }
+			.button { display: flex; justify-content: center; align-items: center; padding: 16px 30px; font-family: inherit; font-size: 15px; font-weight: 700; text-decoration: none; text-align: center; color: var(--button-text-color, #fff); background-color: var(--button-bg-color, #2751e6); border: none; border-radius: 13px; box-shadow: 0 2px 10px 0 rgba(var(--shadow-rgb, "0, 0, 0"), .15); cursor: pointer; transition: background .25s ease, box-shadow .25s ease; }
 			.button:hover { color: var(--button-text-color-hover, white); background-color: var(--button-bg-color-hover, #5074f2); box-shadow: 0 3px 15px 0 rgba(var(--shadow-rgb, "0, 0, 0"), .25); }
 			.button.small { padding: 10px 20px; font-weight: 600; }
 			.button.danger { --button-bg-color: var(--color-red); --button-bg-color-hover: var(--color-red-faded); }
@@ -21,6 +22,7 @@ export default class NbButton extends LitElement {
 			size: {type: String, attribute: true},
 			color: {type: String, attribute: true},
 			target: {type: String, attribute: true},
+			name: {type: String, attribute: true},
 			loading: {type: Boolean, attribute: true, reflect: true},
 			disabled: {type: Boolean, attribute: true, reflect: true},
 			_classes: {state: true}
@@ -35,6 +37,7 @@ export default class NbButton extends LitElement {
 		this.size = "";
 		this.color = "";
 		this.target = "_self";
+		this.name = "";
 		this.loading = false;
 		this.disabled = false;
 		this.clickListener = null;
@@ -44,14 +47,14 @@ export default class NbButton extends LitElement {
 	{
 		if (this.href) {
 			return html`
-				<a href=${this.href} class="button ${this._classes.join(" ")}" target=${this.target} ?disabled=${this.disabled}>
+				<a href=${this.href} class=${this._classes.join(" ").trim()} target=${this.target} ?disabled=${this.disabled}>
 					<slot></slot>
 				<a>
 			`;
 		}
 
 		return html`
-			<button type=${this.type} class="button ${this._classes.join(" ")}" ?disabled=${this.disabled} @click=${this._handleClick}>
+			<button type=${this.type} class=${this._classes.join(" ").trim()} name=${this.name} ?disabled=${this.disabled} @click=${this._handleClick}>
 				<slot></slot>
 			</button>
 	  	`;
@@ -60,6 +63,7 @@ export default class NbButton extends LitElement {
 	get _classes()
 	{
 		return [
+			"button",
 			this.size,
 			this.color,
 			this.loading ? "loading" : "",
@@ -82,6 +86,8 @@ export default class NbButton extends LitElement {
 				e.preventDefault();
 				const tmpButton = document.createElement("button");
 				tmpButton.type = "submit";
+				tmpButton.name = this.name;
+				tmpButton.target = this.target;
 				tmpButton.style.display = "none";
 				form.appendChild(tmpButton);
 				tmpButton.click();

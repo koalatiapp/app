@@ -25,7 +25,7 @@
 				{{ project_list_simple(projects) }}
 				<hr>
 				<div class="button-container">
-					<a href="{{ path('projects') }}" class="button">{% trans %}dashboard.projects.view_all{% endtrans %}</a>
+					<nb-button href="{{ path('projects') }}">{% trans %}dashboard.projects.view_all{% endtrans %}</nb-button>
 				</div>
 			{% else %}
 				<div class="text-gray">
@@ -33,7 +33,7 @@
 				</div>
 				<hr>
 				<div class="button-container">
-					<a href="#" class="button">{% trans %}dashboard.projects.create_first{% endtrans %}</a>
+					<nb-button href="#">{% trans %}dashboard.projects.create_first{% endtrans %}</nb-button>
 				</div>
 			{% endif %}
         </div>
@@ -84,7 +84,7 @@
         <div class="card blue centered">
             <p>Want to see more?</p>
             <div class="button-container">
-                <a href="#" class="button">Read the blog</a>
+                <nb-button href="#">Read the blog</nb-button>
             </div>
         </div>
     </div>
