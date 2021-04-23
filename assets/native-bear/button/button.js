@@ -50,7 +50,7 @@ export default class NbButton extends LitElement {
 	{
 		if (this.href) {
 			return html`
-				<a href=${this.href} class=${this._classes.join(" ").trim()} target=${this.target} ?disabled=${this.disabled}>
+				<a href=${this.href} class=${this._classes.join(" ").trim()} target=${this.target} ?disabled=${this.disabled} rel="${this.target == "_blank" ? "noopener" : ""}">
 					<slot></slot>
 				<a>
 			`;
