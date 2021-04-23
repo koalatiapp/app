@@ -15,6 +15,7 @@ export default class NbButton extends LitElement {
 
 			@media (prefers-color-scheme: dark) {
 				.button.gray { --button-bg-color: #393f56; --button-bg-color-hover: var(--color-gray-dark); color: var(--color-gray); }
+			}
 		`;
 	}
 
