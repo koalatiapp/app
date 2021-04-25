@@ -102,6 +102,8 @@ RUN set -eux; \
 	composer dump-autoload --classmap-authoritative --no-dev; \
 	composer symfony:dump-env prod; \
 	composer run-script --no-dev post-install-cmd; \
+	npm ci; \
+	npm run encore prod; \
 	chmod +x bin/console; sync
 VOLUME /srv/app/var
 
