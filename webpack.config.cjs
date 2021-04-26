@@ -56,6 +56,6 @@ Encore
 ;
 
 const config = Encore.getWebpackConfig();
-config.watch = true;
+config.watch = !Encore.isProduction();
 config.resolve.extensions =  [".js"];
 module.exports = config;

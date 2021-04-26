@@ -28,7 +28,7 @@ RUN set -eux; \
 		libzip-dev \
 		zlib-dev \
 	; \
-	\
+	apk add --update nodejs npm; \
 	docker-php-ext-configure zip; \
 	docker-php-ext-install -j$(nproc) \
 		intl \
@@ -103,7 +103,7 @@ RUN set -eux; \
 	composer symfony:dump-env prod; \
 	composer run-script --no-dev post-install-cmd; \
 	npm ci; \
-	npm run encore prod; \
+	npm run encore production; \
 	chmod +x bin/console; sync
 VOLUME /srv/app/var
 
