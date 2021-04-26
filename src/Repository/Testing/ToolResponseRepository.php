@@ -7,10 +7,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method ToolResponse|null find($id, $lockMode = null, $lockVersion = null)
- * @method ToolResponse|null findOneBy(array $criteria, array $orderBy = null)
- * @method ToolResponse[]    findAll()
- * @method ToolResponse[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends ServiceEntityRepository<ToolResponse>
  */
 class ToolResponseRepository extends ServiceEntityRepository
 {

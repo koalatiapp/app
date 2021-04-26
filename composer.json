@@ -15,6 +15,7 @@
     "erusev/parsedown": "^1.7",
     "friendsofsymfony/jsrouting-bundle": "^2.7",
     "knplabs/knp-time-bundle": "^1.14",
+    "lcobucci/jwt": "^4.1",
     "league/flysystem-aws-s3-v3": "^2.0",
     "phpdocumentor/reflection-docblock": "^5.2",
     "pyrrah/gravatar-bundle": "^1.1",

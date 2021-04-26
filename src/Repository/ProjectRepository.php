@@ -8,10 +8,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method Project|null find($id, $lockMode = null, $lockVersion = null)
- * @method Project|null findOneBy(array $criteria, array $orderBy = null)
- * @method Project[]    findAll()
- * @method Project[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends ServiceEntityRepository<Project>
  */
 class ProjectRepository extends ServiceEntityRepository
 {
@@ -33,17 +30,17 @@ class ProjectRepository extends ServiceEntityRepository
 			return [];
 		}
 
-		$qb = $this->createQueryBuilder('p')
+		$queryBuilder = $this->createQueryBuilder('p')
 			->andWhere('p.ownerUser = :user')
 			->setParameter('user', $requestingUser)
 			->orderBy('p.dateCreated', 'DESC');
 
 		foreach ($queryParts as $index => $part) {
-			$qb->andWhere('p.name LIKE :namePart'.$index)
+			$queryBuilder->andWhere('p.name LIKE :namePart'.$index)
 				->setParameter('namePart'.$index, '%'.addcslashes($part, '%_').'%');
 		}
 
-		return $qb->getQuery()->getResult();
+		return $queryBuilder->getQuery()->getResult();
 	}
 
 	public function findById(int $id, User $requestingUser): ?Project

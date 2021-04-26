@@ -30,7 +30,6 @@ class TestingFixtures extends Fixture implements DependentFixtureInterface
 				$recommendation = new Recommendation();
 				$recommendation->setType(Recommendation::TYPE_ISSUE)
 					->setTemplate('Add an alt attribute to all of your <img> tags to describe their content.')
-					->setProject($project)
 					->setRelatedPage($page);
 				$manager->persist($recommendation);
 			}

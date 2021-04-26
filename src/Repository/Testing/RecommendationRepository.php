@@ -3,14 +3,15 @@
 namespace App\Repository\Testing;
 
 use App\Entity\Testing\Recommendation;
+use App\Entity\Testing\ToolResponse;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method Recommendation|null find($id, $lockMode = null, $lockVersion = null)
- * @method Recommendation|null findOneBy(array $criteria, array $orderBy = null)
- * @method Recommendation[]    findAll()
- * @method Recommendation[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * Repository for automated testing recommendations.
+ *
+ * @extends ServiceEntityRepository<Recommendation>
  */
 class RecommendationRepository extends ServiceEntityRepository
 {
@@ -19,32 +20,27 @@ class RecommendationRepository extends ServiceEntityRepository
 		parent::__construct($registry, Recommendation::class);
 	}
 
-	// /**
-	//  * @return Recommendation[] Returns an array of Recommendation objects
-	//  */
-	/*
-	public function findByExampleField($value)
+	/**
+	 * Finds every recommendation matching a tool response's URL and tool name.
+	 *
+	 * @return ArrayCollection<int,Recommendation>
+	 */
+	public function findFromToolResponse(ToolResponse $toolResponse): ArrayCollection
 	{
-		return $this->createQueryBuilder('r')
-			->andWhere('r.exampleField = :val')
-			->setParameter('val', $value)
-			->orderBy('r.id', 'ASC')
-			->setMaxResults(10)
+		$result = $this->createQueryBuilder('r')
+			->innerJoin('r.relatedPage', 'relatedPage')
+			->innerJoin('r.parentResult', 'parentResult')
+			->innerJoin('parentResult.parentResponse', 'parentResponse')
+			->innerJoin('r.relatedPage', 'p')
+			->andWhere('relatedPage.url = :url')
+			->andWhere('parentResponse.tool = :tool')
+			->setParameter('url', $toolResponse->getUrl())
+			->setParameter('tool', $toolResponse->getTool())
+			->orderBy('r.dateLastOccured', 'DESC')
 			->getQuery()
 			->getResult()
 		;
-	}
-	*/
 
-	/*
-	public function findOneBySomeField($value): ?Recommendation
-	{
-		return $this->createQueryBuilder('r')
-			->andWhere('r.exampleField = :val')
-			->setParameter('val', $value)
-			->getQuery()
-			->getOneOrNullResult()
-		;
+		return new ArrayCollection($result);
 	}
-	*/
 }

@@ -3,6 +3,8 @@
 namespace App\Entity\Testing;
 
 use App\Repository\ToolResponseRepository;
+use DateTime;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -37,7 +39,7 @@ class ToolResponse
 	 * @ORM\Column(type="datetime")
 	 * @Groups({"default"})
 	 */
-	private \DateTimeInterface $dateReceived;
+	private DateTimeInterface $dateReceived;
 
 	/**
 	 * @ORM\Column(type="integer")
@@ -55,6 +57,7 @@ class ToolResponse
 	public function __construct()
 	{
 		$this->testResults = new ArrayCollection();
+		$this->dateReceived = new DateTime();
 	}
 
 	public function getId(): ?int
@@ -86,12 +89,12 @@ class ToolResponse
 		return $this;
 	}
 
-	public function getDateReceived(): ?\DateTimeInterface
+	public function getDateReceived(): ?DateTimeInterface
 	{
 		return $this->dateReceived;
 	}
 
-	public function setDateReceived(\DateTimeInterface $dateReceived): self
+	public function setDateReceived(DateTimeInterface $dateReceived): self
 	{
 		$this->dateReceived = $dateReceived;
 

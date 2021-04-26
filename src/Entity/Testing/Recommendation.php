@@ -6,7 +6,10 @@ use App\Entity\Page;
 use App\Entity\Project;
 use App\Entity\User;
 use App\Repository\Testing\RecommendationRepository;
+use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
 
@@ -42,7 +45,7 @@ class Recommendation
 	 *
 	 * @var array<mixed,mixed>
 	 */
-	private array $parameters = [];
+	private ?array $parameters = [];
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=Page::class, inversedBy="recommendations")
@@ -57,6 +60,12 @@ class Recommendation
 	private string $type;
 
 	/**
+	 * @ORM\Column(type="string", length=255)
+	 * @Groups({"default"})
+	 */
+	private string $uniqueName;
+
+	/**
 	 * @ORM\ManyToOne(targetEntity=TestResult::class, inversedBy="recommendations")
 	 * @ORM\JoinColumn(nullable=false)
 	 * @Groups({"default"})
@@ -68,19 +77,19 @@ class Recommendation
 	 * @ORM\Column(type="datetime")
 	 * @Groups({"default"})
 	 */
-	private \DateTimeInterface $dateCreated;
+	private DateTimeInterface $dateCreated;
 
 	/**
 	 * @ORM\Column(type="datetime")
 	 * @Groups({"default"})
 	 */
-	private \DateTimeInterface $dateLastOccured;
+	private DateTimeInterface $dateLastOccured;
 
 	/**
 	 * @ORM\Column(type="datetime", nullable=true)
 	 * @Groups({"default"})
 	 */
-	private \DateTimeInterface $dateCompleted;
+	private ?DatetimeInterface $dateCompleted;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=User::class)
@@ -100,17 +109,11 @@ class Recommendation
 	 */
 	private bool $isIgnored = false;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity=Project::class, inversedBy="recommendations")
-	 * @ORM\JoinColumn(nullable=false)
-	 */
-	private Project $project;
-
 	public function __construct()
 	{
-		$this->dateCreated = new \DateTime();
-		$this->dateLastOccured = new \DateTime();
-		$this->dateCompleted = new \DateTime();
+		$this->dateCreated = new DateTime();
+		$this->dateLastOccured = new DateTime();
+		$this->dateCompleted = null;
 	}
 
 	public function getId(): ?int
@@ -135,7 +138,7 @@ class Recommendation
 	 */
 	public function getParameters(): ?array
 	{
-		return $this->parameters;
+		return $this->parameters ?: [];
 	}
 
 	/**
@@ -178,10 +181,22 @@ class Recommendation
 		$allowedTypes = array_keys(static::TYPE_PRIORITIES);
 
 		if (!in_array($type, $allowedTypes)) {
-			throw new \Exception(sprintf('%s is not a valid recommendation type. Accecpted types are %s', $type, implode(', ', $allowedTypes)));
+			throw new Exception(sprintf('%s is not a valid recommendation type. Accecpted types are %s', $type, implode(', ', $allowedTypes)));
 		}
 
 		$this->type = $type;
+
+		return $this;
+	}
+
+	public function getUniqueName(): ?string
+	{
+		return $this->uniqueName;
+	}
+
+	public function setUniqueName(string $uniqueName): self
+	{
+		$this->uniqueName = $uniqueName;
 
 		return $this;
 	}
@@ -198,36 +213,36 @@ class Recommendation
 		return $this;
 	}
 
-	public function getDateCreated(): ?\DateTimeInterface
+	public function getDateCreated(): ?DatetimeInterface
 	{
 		return $this->dateCreated;
 	}
 
-	public function setDateCreated(\DateTimeInterface $dateCreated): self
+	public function setDateCreated(DatetimeInterface $dateCreated): self
 	{
 		$this->dateCreated = $dateCreated;
 
 		return $this;
 	}
 
-	public function getDateLastOccured(): ?\DateTimeInterface
+	public function getDateLastOccured(): ?DatetimeInterface
 	{
 		return $this->dateLastOccured;
 	}
 
-	public function setDateLastOccured(\DateTimeInterface $dateLastOccured): self
+	public function setDateLastOccured(DatetimeInterface $dateLastOccured): self
 	{
 		$this->dateLastOccured = $dateLastOccured;
 
 		return $this;
 	}
 
-	public function getDateCompleted(): ?\DateTimeInterface
+	public function getDateCompleted(): ?DatetimeInterface
 	{
 		return $this->dateCompleted;
 	}
 
-	public function setDateCompleted(?\DateTimeInterface $dateCompleted): self
+	public function setDateCompleted(?DatetimeInterface $dateCompleted): self
 	{
 		$this->dateCompleted = $dateCompleted;
 
@@ -270,25 +285,46 @@ class Recommendation
 		return $this;
 	}
 
-	public function getProject(): ?Project
+	public function getProject(): Project
 	{
-		return $this->project;
-	}
-
-	public function setProject(?Project $project): self
-	{
-		$this->project = $project;
-
-		return $this;
+		return $this->getRelatedPage()->getProject();
 	}
 
 	/**
-	 * @Groups({"default"})
-	 * @TODO: Implement the Recommendation::getUniqueName() method with an actual property,
-	 * with a fallback on the template when it is missing or empty.
+	 * Returns an app-wide unique identifier composed of the related page's ID,
+	 * the tool's name and the recommendation's unique name.
+	 *
+	 * This identifier can be used to easily match new recommendation results to
+	 * existing recommendations.
+	 *
+	 * The resulting value is a simple MD5 hash of the serialized values.
 	 */
-	public function getUniqueName(): ?string
+	public function getUniqueMatchingIdentifier(): string
 	{
-		return $this->template;
+		$parentResponse = $this->getParentResult()->getParentResponse();
+
+		return static::generateUniqueMatchingIdentifier(
+			$this->getRelatedPage()->getId(),
+			$parentResponse->getTool(),
+			$this->getUniqueName()
+		);
+	}
+
+	/**
+	 * Returns an app-wide unique identifier composed of the related page's ID,
+	 * the tool's name and the recommendation's unique name.
+	 *
+	 * This identifier can be used to easily match new recommendation results to
+	 * existing recommendations.
+	 *
+	 * The resulting value is a simple MD5 hash of the serialized values.
+	 */
+	public static function generateUniqueMatchingIdentifier(int $pageId, string $toolName, string $recommendationUniqueName): string
+	{
+		return md5(serialize([
+			$pageId,
+			$toolName,
+			$recommendationUniqueName,
+		]));
 	}
 }

@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Entity\Testing\Recommendation;
 use App\Repository\ProjectRepository;
 use App\Util\Testing\RecommendationGroup;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
@@ -97,21 +98,12 @@ class Project
 	 */
 	private $teamMembers;
 
-	/**
-	 * @var Collection<int, Recommendation>
-	 * @ORM\OneToMany(targetEntity=Recommendation::class, mappedBy="project", orphanRemoval=true)
-	 * @Groups({"default"})
-	 * @MaxDepth(1)
-	 */
-	private Collection $recommendations;
-
 	public function __construct()
 	{
-		$this->dateCreated = new \DateTime();
+		$this->dateCreated = new DateTime();
 		$this->status = self::STATUS_NEW;
 		$this->pages = new ArrayCollection();
 		$this->teamMembers = new ArrayCollection();
-		$this->recommendations = new ArrayCollection();
 	}
 
 	public function getId(): ?int
@@ -288,44 +280,30 @@ class Project
 	}
 
 	/**
-	 * @return Collection<int,Recommendation>
+	 * @return ArrayCollection<int,Recommendation>
 	 */
-	public function getRecommendations(): Collection
+	public function getRecommendations(): ArrayCollection
 	{
-		return $this->recommendations;
-	}
+		$recommendations = new ArrayCollection();
 
-	public function addRecommendation(Recommendation $recommendation): self
-	{
-		if (!$this->recommendations->contains($recommendation)) {
-			$this->recommendations[] = $recommendation;
-			$recommendation->setProject($this);
-		}
-
-		return $this;
-	}
-
-	public function removeRecommendation(Recommendation $recommendation): self
-	{
-		if ($this->recommendations->removeElement($recommendation)) {
-			// set the owning side to null (unless already changed)
-			if ($recommendation->getProject() === $this) {
-				$recommendation->setProject(null);
+		foreach ($this->getActivePages() as $page) {
+			foreach ($page->getRecommendations() as $recommendation) {
+				$recommendations->add($recommendation);
 			}
 		}
 
-		return $this;
+		return $recommendations;
 	}
 
 	/**
-	 * @return Collection<int,Recommendation>
+	 * @return ArrayCollection<int,Recommendation>
 	 */
-	public function getSortedRecommendations(): Collection
+	public function getSortedRecommendations(): ArrayCollection
 	{
 		/**
 		 * @var \ArrayIterator<int, Recommendation> $recommendationIterator
 		 */
-		$recommendationIterator = $this->recommendations->getIterator();
+		$recommendationIterator = $this->getRecommendations()->getIterator();
 		$recommendationIterator->uasort(function ($a, $b) {
 			$priorities = Recommendation::TYPE_PRIORITIES;
 
@@ -336,9 +314,9 @@ class Project
 	}
 
 	/**
-	 * @return Collection<int,Recommendation>
+	 * @return ArrayCollection<int,Recommendation>
 	 */
-	public function getActiveRecommendations(): Collection
+	public function getActiveRecommendations(): ArrayCollection
 	{
 		return $this->getSortedRecommendations()->filter(function ($recommendation) {
 			return !$recommendation->getIsCompleted()
@@ -348,9 +326,9 @@ class Project
 	}
 
 	/**
-	 * @return Collection<int,RecommendationGroup>
+	 * @return ArrayCollection<int,RecommendationGroup>
 	 */
-	public function getActiveRecommendationGroups(): Collection
+	public function getActiveRecommendationGroups(): ArrayCollection
 	{
 		$groups = RecommendationGroup::fromLooseRecommendations($this->getActiveRecommendations());
 
