@@ -67,7 +67,9 @@ class TestResultController extends AbstractController
 			$toolResponse->addTestResult($testResult);
 			$em->persist($testResult);
 
-			foreach ($rawResult['recommendations'] ?? [] as $rawRecommendation) {
+			$rawRecommendations = (array) ($rawResult['recommendations'] ?? []);
+
+			foreach ($rawRecommendations ?? [] as $rawRecommendation) {
 				$rawRecommendation = $this->standardizeRawRecommendation($rawRecommendation);
 
 				foreach ($matchingPages as $page) {

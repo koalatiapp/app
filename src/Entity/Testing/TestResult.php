@@ -44,7 +44,7 @@ class TestResult
 	 * @ORM\Column(type="float", nullable=true)
 	 * @Groups({"default"})
 	 */
-	private float $weight;
+	private ?float $weight;
 
 	/**
 	 * @ORM\Column(type="float")
