@@ -12,7 +12,9 @@
 		{% endif %}
 
 		<p>
-			{{ recommendation.title }}
+			<nb-markdown barebones>
+				<script type="text/markdown">{{ recommendation.title }}</script>
+			</nb-markdown>
 			<recommendation-details-link recommendation-id="{{ recommendation.id }}">
 				{% trans %}recommendation.view_more{% endtrans %}
 			</recommendation-details-link>
@@ -41,7 +43,11 @@
 				{% for recommendationGroup in recommendationGroups %}
 					<div class="list-row recommendation" recommendation-sample-id="{{ recommendationGroup.sample.id }}">
 						<div>
-							<strong class="name">{{ recommendationGroup.title }}</strong>
+							<strong class="name">
+								<nb-markdown barebones>
+									<script type="text/markdown">{{ recommendationGroup.title }}</script>
+								</nb-markdown>
+							</strong>
 							<br>
 							<recommendation-details-link recommendation-id="{{ recommendationGroup.sample.id }}">
 								<i class="fad fa-circle-info"></i>&nbsp;
