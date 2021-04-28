@@ -19,6 +19,15 @@ export default class NbMarkdown extends ZeroMd {
 			code[class*="language-"] { padding: 0; }
 			.markdown-body :is(code, pre)[class*="language-"] { font-size: 13px; }
 		`;
+
+		if (this.hasAttribute("barebones")) {
+			this.config.hostCss = `
+				${this.config.hostCss}
+				:host { display: inline; }
+				div { display: inline; }
+				p { display: inline; margin: 0; }
+			`;
+		}
 	}
 
 	connectedCallback()
@@ -28,6 +37,19 @@ export default class NbMarkdown extends ZeroMd {
 			script.setAttribute("data-dedent", 1);
 		}
 		super.connectedCallback();
+		this._makeLinksOpenInNewTab();
+	}
+
+	_makeLinksOpenInNewTab()
+	{
+		this.addEventListener("zero-md-rendered", () => {
+			for (const link of this.shadowRoot.querySelectorAll("a")) {
+				if (link.host != window.location.host) {
+					link.setAttribute("target", "_blank");
+					link.setAttribute("rel", "noopener");
+				}
+			}
+		});
 	}
 }
 
