@@ -30,6 +30,37 @@ services:
     volumes:
       - db-data:/var/lib/mysql:rw
 
+  tools-service:
+    image: koalati/tools-service
+    depends_on:
+        - tools-service-database
+    environment:
+      PORT: 3000
+      MOCK_API: 0
+      WEBHOOK_HOST: caddy
+      WEBHOOK_PATH: /webhook/test-result
+      JWT_SECRET: ${TOOLS_API_JWT_SECRET:-ChangeMe123}
+      AUTH_ACCESS_TOKEN: ${TOOLS_API_AUTH_ACCESS_TOKEN:-ChangeMe123}
+      PGHOST: tools-service-database
+      PGUSER: ${TOOLS_API_PGUSER:-postgres}
+      PGPASSWORD: ${TOOLS_API_PGPASSWORD:-ChangeMe123}
+      PGDATABASE: ${TOOLS_API_PGDATABASE:-postgres}
+      PGPORT: 5432
+    ports:
+    - 3000:3000
+
+  tools-service-database:
+    image: postgres:${TOOLS_API_PGVERSION:-13}
+    restart: always
+    environment:
+      POSTGRES_USER: ${TOOLS_API_PGUSER:-postgres}
+      POSTGRES_PASSWORD: ${TOOLS_API_PGPASSWORD:-ChangeMe123}
+      POSTGRES_DB: ${TOOLS_API_PGDATABASE:-postgres}
+    volumes:
+      - tools-service-db-data:/var/lib/postgresql:rw
+    ports:
+      - 5432:5432
+
   adminer:
     image: adminer
     restart: always
@@ -37,4 +68,5 @@ services:
       - ${ADMINER_PORT:-8080}:8080
 
 volumes:
+  tools-service-db-data:
   db-data:
