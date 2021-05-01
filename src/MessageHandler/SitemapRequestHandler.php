@@ -55,6 +55,9 @@ class SitemapRequestHandler implements MessageHandlerInterface
 		$this->bus = $bus;
 	}
 
+	/**
+	 * @SuppressWarnings(PHPMD.ElseExpression)
+	 */
 	public function __invoke(SitemapRequest $message): void
 	{
 		$project = $this->projectRepository->find($message->getProjectId());
@@ -64,7 +67,7 @@ class SitemapRequestHandler implements MessageHandlerInterface
 		}
 
 		// Crawl website to generate the sitemap
-		$websiteUrl = $this->urlHelper->standardize($project->getUrl());
+		$websiteUrl = $this->urlHelper->standardize($project->getUrl(), false);
 		$locations = $this->sitemapBuilder->buildFromWebsiteUrl($websiteUrl)->getLocations();
 		$pagesByUrl = [];
 		$allPages = [];

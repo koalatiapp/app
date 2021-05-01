@@ -87,11 +87,11 @@ class ScreenshotGenerator implements ScreenshotGeneratorInterface
 	public function renderCustom(string $url, int $viewportWidth, int $viewportHeight): string
 	{
 		return $this->driver->screenshot(
-			url: $this->urlHelper->standardize($url),
-			viewportWidth: $viewportWidth,
-			viewportHeight: $viewportHeight,
-			renderWidth: $this->renderWidth,
-			renderScale: $this->renderScale,
+			$this->urlHelper->standardize($url, false),
+			$viewportWidth,
+			$viewportHeight,
+			$this->renderWidth,
+			$this->renderScale,
 		);
 	}
 }

@@ -2,6 +2,7 @@
 
 namespace App\Util;
 
+use Symfony\Component\HttpClient\Exception\TransportException;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
@@ -34,7 +35,7 @@ class Url
 			$response = $this->client->request('GET', $url);
 			$code = (string) $response->getStatusCode();
 			$response->cancel();
-		} catch (\Symfony\Component\HttpClient\Exception\TransportException $e) {
+		} catch (TransportException $exception) {
 			$code = '404';
 		}
 
@@ -50,8 +51,8 @@ class Url
 			$response = $this->client->request('GET', $url);
 			$type = $response->getHeaders()['content-type'][0] ?? '';
 			$response->cancel();
-		} catch (\Symfony\Component\HttpClient\Exception\TransportException $e) {
-			$type = null;
+		} catch (TransportException $exception) {
+			return false;
 		}
 
 		return (bool) preg_match('~^.+\/(.+[+-])?xml([+-].+)?.*$~', $type);
@@ -66,7 +67,7 @@ class Url
 			$response = $this->client->request('GET', $url);
 			$type = $response->getHeaders()['content-type'][0] ?? '';
 			$response->cancel();
-		} catch (\Symfony\Component\HttpClient\Exception\TransportException $e) {
+		} catch (TransportException $exception) {
 			$type = '';
 		}
 
@@ -78,7 +79,7 @@ class Url
 	 *
 	 * @param bool $forceHttps when $forceHttps is set to true, the URL will be changed to use HTTPS
 	 */
-	public static function standardize(string $url, bool $forceHttps = false): string
+	public static function standardize(string $url, bool $forceHttps): string
 	{
 		$url = strtolower($url);
 
@@ -98,7 +99,7 @@ class Url
 	 */
 	public static function rootUrl(string $url): string
 	{
-		$url = static::standardize($url);
+		$url = static::standardize($url, false);
 
 		// Trim URL queries and anchor hash
 		$url = explode('?', $url)[0];
@@ -117,7 +118,7 @@ class Url
 	 */
 	public static function domain(string $url): string
 	{
-		$url = static::standardize($url);
+		$url = static::standardize($url, false);
 
 		return parse_url($url, PHP_URL_HOST);
 	}
@@ -127,7 +128,7 @@ class Url
 	 */
 	public static function path(string $url): string
 	{
-		$url = static::standardize($url);
+		$url = static::standardize($url, false);
 
 		return parse_url($url, PHP_URL_PATH) ?? '';
 	}

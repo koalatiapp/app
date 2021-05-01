@@ -60,7 +60,7 @@ class ProjectSettingsController extends AbstractProjectController
 
 	private function processChanges(Form $form, Project $project, Project $originalProject, Url $urlHelper, TranslatorInterface $translator): void
 	{
-		$websiteUrl = $urlHelper->standardize($project->getUrl());
+		$websiteUrl = $urlHelper->standardize($project->getUrl(), false);
 		$urlHasChanged = $originalProject->getUrl() != $project->getUrl();
 
 		// Check if the provided website URL exists

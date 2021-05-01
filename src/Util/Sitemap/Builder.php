@@ -64,7 +64,7 @@ class Builder
 	public function buildFromWebsiteUrl(string $websiteUrl)
 	{
 		// Standardize the provided URL
-		$websiteUrl = $this->urlHelper->standardize($websiteUrl);
+		$websiteUrl = $this->urlHelper->standardize($websiteUrl, false);
 
 		// Check if a sitemap is available and scan it if possible
 		if ($sitemapUrl = $this->findSitemapFromWebsiteUrl($websiteUrl)) {
@@ -142,7 +142,7 @@ class Builder
 	 */
 	public function crawlWebsite(string $websiteUrl)
 	{
-		$websiteUrl = $this->urlHelper->standardize($websiteUrl);
+		$websiteUrl = $this->urlHelper->standardize($websiteUrl, false);
 		$pages = (new Crawler($websiteUrl))->crawl();
 
 		foreach ($pages as $url => $title) {

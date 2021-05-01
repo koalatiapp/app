@@ -81,13 +81,13 @@ class UrlTest extends WebTestCase
 	 */
 	public function testStandardize()
 	{
-		$this->assertSame('http://domain.com', $this->urlHelper->standardize('domain.com'), 'Standardize root domain');
-		$this->assertSame('http://sub.domain.com', $this->urlHelper->standardize('sub.domain.com'), 'Standardize subdomain');
+		$this->assertSame('http://domain.com', $this->urlHelper->standardize('domain.com', false), 'Standardize root domain');
+		$this->assertSame('http://sub.domain.com', $this->urlHelper->standardize('sub.domain.com', false), 'Standardize subdomain');
 		$this->assertSame('https://domain.com', $this->urlHelper->standardize('domain.com', true), 'Standardize root domain (HTTPS forced)');
 		$this->assertSame('https://sub.domain.com', $this->urlHelper->standardize('sub.domain.com', true), 'Standardize subdomain (HTTPS forced)');
-		$this->assertSame('https://domain.com', $this->urlHelper->standardize('https://domain.com'), 'Standardize already standard domain (HTTPS)');
-		$this->assertSame('http://domain.com', $this->urlHelper->standardize('http://domain.com'), 'Standardize already standard domain (HTTP)');
-		$this->assertSame('//domain.com', $this->urlHelper->standardize('//domain.com'), 'Standardize already standard domain (//)');
+		$this->assertSame('https://domain.com', $this->urlHelper->standardize('https://domain.com', false), 'Standardize already standard domain (HTTPS)');
+		$this->assertSame('http://domain.com', $this->urlHelper->standardize('http://domain.com', false), 'Standardize already standard domain (HTTP)');
+		$this->assertSame('//domain.com', $this->urlHelper->standardize('//domain.com', false), 'Standardize already standard domain (//)');
 		$this->assertSame('//domain.com', $this->urlHelper->standardize('//domain.com', true), 'Standardize already standard domain (//) (HTTPS forced)');
 		$this->assertSame('https://domain.com', $this->urlHelper->standardize('http://domain.com', true), 'Standardize already standard domain (//) (HTTP)');
 		$this->assertSame('https://domain.com', $this->urlHelper->standardize('https://domain.com', true), 'Standardize already standard domain (//) (HTTPS forced, already HTTPS)');
