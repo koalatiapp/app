@@ -31,12 +31,12 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
 	public function authenticate(Request $request): PassportInterface
 	{
-		$Email = $request->request->get('email', '');
+		$email = $request->request->get('email', '');
 
-		$request->getSession()->set(Security::LAST_USERNAME, $Email);
+		$request->getSession()->set(Security::LAST_USERNAME, $email);
 
 		return new Passport(
-			new UserBadge($Email),
+			new UserBadge($email),
 			new PasswordCredentials($request->request->get('password', '')),
 			[
 				new CsrfTokenBadge('authenticate', $request->get('_csrf_token')),
@@ -44,6 +44,9 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 		);
 	}
 
+	/**
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+	 */
 	public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
 	{
 		if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
@@ -53,6 +56,9 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 		return new RedirectResponse($this->urlGenerator->generate('dashboard'));
 	}
 
+	/**
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+	 */
 	protected function getLoginUrl(Request $request): string
 	{
 		return $this->urlGenerator->generate(self::LOGIN_ROUTE);
