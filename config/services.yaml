@@ -62,7 +62,11 @@ services:
     App\Storage\ProjectStorage:
         parent:  App\Storage\AbstractStorage
 
-    App\ApiClient\ClientInterface: '@App\ApiClient\Client'
+    App\ApiClient\ClientInterface:
+        class: 'App\ApiClient\Client'
+        arguments:
+            - '%env(TOOLS_API_URL)%'
+            - '%env(TOOLS_API_BEARER_TOKEN)%'
 
     App\Util\Screenshot\Driver\ApiFlash:
         arguments:

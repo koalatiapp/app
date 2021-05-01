@@ -4,6 +4,7 @@ namespace App\ApiClient;
 
 use App\ApiClient\Exception\ToolsApiBadResponseException;
 use App\ApiClient\Exception\ToolsApiConfigurationException;
+use Exception;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -15,24 +16,26 @@ class Client implements ClientInterface
 	 */
 	protected $httpClient;
 
-	public function __construct()
+	/**
+	 * @param string $apiUrl         URL of the tools API
+	 * @param string $apiBearerToken bearer token for the tools API
+	 */
+	public function __construct(string $apiUrl, string $apiBearerToken)
 	{
-		$this->validateConfiguration();
-		$this->httpClient = HttpClient::createForBaseUri($_ENV['TOOLS_API_URL'], [
-			'auth_bearer' => $_ENV['TOOLS_API_BEARER_TOKEN'],
+		$this->validateConfiguration($apiUrl, $apiBearerToken);
+		$this->httpClient = HttpClient::createForBaseUri($apiUrl, [
+			'auth_bearer' => $apiBearerToken,
 		]);
 	}
 
 	/**
-	 * Ensure that the required environment variables are defined to ues the client.
+	 * Ensures that the required configurations are defined to use the client.
 	 *
 	 * @throws ToolsApiConfigurationException
-	 *
-	 * @return void
 	 */
-	private function validateConfiguration()
+	private function validateConfiguration(string $apiUrl, string $apiBearerToken): void
 	{
-		if (empty($_ENV['TOOLS_API_URL']) || empty($_ENV['TOOLS_API_BEARER_TOKEN'])) {
+		if (empty($apiUrl) || empty($apiBearerToken)) {
 			throw new ToolsApiConfigurationException();
 		}
 	}
@@ -47,7 +50,7 @@ class Client implements ClientInterface
 	 * @throws ToolsApiBadResponseException
 	 * @throws AccessDeniedHttpException
 	 * @throws NotFoundHttpException
-	 * @throws \Exception
+	 * @throws Exception
 	 *
 	 * @return array<mixed>
 	 */
@@ -64,7 +67,7 @@ class Client implements ClientInterface
 		} elseif ($statusCode == 404) {
 			throw new NotFoundHttpException(sprintf('The tools API endpoint "%s" could not be found. Make sure to provide a valid API URL in the "TOOLS_API_URL" environment variable.', $endpoint));
 		} elseif ($statusCode != 200) {
-			throw new \Exception(sprintf('An unknown error (code %s) occured in a request to the tools API endpoint "%s".', $statusCode, $endpoint), $statusCode);
+			throw new Exception(sprintf('An unknown error (code %s) occured in a request to the tools API endpoint "%s".', $statusCode, $endpoint), $statusCode);
 		}
 
 		$decodedResponse = $response->toArray();
