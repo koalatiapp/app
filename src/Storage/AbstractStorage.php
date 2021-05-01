@@ -3,6 +3,7 @@
 namespace App\Storage;
 
 use Aws\S3\S3Client;
+use Exception;
 use League\Flysystem\AwsS3V3\AwsS3V3Adapter;
 use League\Flysystem\Filesystem;
 
@@ -36,7 +37,7 @@ abstract class AbstractStorage
 	public function __construct(string $region, string $version, string $endpoint, string $key, string $secret, string $bucket, string $cdnBaseUrl)
 	{
 		if (!static::DIRECTORY) {
-			throw new \Exception(sprintf('Storage class %s has not implemented the required DIRECTORY constant.', static::class));
+			throw new Exception(sprintf('Storage class %s has not implemented the required DIRECTORY constant.', static::class));
 		}
 
 		$client = new S3Client([
@@ -58,7 +59,7 @@ abstract class AbstractStorage
 	 *
 	 * @return string|null
 	 */
-	protected function generateUrl(string $path, bool $returnNullWhenMissing = true)
+	protected function generateUrl(string $path, bool $returnNullWhenMissing)
 	{
 		if ($returnNullWhenMissing && !$this->filesystem->fileExists($path)) {
 			return null;
