@@ -214,7 +214,7 @@ class TestResultController extends AbstractController
 			case 'developerError':
 				$this->throwDeveloperError($payload);
 
-				// no break
+			// no break
 			case 'toolError':
 				$this->throwToolError($payload);
 		}
@@ -231,7 +231,7 @@ class TestResultController extends AbstractController
 	{
 		throw new WebhookException(sprintf("An error (developerError) occured on the Tools API: %s.\n
 				 Request: %s\n
-				 Error details: %s", $payload['message'], json_encode($payload['request'], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT), json_encode($payload['error'], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)));
+				 Error details: %s", $payload['message'] ?? 'no error message', json_encode($payload['request'], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT), json_encode($payload['error'], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)));
 	}
 
 	/**
@@ -244,8 +244,8 @@ class TestResultController extends AbstractController
 	private function throwToolError(array $payload): void
 	{
 		// @TODO: Handle toolError in tools result webhook (submit bug to tool developer)
-		throw new WebhookException(sprintf("An error (toolError) occured on the Tools API: %s.\n
+		throw new WebhookException(sprintf("An error (toolError) occured on the Tools API for tool %s.\n
 				 Request: %s\n
-				 Error details: %s", $payload['message'], json_encode($payload['request'], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT), json_encode($payload['error'], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)));
+				 Error details: %s", $payload['request']['tool'], json_encode($payload['request'], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT), json_encode($payload['error'], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)));
 	}
 }
