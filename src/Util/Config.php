@@ -20,15 +20,43 @@ class Config
 	protected $configDirPath;
 
 	/**
+	 * Path to the root of the project (without trailing slash).
+	 *
+	 * @var string
+	 */
+	protected $projectRootPath;
+
+	/**
 	 * Array containing the parsed configuration of every existing.
 	 *
 	 * @var array<mixed>
 	 */
 	private static $loadedConfigurations = [];
 
-	public function __construct(ParameterBagInterface $params)
+	/**
+	 * @param string $configDirectory the relative path of the directory containing the configurations
+	 */
+	public function __construct(ParameterBagInterface $params, string $configDirectory = '/config/app')
 	{
-		$this->configDirPath = rtrim($params->get('kernel.project_dir'), '/').'/config/app';
+		$this->projectRootPath = rtrim($params->get('kernel.project_dir'), '/');
+		$this->setConfigDirectory($configDirectory);
+	}
+
+	public function setConfigDirectory(string $relativePath): self
+	{
+		$this->configDirPath = '/'.trim($relativePath, '/');
+
+		return $this;
+	}
+
+	public function getConfigDirectory(): string
+	{
+		return $this->configDirPath;
+	}
+
+	public function getConfigDirectoryFullPath(): string
+	{
+		return $this->projectRootPath.$this->configDirPath;
 	}
 
 	/**
@@ -62,7 +90,7 @@ class Config
 
 	protected function loadDataFromFile(string $filename): mixed
 	{
-		$locator = new FileLocator([$this->configDirPath]);
+		$locator = new FileLocator([$this->getConfigDirectoryFullPath()]);
 		$extensions = ['json', 'yml', 'yaml', 'php'];
 
 		$fullFilename = null;

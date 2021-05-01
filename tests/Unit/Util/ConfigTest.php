@@ -16,6 +16,7 @@ class ConfigTest extends WebTestCase
 	{
 		self::bootKernel();
 		$this->configHelper = self::$container->get('App\\Util\\Config');
+		$this->configHelper->setConfigDirectory('tests/stub/config');
 	}
 
 	/**
@@ -25,6 +26,15 @@ class ConfigTest extends WebTestCase
 	 */
 	public function testGet()
 	{
-		$this->assertArrayHasKey(200, $this->configHelper->get('http_codes'), 'Loads JSON configuration files successfully.');
+		$expectedConfiguration = [
+			'scope' => [
+				'name' => 'test',
+				'values' => [1, 2, 3],
+			],
+		];
+		$this->assertSame($expectedConfiguration, $this->configHelper->get('json'), 'Loads JSON configuration files successfully (.json extension).');
+		$this->assertSame($expectedConfiguration, $this->configHelper->get('yaml'), 'Loads YAML configuration files successfully (.yaml extension).');
+		$this->assertSame($expectedConfiguration, $this->configHelper->get('yml'), 'Loads YAML configuration files successfully (.yml extension).');
+		$this->assertSame($expectedConfiguration, $this->configHelper->get('php'), 'Loads PHP configuration files successfully (.php extension).');
 	}
 }
