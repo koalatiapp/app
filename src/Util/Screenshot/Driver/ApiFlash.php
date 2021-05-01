@@ -2,7 +2,7 @@
 
 namespace App\Util\Screenshot\Driver;
 
-class ApiFlash implements ScreenshotDriverInterface
+class ApiFlash extends AbstractScreenshotDriver implements ScreenshotDriverInterface
 {
 	private string $accessKey;
 
@@ -11,13 +11,13 @@ class ApiFlash implements ScreenshotDriverInterface
 		$this->accessKey = $accessKey;
 	}
 
-	public function screenshot(string $url, int $viewportWidth, int $viewportHeight, bool $fullpage = false, ?int $renderWidth = null, int $renderScale = 1, bool $fresh = false): string
+	public function screenshot(string $url, int $viewportWidth, int $viewportHeight, ?int $renderWidth = null, int $renderScale = 1): string
 	{
 		$params = http_build_query([
 			'access_key' => $this->accessKey,
 			'url' => $url,
-			'fresh' => $fresh,
-			'full_page' => $fullpage,
+			'fresh' => !$this->allowCache,
+			'full_page' => $this->fullpageMode,
 			'width' => $viewportWidth,
 			'height' => $viewportHeight,
 			'scale_factor' => $renderScale,

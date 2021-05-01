@@ -9,10 +9,13 @@ interface ScreenshotGeneratorInterface
 {
 	public function __construct(ScreenshotDriverInterface $driver, Url $urlHelper);
 
-	/**
-	 * Toggles the fullpage screenshot mode.
-	 */
-	public function setFullpage(bool $fullpage): self;
+	public function allowCache(): self;
+
+	public function disallowCache(): self;
+
+	public function enableFullpageMode(): self;
+
+	public function disableFullpageMode(): self;
 
 	/**
 	 * Defines the width of the image that is returned.
@@ -32,22 +35,18 @@ interface ScreenshotGeneratorInterface
 	/**
 	 * Takes a screenshot using a mobile resolution and
 	 * returns the resulting image content.
-	 *
-	 * @param bool $fresh whether to force a refresh or allow cached images
 	 */
-	public function renderMobile(string $url, bool $fresh = false): string;
+	public function renderMobile(string $url): string;
 
 	/**
 	 * Takes a screenshot using a desktop resolution and
 	 * returns the resulting image content.
-	 *
-	 * @param bool $fresh whether to force a refresh or allow cached images
 	 */
-	public function renderDesktop(string $url, bool $fresh = false): string;
+	public function renderDesktop(string $url): string;
 
 	/**
 	 * Takes a screenshot using the provided resolution and
 	 * returns the resulting image content.
 	 */
-	public function renderCustom(string $url, int $viewportWidth, int $viewportHeight, bool $fresh = false): string;
+	public function renderCustom(string $url, int $viewportWidth, int $viewportHeight): string;
 }

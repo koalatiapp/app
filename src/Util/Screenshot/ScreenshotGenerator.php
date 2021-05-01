@@ -15,11 +15,6 @@ class ScreenshotGenerator implements ScreenshotGeneratorInterface
 	private Url $urlHelper;
 
 	/**
-	 * Whether screenshots should be generated in fullpage mode or not.
-	 */
-	private bool $fullpageMode = false;
-
-	/**
 	 * The width of the images to generate, in pixel.
 	 * If `null`, the viewport's size is used.
 	 */
@@ -37,9 +32,30 @@ class ScreenshotGenerator implements ScreenshotGeneratorInterface
 		$this->urlHelper = $urlHelper;
 	}
 
-	public function setFullpage(bool $fullpage): self
+	public function allowCache(): self
 	{
-		$this->fullpageMode = $fullpage;
+		$this->driver->allowCache();
+
+		return $this;
+	}
+
+	public function disallowCache(): self
+	{
+		$this->driver->disallowCache();
+
+		return $this;
+	}
+
+	public function enableFullpageMode(): self
+	{
+		$this->driver->enableFullpageMode();
+
+		return $this;
+	}
+
+	public function disableFullpageMode(): self
+	{
+		$this->driver->disableFullpageMode();
 
 		return $this;
 	}
@@ -58,28 +74,24 @@ class ScreenshotGenerator implements ScreenshotGeneratorInterface
 		return $this;
 	}
 
-	public function renderMobile(string $url, bool $fresh = false): string
+	public function renderMobile(string $url): string
 	{
-		return $this->renderCustom($url, 375, 667, $fresh);
+		return $this->renderCustom($url, 375, 667);
 	}
 
-	public function renderDesktop(string $url, bool $fresh = false): string
+	public function renderDesktop(string $url): string
 	{
-		return $this->renderCustom($url, 1920, 1080, $fresh);
+		return $this->renderCustom($url, 1920, 1080);
 	}
 
-	public function renderCustom(string $url, int $viewportWidth, int $viewportHeight, bool $fresh = false): string
+	public function renderCustom(string $url, int $viewportWidth, int $viewportHeight): string
 	{
-		$standardizedUrl = $this->urlHelper->standardize($url);
-
 		return $this->driver->screenshot(
-			url: $standardizedUrl,
+			url: $this->urlHelper->standardize($url),
 			viewportWidth: $viewportWidth,
 			viewportHeight: $viewportHeight,
 			renderWidth: $this->renderWidth,
 			renderScale: $this->renderScale,
-			fullpage: $this->fullpageMode,
-			fresh: $fresh,
 		);
 	}
 }
