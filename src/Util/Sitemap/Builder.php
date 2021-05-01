@@ -2,21 +2,13 @@
 
 namespace App\Util\Sitemap;
 
+use App\Exception\CrawlingException;
 use App\Util\Url;
-use VDB\Spider\Discoverer\XPathExpressionDiscoverer;
-use VDB\Spider\Event\SpiderEvents;
-use VDB\Spider\EventListener\PolitenessPolicyListener;
-use VDB\Spider\Filter\Prefetch\AllowedHostsFilter;
-use VDB\Spider\Filter\Prefetch\UriFilter;
-use VDB\Spider\Filter\Prefetch\UriWithHashFragmentFilter;
-use VDB\Spider\Spider;
+use DOMDocument;
 
 class Builder
 {
-	/**
-	 * @var \App\Util\Url
-	 */
-	protected $urlHelper;
+	protected Url $urlHelper;
 
 	/**
 	 * Array of locations for the sitemap.
@@ -24,7 +16,12 @@ class Builder
 	 *
 	 * @var array<string, \App\Util\Sitemap\Location>
 	 */
-	protected $locations = [];
+	protected array $locations = [];
+
+	/**
+	 * Whether the website should be crawled to generate a more complete sitemap.
+	 */
+	protected bool $shouldCrawlWebsite = true;
 
 	public function __construct(Url $urlHelper)
 	{
@@ -41,17 +38,30 @@ class Builder
 		return $this->locations;
 	}
 
+	public function enableWebsiteCrawling(): self
+	{
+		$this->shouldCrawlWebsite = true;
+
+		return $this;
+	}
+
+	public function disableWebsiteCrawling(): self
+	{
+		$this->shouldCrawlWebsite = false;
+
+		return $this;
+	}
+
 	/**
 	 * Builds a sitemap from a website's URL.
 	 * The website's sitemap, if available, is fetched and scanned.
-	 * If the $crawlWebsite parameter is set to true, the website will also be crawled to generate a more complete sitemap.
+	 * If the builder's `crawlWebsite` property is set to true, the website will also be crawled to generate a more complete sitemap.
 	 *
-	 * @param string $websiteUrl   URL of the website to build the sitemap from
-	 * @param bool   $crawlWebsite Whether the website should be crawled to generate a more complete sitemap. Defaults to TRUE.
+	 * @param string $websiteUrl URL of the website to build the sitemap from
 	 *
 	 * @return self
 	 */
-	public function buildFromWebsiteUrl(string $websiteUrl, bool $crawlWebsite = true)
+	public function buildFromWebsiteUrl(string $websiteUrl)
 	{
 		// Standardize the provided URL
 		$websiteUrl = $this->urlHelper->standardize($websiteUrl);
@@ -64,8 +74,12 @@ class Builder
 		}
 
 		// Crawl the website for a more complete sitemap (unless disabled)
-		if ($crawlWebsite) {
-			$this->crawlWebsite($websiteUrl);
+		if ($this->shouldCrawlWebsite) {
+			try {
+				$this->crawlWebsite($websiteUrl);
+			} catch (CrawlingException $exception) {
+				// Oh well, let's hope the sitemap was good enough...
+			}
 		}
 
 		$this->standardizeProtocols();
@@ -99,20 +113,22 @@ class Builder
 	{
 		$urls = [];
 
-		$DomDocument = new \DOMDocument();
-		$DomDocument->preserveWhiteSpace = false;
-		$DomDocument->load($sitemapUrl);
-		$DomNodeList = $DomDocument->getElementsByTagName('loc');
+		$domDocument = new DOMDocument();
+		$domDocument->preserveWhiteSpace = false;
+		$domDocument->load($sitemapUrl);
+		$domNodeList = $domDocument->getElementsByTagName('loc');
 
-		foreach ($DomNodeList as $url) {
+		foreach ($domNodeList as $url) {
 			if (strtolower($url->tagName) == 'loc') {  // Make sure we don't get image:loc tags and stuff like that, which is frequent in Wordpress sitemaps
 				if ($url->parentNode && $url->parentNode->tagName == 'sitemap') {
 					foreach ($this->scanSitemap($url->nodeValue) as $childSitemapUrl) {
 						$urls[] = $childSitemapUrl;
 					}
-				} else {
-					$urls[] = $url->nodeValue;
+
+					continue;
 				}
+
+				$urls[] = $url->nodeValue;
 			}
 		}
 
@@ -127,83 +143,10 @@ class Builder
 	public function crawlWebsite(string $websiteUrl)
 	{
 		$websiteUrl = $this->urlHelper->standardize($websiteUrl);
-		$urls = [];
-		$titlesByUrl = [];
+		$pages = (new Crawler($websiteUrl))->crawl();
 
-		$spider = new Spider($websiteUrl);
-		/**
-		 * @var \VDB\Spider\QueueManager\InMemoryQueueManager
-		 */
-		$queueManager = $spider->getQueueManager();
-		$spider->getDiscovererSet()->set(new XPathExpressionDiscoverer('//a'));
-		$spider->getDiscovererSet()->maxDepth = 30;
-		$queueManager->maxQueueSize = 1000;
-
-		// Filter out URLs from external domains
-		$spider->getDiscovererSet()->addFilter(new AllowedHostsFilter([$websiteUrl], false));
-
-		// Filter out URLs with anchors
-		$spider->getDiscovererSet()->addFilter(new UriWithHashFragmentFilter());
-
-		// Filter out URLs that are in fact email addresses
-		$spider->getDiscovererSet()->addFilter(new UriFilter(['~^(https?:)//[^/]+@[^/]+(/.*)?$~']));
-
-		// Delay between consecutive requests
-		/**
-		 * @var \VDB\Spider\Downloader\Downloader
-		 */
-		$downloader = $spider->getDownloader();
-		$politenessPolicyEventListener = new PolitenessPolicyListener(10);
-		$downloader->getDispatcher()->addListener(
-			SpiderEvents::SPIDER_CRAWL_PRE_REQUEST,
-			[$politenessPolicyEventListener, 'onCrawlPreRequest']
-		);
-
-		try {
-			// Crawl the site to look for pages
-			$spider->crawl();
-
-			// At this point, the pages are fetched, and we should have data on all of them.
-			foreach ($spider->getDownloader()->getPersistenceHandler() as $resource) {
-				$crawler = $resource->getCrawler();
-				$url = $crawler->getUri();
-				$urlWithoutTrailingSlash = preg_replace('~^(.*)/$~', '$1', $url);
-
-				if (in_array($urlWithoutTrailingSlash, $urls)) {
-					continue;
-				}
-
-				// Only add pages with an <html> tag to the list - others are likely files or images
-				if (!$crawler->filterXpath('//html')->count()) {
-					continue;
-				}
-
-				try {
-					$title = $crawler->filterXpath('//title')->text();
-				} catch (\Exception $e) {
-					$title = null;
-				}
-
-				$urls[] = $url;
-
-				if ($title && $titlesByUrl[$url] ?? null) {
-					$titlesByUrl[$url] = $title;
-				}
-			}
-
-			// Discard repeated URLs (ex.: both HTTP and HTTPS are present, etc.)
-			foreach ($urls as $url) {
-				$httpUrl = str_replace('https://', 'http://', $url);
-				if ($httpUrl != $url && ($httpUrlIndex = array_search($httpUrl, $urls)) !== false) {
-					unset($urls[$httpUrlIndex]);
-				}
-			}
-		} catch (\Exception $e) {
-			// Oh well...
-		}
-
-		foreach ($urls as $url) {
-			$this->addLocation($url, $titlesByUrl[$url] ?? null);
+		foreach ($pages as $url => $title) {
+			$this->addLocation($url, $title);
 		}
 
 		return $this;
