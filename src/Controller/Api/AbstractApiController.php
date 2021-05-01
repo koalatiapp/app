@@ -12,6 +12,9 @@ abstract class AbstractApiController extends AbstractController
 	public const STATUS_ERROR = 'error';
 	public const STATUS_OKAY = 'ok';
 
+	/**
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.serializer)
+	 */
 	public function __construct(
 		public SerializerInterface $serializer
 	) {

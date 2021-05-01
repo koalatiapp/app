@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Entity\Testing\Recommendation;
 use App\Repository\PageRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -80,8 +81,8 @@ class Page
 	{
 		$this->url = $url;
 		$this->title = $title;
-		$this->dateCreated = new \DateTime();
-		$this->dateUpdated = new \DateTime();
+		$this->dateCreated = new DateTime();
+		$this->dateUpdated = new DateTime();
 		$this->recommendations = new ArrayCollection();
 		$this->setProject($project);
 	}

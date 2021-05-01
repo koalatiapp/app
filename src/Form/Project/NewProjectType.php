@@ -12,6 +12,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class NewProjectType extends AbstractType
 {
+	/**
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.options)
+	 */
 	public function buildForm(FormBuilderInterface $builder, array $options): void
 	{
 		$builder
