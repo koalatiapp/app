@@ -4,7 +4,3 @@
 .button-container.left { justify-content: flex-start; }
 .button-container.right { justify-content: flex-end; }
 .button-container.margin-top { margin-top: 1.5rem; }
-/* Button container: fix for unsupported flexbox gap in Safari */
-@supports not ((gap: 10px) with (display: flex)) {
-	.button-container > * { margin: 0 15px; }
-}
