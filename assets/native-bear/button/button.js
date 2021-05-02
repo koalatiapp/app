@@ -1,5 +1,7 @@
 import { LitElement, html, css } from "lit";
 
+let submitOnEnterRegistered = false;
+
 export default class NbButton extends LitElement {
 	static get styles()
 	{
@@ -64,6 +66,12 @@ export default class NbButton extends LitElement {
 	  	`;
 	}
 
+	connectedCallback()
+	{
+		super.connectedCallback();
+		this._registerFormSubmitOnEnter();
+	}
+
 	get _classes()
 	{
 		return [
@@ -97,6 +105,30 @@ export default class NbButton extends LitElement {
 				tmpButton.click();
 				tmpButton.remove();
 			}
+		}
+	}
+
+	/**
+	 * Reimplements the default form submission on Enter feature,
+	 * which is broken when using a submit button inside a web component.
+	 */
+	_registerFormSubmitOnEnter()
+	{
+		if (!submitOnEnterRegistered) {
+			submitOnEnterRegistered = true;
+			window.addEventListener("keydown", (e) => {
+				const form = e.target.closest("form");
+
+				if (!form || e.key != "Enter" || e.target.matches("textarea, nb-button")) {
+					return;
+				}
+
+				e.preventDefault();
+
+				const nbButton = form.querySelector("nb-button[type='submit']");
+				const innerSubmitButton = nbButton?.shadowRoot.querySelector("button");
+				innerSubmitButton?.click();
+			});
 		}
 	}
 }
