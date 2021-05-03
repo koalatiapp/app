@@ -1,3 +1,29 @@
+{%- block form_widget_simple -%}
+    {%- set type = type|default('text') -%}
+    {%- if type == 'range' or type == 'color' -%}
+        {# Attribute "required" is not supported #}
+        {%- set required = false -%}
+    {%- endif -%}
+	{%- if type == 'hidden' -%}
+    	<input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+	{%- else -%}
+		<nb-input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}
+			label="{%- if translation_domain is same as(false) -%}
+				{%- if label_html is same as(false) -%}
+					{{- label -}}
+				{%- else -%}
+					{{- label|raw -}}
+				{%- endif -%}
+			{%- else -%}
+				{%- if label_html is same as(false) -%}
+					{{- label|trans(label_translation_parameters, translation_domain) -}}
+				{%- else -%}
+					{{- label|trans(label_translation_parameters, translation_domain)|raw -}}
+				{%- endif -%}
+			{%- endif -%}"/>
+	{%- endif -%}
+{%- endblock form_widget_simple -%}
+
 {%- block form_widget_compound -%}
     <fieldset {{ block('widget_container_attributes') }}>
         {%- if form is rootform -%}
@@ -135,7 +161,6 @@
         {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
     {%- endif -%}
     <fieldset{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %}>
-        {{- form_label(form) -}}
         {{- form_errors(form) -}}
         {{- form_widget(form, widget_attr) -}}
         {{- form_help(form) -}}
