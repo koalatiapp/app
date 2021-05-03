@@ -45,9 +45,6 @@
 	textarea,
 	select { color: var(--color-black); }
 
-	/* Buttons */
-	:is(input[type="button"], button, .button).gray { --button-bg-color: #24283e; --button-bg-color-hover: #31385a; color: #afb4bf; }
-
 	/* Text links */
 	a.text-link { color: var(--color-blue-light); }
 
