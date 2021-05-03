@@ -1,24 +1,28 @@
 import { LitElement, html, css } from "lit";
+import stylesReset from "../styles-reset.js";
 
 let submitOnEnterRegistered = false;
 
 export default class NbButton extends LitElement {
 	static get styles()
 	{
-		return css`
-			:host { display: inline-block; }
-			.button { display: flex; justify-content: center; align-items: center; padding: 16px 30px; font-family: inherit; font-size: 15px; font-weight: 700; text-decoration: none; text-align: center; color: var(--button-text-color, #fff); background-color: var(--button-bg-color, #2751e6); border: none; border-radius: 13px; box-shadow: 0 2px 10px 0 rgba(var(--shadow-rgb, "0, 0, 0"), .15); cursor: pointer; transition: background .25s ease, box-shadow .25s ease; }
-			.button:hover { color: var(--button-text-color-hover, white); background-color: var(--button-bg-color-hover, #5074f2); box-shadow: 0 3px 15px 0 rgba(var(--shadow-rgb, "0, 0, 0"), .25); }
-			.button.small { padding: 10px 20px; font-weight: 600; }
-			.button.danger { --button-bg-color: var(--color-red); --button-bg-color-hover: var(--color-red-faded); }
-			.button.warning { --button-bg-color: var(--color-orange); --button-bg-color-hover: var(--color-orange-faded); }
-			.button.gray { --button-bg-color: #d9ddea; --button-bg-color-hover: var(--color-gray); color: var(--color-gray-dark); }
-			.button.dark { --button-bg-color: var(--color-blue-dark); }
+		return [
+			stylesReset,
+			css`
+				:host { display: inline-block; }
+				.button { display: flex; justify-content: center; align-items: center; padding: 16px 30px; font-family: inherit; font-size: 15px; font-weight: 700; text-decoration: none; text-align: center; color: var(--button-text-color, #fff); background-color: var(--button-bg-color, #2751e6); border: none; border-radius: 13px; box-shadow: 0 2px 10px 0 rgba(var(--shadow-rgb, "0, 0, 0"), .15); cursor: pointer; transition: background .25s ease, box-shadow .25s ease; }
+				.button:hover { color: var(--button-text-color-hover, white); background-color: var(--button-bg-color-hover, #5074f2); box-shadow: 0 3px 15px 0 rgba(var(--shadow-rgb, "0, 0, 0"), .25); }
+				.button.small { padding: 10px 20px; font-weight: 600; }
+				.button.danger { --button-bg-color: var(--color-red); --button-bg-color-hover: var(--color-red-faded); }
+				.button.warning { --button-bg-color: var(--color-orange); --button-bg-color-hover: var(--color-orange-faded); }
+				.button.gray { --button-bg-color: #d9ddea; --button-bg-color-hover: var(--color-gray); color: var(--color-gray-dark); }
+				.button.dark { --button-bg-color: var(--color-blue-dark); }
 
-			@media (prefers-color-scheme: dark) {
-				.button.gray { --button-bg-color: #393f56; --button-bg-color-hover: var(--color-gray-dark); color: var(--color-gray); }
-			}
-		`;
+				@media (prefers-color-scheme: dark) {
+					.button.gray { --button-bg-color: #393f56; --button-bg-color-hover: var(--color-gray-dark); color: var(--color-gray); }
+				}
+			`
+		];
 	}
 
 	static get properties() {
