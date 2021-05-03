@@ -85,6 +85,10 @@ export default class NbInput extends LitElement {
 	firstUpdated()
 	{
 		this._updateValue();
+
+		if (this.autofocus && document.activeElement == document.body)  {
+			this.focus();
+		}
 	}
 
 	focus()
