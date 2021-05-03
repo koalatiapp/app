@@ -1,3 +1,4 @@
+export {default as NbInput} from "./input/input";
 export {default as NbButton} from "./button/button";
 export {default as NbIconButton} from "./icon-button/icon-button";
 export {default as NbMarkdown} from "./markdown/markdown";
