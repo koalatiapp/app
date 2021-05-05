@@ -18,6 +18,10 @@ export default class NbMarkdown extends ZeroMd {
 			code { padding: .2em .4em; margin: 0; font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace; font-size: .85em; background-color: rgba(27,31,35,.05); border-radius: 3px; }
 			code[class*="language-"] { padding: 0; }
 			.markdown-body :is(code, pre)[class*="language-"] { font-size: 13px; }
+
+			@media (prefers-color-scheme: dark) {
+				code { background-color: rgb(146 170 255 / 10%); }
+			}
 		`;
 
 		if (this.hasAttribute("barebones")) {
