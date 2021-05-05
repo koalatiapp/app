@@ -2,20 +2,61 @@
 
 namespace App\Controller\Api;
 
+use App\Message\TestingRequest;
 use App\Repository\Testing\RecommendationRepository;
 use App\Trait\ProjectControllerTrait;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/api", name="api_testing_")
+ * @Route("/api/testing", name="api_testing_")
  */
 class TestingController extends AbstractApiController
 {
 	use ProjectControllerTrait;
 
 	/**
-	 * @Route("/recommendation/{recommendationId}", name="recommendation", options={"expose": true})
+	 * Submits an automated testing request for the project.
+	 * Testing will be requested for every page and for every tool.
+	 *
+	 * @Route("/request/{projectId}", methods={"POST"}, name="request", options={"expose": true})
+	 */
+	public function testingRequest(int $projectId): JsonResponse
+	{
+		$project = $this->getProject($projectId);
+
+		if (!$this->hasProjectAccess($project)) {
+			return $this->accessDenied();
+		}
+
+		$this->dispatchMessage(new TestingRequest($project->getId()));
+
+		return $this->apiSuccess();
+	}
+
+	/**
+	 * Return a list of grouped recommendations for a project.
+	 *
+	 * @Route("/recommendation/groups/{projectId}", methods={"GET","HEAD"}, name="recommendation_groups", options={"expose": true})
+	 */
+	public function recommendationGroups(int $projectId): JsonResponse
+	{
+		$project = $this->getProject($projectId);
+
+		if (!$this->hasProjectAccess($project)) {
+			return $this->accessDenied();
+		}
+
+		$recommendationGroups = $project->getActiveRecommendationGroups();
+
+		return $this->apiSuccess($recommendationGroups);
+	}
+
+	/**
+	 * Returns the detailed record of a single recommmendation.
+	 *
+	 * @Route("/recommendation/{recommendationId}", methods={"GET","HEAD"}, name="recommendation", options={"expose": true})
 	 */
 	public function recommendation(int $recommendationId, RecommendationRepository $recommendationRepository): JsonResponse
 	{
@@ -31,6 +72,6 @@ class TestingController extends AbstractApiController
 			return $this->accessDenied();
 		}
 
-		return $this->apiSuccess($this->simplifyEntity($recommendation));
+		return $this->apiSuccess($recommendation);
 	}
 }

@@ -34,24 +34,24 @@ abstract class AbstractApiController extends AbstractController
 
 	/**
 	 * Generates a JsonResponse for a successful API request.
+	 * The provided data will be automatically serialized to JSON.
 	 */
-	protected function apiSuccess(mixed $data, int $code = 200): JsonResponse
+	protected function apiSuccess(mixed $data = null, int $code = 200): JsonResponse
 	{
 		return new JsonResponse([
 			'status' => self::STATUS_OKAY,
 			'code' => $code,
-			'data' => $data,
+			'data' => $this->serializeData($data),
 		]);
 	}
 
 	/**
-	 * Uses Symfony's Serializer component to turn an entity into a regular object.
-	 *
-	 * @return array<mixed,mixed>
+	 * Uses Symfony's Serializer component to serialize any data into JSON.
+	 * Entities will be turned into regular objects based on their `default` serializer group annotations.
 	 */
-	protected function simplifyEntity(mixed $entity): array
+	protected function serializeData(mixed $data): mixed
 	{
-		return json_decode($this->serializer->serialize($entity, 'json', [
+		return json_decode($this->serializer->serialize($data, 'json', [
 			AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object) {
 				return $object->getId();
 			},
