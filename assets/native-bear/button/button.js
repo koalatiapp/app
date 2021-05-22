@@ -3,7 +3,7 @@ import stylesReset from "../styles-reset.js";
 
 let submitOnEnterRegistered = false;
 
-export default class NbButton extends LitElement {
+export class NbButton extends LitElement {
 	static get styles()
 	{
 		return [

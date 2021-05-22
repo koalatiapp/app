@@ -1,7 +1,7 @@
 import { css } from "lit";
-import NbButton from "../button/button";
+import { NbButton } from "../button/button";
 
-export default class NbIconButton extends NbButton {
+export class NbIconButton extends NbButton {
 	static get styles()
 	{
 		return [

@@ -1,7 +1,7 @@
 import { LitElement, html, css } from "lit";
 import stylesReset from "../styles-reset.js";
 
-export default class NbInput extends LitElement {
+export class NbInput extends LitElement {
 	static get formAssociated()
 	{
 		return true;
@@ -67,7 +67,7 @@ export default class NbInput extends LitElement {
 	{
 		return html`
 			${this.label ? html`<label for=${this.inputId}>${this.label}</label>` : ""}
-			<input class="input" id=${this.inputId} type=${this.type} placeholder=${this.placeholder} value=${this.value}  ?readonly=${this.readonly} ?disabled=${this.disabled} @input=${this._updateValue}>
+			<input class="input" id=${this.inputId} name=${this.name} type=${this.type} placeholder=${this.placeholder} value=${this.value}  ?readonly=${this.readonly} ?disabled=${this.disabled} @input=${this._updateValue}>
 	  	`;
 	}
 
@@ -103,8 +103,12 @@ export default class NbInput extends LitElement {
 		let validationMessage = "";
 
 		if (this._required && !input.value.toString().length) {
-			validity = { valueMissing: true };
+			validity = { valueMissing: true, valid: false };
 			validationMessage = typeof Translator == "undefined" ? "Please fill out this field." : Translator.trans("generic.form.value_missing");
+		}
+
+		if (!validity.valid && !validationMessage) {
+			validationMessage = input.validationMessage;
 		}
 
 		this.value = input.value;

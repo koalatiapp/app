@@ -31,7 +31,8 @@
 
 	<hr class="spacer">
 
-	{{ recommendation_grouped_list(project.activeRecommendationGroups) }}
+	<recommendation-list projectId="{{ project.id }}"></recommendation-list>
+
 {% endblock %}
 
 {% block javascripts %}

@@ -2,12 +2,6 @@ import { LitElement, html, css } from "lit";
 import Modal from "../../../utils/modal.js";
 
 export class RecommendationDetailsLink extends LitElement {
-	constructor()
-	{
-		super();
-		this.recommendationId = this.getAttribute("recommendation-id");
-	}
-
 	static get styles()
 	{
 		return css`
@@ -20,6 +14,12 @@ export class RecommendationDetailsLink extends LitElement {
 				a:hover { color: var(--color-gray); }
 			}
 		`;
+	}
+
+	static get properties() {
+		return {
+			recommendationId: {type: Number}
+		};
 	}
 
 	render()

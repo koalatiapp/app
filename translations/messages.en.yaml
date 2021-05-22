@@ -4,6 +4,8 @@ generic:
     back_to_dashboard: Back to your dashboard
     project_section_title: 'Project: %name%'
     not_yet_implemented: This will be implemented in a future update of the Koalati platform.
+    list:
+        empty_state: There is nothing to display in this list 🤷
     form:
         value_missing: Please fill out this field.
 

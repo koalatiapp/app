@@ -1,5 +1,6 @@
-export {default as NbInput} from "./input/input";
-export {default as NbButton} from "./button/button";
-export {default as NbIconButton} from "./icon-button/icon-button";
-export {default as NbMarkdown} from "./markdown/markdown";
-export {default as TabbedContainer} from "./tabbed-container/tabbed-container";
+export {NbList} from "./list/list";
+export {NbInput} from "./input/input";
+export {NbButton} from "./button/button";
+export {NbIconButton} from "./icon-button/icon-button";
+export {NbMarkdown} from "./markdown/markdown";
+export {TabbedContainer} from "./tabbed-container/tabbed-container";

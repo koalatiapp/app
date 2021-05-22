@@ -21,7 +21,7 @@ template.innerHTML = `
 	</main>
 `;
 
-export default class TabbedContainer extends HTMLElement
+export class TabbedContainer extends HTMLElement
 {
 	constructor()
 	{
