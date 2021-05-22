@@ -32,7 +32,7 @@ services:
     Symfony\Component\Serializer\SerializerInterface:
         class: Symfony\Component\Serializer\Serializer
         arguments:
-            - ['@DateTimeNormalizer', '@GetSetMethodNormalizer']
+            - ['@DateTimeNormalizer', '@JsonSerializableNormalizer', '@GetSetMethodNormalizer']
             - ['@JsonEncoder']
 
     GetSetMethodNormalizer:
@@ -41,6 +41,10 @@ services:
 
     DateTimeNormalizer:
         class: Symfony\Component\Serializer\Normalizer\DateTimeNormalizer
+        tags: [serializer.normalizer]
+
+    JsonSerializableNormalizer:
+        class: Symfony\Component\Serializer\Normalizer\JsonSerializableNormalizer
         tags: [serializer.normalizer]
 
     JsonEncoder:
