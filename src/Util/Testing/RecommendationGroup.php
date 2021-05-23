@@ -92,6 +92,14 @@ class RecommendationGroup implements Countable, IteratorAggregate, JsonSerializa
 		return $this->getSample()?->getTitle();
 	}
 
+	/**
+	 * @Groups({"default"})
+	 */
+	public function getTool(): ?string
+	{
+		return $this->getSample()?->getParentResult()?->getParentResponse()?->getTool();
+	}
+
 	public function count(): int
 	{
 		return $this->recommendations->count();
@@ -134,6 +142,7 @@ class RecommendationGroup implements Countable, IteratorAggregate, JsonSerializa
 		return [
 			'recommendations' => $this->getRecommendations(),
 			'sample' => $this->getSample(),
+			'tool' => $this->getTool(),
 			'type' => $this->getType(),
 			'uniqueName' => $this->getUniqueName(),
 			'template' => $this->getTemplate(),
