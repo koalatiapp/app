@@ -18,7 +18,7 @@ export class NbList extends LitElement {
 			stylesReset,
 			css`
 				:host { display: block; }
-				.nb--list { display: flex; flex-direction: column; gap: 15px; }
+				.nb--list { display: flex; flex-direction: column; gap: 15px; padding: 0; margin: 0; list-style: none; }
 				.nb--list-header { display: grid; gap: 20px; padding: 15px; font-size: .85rem; font-weight: 400; color: rgba(0, 0, 0, .57); }
 				.nb--list-item { display: grid; gap: 20px; align-items: center; padding: 10px 15px; background-color: var(--color-white); border-radius: 12px; box-shadow: 0 2px 10px rgba(var(--shadow-rgb), 0.05); transition: box-shadow 0.25s ease 0s; }
 				.nb--list-item-column { min-width: 0; }
@@ -94,9 +94,9 @@ export class NbList extends LitElement {
 	{
 		return html`
 			${this._renderHeader()}
-			<div class="nb--list">
+			<ol class="nb--list">
 				${this._itemIdentifierCallback !== null ? repeat(this._pageItems, this.constructor._itemIdentifierCallback, this._renderItem.bind(this)) : this._pageItems.map(this._renderItem)}
-			</div>
+			</ol>
 			${this.isLoading || this._itemsArray.length ? "" : this._renderEmptyState()}
 			${this.isLoading ? this._renderLoadingState() : ""}
 			${this._renderPagination()}
@@ -141,18 +141,18 @@ export class NbList extends LitElement {
 	_renderItem(item)
 	{
 		return html`
-			<div class="nb--list-item">
+			<li class="nb--list-item">
 				${this.constructor._columns.map(column => html`<div class="nb--list-item-column" nb-column=${column.key}>${column.render(item)}</div>`)}
-			</div>
+			</li>
 		`;
 	}
 
 	_renderPlaceholderItem()
 	{
 		return html`
-			<div class="nb--list-item nb--list-item-placeholder">
+			<li class="nb--list-item nb--list-item-placeholder">
 				${this.constructor._columns.map(column => html`<div class="nb--list-item-column" nb-column=${column.key}>${column.placeholder ?? html`<div class="nb--list-item-column-placeholder">&nbsp;</div>`}</div>`)}
-			</div>
+			</li>
 		`;
 	}
 
