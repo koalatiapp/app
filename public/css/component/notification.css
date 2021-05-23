@@ -1,8 +1,8 @@
 .notification { display: grid; grid-template-columns: 36px auto; gap: 10px; padding: 10px; margin-bottom: 10px; color: var(--notification-text-color); background-color: var(--notification-bg-color); border-radius: 8px; box-shadow: 0 3px 8px 0 rgba(var(--shadow-rgb), .05); }
 .notification .icon { display: grid; place-items: center; width: 36px; height: 36px; background-color: var(--notification-icon-color); border-radius: 8px; }
-.notification .icon i { font-size: 18px; color: white; }
-.notification .date { margin: 2px auto; font-size: 12px; font-weight: 600; opacity: .35; filter: saturate(2.5); }
-.notification .message { font-size: 14px; font-weight: 500; }
+.notification .icon i { font-size: 1.125rem; color: white; }
+.notification .date { margin: 2px auto; font-size: .75rem; font-weight: 500; opacity: .35; filter: saturate(2.5); }
+.notification .message { font-size: .875rem; font-weight: 400; }
 
 .notification.warning {
 	--notification-bg-color: var(--notification-warning-bg-color);

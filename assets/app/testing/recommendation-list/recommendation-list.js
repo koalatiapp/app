@@ -14,7 +14,7 @@ export class RecommendationList extends NbList {
 				[nb-column="type"] { font-size: .85rem; }
 				[nb-column="occurences"] { font-size: .85rem; text-align: center; color: var(--color-gray-dark); }
 
-				nb-markdown { display: block; font-weight: 600; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
+				nb-markdown { display: block; font-weight: 500; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
 				recommendation-details-link { font-size: .85em; }
 			`
 		];

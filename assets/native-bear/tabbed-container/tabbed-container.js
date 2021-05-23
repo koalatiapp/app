@@ -5,10 +5,10 @@ template.innerHTML = `
 		* { font-family: inherit; font-size: inherit; box-sizing: inherit; }
 		nav { width: calc(100% + 15px); background-color: var(--tabbed-page-navigation-bg-color); border-top-left-radius: 13px; border-bottom-left-radius: 13px; box-shadow: 0 3px 15px 0 rgba(var(--shadow-rgb), .05); }
 		nav [role='tablist'] { padding: 25px; padding-right: 40px; margin: 0; list-style: none; position: sticky; top: 0; }
-		nav a { display: block; padding: 10px; font-weight: 500; text-decoration: none; color: var(--tabbed-page-navigation-text-color, #eee); -webkit-font-smoothing: antialiased; transition: color .15s ease; }
+		nav a { display: block; padding: 10px; font-weight: 400; text-decoration: none; color: var(--tabbed-page-navigation-text-color, #eee); -webkit-font-smoothing: antialiased; transition: color .15s ease; }
 		nav a:not(:first-child) { margin-top: 25px; }
 		nav a:hover { color: var(--tabbed-page-navigation-text-color-hover); }
-		nav a[aria-selected="true"] { font-weight: 600; color: var(--tabbed-page-navigation-text-color-active); }
+		nav a[aria-selected="true"] { font-weight: 500; color: var(--tabbed-page-navigation-text-color-active); }
 		main { width: 100%; max-width: 100%; padding: 30px; background-color: var(--tabbed-page-content-bg-color, #fff); border-radius: 13px; box-shadow: 0 3px 15px 0 rgba(var(--shadow-rgb), .05); position: relative; }
 		::slotted([aria-hidden="true"]) { display: none; }
 	</style>
