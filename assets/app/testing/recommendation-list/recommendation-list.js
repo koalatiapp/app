@@ -1,7 +1,6 @@
 import { html, css } from "lit";
 import { NbList } from "../../../native-bear";
 import fontawesomeImport from "../../../utils/fontawesome-import";
-import Modal from "../../../utils/modal.js";
 
 export class RecommendationList extends NbList {
 	static get styles()
