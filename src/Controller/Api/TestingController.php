@@ -54,6 +54,30 @@ class TestingController extends AbstractApiController
 	}
 
 	/**
+	 * Return the recommendation group for a given recommendation.
+	 *
+	 * @Route("/recommendation/group/{recommendationId}", methods={"GET","HEAD"}, name="recommendation_group", options={"expose": true})
+	 */
+	public function recommendationGroup(int $recommendationId, RecommendationRepository $recommendationRepository): JsonResponse
+	{
+		$recommendation = $recommendationRepository->find($recommendationId);
+
+		if (!$recommendation) {
+			return $this->notFound();
+		}
+
+		$project = $recommendation->getProject();
+		$recommendationGroups = $project->getActiveRecommendationGroups();
+		$recommendationGroup = $recommendationGroups[$recommendation->getUniqueName()];
+
+		if (!$this->hasProjectAccess($project)) {
+			return $this->accessDenied();
+		}
+
+		return $this->apiSuccess($recommendationGroup);
+	}
+
+	/**
 	 * Returns the detailed record of a single recommmendation.
 	 *
 	 * @Route("/recommendation/{recommendationId}", methods={"GET","HEAD"}, name="recommendation", options={"expose": true})

@@ -1,6 +1,7 @@
 import { html, css } from "lit";
 import { NbList } from "../../../native-bear";
 import fontawesomeImport from "../../../utils/fontawesome-import";
+import Modal from "../../../utils/modal.js";
 
 export class RecommendationList extends NbList {
 	static get styles()
@@ -37,7 +38,7 @@ export class RecommendationList extends NbList {
 					<nb-markdown barebones>
 						<script type="text/markdown">${item.title}</script>
 					</nb-markdown>
-					<recommendation-details-link recommendationId=${item.sample.id}>
+					<recommendation-details-link .recommendationGroup=${item}>
 						<i class="fad fa-circle-info"></i>&nbsp;
 						${Translator.trans("recommendation.view_more")}
 					</recommendation-details-link>

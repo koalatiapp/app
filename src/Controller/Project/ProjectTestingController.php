@@ -2,7 +2,6 @@
 
 namespace App\Controller\Project;
 
-use App\Repository\Testing\RecommendationRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -17,21 +16,6 @@ class ProjectTestingController extends AbstractProjectController
 
 		return $this->render('app/project/testing/index.html.twig', [
 			'project' => $project,
-		]);
-	}
-
-	/**
-	 * @Route("/recommendation-group/{recommendationId}", name="recommendation_group_modal", options={"expose": true})
-	 */
-	public function recommendationGroupModal(int $recommendationId, RecommendationRepository $recommendationRepository): Response
-	{
-		$recommendation = $recommendationRepository->find($recommendationId);
-		$project = $recommendation->getProject();
-		$recommendationGroups = $project->getActiveRecommendationGroups();
-		$recommendationGroup = $recommendationGroups[$recommendation->getUniqueName()];
-
-		return $this->render('app/project/testing/recommendation_details.html.twig', [
-			'recommendationGroup' => $recommendationGroup,
 		]);
 	}
 }

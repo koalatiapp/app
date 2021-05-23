@@ -22,6 +22,13 @@ export class RecommendationDetailsLink extends LitElement {
 		};
 	}
 
+	constructor()
+	{
+		super();
+		this.recommendationId = null;
+		this.recommendationGroup = null;
+	}
+
 	render()
 	{
 		return html`
@@ -34,9 +41,12 @@ export class RecommendationDetailsLink extends LitElement {
 	open(e)
 	{
 		e && e.preventDefault();
+
 		new Modal({
 			title: Translator.trans("recommendation.modal.title"),
-			contentUrl: this.contentUrl,
+			content: html`
+				<recommendation-details .recommendationGroup=${this.recommendationGroup} recommendationId=${this.recommendationId}>
+			`
 		});
 	}
 
@@ -45,11 +55,6 @@ export class RecommendationDetailsLink extends LitElement {
 		if (e.code == "Space") {
 			this.open(e);
 		}
-	}
-
-	get contentUrl()
-	{
-		return Routing.generate("recommendation_group_modal", {recommendationId: this.recommendationId});
 	}
 }
 

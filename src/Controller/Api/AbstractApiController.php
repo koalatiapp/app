@@ -60,6 +60,14 @@ abstract class AbstractApiController extends AbstractController
 	}
 
 	/**
+	 * Returns a generic 404 not found error response.
+	 */
+	protected function notFound(): JsonResponse
+	{
+		return $this->apiError('This resource does not exist or could not be found.', 404);
+	}
+
+	/**
 	 * Returns a generic access denied error response.
 	 */
 	protected function accessDenied(): JsonResponse
