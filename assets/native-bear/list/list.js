@@ -19,7 +19,7 @@ export class NbList extends LitElement {
 			css`
 				:host { display: block; }
 				.nb--list { display: flex; flex-direction: column; gap: 15px; }
-				.nb--list-header { display: grid; gap: 20px; padding: 15px; font-size: .9rem; font-weight: 500; color: rgba(0, 0, 0, .57); }
+				.nb--list-header { display: grid; gap: 20px; padding: 15px; font-size: .85rem; font-weight: 400; color: rgba(0, 0, 0, .57); }
 				.nb--list-item { display: grid; gap: 20px; align-items: center; padding: 10px 15px; background-color: var(--color-white); border-radius: 12px; box-shadow: 0 2px 10px rgba(var(--shadow-rgb), 0.05); transition: box-shadow 0.25s ease 0s; }
 				.nb--list-item-column { min-width: 0; }
 				.nb--list-item-column[nb-column="actions"]:last-child { text-align: right; }
