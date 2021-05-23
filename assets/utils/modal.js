@@ -145,7 +145,7 @@ export default class Modal {
 			<header class="modal-header">
 				<div class="modal-title" id="modal-title-${this.guid}">${this.options.title ?? ""}</div>
 				<div class="modal-actions">
-					<nb-icon-button class="modal-close" size="small">
+					<nb-icon-button class="modal-close" size="small" color="gray">
 						<i class="far fa-times" aria-label="Close this dialog"></i>
 					</nb-icon-button>
 				</div>
