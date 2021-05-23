@@ -36,7 +36,7 @@ export class RecommendationList extends NbList {
 				label: "recommendation.listing.title",
 				render: (item) => html`
 					<nb-markdown barebones>
-						<script type="text/markdown">${item.title}</script>
+						<script type="text/markdown">${item.htmlTitle}</script>
 					</nb-markdown>
 					<recommendation-details-link .recommendationGroup=${item}>
 						<i class="fad fa-circle-info"></i>&nbsp;

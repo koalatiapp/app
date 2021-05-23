@@ -37,11 +37,13 @@ class Recommendation
 
 	/**
 	 * @ORM\Column(type="text")
+	 * @Groups({"default"})
 	 */
 	private string $template;
 
 	/**
 	 * @ORM\Column(type="json", nullable=true)
+	 * @Groups({"default"})
 	 *
 	 * @var array<mixed,mixed>
 	 */
@@ -157,6 +159,20 @@ class Recommendation
 	public function getTitle(): string
 	{
 		return strtr($this->getTemplate(), $this->getParameters());
+	}
+
+	/**
+	 * @Groups({"default"})
+	 */
+	public function getHtmlTitle(): string
+	{
+		$htmlTemplate = $this->getTemplate();
+
+		foreach (array_keys($this->getParameters()) as $key) {
+			$htmlTemplate = str_replace($key, "<span class='parameter'>$key</span>", $htmlTemplate);
+		}
+
+		return strtr($htmlTemplate, $this->getParameters());
 	}
 
 	public function getRelatedPage(): ?Page
