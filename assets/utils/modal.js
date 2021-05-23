@@ -1,3 +1,5 @@
+import { render } from "lit";
+
 /**
  * Keeps a reference to every active modal.
  * This is used to close all modals at once.
@@ -90,7 +92,7 @@ export default class Modal {
 	 */
 	_standardizeOptions(options)
 	{
-		if (["undefined", "string"].indexOf(typeof options.content) == -1) {
+		if (["undefined", "string"].indexOf(typeof options.content) == -1 && !(typeof options.content == "object" && options.content !== null)) {
 			options.content = Promise.resolve(options.content);
 		}
 
@@ -148,25 +150,46 @@ export default class Modal {
 					</nb-icon-button>
 				</div>
 			</header>
-			<div class="modal-content" id="modal-content-${this.guid}">${this.options.content instanceof Promise ? "" : (this.options?.content ?? "")}</div>
+			<div class="modal-content" id="modal-content-${this.guid}">${this._hasStaticContent() ? (this.options?.content ?? "") : ""}</div>
 		`;
 		this.wrapperElement.prepend(dialog);
 
 		return dialog;
 	}
 
+	_hasStaticContent()
+	{
+		if (this.options?.content instanceof Promise) {
+			return false;
+		}
+
+		if (this.options?.content !== null && typeof this.options?.content == "object") {
+			return false;
+		}
+
+		return true;
+	}
+
 	/**
-	 * Loads the modal's content from the `contentUrl` or `content` promise provided in the options.
+	 * Loads the modal's content from the `contentUrl` or `content` promise or lit template provided in the options.
 	 */
 	_loadContent()
 	{
+		const contentElement = this.dialogElement.querySelector(".modal-content");
+
+		// If the content is an object, it should be a lit HTML tagged template.
+		if (this.options?.content !== null && typeof this.options?.content == "object") {
+			console.log(this.options?.content);
+			render(this.options?.content, contentElement);
+			return;
+		}
+
 		if (!this.options?.contentUrl && !(this.options?.content instanceof Promise)) {
 			return;
 		}
 
 		this.toggleLoading(true);
 
-		const contentElement = this.dialogElement.querySelector(".modal-content");
 		let contentPromise;
 
 		if (this.options?.content) {
