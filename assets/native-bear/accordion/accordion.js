@@ -52,7 +52,6 @@ export class NbAccordion extends LitElement {
 
 	handleContentSlotChange(e)
 	{
-		console.log(e.target);
 		const slottedElements = e.target.assignedElements({flatten: true});
 
 		for (let i = 0; i < slottedElements.length; i++) {
