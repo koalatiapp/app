@@ -1,11 +1,18 @@
 import { LitElement, html, css } from "lit";
+import { unsafeHTML } from "lit/directives/unsafe-html.js";
+import stylesReset from "../../../native-bear/styles-reset.js";
+import faImport from "../../../utils/fontawesome-import";
 
 export class RecommendationDetails extends LitElement {
 	static get styles()
 	{
-		return css`
-			:host { display: block; }
-		`;
+		return [
+			stylesReset,
+			css`
+				:host { display: block; }
+				.sample-recommendation-title { padding: 1em; margin: 0; margin-bottom: 2em; font-weight: 500; color: var(--color-blue-dark-faded); background-color: var(--card-secondary-bg-color); border-radius: 3px; }
+			`
+		];
 	}
 
 	static get properties() {
@@ -19,13 +26,23 @@ export class RecommendationDetails extends LitElement {
 	constructor()
 	{
 		super();
-		this._loading = null;
+		this._loading = false;
 		this.recommendationId = null;
 		this.recommendationGroup = null;
+		this.setAttribute("aria-live", "polite");
 	}
 
-	createRenderRoot() {
-		return this;
+	get _loading()
+	{
+		return this.__loading;
+	}
+
+	set _loading(state)
+	{
+		const originalState = this.__loading;
+		this.__loading = state;
+		this.setAttribute("aria-busy", state ? "true" : "false");
+		this.requestUpdate("_loading", originalState);
 	}
 
 	connectedCallback()
@@ -54,6 +71,8 @@ export class RecommendationDetails extends LitElement {
 		}
 
 		return html`
+			${faImport}
+			<div class="sample-recommendation-title">${unsafeHTML(this.recommendationGroup.htmlTitle)}</div>
 			<h3>${Translator.trans("recommendation.modal.description_heading")}</h3>
 			<nb-markdown>
 				<script type="text/markdown">
