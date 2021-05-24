@@ -37,7 +37,7 @@ export class RecommendationList extends NbList {
 					<nb-markdown barebones>
 						<script type="text/markdown">${item.htmlTitle}</script>
 					</nb-markdown>
-					<recommendation-details-link .recommendationGroup=${item}>
+					<recommendation-details-link recommendationId=${item.sampleId}>
 						<i class="fad fa-circle-info"></i>&nbsp;
 						${Translator.trans("recommendation.view_more")}
 					</recommendation-details-link>
