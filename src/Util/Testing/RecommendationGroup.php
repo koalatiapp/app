@@ -6,17 +6,12 @@ use App\Entity\Testing\Recommendation;
 use App\Exception\WrongRecommendationTypeException;
 use Countable;
 use Doctrine\Common\Collections\ArrayCollection;
-use IteratorAggregate;
-use JsonSerializable;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Traversable;
 
 /**
  * A group of recommendations of the same type.
- *
- * @implements IteratorAggregate<int, Recommendation>
  */
-class RecommendationGroup implements Countable, IteratorAggregate, JsonSerializable
+class RecommendationGroup implements Countable
 {
 	/**
 	 * @var ArrayCollection<int, Recommendation>
@@ -32,7 +27,7 @@ class RecommendationGroup implements Countable, IteratorAggregate, JsonSerializa
 	}
 
 	/**
-	 * @Groups({"default"})
+	 * @Groups({"recommendation_group"})
 	 *
 	 * @return ArrayCollection<int, Recommendation>
 	 */
@@ -54,6 +49,14 @@ class RecommendationGroup implements Countable, IteratorAggregate, JsonSerializa
 
 	/**
 	 * @Groups({"default"})
+	 */
+	public function getSampleId(): ?int
+	{
+		return $this->getSample()?->getId() ?: null;
+	}
+
+	/**
+	 * @Groups({"recommendation_group"})
 	 */
 	public function getSample(): ?Recommendation
 	{
@@ -114,11 +117,11 @@ class RecommendationGroup implements Countable, IteratorAggregate, JsonSerializa
 	}
 
 	/**
-	 * @return Traversable<int, Recommendation>
+	 * @Groups({"default"})
 	 */
-	public function getIterator(): Traversable
+	public function getCount(): int
 	{
-		return $this->recommendations->getIterator();
+		return $this->count();
 	}
 
 	/**
@@ -126,7 +129,7 @@ class RecommendationGroup implements Countable, IteratorAggregate, JsonSerializa
 	 *
 	 * @param ArrayCollection<int, Recommendation> $recommendations
 	 *
-	 * @return RecommendationGroup[]
+	 * @return Array<string,RecommendationGroup>
 	 */
 	public static function fromLooseRecommendations(ArrayCollection $recommendations): array
 	{
@@ -143,20 +146,5 @@ class RecommendationGroup implements Countable, IteratorAggregate, JsonSerializa
 		}
 
 		return $groups;
-	}
-
-	public function jsonSerialize()
-	{
-		return [
-			'recommendations' => $this->getRecommendations(),
-			'sample' => $this->getSample(),
-			'tool' => $this->getTool(),
-			'type' => $this->getType(),
-			'uniqueName' => $this->getUniqueName(),
-			'template' => $this->getTemplate(),
-			'title' => $this->getTitle(),
-			'htmlTitle' => $this->getHtmlTitle(),
-			'count' => $this->count(),
-		];
 	}
 }

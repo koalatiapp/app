@@ -57,7 +57,7 @@ class Page
 
 	/**
 	 * @ORM\OneToMany(targetEntity=Recommendation::class, mappedBy="relatedPage", orphanRemoval=true)
-	 * @Groups({"default"})
+	 * @Groups({"page"})
 	 * @MaxDepth(1)
 	 *
 	 * @var Collection<int,Recommendation>
@@ -66,7 +66,7 @@ class Page
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=Project::class, inversedBy="pages")
-	 * @Groups({"default"})
+	 * @Groups({"page"})
 	 * @MaxDepth(1)
 	 */
 	private Project $project;

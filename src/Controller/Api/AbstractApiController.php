@@ -5,6 +5,7 @@ namespace App\Controller\Api;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
 abstract class AbstractApiController extends AbstractController
@@ -35,27 +36,35 @@ abstract class AbstractApiController extends AbstractController
 	/**
 	 * Generates a JsonResponse for a successful API request.
 	 * The provided data will be automatically serialized to JSON.
+	 *
+	 * @param mixed             $data   Data to serialize
+	 * @param array<int,string> $groups Field groups to include in the serialization (`default` is always included)
+	 * @param int               $code   HTTP code of the response
 	 */
-	protected function apiSuccess(mixed $data = null, int $code = 200): JsonResponse
+	protected function apiSuccess(mixed $data = null, array $groups = [], int $code = 200): JsonResponse
 	{
 		return new JsonResponse([
 			'status' => self::STATUS_OKAY,
 			'code' => $code,
-			'data' => $this->serializeData($data),
+			'data' => $this->serializeData($data, $groups),
 		]);
 	}
 
 	/**
 	 * Uses Symfony's Serializer component to serialize any data into JSON.
 	 * Entities will be turned into regular objects based on their `default` serializer group annotations.
+	 *
+	 * @param mixed             $data   Data to serialize
+	 * @param array<int,string> $groups field groups to include in the serialization (`default` is always included)
 	 */
-	protected function serializeData(mixed $data): mixed
+	protected function serializeData(mixed $data, array $groups = []): mixed
 	{
 		return json_decode($this->serializer->serialize($data, 'json', [
 			AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object) {
 				return $object->getId();
 			},
-			AbstractNormalizer::GROUPS => ['default'],
+			AbstractNormalizer::GROUPS => array_merge(['default'], $groups),
+			AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true,
 		 ]), true);
 	}
 

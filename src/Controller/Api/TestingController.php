@@ -74,7 +74,7 @@ class TestingController extends AbstractApiController
 			return $this->accessDenied();
 		}
 
-		return $this->apiSuccess($recommendationGroup);
+		return $this->apiSuccess($recommendationGroup, ['recommendation_group', 'recommendation']);
 	}
 
 	/**
@@ -96,6 +96,6 @@ class TestingController extends AbstractApiController
 			return $this->accessDenied();
 		}
 
-		return $this->apiSuccess($recommendation);
+		return $this->apiSuccess($recommendation, ['recommendation']);
 	}
 }

@@ -85,7 +85,7 @@ class Project
 	/**
 	 * @var Collection<int, Page>
 	 * @ORM\OneToMany(targetEntity=Page::class, mappedBy="project")
-	 * @Groups({"default"})
+	 * @Groups({"project"})
 	 * @MaxDepth(1)
 	 */
 	private $pages;
@@ -326,7 +326,7 @@ class Project
 	}
 
 	/**
-	 * @return ArrayCollection<int,RecommendationGroup>
+	 * @return ArrayCollection<string,RecommendationGroup>
 	 */
 	public function getActiveRecommendationGroups(): ArrayCollection
 	{

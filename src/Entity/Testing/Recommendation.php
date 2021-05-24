@@ -52,6 +52,8 @@ class Recommendation
 	/**
 	 * @ORM\ManyToOne(targetEntity=Page::class, inversedBy="recommendations")
 	 * @ORM\JoinColumn(nullable=false)
+	 * @Groups({"recommendation"})
+	 * @MaxDepth(1)
 	 */
 	private Page $relatedPage;
 
@@ -70,7 +72,7 @@ class Recommendation
 	/**
 	 * @ORM\ManyToOne(targetEntity=TestResult::class, inversedBy="recommendations")
 	 * @ORM\JoinColumn(nullable=false)
-	 * @Groups({"default"})
+	 * @Groups({"recommendation"})
 	 * @MaxDepth(1)
 	 */
 	private TestResult $parentResult;
