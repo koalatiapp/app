@@ -80,6 +80,8 @@ export default class Modal {
 		modalStack.push(this);
 
 		setTimeout(() => { this.show(); }, 30);
+
+		document.body.style.overflow = "hidden";
 	}
 
 	/**
@@ -267,6 +269,7 @@ export default class Modal {
 		if (!modalStack.length) {
 			Modal._removeEscapeEventListener();
 			Modal._removeFocusTrap();
+			document.body.style.overflow = "";
 		}
 
 		// @TODO: Return a promise with a boolean indicating if the modal is closed or not
