@@ -4,8 +4,8 @@ export class NbAccordion extends LitElement {
 	static get styles()
 	{
 		return css`
-			:host { display: block; }
-			details { margin-top: 10px; font-size: .85rem; background-color: var(--color-gray-lighter); border-radius: 4px; overflow: hidden; }
+			:host { display: block; margin-top: 1rem; }
+			details { font-size: .85rem; background-color: var(--color-gray-lighter); box-shadow: 0 2px 5px rgb(var(--shadow-rgb), .1); border-radius: 4px; overflow: hidden; }
 			summary { display: grid; grid-template-columns: 1fr 3rem; padding: .5rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; background-color: var(--color-gray-lighter); cursor: pointer; transition: background-color .25s ease; }
 			summary svg { width: .85rem; height: 100%; margin-right: .5rem; margin-left: auto; color: var(--color-gray); transform: rotate(0deg); transition: transform .25s ease}
 			summary:hover { background-color: var(--color-gray-light); }
