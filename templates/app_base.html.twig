@@ -36,7 +36,9 @@
         {% include 'app/_parts/flash_messages.html.twig' %}
 
         <header id="sidebar">
-            <div id="brand-wrapper"></div>
+            <div id="brand-wrapper">
+				<img src="{{ asset("media/brand/koalati-logo.svg") }}" alt="Koalati logo">
+			</div>
 
             {% include 'app/_parts/navigation.html.twig' %}
             {% include 'app/_parts/quick_actions.html.twig' %}

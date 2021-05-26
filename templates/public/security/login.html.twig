@@ -2,10 +2,18 @@
 
 {% block title %}Log in{% endblock %}
 
-{% block body %}
+{% block head %}
+	<style>
+		#login-section { padding-top: 60px; }
+		#login-branding { width: 250px; max-width: 75%; }
+	</style>
+{% endblock %}
 
-	<section>
+{% block body %}
+	<section id="login-section">
 		<div class="container center column">
+			<img id="login-branding" src="{{ asset("media/brand/koalati-logo-v.svg") }}" alt="Koalati's logo" width="250">
+
 			<form method="post" class="card small">
 				<h1>{% trans %}login.form.title{% endtrans %}</h1>
 
