@@ -2,9 +2,9 @@ body { padding: 45px 60px; padding-left: calc(var(--sidebar-width) + 60px); font
 
 /* Layout */
 /* Layout: sidebar */
-#sidebar { width: var(--sidebar-width); height: 100%; padding: 30px; border-right: 1px solid var(--color-gray-light); position: fixed; top: 0; left: 0; }
+#sidebar { width: var(--sidebar-width); height: 100%; padding: 30px; padding-top: 35px; border-right: 1px solid var(--color-gray-light); position: fixed; top: 0; left: 0; }
 #sidebar #brand-wrapper { height: 100px; }
-#sidebar #brand-wrapper img { width: auto; height: 70px; }
+#sidebar #brand-wrapper img { width: auto; height: 60px; }
 /* Layout: sidebar: navigation */
 #sidebar nav { font-weight: 400; }
 #sidebar nav > ul > li { margin-bottom: 20px; border-radius: 10px; }
