@@ -33,15 +33,20 @@ export class RecommendationList extends NbList {
 			{
 				key: "title",
 				label: "recommendation.listing.title",
-				render: (item) => html`
-					<nb-markdown barebones>
-						<script type="text/markdown">${item.htmlTitle}</script>
-					</nb-markdown>
-					<recommendation-details-link recommendationId=${item.sampleId}>
-						<i class="fad fa-circle-info"></i>&nbsp;
-						${Translator.trans("recommendation.view_more")}
-					</recommendation-details-link>
-				`,
+				render: item => {
+					// Remove links from the recommendation title
+					const strippedTitle = item.htmlTitle.replace(/\[.+?\]\(.+?\)/g, "");
+
+					return html`
+						<nb-markdown barebones>
+							<script type="text/markdown">${strippedTitle}</script>
+						</nb-markdown>
+						<recommendation-details-link recommendationId=${item.sampleId}>
+							<i class="fad fa-circle-info"></i>&nbsp;
+							${Translator.trans("recommendation.view_more")}
+						</recommendation-details-link>
+					`;
+				},
 				placeholder: html`
 					<div class="nb--list-item-column-placeholder" style="width: 90%;">&nbsp;</div>
 					<div class="nb--list-item-column-placeholder" style="width: min(30ch, 75%); font-size: .65em;">&nbsp;</div>
