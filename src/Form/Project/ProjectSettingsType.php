@@ -40,7 +40,7 @@ class ProjectSettingsType extends AbstractType
 			])
 			->add('delete', SubmitType::class, [
 				'label' => 'project_settings.delete.button_label',
-				'attr' => ['class' => 'danger'],
+				'attr' => ['color' => 'danger'],
 			]);
 	}
 

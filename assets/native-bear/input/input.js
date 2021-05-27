@@ -27,7 +27,7 @@ export class NbInput extends LitElement {
 				:host([type="date"]) { width: 12ch; }
 
 				@media (prefers-color-scheme: dark) {
-					.input { color: var(--color-black); }
+					.input { color: var(--color-black); background-color: var(--color-gray-lighter); border-color: #444867; }
 				}
 			`
 		];
@@ -35,16 +35,17 @@ export class NbInput extends LitElement {
 
 	static get properties() {
 		return {
-			name: {type: String, attribute: true},
-			type: {type: String, attribute: true},
-			placeholder: {type: String, attribute: true},
-			value: {type: String|Number, attribute: true},
-			step: {type: Number, attribute: true},
-			required: {type: Boolean, attribute: true, reflect: true},
-			readonly: {type: Boolean, attribute: true, reflect: true},
-			disabled: {type: Boolean, attribute: true, reflect: true},
-			label: {type: String, attribute: true},
-			inputId: {type: String, attribute: true},
+			name: {type: String},
+			type: {type: String},
+			placeholder: {type: String},
+			value: {type: String|Number},
+			step: {type: Number},
+			required: {type: Boolean},
+			readonly: {type: Boolean},
+			disabled: {type: Boolean},
+			disableAutofill: {type: Boolean},
+			label: {type: String},
+			inputId: {type: String},
 		};
 	}
 
@@ -60,6 +61,7 @@ export class NbInput extends LitElement {
 		this._required = false;
 		this.readonly = false;
 		this.disabled = false;
+		this.disableAutofill = false;
 		this.inputId = "input" + Math.random().toString(16).slice(2);
 	}
 
@@ -67,7 +69,7 @@ export class NbInput extends LitElement {
 	{
 		return html`
 			${this.label ? html`<label for=${this.inputId}>${this.label}</label>` : ""}
-			<input class="input" id=${this.inputId} name=${this.name} type=${this.type} placeholder=${this.placeholder} value=${this.value}  ?readonly=${this.readonly} ?disabled=${this.disabled} @input=${this._updateValue}>
+			<input class="input" id=${this.inputId} name=${this.disableAutofill ? "" : this.name} type=${this.type} placeholder=${this.placeholder} value=${this.value}  ?readonly=${this.readonly} ?disabled=${this.disabled} @input=${this._updateValue}>
 	  	`;
 	}
 
