@@ -80,7 +80,10 @@ recommendation:
         title: Recommendation details
         description_heading: What is this about?
         learn_more: Learn more about this
-        pages_heading: Details for each page
+        pages_heading: Breakdown by page
+        snippets_heading: Relevant snippets from your page
+        table_heading: Detailed information for this page
+        no_page_details: There is no additional information or data for this page.
 
 dashboard:
     title: Dashboard

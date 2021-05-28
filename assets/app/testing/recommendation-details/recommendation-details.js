@@ -10,7 +10,13 @@ export class RecommendationDetails extends LitElement {
 			stylesReset,
 			css`
 				:host { display: block; }
-				.sample-recommendation-title { padding: 1em; margin: 0; margin-bottom: 2em; font-weight: 500; color: var(--color-blue-dark-faded); background-color: var(--card-secondary-bg-color); border-radius: 3px; }
+				.sample-recommendation-title { padding: 1em; margin: 0; margin-bottom: 2em; font-weight: 500; color: var(--color-blue-dark-faded); background-color: var(--color-gray-light); border-radius: 3px; box-shadow: 0 2px 5px rgb(var(--shadow-rgb), .1); }
+				.page-url { font-size: .8em; font-weight: 400; color: var(--color-blue-dark-faded); }
+				.page-empty-state { color: var(--color-gray); }
+
+				@media (prefers-color-scheme: dark) {
+					.sample-recommendation-title { color: var(--color-gray); }
+				}
 			`
 		];
 	}
@@ -72,26 +78,41 @@ export class RecommendationDetails extends LitElement {
 
 		return html`
 			${faImport}
-			<div class="sample-recommendation-title">${unsafeHTML(this.recommendationGroup.htmlTitle)}</div>
+			<div class="sample-recommendation-title">
+				<nb-markdown barebones>
+					<script type="text/markdown">
+						${unsafeHTML(this.recommendationGroup.title)}
+					</script>
+				</nb-markdown>
+			</div>
 			<h3>${Translator.trans("recommendation.modal.description_heading")}</h3>
 			<nb-markdown>
 				<script type="text/markdown">
 					${this.recommendationGroup.sample.parentResult.description}
 				</script>
 			</nb-markdown>
-			<nb-button href="#" target="_blank" size="small" color="gray">
-				${Translator.trans("recommendation.modal.learn_more")}
-				&nbsp;
-				<i class="far fa-up-right-from-square"></i>
-			</nb-button>
 
 			<hr>
 
 			<h3>${Translator.trans("recommendation.modal.pages_heading")}</h3>
-			<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam iste dolorem accusamus quisquam sed, laboriosam quo reiciendis! Temporibus illo omnis recusandae expedita aut a sunt maxime blanditiis, dignissimos asperiores nemo?</p>
+			${this.recommendationGroup.recommendations.map(recommendation => {
+				const renderedTable = this.constructor._renderTable(recommendation.parentResult.tableData);
+				const renderedSnippets = this.constructor._renderSnippets(recommendation.parentResult.snippets);
+				const hasDetails = renderedSnippets || renderedTable;
 
-			<p>{# TODO: Add recommendation details (snippets, table) for each page #}</p>
-			<p>{# TODO: Add a section that shows other recommendations from the same test/tool #}</p>
+				return html`
+					<nb-accordion ?open=${this.recommendationGroup.recommendations.indexOf(recommendation) === 0}>
+						<div slot="summary">
+							<div class="page-title">${recommendation.relatedPage.title || Translator.trans("page.unknown_title")}</div>
+							<div class="page-url">${recommendation.relatedPage.url}</div>
+						</div>
+
+						${renderedTable}
+						${renderedSnippets}
+						${!hasDetails ? html`<div class="page-empty-state">${Translator.trans("recommendation.modal.no_page_details")}</div>` : ""}
+					</nb-accordion>
+				`;
+			})}
 		`;
 	}
 
@@ -118,6 +139,49 @@ export class RecommendationDetails extends LitElement {
 					resolve(null);
 				});
 		});
+	}
+
+	static _renderTable(tableData)
+	{
+		if (!tableData || !tableData.length) {
+			return "";
+		}
+
+		let isFirstRow = true;
+		const renderRow = row => {
+			const tag = unsafeHTML(isFirstRow ? "th" : "td");
+
+			return html`<tr>
+				${row.map(cellContent => html`<${tag}>${cellContent}</${tag}>`)}
+			</tr>`;
+		};
+
+		return html`
+			<h4>${Translator.trans("recommendation.modal.table_heading")}</h4>
+			<table>
+				${tableData.map(renderRow)}
+			</table>
+		`;
+	}
+
+	static _renderSnippets(snippets)
+	{
+		if (!snippets || !snippets.length) {
+			return "";
+		}
+
+		return html`
+			<h4>${Translator.trans("recommendation.modal.snippets_heading")}</h4>
+			${snippets.map(snippet => {
+				return html`<nb-markdown barebones>
+					<script type="text/markdown">
+						\`\`\`
+						${snippet}
+						\`\`\`
+					</script>
+				</nb-markdown>`;
+			})}
+		`;
 	}
 }
 
