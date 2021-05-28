@@ -181,7 +181,6 @@ export default class Modal {
 
 		// If the content is an object, it should be a lit HTML tagged template.
 		if (this.options?.content !== null && typeof this.options?.content == "object") {
-			console.log(this.options?.content);
 			render(this.options?.content, contentElement);
 			return;
 		}
