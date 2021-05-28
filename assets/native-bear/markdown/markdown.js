@@ -21,6 +21,7 @@ export class NbMarkdown extends ZeroMd {
 
 			@media (prefers-color-scheme: dark) {
 				code { background-color: rgb(146 170 255 / 20%); }
+				:not(pre) > code[class*="language-"], pre[class*="language-"] { background-color: rgba(0, 0, 0, .2); }
 			}
 		`;
 
