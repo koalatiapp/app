@@ -10,7 +10,7 @@ export class RecommendationDetailsLink extends LitElement {
 			a:hover { color: var(--color-gray-dark); }
 
 			@media (prefers-color-scheme: dark) {
-				a { color: var(--color-blue-light); }
+				a { color: var(--color-blue-dark); }
 				a:hover { color: var(--color-gray); }
 			}
 		`;

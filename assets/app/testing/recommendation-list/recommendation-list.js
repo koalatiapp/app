@@ -11,8 +11,8 @@ export class RecommendationList extends NbList {
 				.nb--list-header,
 				.nb--list-item { grid-template-areas: "title type occurences actions"; grid-template-columns: 1fr 10rem 5.5rem 12rem; }
 
-				[nb-column="type"] { font-size: .85rem; }
-				[nb-column="occurences"] { font-size: .85rem; text-align: center; color: var(--color-gray-dark); }
+				.nb--list-item-column[nb-column="type"] { font-size: .85rem; }
+				.nb--list-item-column[nb-column="occurences"] { font-size: .85rem; text-align: center; color: var(--color-gray-dark); }
 
 				nb-markdown { display: block; font-weight: 500; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
 				recommendation-details-link { font-size: .85em; }

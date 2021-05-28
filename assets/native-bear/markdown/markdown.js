@@ -20,7 +20,7 @@ export class NbMarkdown extends ZeroMd {
 			.markdown-body :is(code, pre)[class*="language-"] { font-size: 13px; }
 
 			@media (prefers-color-scheme: dark) {
-				code { background-color: rgb(146 170 255 / 10%); }
+				code { background-color: rgb(146 170 255 / 20%); }
 			}
 		`;
 
