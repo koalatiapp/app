@@ -141,9 +141,11 @@ export class NbList extends LitElement {
 
 	_renderItem(item)
 	{
+		const instance = this;
+
 		return html`
 			<li class="nb--list-item">
-				${this.constructor._columns.map(column => html`<div class="nb--list-item-column" nb-column=${column.key}>${column.render(item)}</div>`)}
+				${this.constructor._columns.map(column => html`<div class="nb--list-item-column" nb-column=${column.key}>${column.render(item, instance)}</div>`)}
 			</li>
 		`;
 	}
@@ -160,7 +162,7 @@ export class NbList extends LitElement {
 	_renderPagination()
 	{
 		const itemCount = this._itemsArray.length;
-		const pageCount = itemCount / this.itemsPerPage;
+		const pageCount = Math.ceil(itemCount / this.itemsPerPage);
 
 		if (pageCount <= 1) {
 			return "";
