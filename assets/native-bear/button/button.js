@@ -93,8 +93,6 @@ export class NbButton extends LitElement {
 			e.stopPropagation();
 		}
 
-		this.dispatchEvent(new Event("click"));
-
 		if (this.type == "submit") {
 			const form = this.closest("form");
 
