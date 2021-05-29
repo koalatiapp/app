@@ -345,4 +345,13 @@ class Recommendation
 			$recommendationUniqueName,
 		]));
 	}
+
+	public function complete(User $user): static
+	{
+		$this->setCompletedBy($user)
+			->setDateCompleted(new DateTime())
+			->setIsCompleted(true);
+
+		return $this;
+	}
 }

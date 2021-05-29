@@ -98,4 +98,38 @@ class TestingController extends AbstractApiController
 
 		return $this->apiSuccess($recommendation, ['recommendation']);
 	}
+
+	/**
+	 * Marks all recommendations from a given group as completed.
+	 *
+	 * @Route("/recommendation/group/{recommendationId}/complete", methods={"PUT"}, name="recommendation_group_complete", options={"expose": true})
+	 */
+	public function markRecommendationGroupAsCompleted(int $recommendationId, RecommendationRepository $recommendationRepository): JsonResponse
+	{
+		$em = $this->getDoctrine()->getManager();
+		$user = $this->getUser();
+		$recommendation = $recommendationRepository->find($recommendationId);
+
+		if (!$recommendation) {
+			return $this->notFound();
+		}
+
+		$project = $recommendation->getProject();
+
+		if (!$this->hasProjectAccess($project)) {
+			return $this->accessDenied();
+		}
+
+		$recommendationGroups = $project->getActiveRecommendationGroups();
+		$recommendationGroup = $recommendationGroups[$recommendation->getUniqueName()];
+
+		foreach ($recommendationGroup->getRecommendations() as $recommendation) {
+			$recommendation->complete($user);
+			$em->persist($recommendation);
+		}
+
+		$em->flush();
+
+		return $this->apiSuccess($recommendationGroup);
+	}
 }
