@@ -1,12 +1,14 @@
 {
     "env": {
         "browser": true,
-        "es2021": true
+        "es2021": true,
+		"mocha": true
 	},
 	"globals": {
 		"Routing": "readonly",
 		"Translator": "readonly",
-		"wretch": "readonly"
+		"wretch": "readonly",
+		"chai": "readonly"
 	},
     "extends": [
         "eslint:recommended",

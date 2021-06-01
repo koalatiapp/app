@@ -8,14 +8,20 @@
     "zero-md": "^2.1.1"
   },
   "devDependencies": {
+    "@esm-bundle/chai": "^4.3.4",
+    "@open-wc/testing": "^2.5.33",
+    "@web/test-runner": "^0.13.5",
+    "@web/test-runner-mocha": "^0.7.2",
     "eslint": "^7.16.0",
     "eslint-plugin-html": "^6.1.1",
     "eslint-plugin-vue": "^7.3.0",
+    "mocha": "^6.2.3",
     "stylelint": "^13.8.0",
     "stylelint-config-standard": "^20.0.0"
   },
   "scripts": {
-    "encore": "encore"
+    "encore": "encore",
+    "test": "web-test-runner \"tests/WebComponent/**/*.test.js\" --node-resolve"
   },
   "repository": {
     "type": "git",
