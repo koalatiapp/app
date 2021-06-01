@@ -72,3 +72,5 @@ jobs:
               run: curl -k https://localhost
             - name: PHPUnit tests
               run: docker-compose exec -T php ./bin/phpunit
+            - name: Javascript unit tests
+              run: docker-compose exec -T npm test
