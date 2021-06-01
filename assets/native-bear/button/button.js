@@ -51,6 +51,7 @@ export class NbButton extends LitElement {
 		this.loading = false;
 		this.disabled = false;
 		this.clickListener = null;
+		this._initProgrammaticClickListener();
 	}
 
 	render()
@@ -132,6 +133,25 @@ export class NbButton extends LitElement {
 				innerSubmitButton?.click();
 			});
 		}
+	}
+
+	_initProgrammaticClickListener()
+	{
+		this.addEventListener("click", (e) => {
+			/*
+			 * e.path contains the event's bubbling list of elements, starting by the deepest one.
+			 * If we encounter a ShadowRoot document fragment before encountering `this`,
+			 * that means the click was triggered inside the shadow DOM and has bubbled up.
+			 * Otherwise, it was made directly on the <nb-button>, and needs to be handled.
+			 */
+			for (const pathEl of e.path) {
+				if (pathEl == this) {
+					this._handleClick(e);
+				} else if (pathEl.constructor.name == "ShadowRoot") {
+					return;
+				}
+			}
+		});
 	}
 }
 
