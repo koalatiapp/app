@@ -138,6 +138,10 @@ export class NbButton extends LitElement {
 	_initProgrammaticClickListener()
 	{
 		this.addEventListener("click", (e) => {
+			if (this.disabled || this.loading) {
+				return;
+			}
+
 			/*
 			 * e.path contains the event's bubbling list of elements, starting by the deepest one.
 			 * If we encounter a ShadowRoot document fragment before encountering `this`,
