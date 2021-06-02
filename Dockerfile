@@ -8,7 +8,7 @@ ARG PHP_VERSION=8.0
 ARG CADDY_VERSION=2
 
 # "php" stage
-FROM php:${PHP_VERSION}-fpm-alpine3.13 AS symfony_php
+FROM php:${PHP_VERSION}-fpm-alpine AS symfony_php
 
 # persistent / runtime deps
 RUN apk add --no-cache \
@@ -105,14 +105,13 @@ RUN set -eux; \
 		composer dump-autoload --classmap-authoritative --no-dev; \
 		composer symfony:dump-env prod; \
 		composer run-script --no-dev post-install-cmd; \
-		npm ci; \
 	else \
 		composer install --prefer-dist --no-progress --no-scripts --no-interaction; \
 		composer dump-autoload --classmap-authoritative; \
 		composer symfony:dump-env dev; \
 		composer run-script --dev post-install-cmd; \
-		npm install; \
 	fi; \
+	npm ci --production; \
 	npm run encore production; \
 	chmod +x bin/console; sync
 VOLUME /srv/app/var
