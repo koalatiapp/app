@@ -42,7 +42,7 @@ If you prefer to use the tools manually, here is the list of tools available alo
 - [stylelint](https://stylelint.io/): `DEV/ci/stylelint.sh`
 
 ### Twig
-- [Twigccs](https://github.com/friendsoftwig/twigcs): `DEV/ci/twigcs.sh` _(this is not currently used in the precommit, but [Twig's coding standards](https://twig.symfony.com/doc/3.x/coding_standards.html) should be respected nonetheless)_
+- [Twigcs](https://github.com/friendsoftwig/twigcs): `DEV/ci/twigcs.sh` _(this is not currently used in the precommit, but [Twig's coding standards](https://twig.symfony.com/doc/3.x/coding_standards.html) should be respected nonetheless)_
 
 ---
 
@@ -55,6 +55,24 @@ Tests are structured in the following way:
 - **PHP Unit tests** are located in `tests/Unit/`. The structure within this directory should match the directory structure of `src/`.
 - **Functional tests** are located in `tests/Functional/`. There is no set structure for these, but tests and their directories should be named in a way that clearly expresses what is being tested.
 - **Stub data** for tests is located in `tests/stub/`.  No rules there: just try to keep it clean-ish.
+
+### Running tests
+
+#### PHP (unit + functional)
+Although the unit tests can be run locally, the functional tests should run inside the docker container.
+You can use the following command to run unit tests within the docker container if you are using the recommended docker-composer setup.
+
+```bash
+docker-compose exec -T php ./bin/phpunit
+```
+
+#### JS
+Unlike the functional tests, all our Javascript tests can run locally. 
+Make sure you have the dependencies installed locally (by running `npm install` or `npm ci`), and run the following command:
+
+```bash
+npm test
+```
 
 ---
 
