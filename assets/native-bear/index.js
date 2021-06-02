@@ -1,3 +1,6 @@
+// Polyfills
+import "element-internals-polyfill";
+
 export {NbList} from "./list/list";
 export {NbInput} from "./input/input";
 export {NbButton} from "./button/button";
