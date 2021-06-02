@@ -96,13 +96,23 @@ RUN composer create-project "symfony/skeleton ${SYMFONY_VERSION}" . --stability=
 
 COPY . .
 
+ARG APP_ENV="prod"
+ENV APP_ENV ${APP_ENV:-prod}
 RUN set -eux; \
 	mkdir -p var/cache var/log; \
-	composer install --prefer-dist --no-dev --no-progress --no-scripts --no-interaction; \
-	composer dump-autoload --classmap-authoritative --no-dev; \
-	composer symfony:dump-env prod; \
-	composer run-script --no-dev post-install-cmd; \
-	npm ci; \
+	if [ "$APP_ENV" = "prod" ]; then \
+		composer install --prefer-dist --no-dev --no-progress --no-scripts --no-interaction; \
+		composer dump-autoload --classmap-authoritative --no-dev; \
+		composer symfony:dump-env prod; \
+		composer run-script --no-dev post-install-cmd; \
+		npm ci; \
+	else \
+		composer install --prefer-dist --no-progress --no-scripts --no-interaction; \
+		composer dump-autoload --classmap-authoritative; \
+		composer symfony:dump-env dev; \
+		composer run-script --dev post-install-cmd; \
+		npm install; \
+	fi; \
 	npm run encore production; \
 	chmod +x bin/console; sync
 VOLUME /srv/app/var

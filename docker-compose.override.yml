@@ -3,6 +3,9 @@ version: "3.4"
 # Development environment override
 services:
   php:
+    build:
+      args:
+        APP_ENV: dev
     volumes:
       - ./:/srv/app:rw,cached
       - ./docker/php/conf.d/symfony.dev.ini:/usr/local/etc/php/conf.d/symfony.ini
@@ -14,6 +17,9 @@ services:
       - database
 
   caddy:
+    build:
+      args:
+        APP_ENV: dev
     volumes:
       - ./docker/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
       - ./public:/srv/app/public:ro
