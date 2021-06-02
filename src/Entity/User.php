@@ -6,6 +6,7 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -13,7 +14,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="`user`")
  */
-class User implements UserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
 	/**
 	 * @ORM\Id
@@ -108,9 +109,25 @@ class User implements UserInterface
 	 *
 	 * @see UserInterface
 	 */
-	public function getUsername(): string
+	public function getUserIdentifier(): string
 	{
 		return (string) $this->email;
+	}
+
+	/**
+	 * @deprecated 5.3 Deprecated in Symfony 5.3: use `getUserIdentifier` instead
+	 */
+	public function getUsername(): string
+	{
+		return $this->getUserIdentifier();
+	}
+
+	/**
+	 * @deprecated 5.3 Deprecated in Symfony 5.3. Can be removed starting from 6.0
+	 */
+	public function getSalt(): ?string
+	{
+		return null;
 	}
 
 	/**
@@ -148,14 +165,6 @@ class User implements UserInterface
 		$this->password = $password;
 
 		return $this;
-	}
-
-	/**
-	 * @see UserInterface
-	 */
-	public function getSalt()
-	{
-		return null;
 	}
 
 	/**
