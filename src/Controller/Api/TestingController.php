@@ -4,6 +4,7 @@ namespace App\Controller\Api;
 
 use App\Message\TestingRequest;
 use App\Repository\Testing\RecommendationRepository;
+use App\Security\ProjectVoter;
 use App\Trait\ProjectControllerTrait;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,7 +27,7 @@ class TestingController extends AbstractApiController
 	{
 		$project = $this->getProject($projectId);
 
-		if (!$this->hasProjectAccess($project)) {
+		if (!$this->isGranted(ProjectVoter::PARTICIPATE, $project)) {
 			return $this->accessDenied();
 		}
 
@@ -44,7 +45,7 @@ class TestingController extends AbstractApiController
 	{
 		$project = $this->getProject($projectId);
 
-		if (!$this->hasProjectAccess($project)) {
+		if (!$this->isGranted(ProjectVoter::VIEW, $project)) {
 			return $this->accessDenied();
 		}
 
@@ -70,7 +71,7 @@ class TestingController extends AbstractApiController
 		$recommendationGroups = $project->getActiveRecommendationGroups();
 		$recommendationGroup = $recommendationGroups[$recommendation->getUniqueName()];
 
-		if (!$this->hasProjectAccess($project)) {
+		if (!$this->isGranted(ProjectVoter::VIEW, $project)) {
 			return $this->accessDenied();
 		}
 
@@ -92,7 +93,7 @@ class TestingController extends AbstractApiController
 
 		$project = $recommendation->getProject();
 
-		if (!$this->hasProjectAccess($project)) {
+		if (!$this->isGranted(ProjectVoter::VIEW, $project)) {
 			return $this->accessDenied();
 		}
 
@@ -116,7 +117,7 @@ class TestingController extends AbstractApiController
 
 		$project = $recommendation->getProject();
 
-		if (!$this->hasProjectAccess($project)) {
+		if (!$this->isGranted(ProjectVoter::PARTICIPATE, $project)) {
 			return $this->accessDenied();
 		}
 

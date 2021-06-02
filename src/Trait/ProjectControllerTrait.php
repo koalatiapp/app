@@ -3,7 +3,7 @@
 namespace App\Trait;
 
 use App\Entity\Project;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use App\Security\ProjectVoter;
 
 trait ProjectControllerTrait
 {
@@ -29,29 +29,11 @@ trait ProjectControllerTrait
 			throw $this->createNotFoundException('Project not found');
 		}
 
+		$this->denyAccessUnlessGranted(ProjectVoter::VIEW, $project);
+
 		// Save the project to session as the "current project". This is used in the projectShortcut() method.
 		$this->get('session')->set(static::getCurrentProjectSessionKey(), $project->getId());
 
 		return $project;
-	}
-
-	protected function hasProjectAccess(Project $project): bool
-	{
-		$user = $this->getUser();
-
-		if ($project->getTeamMembers()->contains($user) ||
-			$project->getOwnerUser() == $user ||
-			($project->getOwnerOrganization() && $project->getOwnerOrganization()->getMembers()->contains($user))) {
-			return true;
-		}
-
-		return false;
-	}
-
-	protected function checkProjectAccess(Project $project): void
-	{
-		if (!$this->hasProjectAccess($project)) {
-			throw new AccessDeniedException();
-		}
 	}
 }
