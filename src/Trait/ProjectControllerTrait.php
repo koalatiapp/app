@@ -32,7 +32,8 @@ trait ProjectControllerTrait
 		$this->denyAccessUnlessGranted(ProjectVoter::VIEW, $project);
 
 		// Save the project to session as the "current project". This is used in the projectShortcut() method.
-		$this->get('session')->set(static::getCurrentProjectSessionKey(), $project->getId());
+		$session = $this->get('request_stack')->getSession();
+		$session->set(static::getCurrentProjectSessionKey(), $project->getId());
 
 		return $project;
 	}
