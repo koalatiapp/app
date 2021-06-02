@@ -14,6 +14,9 @@ class ProjectVoter extends Voter
 	public const PARTICIPATE = 'participate';
 	public const MANAGE = 'manage';
 
+	/**
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.attributes)
+	 */
 	protected function supports(string $attribute, mixed $subject): bool
 	{
 		return $subject instanceof Project;
