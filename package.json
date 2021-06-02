@@ -1,6 +1,5 @@
 {
   "name": "@koalati/app",
-  "type": "module",
   "dependencies": {
     "@symfony/webpack-encore": "^1.1.2",
     "core-js": "^3.10.2",
