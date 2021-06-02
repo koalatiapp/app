@@ -148,7 +148,8 @@ export class NbButton extends LitElement {
 			 * that means the click was triggered inside the shadow DOM and has bubbled up.
 			 * Otherwise, it was made directly on the <nb-button>, and needs to be handled.
 			 */
-			for (const pathEl of e.path) {
+			const bubblingPath = e.path || e.composedPath();
+			for (const pathEl of bubblingPath) {
 				if (pathEl == this) {
 					this._handleClick(e);
 				} else if (pathEl.constructor.name == "ShadowRoot") {
