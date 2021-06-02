@@ -113,9 +113,10 @@ export class NbInput extends LitElement {
 			validationMessage = input.validationMessage;
 		}
 
-		this.value = input.value;
+		const newValue = this.disabled || this.loading ? null :  input.value;
+		this.value = newValue;
 		this.internals.setValidity(validity, validationMessage, input);
-		this.internals.setFormValue(input.value);
+		this.internals.setFormValue(newValue);
 	}
 }
 
