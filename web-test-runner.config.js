@@ -15,9 +15,12 @@ const noBrowser = (b) => {
 let commandLineBrowsers;
 try {
 	// eslint-disable-next-line no-undef
-	commandLineBrowsers = process.env.BROWSERS?.split(",").map(
-		(b) => browsers[b] ?? noBrowser(b)
-	);
+	if (typeof process.env.BROWSERS !== "undefined") {
+		// eslint-disable-next-line no-undef
+		commandLineBrowsers = process.env.BROWSERS.split(",").map(
+			(b) => (typeof browsers[b] != "undefined" ? browsers[b] : noBrowser(b))
+		);
+	}
 } catch (e) {
 	console.warn(e);
 }
@@ -28,7 +31,7 @@ export default {
 	files: ["./tests/WebComponent/**/*.test.js"],
 	nodeResolve: true,
 	preserveSymlinks: true,
-	browsers: commandLineBrowsers ?? Object.values(browsers),
+	browsers: commandLineBrowsers || Object.values(browsers),
 	testFramework: {
 		// https://mochajs.org/api/mocha
 		config: {

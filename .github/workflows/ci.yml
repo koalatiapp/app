@@ -73,4 +73,4 @@ jobs:
             - name: PHPUnit tests
               run: docker-compose exec -T php ./bin/phpunit
             - name: Javascript unit tests
-              run: docker-compose exec -T php npx wtr
+              run: docker-compose exec -T php npm test
