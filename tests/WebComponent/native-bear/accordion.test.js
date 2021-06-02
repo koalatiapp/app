@@ -46,21 +46,4 @@ describe("nb-accordion", () => {
 		const el = await fixture(html`<nb-accordion open></nb-accordion>`);
 		assert.isTrue(el.shadowRoot.firstElementChild.hasAttribute("open"));
 	});
-
-	it("toggles on click", async () => {
-		const el = await fixture(html`<nb-accordion></nb-accordion>`);
-		const detailsEl = el.shadowRoot.firstElementChild;
-		assert.isFalse(detailsEl.hasAttribute("open"));
-		const summary = el.shadowRoot.querySelector("summary");
-
-		// Open on first click
-		summary.click();
-		await el.updateComplete;
-		assert.isTrue(detailsEl.hasAttribute("open"));
-
-		// Close on second click
-		summary.click();
-		await el.updateComplete;
-		assert.isFalse(detailsEl.hasAttribute("open"));
-	});
 });
