@@ -43,18 +43,6 @@ class ProjectRepository extends ServiceEntityRepository
 		return $queryBuilder->getQuery()->getResult();
 	}
 
-	public function findById(int $id, User $requestingUser): ?Project
-	{
-		return $this->createQueryBuilder('p')
-			->andWhere('p.id = :id')
-			->andWhere('p.ownerUser = :user')
-			->setParameter('id', $id)
-			->setParameter('user', $requestingUser)
-			->getQuery()
-			->getOneOrNullResult()
-		;
-	}
-
 	/**
 	 * Finds projects corresponding to a provided URL.
 	 *

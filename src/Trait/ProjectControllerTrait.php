@@ -23,7 +23,7 @@ trait ProjectControllerTrait
 		 * @var \App\Repository\ProjectRepository
 		 */
 		$repository = $this->getDoctrine()->getRepository(Project::class);
-		$project = $repository->findById($id, $this->getUser());
+		$project = $repository->find($id);
 
 		if (!$project) {
 			throw $this->createNotFoundException('Project not found');
