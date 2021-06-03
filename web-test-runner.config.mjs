@@ -28,7 +28,7 @@ try {
 // https://modern-web.dev/docs/test-runner/cli-and-configuration/
 export default {
 	rootDir: ".",
-	files: ["./tests/WebComponent/**/*.test.js"],
+	files: ["./tests/Frontend/Unit/**/*.test.js"],
 	nodeResolve: true,
 	preserveSymlinks: true,
 	browsers: commandLineBrowsers || Object.values(browsers),

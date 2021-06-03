@@ -1,5 +1,5 @@
 import { fixture, html } from "@open-wc/testing";
-import { NbButton } from "../../../assets/native-bear";
+import { NbButton } from "../../../../assets/native-bear";
 
 const assert = chai.assert;
 const createEnterKeydownEvent = () => new KeyboardEvent("keydown", {

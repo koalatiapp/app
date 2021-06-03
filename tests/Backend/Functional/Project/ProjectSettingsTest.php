@@ -3,7 +3,7 @@
 namespace App\Tests\Functional\Project;
 
 use App\Entity\Project;
-use App\Tests\Functional\AbstractAppTestCase;
+use App\Tests\Backend\Functional\AbstractAppTestCase;
 
 class ProjectSettingsTest extends AbstractAppTestCase
 {

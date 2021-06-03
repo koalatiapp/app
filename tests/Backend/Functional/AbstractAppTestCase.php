@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Functional;
+namespace App\Tests\Backend\Functional;
 
 use App\Entity\User;
 use App\Repository\UserRepository;

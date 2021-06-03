@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Tests\Functional\Project;
+namespace App\Tests\Backend\Functional\Project;
 
-use App\Tests\Functional\AbstractAppTestCase;
+use App\Tests\Backend\Functional\AbstractAppTestCase;
 
 class ProjectCreationTest extends AbstractAppTestCase
 {

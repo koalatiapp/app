@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Functional\Authentication;
+namespace App\Tests\Backend\Functional\Authentication;
 
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;

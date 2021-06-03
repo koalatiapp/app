@@ -10,6 +10,7 @@
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
     "@open-wc/testing": "^2.5.33",
+    "@playwright/test": "^0.1111.0",
     "@web/test-runner": "^0.13.5",
     "@web/test-runner-mocha": "^0.7.2",
     "@web/test-runner-playwright": "^0.8.6",
@@ -22,7 +23,9 @@
   },
   "scripts": {
     "encore": "encore",
-    "test": "wtr"
+	"test": "npm run test:unit",
+    "test:unit": "wtr",
+    "test:e2e": "npx folio tests/Full"
   },
   "repository": {
     "type": "git",

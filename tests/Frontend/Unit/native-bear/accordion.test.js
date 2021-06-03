@@ -1,5 +1,5 @@
 import { fixture, html } from "@open-wc/testing";
-import { NbAccordion } from "../../../assets/native-bear";
+import { NbAccordion } from "../../../../assets/native-bear";
 
 const assert = chai.assert;
 

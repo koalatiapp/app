@@ -48,30 +48,44 @@ If you prefer to use the tools manually, here is the list of tools available alo
 
 ## Testing
 
-Unit and functional tests are located in the `tests/` directory at the root of the project. 
-Tests are structured in the following way:
+All tests are located in the `tests/` directory at the root of the project. 
 
-- **Web Component tests** are located in `tests/WebComponent/`. The structure within this directory should match the directory structure of `assets/`. 
-- **PHP Unit tests** are located in `tests/Unit/`. The structure within this directory should match the directory structure of `src/`.
-- **Functional tests** are located in `tests/Functional/`. There is no set structure for these, but tests and their directories should be named in a way that clearly expresses what is being tested.
-- **Stub data** for tests is located in `tests/stub/`.  No rules there: just try to keep it clean-ish.
+### Frontend-only tests
+Frontend-only tests are located in `tests/Frontend`, and are ran with [@web/test-runner](https://modern-web.dev/docs/test-runner/overview/) 
+along with [Mocha](https://mochajs.org/) and [Chai](https://www.chaijs.com/).
 
-### Running tests
+Make sure you have the dependencies installed locally (by running `npm install` or `npm ci`), and run the following command:
 
-#### PHP (unit + functional)
-Although the unit tests can be run locally, the functional tests should run inside the docker container.
-You can use the following command to run unit tests within the docker container if you are using the recommended docker-composer setup.
+```bash
+npm test:unit
+```
+
+### Backend-only tests
+Backend tests are located in `tests/Backend`, and are ran using [PHPUnit](https://phpunit.de/).
+
+Although the unit tests can be run locally, the functional tests should run inside the docker container as they require a working web server with a test database.
+
+Before you run any of the backend functional tests, you'll want to set up your testing database using the provided Doctrine fixtures. 
+Either switch your `.env` configurations to match the testing database, sacrifice your development database, or prepend your environment variables to the `doctrine:fixtures` like so:
+
+```bash
+MYSQL_DATABASE=test bin/console doctrine:fixtures:load -n
+```
+
+Once you're all set up, you can use the following command to run unit tests within the docker container if you are using the recommended docker-composer setup.
 
 ```bash
 docker-compose exec -T php ./bin/phpunit
 ```
 
-#### JS
-Unlike the functional tests, all our Javascript tests can run locally. 
+For more information about PHPUnit and the available configurations, visit [PHPUnit's documentation](https://phpunit.de/documentation.html).
+
+### End-to-end tests
+End-to-end tests are located in `tests/Full`, and are ran with [Playwright test runner](https://github.com/microsoft/playwright-test).
 Make sure you have the dependencies installed locally (by running `npm install` or `npm ci`), and run the following command:
 
 ```bash
-npm test
+npm test:e2e
 ```
 
 ---
