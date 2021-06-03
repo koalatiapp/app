@@ -56,7 +56,7 @@ if [ "$1" = 'php-fpm' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 		fi
 
 		if [ -n "$GITHUB_JOB" ]; then
-			bin/console doctrine:fixtures:load -n --purge-with-truncate
+			bin/console doctrine:fixtures:load -n
 		fi
 	fi
 
