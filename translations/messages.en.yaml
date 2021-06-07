@@ -84,6 +84,7 @@ recommendation:
         snippets_heading: Relevant snippets from your page
         table_heading: Detailed information for this page
         no_page_details: There is no additional information or data for this page.
+        last_occured_on: Last seen on %date%
 
 dashboard:
     title: Dashboard

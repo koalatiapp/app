@@ -110,6 +110,8 @@ export class RecommendationDetails extends LitElement {
 						${renderedTable}
 						${renderedSnippets}
 						${!hasDetails ? html`<div class="page-empty-state">${Translator.trans("recommendation.modal.no_page_details")}</div>` : ""}
+
+						<p>${Translator.trans("recommendation.modal.last_occured_on", { "date": new Intl.DateTimeFormat("en-CA", { dateStyle: "medium", timeStyle: "medium" }).format(new Date(recommendation.dateLastOccured))})}</p>
 					</nb-accordion>
 				`;
 			})}
@@ -152,7 +154,13 @@ export class RecommendationDetails extends LitElement {
 			const tag = unsafeHTML(isFirstRow ? "th" : "td");
 
 			return html`<tr>
-				${row.map(cellContent => html`<${tag}>${cellContent}</${tag}>`)}
+				${row.map(cellContent => html`<${tag}>
+					<nb-markdown barebones>
+						<script type="text/markdown">
+							${cellContent}
+						</script>
+					</nb-markdown>
+				</${tag}>`)}
 			</tr>`;
 		};
 
