@@ -8,6 +8,7 @@ use App\Entity\User;
 use App\Repository\Testing\RecommendationRepository;
 use DateTime;
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -106,12 +107,6 @@ class Recommendation
 	 * @Groups({"default"})
 	 */
 	private bool $isCompleted = false;
-
-	/**
-	 * @ORM\Column(type="boolean")
-	 * @Groups({"default"})
-	 */
-	private bool $isIgnored = false;
 
 	public function __construct()
 	{
@@ -291,16 +286,24 @@ class Recommendation
 		return $this;
 	}
 
-	public function getIsIgnored(): ?bool
+	public function isIgnored(): ?bool
 	{
-		return $this->isIgnored;
-	}
+		$ignoreEntries = new ArrayCollection(
+			array_merge(
+				$this->getRelatedPage()->getIgnoreEntries()->toArray(),
+				$this->getRelatedPage()->getProject()->getIgnoreEntries()->toArray(),
+				$this->getRelatedPage()->getProject()->getOwner()->getIgnoreEntries()->toArray()
+				)
+			);
 
-	public function setIsIgnored(bool $isIgnored): self
-	{
-		$this->isIgnored = $isIgnored;
+		$recommendation = $this;
+		$matchingIgnoreEntries = $ignoreEntries->filter(function (IgnoreEntry $entry) use ($recommendation) {
+			return $entry->getRecommendationUniqueName() == $recommendation->getUniqueName()
+				&& $entry->getTest() == $recommendation->getParentResult()->getUniqueName()
+				&& $entry->getTool() == $recommendation->getParentResult()->getParentResponse()->getTool();
+		});
 
-		return $this;
+		return $matchingIgnoreEntries->count() > 0;
 	}
 
 	public function getProject(): Project

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Testing\IgnoreEntry;
 use App\Entity\Testing\Recommendation;
 use App\Repository\ProjectRepository;
 use App\Util\Testing\RecommendationGroup;
@@ -98,12 +99,20 @@ class Project
 	 */
 	private $teamMembers;
 
+	/**
+	 * @ORM\OneToMany(targetEntity=IgnoreEntry::class, mappedBy="targetProject")
+	 *
+	 * @var \Doctrine\Common\Collections\Collection<int, IgnoreEntry>
+	 */
+	private $ignoreEntries;
+
 	public function __construct()
 	{
 		$this->dateCreated = new DateTime();
 		$this->status = self::STATUS_NEW;
 		$this->pages = new ArrayCollection();
 		$this->teamMembers = new ArrayCollection();
+		$this->ignoreEntries = new ArrayCollection();
 	}
 
 	public function getId(): ?int
@@ -249,6 +258,11 @@ class Project
 		return $this;
 	}
 
+	public function getOwner(): Organization | User
+	{
+		return $this->getOwnerOrganization() ?: $this->getOwnerUser();
+	}
+
 	/**
 	 * @return Collection<int, ProjectMember>
 	 */
@@ -320,7 +334,7 @@ class Project
 	{
 		return $this->getSortedRecommendations()->filter(function ($recommendation) {
 			return !$recommendation->getIsCompleted()
-				&& !$recommendation->getIsIgnored()
+				&& !$recommendation->isIgnored()
 				&& !$recommendation->getRelatedPage()->getIsIgnored();
 		});
 	}
@@ -333,5 +347,35 @@ class Project
 		$groups = RecommendationGroup::fromLooseRecommendations($this->getActiveRecommendations());
 
 		return new ArrayCollection($groups);
+	}
+
+	/**
+	 * @return Collection<int,IgnoreEntry>
+	 */
+	public function getIgnoreEntries(): Collection
+	{
+		return $this->ignoreEntries;
+	}
+
+	public function addIgnoreEntry(IgnoreEntry $ignoreEntry): self
+	{
+		if (!$this->ignoreEntries->contains($ignoreEntry)) {
+			$this->ignoreEntries[] = $ignoreEntry;
+			$ignoreEntry->setTargetProject($this);
+		}
+
+		return $this;
+	}
+
+	public function removeIgnoreEntry(IgnoreEntry $ignoreEntry): self
+	{
+		if ($this->ignoreEntries->removeElement($ignoreEntry)) {
+			// set the owning side to null (unless already changed)
+			if ($ignoreEntry->getTargetProject() === $this) {
+				$ignoreEntry->setTargetProject(null);
+			}
+		}
+
+		return $this;
 	}
 }

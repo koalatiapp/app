@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Testing\IgnoreEntry;
 use App\Repository\OrganizationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -50,10 +51,18 @@ class Organization
 	 */
 	private $projects;
 
+	/**
+	 * @ORM\OneToMany(targetEntity=IgnoreEntry::class, mappedBy="targetOrganization")
+	 *
+	 * @var \Doctrine\Common\Collections\Collection<int, IgnoreEntry>
+	 */
+	private Collection $ignoreEntries;
+
 	public function __construct()
 	{
 		$this->members = new ArrayCollection();
 		$this->projects = new ArrayCollection();
+		$this->ignoreEntries = new ArrayCollection();
 	}
 
 	public function getId(): ?int
@@ -139,6 +148,36 @@ class Organization
 			// set the owning side to null (unless already changed)
 			if ($project->getOwnerOrganization() === $this) {
 				$project->setOwnerOrganization(null);
+			}
+		}
+
+		return $this;
+	}
+
+	/**
+	 * @return Collection<int,IgnoreEntry>
+	 */
+	public function getIgnoreEntries(): Collection
+	{
+		return $this->ignoreEntries;
+	}
+
+	public function addIgnoreEntry(IgnoreEntry $ignoreEntry): self
+	{
+		if (!$this->ignoreEntries->contains($ignoreEntry)) {
+			$this->ignoreEntries[] = $ignoreEntry;
+			$ignoreEntry->setTargetOrganization($this);
+		}
+
+		return $this;
+	}
+
+	public function removeIgnoreEntry(IgnoreEntry $ignoreEntry): self
+	{
+		if ($this->ignoreEntries->removeElement($ignoreEntry)) {
+			// set the owning side to null (unless already changed)
+			if ($ignoreEntry->getTargetOrganization() === $this) {
+				$ignoreEntry->setTargetOrganization(null);
 			}
 		}
 

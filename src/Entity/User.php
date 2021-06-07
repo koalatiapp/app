@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Testing\IgnoreEntry;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -80,11 +81,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	 */
 	private Collection $projectLinks;
 
+	/**
+	 * @ORM\OneToMany(targetEntity=IgnoreEntry::class, mappedBy="targetUser")
+	 *
+	 * @var \Doctrine\Common\Collections\Collection<int, IgnoreEntry>
+	 */
+	private $ignoreEntries;
+
 	public function __construct()
 	{
 		$this->personalProjects = new ArrayCollection();
 		$this->organizationLinks = new ArrayCollection();
 		$this->projectLinks = new ArrayCollection();
+		$this->ignoreEntries = new ArrayCollection();
 	}
 
 	public function getId(): ?int
@@ -324,6 +333,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	{
 		if ($this->projectLinks->removeElement($projectLink)) {
 			$projectLink->setUser(null);
+		}
+
+		return $this;
+	}
+
+	/**
+	 * @return Collection<int,IgnoreEntry>
+	 */
+	public function getIgnoreEntries(): Collection
+	{
+		return $this->ignoreEntries;
+	}
+
+	public function addIgnoreEntry(IgnoreEntry $ignoreEntry): self
+	{
+		if (!$this->ignoreEntries->contains($ignoreEntry)) {
+			$this->ignoreEntries[] = $ignoreEntry;
+			$ignoreEntry->setTargetUser($this);
+		}
+
+		return $this;
+	}
+
+	public function removeIgnoreEntry(IgnoreEntry $ignoreEntry): self
+	{
+		if ($this->ignoreEntries->removeElement($ignoreEntry)) {
+			// set the owning side to null (unless already changed)
+			if ($ignoreEntry->getTargetUser() === $this) {
+				$ignoreEntry->setTargetUser(null);
+			}
 		}
 
 		return $this;

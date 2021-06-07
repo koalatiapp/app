@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Testing\IgnoreEntry;
 use App\Entity\Testing\Recommendation;
 use App\Repository\PageRepository;
 use DateTime;
@@ -77,6 +78,13 @@ class Page
 	 */
 	private bool $isIgnored = false;
 
+	/**
+	 * @ORM\OneToMany(targetEntity=IgnoreEntry::class, mappedBy="targetPage")
+	 *
+	 * @var \Doctrine\Common\Collections\Collection<int, IgnoreEntry>
+	 */
+	private $ignoreEntries;
+
 	public function __construct(Project $project, string $url, ?string $title = null)
 	{
 		$this->url = $url;
@@ -85,6 +93,7 @@ class Page
 		$this->dateUpdated = new DateTime();
 		$this->recommendations = new ArrayCollection();
 		$this->setProject($project);
+		$this->ignoreEntries = new ArrayCollection();
 	}
 
 	public function getId(): ?int
@@ -203,6 +212,36 @@ class Page
 	public function setIsIgnored(bool $isIgnored): self
 	{
 		$this->isIgnored = $isIgnored;
+
+		return $this;
+	}
+
+	/**
+	 * @return Collection<int,IgnoreEntry>
+	 */
+	public function getIgnoreEntries(): Collection
+	{
+		return $this->ignoreEntries;
+	}
+
+	public function addIgnoreEntry(IgnoreEntry $ignoreEntry): self
+	{
+		if (!$this->ignoreEntries->contains($ignoreEntry)) {
+			$this->ignoreEntries[] = $ignoreEntry;
+			$ignoreEntry->setTargetPage($this);
+		}
+
+		return $this;
+	}
+
+	public function removeIgnoreEntry(IgnoreEntry $ignoreEntry): self
+	{
+		if ($this->ignoreEntries->removeElement($ignoreEntry)) {
+			// set the owning side to null (unless already changed)
+			if ($ignoreEntry->getTargetPage() === $this) {
+				$ignoreEntry->setTargetPage(null);
+			}
+		}
 
 		return $this;
 	}
