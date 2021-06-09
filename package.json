@@ -26,7 +26,7 @@
     "encore": "encore",
     "test": "npm run test:unit && npm run test:e2e",
     "test:unit": "wtr",
-    "test:e2e": "npx folio tests/Full/*/**"
+    "test:e2e": "npx playwright test"
   },
   "repository": {
     "type": "git",
