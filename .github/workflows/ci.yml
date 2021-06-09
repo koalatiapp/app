@@ -84,4 +84,4 @@ jobs:
             - name: Install JS testing dependencies
               run: npm ci
             - name: Run tests
-              run: ./DEV/ci/run-tests.php
+              run: ./DEV/ci/run-tests.php --verbose
