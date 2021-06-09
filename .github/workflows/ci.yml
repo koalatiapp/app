@@ -46,8 +46,6 @@ jobs:
               with:
                   php-version: '8.0'
                   ini-values: post_max_size=256M, max_execution_time=0
-            - name: Install Webkit dependencies
-              run: sudo apt-get update && sudo apt-get install --fix-missing libegl1 libopus0 libwoff1 libharfbuzz-icu0 gstreamer1.0-plugins-base libgstreamer-gl1.0-0 gstreamer1.0-plugins-bad libopenjp2-7 libwebpdemux2 libenchant1c2a libhyphen0 libgles2 gstreamer1.0-libav
             - name: Use Node.js 15.x
               uses: actions/setup-node@v1
               with:
@@ -83,5 +81,7 @@ jobs:
               run: curl -k https://localhost
             - name: Install JS testing dependencies
               run: npm ci
+            - name: Install Playwright dependencies
+              run: npx playwright install-deps
             - name: Run tests
               run: ./DEV/ci/run-tests.php --verbose
