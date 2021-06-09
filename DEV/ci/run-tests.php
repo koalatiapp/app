@@ -38,7 +38,7 @@ function parseTypeOption(): array
 	global $options;
 
 	$availableTypes = ['frontend', 'backend', 'unit', 'functional', 'e2e'];
-	$selectedTypes = explode(',', $options['type'] ?: implode(',', $availableTypes));
+	$selectedTypes = explode(',', $options['type'] ?? implode(',', $availableTypes));
 	$types = [];
 
 	foreach ($availableTypes as $type) {
@@ -104,8 +104,18 @@ $verboseMode = (isset($options['v']) || isset($options['verbose']));
 
 // Processing starts here
 printf('Switching to test .env file... ');
-rename(ROOT_DIR.'.env.local', ROOT_DIR.'.env.local.tmp');
-copy(ROOT_DIR.'.env.test', ROOT_DIR.'.env.local');
+
+if (file_exists(ROOT_DIR.'.env.local.tmp')) {
+	exit(PHP_EOL."File \033[0;33m.env.local.tmp\033[0m already exists. You must restore your .env.local file before you run this script to prevent losing your real configurations.".PHP_EOL);
+}
+
+if (file_exists(ROOT_DIR.'.env.local')) {
+	rename(ROOT_DIR.'.env.local', ROOT_DIR.'.env.local.tmp');
+	copy(ROOT_DIR.'.env.test', ROOT_DIR.'.env.local');
+} else {
+	copy(ROOT_DIR.'.env', ROOT_DIR.'.env.local');
+}
+
 echo '✅'.PHP_EOL;
 
 try {
@@ -174,8 +184,12 @@ try {
 } finally {
 	echo PHP_EOL;
 	printf('Restoring original .env.local file... ');
-	unlink(ROOT_DIR.'.env.local');
-	rename(ROOT_DIR.'.env.local.tmp', ROOT_DIR.'.env.local');
+
+	if (file_exists(ROOT_DIR.'.env.local.tmp')) {
+		unlink(ROOT_DIR.'.env.local');
+		rename(ROOT_DIR.'.env.local.tmp', ROOT_DIR.'.env.local');
+	}
+
 	echo '✅'.PHP_EOL;
 }
 
