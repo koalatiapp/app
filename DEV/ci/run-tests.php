@@ -121,22 +121,22 @@ echo '✅'.PHP_EOL;
 try {
 	runCommand(
 		"Creating test database if it doesn't exist... ",
-		'docker-compose exec -T php ./bin/console --env=test doctrine:database:create --if-not-exists --no-interaction',
+		'docker-compose exec -T php ./bin/console doctrine:database:create --if-not-exists --no-interaction',
 		$verboseMode
 	);
 	runCommand(
 		'Wiping test database... ',
-		'docker-compose exec -T php ./bin/console --env=test doctrine:schema:drop --full-database --force',
+		'docker-compose exec -T php ./bin/console doctrine:schema:drop --full-database --force',
 		$verboseMode
 	);
 	runCommand(
 		'Running database migrations... ',
-		'docker-compose exec -T php ./bin/console --env=test doctrine:migrations:migrate --no-interaction',
+		'docker-compose exec -T php ./bin/console doctrine:migrations:migrate --no-interaction',
 		$verboseMode
 	);
 	runCommand(
 		'Generating fixtures... ',
-		'docker-compose exec -T php ./bin/console --env=test doctrine:fixtures:load -n',
+		'docker-compose exec -T php ./bin/console doctrine:fixtures:load -n',
 		$verboseMode
 	);
 
