@@ -1,12 +1,12 @@
-import { it, describe, expect } from "../fixtures";
+import { test, expect } from "@playwright/test";
 
-describe("login flow", () => {
-	it("redirects to login page when no session is active", async ({ page }) => {
+test.describe("login flow", () => {
+	test("redirects to login page when no session is active", async ({ page }) => {
 		await page.goto("http://localhost/");
 		expect(await page.evaluate(() => window.location.pathname)).toBe("/login")
 	});
 
-	it("prevents login from inexistant account", async ({ page }) => {
+	test("prevents login from inexistant account", async ({ page }) => {
 		await page.goto("http://localhost/");
 		await page.fill("#input-email input", "bad@email.com");
 		await page.fill("#input-password input", "notapassword");
@@ -15,7 +15,7 @@ describe("login flow", () => {
 		expect(await (await page.$(".error")).textContent()).toBe("The email address or password you entered was invalid.");
 	});
 
-	it("allows login from regular account", async ({ page }) => {
+	test("allows login from regular account", async ({ page }) => {
 		await page.goto("http://localhost/");
 		await page.fill("#input-email input", "name@email.com");
 		await page.fill("#input-password input", "123456");
@@ -23,7 +23,7 @@ describe("login flow", () => {
 		expect(await page.$("#page-wrapper")).toBeTruthy();
 	});
 
-	it("allows logout from within the app", async ({ page }) => {
+	test("allows logout from within the app", async ({ page }) => {
 		await page.goto("http://localhost/");
 		await page.fill("#input-email input", "name@email.com");
 		await page.fill("#input-password input", "123456");
