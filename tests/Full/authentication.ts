@@ -11,7 +11,7 @@ test.describe("login flow", () => {
 		await page.fill("#input-email input", "bad@email.com");
 		await page.fill("#input-password input", "notapassword");
 		await page.click("nb-button[type='submit']");
-		await page.waitForSelector("form .error", { timeout: 5000 });
+		await page.waitForSelector("form .error");
 		expect(await (await page.$(".error")).textContent()).toBe("The email address or password you entered was invalid.");
 	});
 
@@ -19,7 +19,7 @@ test.describe("login flow", () => {
 		await page.goto("https://localhost/");
 		await page.fill("#input-email input", "name@email.com");
 		await page.fill("#input-password input", "123456");
-		await Promise.all([page.waitForNavigation({ timeout: 5000 }), page.click("nb-button[type='submit']")]);
+		await Promise.all([page.waitForNavigation(), page.click("nb-button[type='submit']")]);
 		expect(await page.$("#page-wrapper")).toBeTruthy();
 	});
 
@@ -27,9 +27,9 @@ test.describe("login flow", () => {
 		await page.goto("https://localhost/");
 		await page.fill("#input-email input", "name@email.com");
 		await page.fill("#input-password input", "123456");
-		await Promise.all([page.waitForSelector("a[href='/logout']", { state: "attached", timeout: 5000 }), page.click("nb-button[type='submit']")]);
+		await Promise.all([page.waitForSelector("a[href='/logout']", { state: "attached" }), page.click("nb-button[type='submit']")]);
 		await page.hover("#profile-toggle");
-		await Promise.all([page.waitForNavigation({ timeout: 5000 }), page.click("a[href='/logout']")]);
+		await Promise.all([page.waitForNavigation(), page.click("a[href='/logout']")]);
 		expect(await page.evaluate(() => window.location.pathname)).toBe("/login")
 	});
 });
