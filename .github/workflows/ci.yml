@@ -81,6 +81,8 @@ jobs:
               run: curl -k https://localhost
             - name: Install JS testing dependencies
               run: npm ci
+            - name: Build JS assets with Webpack Encore
+              run: npm run encore prod
             - name: Install Playwright dependencies
               run: npx playwright install-deps
             - name: Install Playwright browsers
