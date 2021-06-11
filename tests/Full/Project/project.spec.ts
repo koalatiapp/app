@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { login } from "../utilities";
 
-test("creates and project", async ({ page }) => {
+test("creates, edits and deletes a project", async ({ page }) => {
 	await login(page);
 
 	// Go to project creation page through quick actions
