@@ -1,7 +1,7 @@
 import { PlaywrightTestConfig } from '@playwright/test';
 const config: PlaywrightTestConfig = {
 	testDir: "tests/Full",
-	testMatch: "**/*.ts",
+	testMatch: "**/*.spec.ts",
   use: {
     // Browser options
 
