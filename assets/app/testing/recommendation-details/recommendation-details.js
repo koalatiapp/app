@@ -1,3 +1,4 @@
+import escapeHtml  from "escape-html";
 import { LitElement, html, css } from "lit";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import stylesReset from "../../../native-bear/styles-reset.js";
@@ -81,14 +82,14 @@ export class RecommendationDetails extends LitElement {
 			<div class="sample-recommendation-title">
 				<nb-markdown barebones>
 					<script type="text/markdown">
-						${unsafeHTML(this.recommendationGroup.title)}
+						${escapeHtml(this.recommendationGroup.title)}
 					</script>
 				</nb-markdown>
 			</div>
 			<h3>${Translator.trans("recommendation.modal.description_heading")}</h3>
 			<nb-markdown>
 				<script type="text/markdown">
-					${this.recommendationGroup.sample.parentResult.description}
+					${escapeHtml(this.recommendationGroup.sample.parentResult.description)}
 				</script>
 			</nb-markdown>
 
@@ -103,7 +104,7 @@ export class RecommendationDetails extends LitElement {
 				return html`
 					<nb-accordion ?open=${this.recommendationGroup.recommendations.indexOf(recommendation) === 0}>
 						<div slot="summary">
-							<div class="page-title">${recommendation.relatedPage.title || Translator.trans("page.unknown_title")}</div>
+							<div class="page-title">${escapeHtml(recommendation.relatedPage.title) || Translator.trans("page.unknown_title")}</div>
 							<div class="page-url">${recommendation.relatedPage.url}</div>
 						</div>
 
@@ -157,7 +158,7 @@ export class RecommendationDetails extends LitElement {
 				${row.map(cellContent => html`<${tag}>
 					<nb-markdown barebones>
 						<script type="text/markdown">
-							${cellContent}
+							${escapeHtml(cellContent)}
 						</script>
 					</nb-markdown>
 				</${tag}>`)}
@@ -184,7 +185,7 @@ export class RecommendationDetails extends LitElement {
 				return html`<nb-markdown barebones>
 					<script type="text/markdown">
 						\`\`\`
-						${snippet}
+						${escapeHtml(snippet)}
 						\`\`\`
 					</script>
 				</nb-markdown>`;

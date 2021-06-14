@@ -1,3 +1,4 @@
+import escapeHtml  from "escape-html";
 import { html, css } from "lit";
 import { NbList } from "../../../native-bear";
 import fontawesomeImport from "../../../utils/fontawesome-import";
@@ -38,11 +39,11 @@ export class RecommendationList extends NbList {
 				label: "recommendation.listing.title",
 				render: item => {
 					// Remove links from the recommendation title
-					const strippedTitle = item.htmlTitle.replace(/\[.+?\]\(.+?\)/g, "");
+					const strippedTitle = item.htmlTitle.replace(/\[.+?\]\(.+?\)/g, "").replace(/\.{2,}/g, ".");
 
 					return html`
 						<nb-markdown barebones>
-							<script type="text/markdown">${strippedTitle}</script>
+							<script type="text/markdown">${escapeHtml(strippedTitle)}</script>
 						</nb-markdown>
 						<recommendation-details-link recommendationId=${item.sampleId}>
 							<i class="fad fa-circle-info"></i>&nbsp;
