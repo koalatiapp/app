@@ -1,4 +1,8 @@
-import { PlaywrightTestConfig } from '@playwright/test';
+import { PlaywrightTestConfig, expect } from "@playwright/test";
+import { matchers } from "expect-playwright";
+
+expect.extend(matchers);
+
 const config: PlaywrightTestConfig = {
 	testDir: "tests/Full",
 	testMatch: "**/*.spec.ts",
