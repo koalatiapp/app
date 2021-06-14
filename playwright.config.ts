@@ -7,6 +7,7 @@ const config: PlaywrightTestConfig = {
 	testDir: "tests/Full",
 	testMatch: "**/*.spec.ts",
 	timeout: 60000,
+	workers: 1,
 	use: {
 		// Browser options
 
