@@ -144,6 +144,9 @@
             "config/routes/fos_js_routing.yaml"
         ]
     },
+    "friendsoftwig/twigcs": {
+        "version": "v5.0.0"
+    },
     "guzzlehttp/guzzle": {
         "version": "7.2.0"
     },

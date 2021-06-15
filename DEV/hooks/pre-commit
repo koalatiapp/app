@@ -2,8 +2,8 @@
 BASEDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../.."
 
 # Define CI scripts to run
-CI_SCRIPTS=("php-cs-fixer.sh" "phpstan.sh" "phpmd.sh" "stylelint.sh" "eslint.sh")
-CI_SCRIPT_NAMES=("PHP-CS-Fixer" "PHPStan" "PHPMD" "CSS stylelint" "ESLint")
+CI_SCRIPTS=("php-cs-fixer.sh" "phpstan.sh" "phpmd.sh" "twigcs.sh" "stylelint.sh" "eslint.sh")
+CI_SCRIPT_NAMES=("PHP-CS-Fixer" "PHPStan" "PHPMD" "Twigcs" "CSS stylelint" "ESLint")
 scriptCount=${#CI_SCRIPTS[@]}
 addedFiles=$(git diff --diff-filter=d --cached --name-only)
 

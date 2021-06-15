@@ -1,12 +1,12 @@
 {% extends 'app_base.html.twig' %}
-{% from 'app/_macros/testing.html.twig' import recommendation_card, recommendation_grouped_list %}
+{% from 'app/_macros/testing.html.twig' import recommendation_card %}
 
 {% block head %}
     <link rel="stylesheet" href="{{ asset('css/component/testing/recommendations.css') }}">
 {% endblock %}
 
 {% block title %}{% trans %}project_testing.title{% endtrans %}{% endblock %}
-{% block section_title %}{{ 'generic.project_section_title'|trans({'%name%':project.name}) }}{% endblock %}
+{% block section_title %}{{ 'generic.project_section_title'|trans({'%name%': project.name}) }}{% endblock %}
 
 {% block body %}
     <div class="grid small-fill">

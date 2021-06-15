@@ -44,7 +44,7 @@
 					<img src="{{ project|favicon }}" class="favicon">
 					<strong class="name">{{ project.name }}</strong>
 					<div class="date">{{ project.dateCreated|ago }}</div>
-					<div class="status {{ project.status|lower }}">{{ ('entity.project.status:'~project.status)|trans }}</div>
+					<div class="status {{ project.status|lower }}">{{ ('entity.project.status:' ~ project.status)|trans }}</div>
 					<i class="far fa-angle-right"></i>
 				</a>
 			{% endfor %}

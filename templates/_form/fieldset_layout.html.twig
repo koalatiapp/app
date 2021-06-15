@@ -1,9 +1,5 @@
 {%- block form_widget_simple -%}
     {%- set type = type|default('text') -%}
-    {%- if type == 'range' or type == 'color' -%}
-        {# Attribute "required" is not supported #}
-        {%- set required = false -%}
-    {%- endif -%}
 	{%- if type == 'hidden' -%}
     	<input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
 	{%- else -%}
@@ -62,9 +58,9 @@
     {%- else -%}
         <fieldset {{ block('widget_container_attributes') }}>
             {{- date_pattern|replace({
-                '{{ year }}':  form_widget(form.year),
+                '{{ year }}': form_widget(form.year),
                 '{{ month }}': form_widget(form.month),
-                '{{ day }}':   form_widget(form.day),
+                '{{ day }}': form_widget(form.day),
             })|raw -}}
         </fieldset>
     {%- endif -%}
@@ -74,7 +70,7 @@
     {%- if widget == 'single_text' -%}
         {{ block('form_widget_simple') }}
     {%- else -%}
-        {%- set vars = widget == 'text' ? { 'attr': { 'size': 1 }} : {} -%}
+        {%- set vars = widget == 'text' ? {'attr': {'size': 1}} : {} -%}
         <fieldset {{ block('widget_container_attributes') }}>
             {{ form_widget(form.hour, vars) }}{% if with_minutes %}:{{ form_widget(form.minute, vars) }}{% endif %}{% if with_seconds %}:{{ form_widget(form.second, vars) }}{% endif %}
         </fieldset>
@@ -120,7 +116,7 @@
     {%- if widget == 'single_text' -%}
         {{ block('form_widget_simple') }}
     {%- else -%}
-        {%- set vars = widget == 'text' ? { 'attr': { 'size': 1 }} : {} -%}
+        {%- set vars = widget == 'text' ? {'attr': {'size': 1}} : {} -%}
         <fieldset {{ block('widget_container_attributes') }}>
             {{ form_widget(form.year, vars) }}-{{ form_widget(form.week, vars) }}
         </fieldset>
@@ -158,7 +154,7 @@
 {%- block form_row -%}
     {%- set widget_attr = {} -%}
     {%- if help is not empty -%}
-        {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
+        {%- set widget_attr = {attr: {'aria-describedby': id ~ "_help"}} -%}
     {%- endif -%}
     <fieldset{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %}>
         {{- form_errors(form) -}}
@@ -168,7 +164,7 @@
 {%- endblock form_row -%}
 
 {%- block button_row -%}
-	{% set row_attr = row_attr|merge({'class': 'button-container' ~ (row_attr.class is defined ? ' ' ~ row_attr.class : '')} ) %}
+	{% set row_attr = row_attr|merge({'class': 'button-container' ~ (row_attr.class is defined ? ' ' ~ row_attr.class : '')}) %}
 	<hr>
     <div{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %}>
         {{- form_widget(form) -}}

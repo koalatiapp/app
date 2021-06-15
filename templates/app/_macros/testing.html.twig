@@ -1,11 +1,11 @@
 {# Recommendation type (color) #}
-{%- macro recommendation_type(type, tag = "span") -%}
-	{% set typeColorClasses = { ISSUE: "text-red", ESSENTIAL: "text-blue-faded", OPTIMIZATION: "text-blue-gray" } %}
-	<{{ tag }} class="{{ typeColorClasses[type] }} recommendation-type="{{ type }}">{{ ("recommendation.type." ~ type|lower)|trans }}</{{ tag }}>
+{%- macro recommendation_type(type, tag="span") -%}
+	{% set type_color_class = {ISSUE: "text-red", ESSENTIAL: "text-blue-faded", OPTIMIZATION: "text-blue-gray"} %}
+	<{{ tag }} class="{{ type_color_class[type] }} recommendation-type="{{ type }}">{{ ("recommendation.type." ~ type|lower)|trans }}</{{ tag }}>
 {%- endmacro -%}
 
 {# Recommendation card #}
-{% macro recommendation_card(recommendation, title = "") %}
+{% macro recommendation_card(recommendation, title="") %}
 	<div class="card">
 		{% if title %}
 			<h3>{{ title }}</h3>
