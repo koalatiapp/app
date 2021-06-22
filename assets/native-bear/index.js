@@ -3,6 +3,7 @@ import "element-internals-polyfill";
 
 export {NbList} from "./list/list";
 export {NbInput} from "./input/input";
+export {NbRadioList} from "./radio-list/radio-list";
 export {NbButton} from "./button/button";
 export {NbIconButton} from "./icon-button/icon-button";
 export {NbAccordion} from "./accordion/accordion";
