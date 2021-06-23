@@ -2,6 +2,7 @@ import { css } from "lit";
 
 export default css`
 	:host { box-sizing: border-box; -webkit-font-smoothing: inherit; }
+
 	* { font-family: inherit; font-size: inherit; box-sizing: inherit; -webkit-font-smoothing: inherit; }
 	a { text-decoration: underline; }
 	p { line-height: 1.4; }
@@ -18,4 +19,5 @@ export default css`
 	hr,
 	.spacer { width: 100%; height: 1px; margin: 30px auto; background-color: #F4F4F4; border: none; }
 	.spacer { height: 0; }
+	.spacer.small { margin: .8rem auto; }
 `;
