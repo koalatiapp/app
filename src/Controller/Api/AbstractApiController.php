@@ -24,7 +24,7 @@ abstract class AbstractApiController extends AbstractController
 	/**
 	 * Generates a JsonResponse for an API request that has encountered an error.
 	 */
-	protected function apiError(string $message, int $code = 500): JsonResponse
+	protected function apiError(string $message, int $code = 400): JsonResponse
 	{
 		return new JsonResponse([
 			'status' => self::STATUS_ERROR,
@@ -71,9 +71,9 @@ abstract class AbstractApiController extends AbstractController
 	/**
 	 * Returns a generic 404 not found error response.
 	 */
-	protected function notFound(): JsonResponse
+	protected function notFound(string $message = 'This resource does not exist or could not be found.'): JsonResponse
 	{
-		return $this->apiError('This resource does not exist or could not be found.', 404);
+		return $this->apiError($message, 404);
 	}
 
 	/**
