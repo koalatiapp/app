@@ -85,6 +85,16 @@ recommendation:
         table_heading: Detailed information for this page
         no_page_details: There is no additional information or data for this page.
         last_occured_on: Last seen on %date%
+    ignore_form:
+        title: Ignore a recommendation
+        recommendation: Recommendation
+        scope:
+            label: Ignore this...
+            page: only for this page (%pageName%)
+            project: for every page in this project
+            organization: for all of the team's projects
+            user: for all of your projects
+        submit: Ignore this recommendation
 
 dashboard:
     title: Dashboard

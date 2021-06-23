@@ -21,6 +21,16 @@ class RecommendationRepository extends ServiceEntityRepository
 	}
 
 	/**
+	 * {@inheritDoc}
+	 *
+	 * @return Recommendation|null
+	 */
+	public function find($id, $lockMode = null, $lockVersion = null)
+	{
+		return parent::find($id, $lockMode, $lockVersion);
+	}
+
+	/**
 	 * Finds every recommendation matching a tool response's URL and tool name.
 	 *
 	 * @return ArrayCollection<int,Recommendation>

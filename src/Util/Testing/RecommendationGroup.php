@@ -3,6 +3,7 @@
 namespace App\Util\Testing;
 
 use App\Entity\Testing\Recommendation;
+use App\Entity\User;
 use App\Exception\WrongRecommendationTypeException;
 use Countable;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -101,6 +102,20 @@ class RecommendationGroup implements Countable
 	public function getHtmlTitle(): ?string
 	{
 		return $this->getSample()?->getHtmlTitle();
+	}
+
+	/**
+	 * @Groups({"default"})
+	 */
+	public function getProjectOwnerType(): ?string
+	{
+		$projectOwner = $this->getSample()?->getProject()->getOwner();
+
+		if ($projectOwner instanceof User) {
+			return 'user';
+		}
+
+		return 'organization';
 	}
 
 	/**

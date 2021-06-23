@@ -1,6 +1,7 @@
 import escapeHtml  from "escape-html";
 import { html, css } from "lit";
 import { NbList } from "../../../native-bear";
+import Modal from "../../../utils/modal";
 import fontawesomeImport from "../../../utils/fontawesome-import";
 
 export class RecommendationList extends NbList {
@@ -83,7 +84,7 @@ export class RecommendationList extends NbList {
 					}
 
 					return html`
-						<nb-button size="small" color="gray">${Translator.trans("recommendation.ignore")}</nb-button>
+						<nb-button size="small" color="gray" @click=${() => list._ignoreRecommendation(item)}>${Translator.trans("recommendation.ignore")}</nb-button>
 						<nb-icon-button size="small" @click=${() => list._markItemAsCompletedCallback(item)}><i class="fas fa-check"></i></nb-icon-button>
 					`;
 				},
@@ -152,6 +153,16 @@ export class RecommendationList extends NbList {
 				}
 				this.items = this.items.filter(item => item !== completedItem);
 			});
+	}
+
+	_ignoreRecommendation(item)
+	{
+		new Modal({
+			title: Translator.trans("recommendation.ignore_form.title"),
+			content: html`
+				<recommendation-ignore-form .recommendation=${item}></recommendation-ignore-form>
+			`
+		});
 	}
 }
 
