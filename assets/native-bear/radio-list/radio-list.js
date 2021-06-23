@@ -70,6 +70,10 @@ export class NbRadioList extends LitElement {
 
 			for (const option of optionNodes) {
 				options.push({ value: option.value, label: option.textContent });
+
+				if (option.selected) {
+					this.value = option.value;
+				}
 			}
 
 			this.options = options;
