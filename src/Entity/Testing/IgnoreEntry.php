@@ -69,9 +69,16 @@ class IgnoreEntry
 	 */
 	private ?Page $targetPage;
 
-	public function __construct()
+	public function __construct(string $tool, string $test, string $recommendationUniqueName, null | Organization | User | Project | Page $scopeTarget = null)
 	{
 		$this->dateCreated = new DateTime();
+		$this->setTool($tool);
+		$this->setTest($test);
+		$this->setRecommendationUniqueName($recommendationUniqueName);
+
+		if ($scopeTarget) {
+			$this->setScope($scopeTarget);
+		}
 	}
 
 	public function getId(): ?int
@@ -183,6 +190,22 @@ class IgnoreEntry
 	public function setTargetPage(?Page $targetPage): self
 	{
 		$this->targetPage = $targetPage;
+
+		return $this;
+	}
+
+	public function setScope(Organization | User | Project | Page $scopeTarget): self
+	{
+		switch (get_class($scopeTarget)) {
+			case Organization::class:
+				return $this->setTargetOrganization($scopeTarget);
+			case User::class:
+				return $this->setTargetUser($scopeTarget);
+			case Project::class:
+				return $this->setTargetProject($scopeTarget);
+			case Page::class:
+				return $this->setTargetPage($scopeTarget);
+		}
 
 		return $this;
 	}
