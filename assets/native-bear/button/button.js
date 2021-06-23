@@ -60,7 +60,7 @@ export class NbButton extends LitElement {
 			return html`
 				<a href=${this.href} class=${this._classes.join(" ").trim()} target=${this.target} ?disabled=${this.disabled} rel="${this.target == "_blank" ? "noopener" : ""}">
 					<slot></slot>
-				<a>
+				</a>
 			`;
 		}
 
