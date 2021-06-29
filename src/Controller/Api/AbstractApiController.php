@@ -2,8 +2,16 @@
 
 namespace App\Controller\Api;
 
+use App\Entity\Project;
+use App\Mercure\TopicBuilder;
+use App\Mercure\UpdateDispatcher;
+use App\Security\ProjectVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mercure\Authorization;
+use Symfony\Component\Mercure\Discovery;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -14,11 +22,79 @@ abstract class AbstractApiController extends AbstractController
 	public const STATUS_OKAY = 'ok';
 
 	/**
+	 * A Mercure topic that the client may want to subscribe to in order
+	 * to receive live updates to the data returned by the current request.
+	 *
+	 * This topic will be sent in the response via the `suggested-mercure-topic` HTTP header.
+	 */
+	private ?string $suggestedMercureTopic = null;
+
+	/**
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.serializer)
 	 */
 	public function __construct(
-		public SerializerInterface $serializer
+		protected TopicBuilder $topicBuilder,
+		protected UpdateDispatcher $updateDispatcher,
+		private SerializerInterface $serializer,
+		private Discovery $discovery,
+		private Authorization $authorization,
+		private RequestStack $requestStack
 	) {
+	}
+
+	/**
+	 * @SuppressWarnings(PHPMD.ExitExpression)
+	 */
+	protected function getProject(?int $id, string $privilege = ProjectVoter::VIEW): ?Project
+	{
+		if (!$id) {
+			return null;
+		}
+
+		/**
+		 * @var \App\Repository\ProjectRepository
+		 */
+		$repository = $this->getDoctrine()->getRepository(Project::class);
+		$project = $repository->find($id);
+
+		if (!$project) {
+			$this->notFound()->send();
+			exit;
+		}
+
+		if (!$this->isGranted($privilege, $project)) {
+			$this->accessDenied()->send();
+			exit;
+		}
+
+		// Save the project to session as the "current project". This is used in the projectShortcut() method.
+		$session = $this->get('request_stack')->getSession();
+		$session->set('koalati_current_project_id', $project->getId());
+
+		return $project;
+	}
+
+	protected function setSuggestedMercureTopic(string $topic): static
+	{
+		$this->suggestedMercureTopic = $topic;
+
+		return $this;
+	}
+
+	private function addSuggestedMercureTopicToResponse(Response $response): static
+	{
+		if ($this->suggestedMercureTopic) {
+			$response->headers->set('suggested-mercure-topic', $this->suggestedMercureTopic);
+
+			// @TODO: Add Mercure authorization cookie to API responses
+			/*
+			$response->headers->setCookie(
+				$this->authorization->createCookie($this->requestStack->getCurrentRequest(),  ["http://example.com/books/1"])
+			);
+			*/
+		}
+
+		return $this;
 	}
 
 	/**
@@ -26,11 +102,15 @@ abstract class AbstractApiController extends AbstractController
 	 */
 	protected function apiError(string $message, int $code = 400): JsonResponse
 	{
-		return new JsonResponse([
+		$response = new JsonResponse([
 			'status' => self::STATUS_ERROR,
 			'code' => $code,
 			'message' => $message,
 		]);
+
+		$this->addSuggestedMercureTopicToResponse($response);
+
+		return $response;
 	}
 
 	/**
@@ -43,11 +123,15 @@ abstract class AbstractApiController extends AbstractController
 	 */
 	protected function apiSuccess(mixed $data = null, array $groups = [], int $code = 200): JsonResponse
 	{
-		return new JsonResponse([
+		$response = new JsonResponse([
 			'status' => self::STATUS_OKAY,
 			'code' => $code,
 			'data' => $this->serializeData($data, $groups),
 		]);
+
+		$this->addSuggestedMercureTopicToResponse($response);
+
+		return $response;
 	}
 
 	/**
