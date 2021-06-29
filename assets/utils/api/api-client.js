@@ -14,6 +14,19 @@ class ApiClient {
 	}
 
 	/**
+	 * Builds the URL for the requests and subscriptions.
+	 *
+	 * @param {string} method The HTTP method to use for the request.
+	 * @param {string} endpoint The route name of the API endpoint.
+	 * @param {object} body The body of the request. Raw objects and FormData are accepted.
+	 */
+	_resolveRouteUrl(method, endpoint, body = {})
+	{
+		method = method.trim().toUpperCase();
+		return Routing.generate(endpoint, ["GET", "DELETE"].includes(method) ? body : {});
+	}
+
+	/**
 	 * @param {string} method The HTTP method to use for the request.
 	 * @param {string} endpoint The route name of the API endpoint.
 	 * @param {object} body The body of the request. Raw objects and FormData are accepted.
@@ -22,14 +35,14 @@ class ApiClient {
 	 * 	- `ApiClient.ERROR_FLASH`: automatically displays the error in a temporary Flash message.
 	 * 	- function: calls the provided callback with the error message as a parameter
 	 *  - null: throws an `ApiError`
-	 * @returns {object|undefined} The response object, or undefined if an error is returned from the API.
+	 * @returns {object|undefined} The response data object, or undefined if an error is returned from the API.
 	 * @throws {ApiError} Only thrown when the `errorCallback` is null or an unknown option.
 	 */
 	async _request(method, endpoint, body = {}, errorCallback = ApiClient.ERROR_FLASH)
 	{
 		method = method.trim().toUpperCase();
 
-		if (!(body instanceof FormData) && method != "GET") {
+		if (!(body instanceof FormData) && !["GET", "DELETE"].includes(method)) {
 			const formData = new FormData();
 
 			for (const key in body) {
@@ -39,31 +52,34 @@ class ApiClient {
 			body = formData;
 		}
 
-		const url = Routing.generate(endpoint, method == "GET" ? body : {});
+		const url = this._resolveRouteUrl(method, endpoint, body);
 		const fetchOptions = {
 			method: method,
 		};
 
-		if (method != "GET") {
+		if (!["GET", "DELETE"].includes(method)) {
 			fetchOptions.body = body;
 		}
 
-		const encodedResponse = await fetch(url, fetchOptions);
-		const response = await encodedResponse.json();
+		const response = await fetch(url, fetchOptions);
+		const responseData = await response.json();
 
-		if (response.status != "ok") {
+		if (responseData.status != "ok") {
 			if (errorCallback == ApiClient.ERROR_FLASH) {
-				window.Flash.show("danger", response.message);
+				window.Flash.show("danger", responseData.message);
 				return;
 			} else if (typeof errorCallback == "function") {
-				errorCallback(response.message);
+				errorCallback(responseData.message);
 				return;
 			} else {
-				throw new ApiError(response.message);
+				throw new ApiError(responseData.message);
 			}
 		}
 
-		return response;
+		// Add the complete Response object
+		responseData._response = response;
+
+		return responseData;
 	}
 
 	/**
@@ -74,7 +90,7 @@ class ApiClient {
 	 * 	- `ApiClient.ERROR_FLASH`: automatically displays the error in a temporary Flash message.
 	 * 	- function: calls the provided callback with the error message as a parameter
 	 *  - null: throws an `ApiError`
-	 * @returns {object|undefined} The response object, or undefined if an error is returned from the API.
+	 * @returns {Promise<object|undefined>} The response object, or undefined if an error is returned from the API.
 	 * @throws {ApiError} Only thrown when the `errorCallback` is null or an unknown option.
 	 */
 	get(endpoint, body = {}, errorCallback = ApiClient.ERROR_FLASH)
@@ -90,7 +106,7 @@ class ApiClient {
 	 * 	- `ApiClient.ERROR_FLASH`: automatically displays the error in a temporary Flash message.
 	 * 	- function: calls the provided callback with the error message as a parameter
 	 *  - null: throws an `ApiError`
-	 * @returns {object|undefined} The response object, or undefined if an error is returned from the API.
+	 * @returns {Promise<object|undefined>} The response object, or undefined if an error is returned from the API.
 	 * @throws {ApiError} Only thrown when the `errorCallback` is null or an unknown option.
 	 */
 	post(endpoint, body = {}, errorCallback = ApiClient.ERROR_FLASH)
@@ -106,7 +122,7 @@ class ApiClient {
 	 * 	- `ApiClient.ERROR_FLASH`: automatically displays the error in a temporary Flash message.
 	 * 	- function: calls the provided callback with the error message as a parameter
 	 *  - null: throws an `ApiError`
-	 * @returns {object|undefined} The response object, or undefined if an error is returned from the API.
+	 * @returns {Promise<object|undefined>} The response object, or undefined if an error is returned from the API.
 	 * @throws {ApiError} Only thrown when the `errorCallback` is null or an unknown option.
 	 */
 	put(endpoint, body = {}, errorCallback = ApiClient.ERROR_FLASH)
@@ -122,7 +138,7 @@ class ApiClient {
 	 * 	- `ApiClient.ERROR_FLASH`: automatically displays the error in a temporary Flash message.
 	 * 	- function: calls the provided callback with the error message as a parameter
 	 *  - null: throws an `ApiError`
-	 * @returns {object|undefined} The response object, or undefined if an error is returned from the API.
+	 * @returns {Promise<object|undefined>} The response object, or undefined if an error is returned from the API.
 	 * @throws {ApiError} Only thrown when the `errorCallback` is null or an unknown option.
 	 */
 	patch(endpoint, body = {}, errorCallback = ApiClient.ERROR_FLASH)
@@ -138,12 +154,36 @@ class ApiClient {
 	 * 	- `ApiClient.ERROR_FLASH`: automatically displays the error in a temporary Flash message.
 	 * 	- function: calls the provided callback with the error message as a parameter
 	 *  - null: throws an `ApiError`
-	 * @returns {object|undefined} The response object, or undefined if an error is returned from the API.
+	 * @returns {Promise<object|undefined>} The response object, or undefined if an error is returned from the API.
 	 * @throws {ApiError} Only thrown when the `errorCallback` is null or an unknown option.
 	 */
 	delete(endpoint, body = {}, errorCallback = ApiClient.ERROR_FLASH)
 	{
 		return this._request("DELETE", endpoint, body, errorCallback);
+	}
+
+	/**
+	 * Subscribes to a Mercure topic and executes the provided callback wehenever an update is received.
+	 *
+	 * @param {string} endpoint The route name of the API endpoint.
+	 * @param {object} body The body of the request. Raw objects and FormData are accepted.
+	 * @param {function} updateCallback The callback that will run when an update is received.
+	 * @returns {EventSource} The EventSource that handles the subscription
+	 * @throws {ApiError} Only thrown when the `errorCallback` is null or an unknown option.
+	 */
+	subscribe(topic, updateCallback = () => {})
+	{
+		const baseUrl = Routing.getScheme() + "://" + Routing.getHost();
+		const sourceUrl = baseUrl + "/.well-known/mercure?topic=" + encodeURIComponent(topic);
+		const eventSource = new EventSource(sourceUrl, {
+			withCredentials: true
+		});
+
+		eventSource.onmessage = event => {
+			updateCallback(JSON.parse(event.data));
+		};
+
+		return eventSource;
 	}
 }
 
