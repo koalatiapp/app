@@ -23,8 +23,9 @@
 
 			<div id="automated-testing">
 				<h2>{% trans %}project_settings.tabs.automated_testing{% endtrans %}</h2>
-				{% trans %}generic.not_yet_implemented{% endtrans %}
-				{{ submit_button|raw }}
+				<nb-field label="{% trans %}project_settings.form.field.ignore.label{% endtrans %}">
+					<recommendation-ignore-list projectId="{{ project.id }}" light></recommendation-ignore-list>
+				</nb-field>
 			</div>
 
 			<div id="checklist">
@@ -41,4 +42,8 @@
 			</div>
 		</tabbed-container>
 	{{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+	{{ encore_entry_script_tags('testing') }}
 {% endblock %}

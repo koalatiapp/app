@@ -2,79 +2,105 @@
 
 namespace App\Entity\Testing;
 
+use App\Entity\MercureEntityInterface;
 use App\Entity\Organization;
 use App\Entity\Page;
 use App\Entity\Project;
 use App\Entity\User;
-use App\Repository\IgnoreEntryRepository;
+use App\Mercure\TopicBuilder;
+use App\Repository\Testing\IgnoreEntryRepository;
 use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=IgnoreEntryRepository::class)
  */
-class IgnoreEntry
+class IgnoreEntry implements MercureEntityInterface
 {
+	public static function getMercureTopics(): array
+	{
+		return [
+			TopicBuilder::SCOPE_SPECIFIC => ['http://koalati/ignore-entry/{id}'],
+			TopicBuilder::SCOPE_PROJECT => ['http://koalati/{scope}/ignore-entry/{id}', 'getTargetProject'],
+			TopicBuilder::SCOPE_USER => ['http://koalati/{scope}/ignore-entry/{id}', 'getTargetUser'],
+			TopicBuilder::SCOPE_ORGANIZATION => ['http://koalati/{scope}/ignore-entry/{id}', 'getTargetOrganization'],
+		];
+	}
+
 	/**
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
 	 * @ORM\Column(type="integer")
+	 * @Groups({"default"})
 	 */
 	private ?int $id;
 
 	/**
 	 * @ORM\Column(type="datetime")
+	 * @Groups({"default"})
 	 */
 	private ?DateTimeInterface $dateCreated;
 
 	/**
 	 * @ORM\Column(type="string", length=255)
+	 * @Groups({"default"})
 	 */
 	private ?string $tool;
 
 	/**
 	 * @ORM\Column(type="string", length=255)
+	 * @Groups({"default"})
 	 */
 	private ?string $test;
 
 	/**
 	 * @ORM\Column(type="string", length=255)
+	 * @Groups({"default"})
 	 */
 	private ?string $recommendationUniqueName;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=Organization::class, inversedBy="ignoreEntries")
 	 */
-	private ?Organization $targetOrganization;
+	private ?Organization $targetOrganization = null;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=User::class, inversedBy="ignoreEntries")
 	 */
-	private ?User $targetUser;
+	private ?User $targetUser = null;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=Project::class, inversedBy="ignoreEntries")
 	 */
-	private ?Project $targetProject;
+	private ?Project $targetProject = null;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=User::class)
 	 * @ORM\JoinColumn(nullable=false)
+	 * @Groups({"default"})
 	 */
 	private ?User $createdBy;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=Page::class, inversedBy="ignoreEntries")
 	 */
-	private ?Page $targetPage;
+	private ?Page $targetPage = null;
 
-	public function __construct(string $tool, string $test, string $recommendationUniqueName, null | Organization | User | Project | Page $scopeTarget = null)
+	/**
+	 * @ORM\Column(type="string", length=512)
+	 * @Groups({"default"})
+	 */
+	private ?string $recommendationTitle;
+
+	public function __construct(string $tool, string $test, string $recommendationUniqueName, string $recommendationTitle, null | Organization | User | Project | Page $scopeTarget = null)
 	{
 		$this->dateCreated = new DateTime();
 		$this->setTool($tool);
 		$this->setTest($test);
 		$this->setRecommendationUniqueName($recommendationUniqueName);
+		$this->setRecommendationTitle($recommendationTitle);
 
 		if ($scopeTarget) {
 			$this->setScope($scopeTarget);
@@ -206,6 +232,38 @@ class IgnoreEntry
 			case Page::class:
 				return $this->setTargetPage($scopeTarget);
 		}
+
+		return $this;
+	}
+
+	/**
+	 * @Groups({"default"})
+	 */
+	public function getScopeType(): string
+	{
+		if ($this->getTargetUser()) {
+			return 'user';
+		}
+
+		if ($this->getTargetOrganization()) {
+			return 'organization';
+		}
+
+		if ($this->getTargetProject()) {
+			return 'project';
+		}
+
+		return 'page';
+	}
+
+	public function getRecommendationTitle(): ?string
+	{
+		return $this->recommendationTitle;
+	}
+
+	public function setRecommendationTitle(string $recommendationTitle): self
+	{
+		$this->recommendationTitle = $recommendationTitle;
 
 		return $this;
 	}

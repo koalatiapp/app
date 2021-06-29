@@ -96,6 +96,14 @@ recommendation:
             user: for all of your projects
         submit: Ignore this recommendation
 
+ignore_entry:
+    listing:
+        title: Recommendation
+        scope: Ignored in
+        tool: Tool
+        date_created: Ignored since
+        created_by: Ignored by
+
 dashboard:
     title: Dashboard
     tabs:
@@ -156,6 +164,8 @@ project_settings:
                 label: Website URL
                 placeholder: www.domain.com
                 error_unreachable: This URL is invalid or unreachable.
+            ignore:
+                label: Manage ignored recommendations
     delete:
         warning_text: "Warning: once you delete a project, there is no turning back. The project will be deleted instantly, and all of its related data will be removed as well. This cannot be undone."
         confirmation_label: I am certain that I want to delete the project "%name%".

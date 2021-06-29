@@ -183,4 +183,25 @@ class Organization
 
 		return $this;
 	}
+
+	public function getMemberFromUser(User $user): ?OrganizationMember
+	{
+		foreach ($this->getMembers() as $member) {
+			if ($member->getUser() == $user) {
+				return $member;
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * @return array<int,string>
+	 */
+	public function getUserRoles(User $user): array
+	{
+		$member = $this->getMemberFromUser($user);
+
+		return $member?->getRoles() ?: [];
+	}
 }
