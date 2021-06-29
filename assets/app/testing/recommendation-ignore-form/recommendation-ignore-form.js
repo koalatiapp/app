@@ -1,3 +1,4 @@
+import escapeHtml from "escape-html";
 import { LitElement, html, css } from "lit";
 import stylesReset from "../../../native-bear/styles-reset.js";
 import faImport from "../../../utils/fontawesome-import";
@@ -68,7 +69,7 @@ export class RecommendationIgnoreForm extends LitElement {
 				<nb-input type="hidden" name="recommendation_id" value=${this.recommendation.sampleId}></nb-input>
 				<nb-field label=${Translator.trans("recommendation.ignore_form.recommendation")}>
 					<nb-markdown barebones id="ignore-form-recommendation-title">
-						<script type="text/markdown">${this.recommendation.title}</script>
+						<script type="text/markdown">${escapeHtml(this.recommendation.title)}</script>
 					</nb-markdown>
 				</nb-field>
 
@@ -121,13 +122,8 @@ export class RecommendationIgnoreForm extends LitElement {
 	{
 		e.preventDefault();
 
-		await ApiClient.post("api_testing_recommendation_ignore", new FormData(this.form));
+		await ApiClient.post("api_testing_ignore_entry_create", new FormData(this.form));
 		Modal.closeCurrent();
-	}
-
-	get ignoreUrl()
-	{
-		return Routing.generate("api_testing_recommendation_ignore", {recommendationId: this.recommendation.id});
 	}
 }
 
