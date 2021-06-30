@@ -19,9 +19,9 @@
         <testsuite name="unit">
             <directory>tests/Backend/Unit</directory>
         </testsuite>
-        <!--testsuite name="functional">
+        <testsuite name="functional">
 						<directory>tests/Backend/Functional</directory>
-        </testsuite-->
+        </testsuite>
     </testsuites>
 
     <filter>
