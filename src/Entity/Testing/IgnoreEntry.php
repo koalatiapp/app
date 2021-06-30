@@ -276,32 +276,26 @@ class IgnoreEntry implements MercureEntityInterface
 	{
 		$entryScopeType = $this->getScopeType();
 
-		switch ($scope) {
-			case TopicBuilder::SCOPE_PROJECT:
-				return match ($entryScopeType) {
-					'user' => $this->getTargetUser()->getPersonalProjects(),
-					'project' => $this->getTargetProject(),
-					'page' => $this->getTargetPage()->getProject(),
-					default => null,
-				};
-
-			case TopicBuilder::SCOPE_USER:
-				return match ($entryScopeType) {
-					'user' => $this->getTargetUser(),
-					'project' => $this->getTargetProject()->getOwnerUser(),
-					'page' => $this->getTargetPage()->getProject()->getOwnerUser(),
-					default => null,
-				};
-
-			case TopicBuilder::SCOPE_ORGANIZATION:
-				return match ($entryScopeType) {
-					'organization' => $this->getTargetOrganization(),
-					'project' => $this->getTargetProject()->getOwnerOrganization(),
-					'page' => $this->getTargetPage()->getProject()->getOwnerOrganization(),
-					default => null,
-				};
-		}
-
-		return null;
+		return match ($scope) {
+			TopicBuilder::SCOPE_PROJECT => match ($entryScopeType) {
+				'user' => $this->getTargetUser()->getPersonalProjects(),
+				'project' => $this->getTargetProject(),
+				'page' => $this->getTargetPage()->getProject(),
+				default => null,
+			},
+			TopicBuilder::SCOPE_USER => match ($entryScopeType) {
+				'user' => $this->getTargetUser(),
+				'project' => $this->getTargetProject()->getOwnerUser(),
+				'page' => $this->getTargetPage()->getProject()->getOwnerUser(),
+				default => null,
+			},
+			TopicBuilder::SCOPE_ORGANIZATION => match ($entryScopeType) {
+				'organization' => $this->getTargetOrganization(),
+				'project' => $this->getTargetProject()->getOwnerOrganization(),
+				'page' => $this->getTargetPage()->getProject()->getOwnerOrganization(),
+				default => null,
+			},
+			default => null
+		};
 	}
 }
