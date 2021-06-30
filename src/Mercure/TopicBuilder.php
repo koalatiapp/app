@@ -41,21 +41,18 @@ class TopicBuilder
 	public function getEntityGenericTopic(MercureEntityInterface | string $entity, string $scope, ?int $scopeId = null): ?string
 	{
 		$entityTopics = $entity::getMercureTopics();
-		$topicTemplate = $entityTopics[$scope][0];
-		$scopeProperty = $entityTopics[$scope][1] ?? null;
+		$topicTemplate = $entityTopics[$scope];
 
-		if (!$scopeProperty) {
+		if (!str_contains($topicTemplate, '{scope}')) {
 			return $topicTemplate;
 		}
 
 		if (!$scopeId) {
-			$scopeEntity = $entity->$scopeProperty();
+			$scopeId = $entity->getMercureScope($scope)?->getId();
 
-			if (!$scopeEntity) {
+			if (!$scopeId) {
 				return null;
 			}
-
-			$scopeId = $scopeEntity->getId();
 		}
 
 		return str_replace('{scope}', $scope.'/'.$this->getScopeUid($scope, $scopeId), $topicTemplate);

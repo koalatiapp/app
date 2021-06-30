@@ -19,16 +19,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 class IgnoreEntry implements MercureEntityInterface
 {
-	public static function getMercureTopics(): array
-	{
-		return [
-			TopicBuilder::SCOPE_SPECIFIC => ['http://koalati/ignore-entry/{id}'],
-			TopicBuilder::SCOPE_PROJECT => ['http://koalati/{scope}/ignore-entry/{id}', 'getTargetProject'],
-			TopicBuilder::SCOPE_USER => ['http://koalati/{scope}/ignore-entry/{id}', 'getTargetUser'],
-			TopicBuilder::SCOPE_ORGANIZATION => ['http://koalati/{scope}/ignore-entry/{id}', 'getTargetOrganization'],
-		];
-	}
-
 	/**
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
@@ -266,5 +256,53 @@ class IgnoreEntry implements MercureEntityInterface
 		$this->recommendationTitle = $recommendationTitle;
 
 		return $this;
+	}
+
+	/*
+	 * Mercure implementation (MercureEntityInterface)
+	 */
+
+	public static function getMercureTopics(): array
+	{
+		return [
+			TopicBuilder::SCOPE_SPECIFIC => 'http://koalati/ignore-entry/{id}',
+			TopicBuilder::SCOPE_PROJECT => 'http://koalati/{scope}/ignore-entry/{id}',
+			TopicBuilder::SCOPE_USER => 'http://koalati/{scope}/ignore-entry/{id}',
+			TopicBuilder::SCOPE_ORGANIZATION => 'http://koalati/{scope}/ignore-entry/{id}',
+		];
+	}
+
+	public function getMercureScope(string $scope): ?object
+	{
+		$entryScopeType = $this->getScopeType();
+
+		switch ($scope) {
+			case TopicBuilder::SCOPE_PROJECT:
+				// @TODO: In such situations, it should be acceptable to return an array (or collection) of scopes. The TopicBuilder and UpdateDispatcher should handle them too.
+				// "user" => $this->getTargetUser()->getPersonalProjects(),
+				return match ($entryScopeType) {
+					'project' => $this->getTargetProject(),
+					'page' => $this->getTargetPage()->getProject(),
+					default => null,
+				};
+
+			case TopicBuilder::SCOPE_USER:
+				return match ($entryScopeType) {
+					'user' => $this->getTargetUser(),
+					'project' => $this->getTargetProject()->getOwnerUser(),
+					'page' => $this->getTargetPage()->getProject()->getOwnerUser(),
+					default => null,
+				};
+
+			case TopicBuilder::SCOPE_ORGANIZATION:
+				return match ($entryScopeType) {
+					'organization' => $this->getTargetOrganization(),
+					'project' => $this->getTargetProject()->getOwnerOrganization(),
+					'page' => $this->getTargetPage()->getProject()->getOwnerOrganization(),
+					default => null,
+				};
+		}
+
+		return null;
 	}
 }
