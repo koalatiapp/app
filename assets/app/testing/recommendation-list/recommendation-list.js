@@ -1,10 +1,10 @@
 import escapeHtml  from "escape-html";
 import { html, css } from "lit";
-import { NbList } from "../../../native-bear";
+import { AbstractDynamicList } from "../../abstract-dynamic-list";
 import Modal from "../../../utils/modal";
 import fontawesomeImport from "../../../utils/fontawesome-import";
 
-export class RecommendationList extends NbList {
+export class RecommendationList extends AbstractDynamicList {
 	static get styles()
 	{
 		return [
@@ -120,23 +120,9 @@ export class RecommendationList extends NbList {
 		`;
 	}
 
-	firstUpdated()
+	fetchListData()
 	{
-		this.fetchRecommendations();
-	}
-
-	fetchRecommendations()
-	{
-		const url = Routing.generate("api_testing_recommendation_groups", {projectId: this.projectId});
-
-		fetch(url)
-			.then(response => response.json())
-			.then(response => {
-				if (response.status != "ok") {
-					throw new Error(`Received invalid response from the API's api_testing_recommendation_groups route: ${JSON.stringify(response)}`);
-				}
-				this.items = Object.values(response.data);
-			});
+		super.fetchListData("api_testing_recommendation_groups", { projectId: this.projectId });
 	}
 
 	_markItemAsCompletedCallback(completedItem)
