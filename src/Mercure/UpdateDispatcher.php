@@ -13,11 +13,55 @@ use Symfony\Component\Messenger\MessageBusInterface;
 class UpdateDispatcher
 {
 	/**
+	 * @var array<int,\Symfony\Component\Mercure\Update>
+	 */
+	private array $pendingUpdates = [];
+
+	/**
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.bus)
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.topicBuilder)
 	 */
 	public function __construct(private TopicBuilder $topicBuilder, private MessageBusInterface $bus)
 	{
+	}
+
+	/**
+	 * Generates Mercure updates for every configured topic of an entity, and keeps
+	 * them to be sent later.
+	 *
+	 * This is meant to be used in conjonction with `dispatchPreparedUpdates()`
+	 *
+	 * The main use case for this feature is preparing updates about an entity that
+	 * is being deleted. Seeing as the update generation needs to access the entity
+	 * prior to deletion, updates must be prepared before the deletion is flushed,
+	 * and sent only afterwards.
+	 *
+	 * @param array<mixed,mixed> $data
+	 * @param string|null        $specificScope Specific scope for which to dispatch the update. Uses all scopes when `null`.
+	 */
+	public function prepare(MercureEntityInterface $entity, array $data, ?string $specificScope = null): void
+	{
+		foreach ($this->generateUpdates($entity, $data, $specificScope) as $update) {
+			$this->pendingUpdates[] = $update;
+		}
+	}
+
+	/**
+	 * Dispatches all previously prepared but not yet sent updates.
+	 *
+	 * @return array<int,\Symfony\Component\Messenger\Envelope>
+	 */
+	public function dispatchPreparedUpdates(): array
+	{
+		$envelopes = [];
+
+		foreach ($this->pendingUpdates as $update) {
+			$envelopes[] = $this->bus->dispatch($update);
+		}
+
+		$this->pendingUpdates = [];
+
+		return $envelopes;
 	}
 
 	/**

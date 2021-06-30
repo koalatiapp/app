@@ -119,11 +119,13 @@ class IgnoreEntriesController extends AbstractApiController
 			return $this->accessDenied();
 		}
 
+		$this->updateDispatcher->prepare($entry, ['id' => $id]);
+
 		$em = $this->getDoctrine()->getManager();
 		$em->remove($entry);
 		$em->flush();
 
-		$this->updateDispatcher->dispatch($entry, ['id' => $id]);
+		$this->updateDispatcher->dispatchPreparedUpdates();
 
 		return $this->apiSuccess();
 	}
