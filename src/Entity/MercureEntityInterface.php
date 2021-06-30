@@ -35,6 +35,8 @@ interface MercureEntityInterface
 	 * - `TopicBuilder::SCOPE_PROJECT`
 	 * - `TopicBuilder::SCOPE_USER`
 	 * - `TopicBuilder::SCOPE_ORGANIZATION`
+	 *
+	 * @return object|array<int,object>|null
 	 */
-	public function getMercureScope(string $scope): ?object;
+	public function getMercureScope(string $scope): object | array | null;
 }

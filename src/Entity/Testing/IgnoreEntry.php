@@ -272,15 +272,14 @@ class IgnoreEntry implements MercureEntityInterface
 		];
 	}
 
-	public function getMercureScope(string $scope): ?object
+	public function getMercureScope(string $scope): object | array | null
 	{
 		$entryScopeType = $this->getScopeType();
 
 		switch ($scope) {
 			case TopicBuilder::SCOPE_PROJECT:
-				// @TODO: In such situations, it should be acceptable to return an array (or collection) of scopes. The TopicBuilder and UpdateDispatcher should handle them too.
-				// "user" => $this->getTargetUser()->getPersonalProjects(),
 				return match ($entryScopeType) {
+					'user' => $this->getTargetUser()->getPersonalProjects(),
 					'project' => $this->getTargetProject(),
 					'page' => $this->getTargetPage()->getProject(),
 					default => null,

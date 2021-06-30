@@ -106,7 +106,10 @@ class UpdateDispatcher
 				continue;
 			}
 
-			$updates[] = new Update($topic, json_encode($data));
+			$topics = (array) $topic;
+			foreach ($topics as $topic) {
+				$updates[] = new Update($topic, json_encode($data));
+			}
 		}
 
 		return $updates;
