@@ -107,7 +107,7 @@ export class NbRadioList extends LitElement {
 
 	get input()
 	{
-		return this.shadowRoot.querySelector("input:checked, input");
+		return this.shadowRoot.querySelector("input:checked") ?? this.shadowRoot.querySelector("input");
 	}
 
 	firstUpdated()
@@ -150,7 +150,7 @@ export class NbRadioList extends LitElement {
 		let hash = 0;
 
 		for (let i = 0; i < optionValue.length; i++) {
-			hash  = ((hash << 5) - hash) + optionValue.charCodeAt(i);
+			hash = ((hash << 5) - hash) + optionValue.charCodeAt(i);
 			hash |= 0;
 		}
 
