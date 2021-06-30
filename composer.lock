@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b2530f28bc117fa2c98e2a23c18447cc",
+    "content-hash": "2020aab19882f4d622d7ee82cda5eb6c",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -9569,16 +9569,16 @@
         },
         {
             "name": "pdepend/pdepend",
-            "version": "2.9.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pdepend/pdepend.git",
-                "reference": "1632f0cee84512ffd6dde71e58536b3b06528c41"
+                "reference": "9175f820e0b34529509a2d73d821c937ae642540"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pdepend/pdepend/zipball/1632f0cee84512ffd6dde71e58536b3b06528c41",
-                "reference": "1632f0cee84512ffd6dde71e58536b3b06528c41",
+                "url": "https://api.github.com/repos/pdepend/pdepend/zipball/9175f820e0b34529509a2d73d821c937ae642540",
+                "reference": "9175f820e0b34529509a2d73d821c937ae642540",
                 "shasum": ""
             },
             "require": {
@@ -9593,6 +9593,7 @@
                 "phpunit/phpunit": "^4.8.36|^5.7.27",
                 "squizlabs/php_codesniffer": "^2.0.0"
             },
+            "default-branch": true,
             "bin": [
                 "src/bin/pdepend"
             ],
@@ -9614,7 +9615,7 @@
             "description": "Official version of pdepend to be handled with Composer",
             "support": {
                 "issues": "https://github.com/pdepend/pdepend/issues",
-                "source": "https://github.com/pdepend/pdepend/tree/2.9.1"
+                "source": "https://github.com/pdepend/pdepend/tree/master"
             },
             "funding": [
                 {
@@ -9622,7 +9623,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-04-15T21:36:28+00:00"
+            "time": "2021-06-27T10:43:02+00:00"
         },
         {
             "name": "php-cs-fixer/diff",
@@ -10390,7 +10391,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "pdepend/pdepend": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
