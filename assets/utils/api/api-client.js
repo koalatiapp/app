@@ -22,8 +22,15 @@ class ApiClient {
 	 */
 	_resolveRouteUrl(method, endpoint, body = {})
 	{
+		let routeParams = body;
+
+		if (body instanceof FormData) {
+			routeParams = {};
+			body.forEach((value, key) => routeParams[key] = value);
+		}
+
 		method = method.trim().toUpperCase();
-		return Routing.generate(endpoint, ["GET", "DELETE"].includes(method) ? body : {});
+		return Routing.generate(endpoint, ["GET", "DELETE", "PUT"].includes(method) ? routeParams : {});
 	}
 
 	/**
