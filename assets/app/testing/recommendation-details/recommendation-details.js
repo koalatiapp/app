@@ -2,6 +2,7 @@ import escapeHtml  from "escape-html";
 import { LitElement, html, css } from "lit";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import stylesReset from "../../../native-bear/styles-reset.js";
+import { ApiClient } from "../../../utils/api/index.js";
 import faImport from "../../../utils/fontawesome-import";
 
 export class RecommendationDetails extends LitElement {
@@ -119,27 +120,18 @@ export class RecommendationDetails extends LitElement {
 		`;
 	}
 
-	get contentUrl()
-	{
-		return Routing.generate("api_testing_recommendation_group", {recommendationId: this.recommendationId});
-	}
-
 	_loadRecommendationGroup()
 	{
 		this._loading = true;
 
 		return new Promise(resolve => {
-			fetch(this.contentUrl)
-				.then(response => response.json())
+			ApiClient.get("api_testing_recommendation_group_details", { id: this.recommendationId }, null)
 				.then(response => {
-					this._loading = false;
-
-					if (response.status == "ok") {
-						resolve(response.data);
-						return;
-					}
-
+					resolve(response.data);
+				}).catch(() => {
 					resolve(null);
+				}).finally(() => {
+					this._loading = false;
 				});
 		});
 	}

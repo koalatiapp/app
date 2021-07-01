@@ -123,7 +123,7 @@ export class RecommendationList extends AbstractDynamicList {
 
 	fetchListData()
 	{
-		super.fetchListData("api_testing_recommendation_groups", { projectId: this.projectId });
+		super.fetchListData("api_testing_recommendation_group_list", { project_id: this.projectId });
 	}
 
 	_markItemAsCompletedCallback(completedItem)
@@ -131,7 +131,7 @@ export class RecommendationList extends AbstractDynamicList {
 		completedItem._pendingCompletion = true;
 		this.requestUpdate("items");
 
-		ApiClient.put("api_testing_recommendation_group_complete", { recommendationId: completedItem.sampleId }, null).then(() => {
+		ApiClient.put("api_testing_recommendation_group_complete", { id: completedItem.sampleId }, null).then(() => {
 			this.items = this.items.filter(item => item !== completedItem);
 		});
 	}
