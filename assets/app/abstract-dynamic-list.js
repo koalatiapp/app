@@ -38,7 +38,7 @@ export class AbstractDynamicList extends NbList {
 	fetchListData(endpoint, body = {})
 	{
 		ApiClient.get(endpoint, body).then(response => {
-			this.items = response.data;
+			this.items = Array.isArray(response.data) ? response.data : Object.values(response.data);
 
 			// Subscribe to live updates
 			const mercureTopic = response._response.headers.get("suggested-mercure-topic");
