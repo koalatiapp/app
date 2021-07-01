@@ -3,6 +3,7 @@ import { html, css } from "lit";
 import { AbstractDynamicList } from "../../abstract-dynamic-list";
 import Modal from "../../../utils/modal";
 import fontawesomeImport from "../../../utils/fontawesome-import";
+import { ApiClient } from "../../../utils/api";
 
 export class RecommendationList extends AbstractDynamicList {
 	static get styles()
@@ -130,15 +131,9 @@ export class RecommendationList extends AbstractDynamicList {
 		completedItem._pendingCompletion = true;
 		this.requestUpdate("items");
 
-		const endpointUrl = Routing.generate("api_testing_recommendation_group_complete", {recommendationId: completedItem.sampleId});
-		fetch(endpointUrl, { method: "PUT" })
-			.then(response => response.json())
-			.then(response => {
-				if (response.status != "ok") {
-					throw new Error(`Received invalid response from the API's api_testing_recommendation_group_complete route: ${JSON.stringify(response)}`);
-				}
-				this.items = this.items.filter(item => item !== completedItem);
-			});
+		ApiClient.put("api_testing_recommendation_group_complete", { recommendationId: completedItem.sampleId }, null).then(() => {
+			this.items = this.items.filter(item => item !== completedItem);
+		});
 	}
 
 	_ignoreRecommendation(item)
