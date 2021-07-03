@@ -1,0 +1,25 @@
+{% extends 'app_base.html.twig' %}
+
+{% block title %}{% trans %}project_settings.automated_testing.title{% endtrans %}{% endblock %}
+{% block section_title %}{{ 'generic.project_section_title'|trans({'%name%': project.name}) }}{% endblock %}
+
+{% block page_tabs %}
+	{% include 'app/project/settings/_tabs.html.twig' %}
+{% endblock %}
+
+{% block body %}
+	<tabbed-container>
+		<div id="ignored">
+			<h2>{% trans %}project_settings.automated_testing.tabs.ignored_recommendations{% endtrans %}</h2>
+			<recommendation-ignore-list projectId="{{ project.id }}" light></recommendation-ignore-list>
+		</div>
+		<div id="tools">
+			<h2>{% trans %}project_settings.automated_testing.tabs.tools{% endtrans %}</h2>
+
+		</div>
+	</tabbed-container>
+{% endblock %}
+
+{% block javascripts %}
+	{{ encore_entry_script_tags('testing') }}
+{% endblock %}

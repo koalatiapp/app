@@ -20,18 +20,18 @@ class ProjectSettingsType extends AbstractType
 	{
 		$builder
 			->add('name', TextType::class, [
-				'label' => 'project_settings.form.field.name.label',
+				'label' => 'project_settings.project.form.field.name.label',
 				'attr' => ['placeholder' => 'project_settings.form.field.name.placeholder', 'class' => 'medium'],
 			])
 			->add('url', UrlType::class, [
-				'label' => 'project_settings.form.field.url.label',
+				'label' => 'project_settings.project.form.field.url.label',
 				'attr' => ['placeholder' => 'project_settings.form.field.url.placeholder', 'class' => 'medium'],
 			])
 			->add('save', SubmitType::class, [
-				'label' => 'project_settings.form.submit_label',
+				'label' => 'project_settings.project.form.submit_label',
 			])
 			->add('deleteConfirmation', CheckboxType::class, [
-				'label' => 'project_settings.delete.confirmation_label',
+				'label' => 'project_settings.project.delete.confirmation_label',
 				'label_translation_parameters' => [
 					'%name%' => $builder->getData()->getName(),
 				],
@@ -39,7 +39,7 @@ class ProjectSettingsType extends AbstractType
 				'mapped' => false,
 			])
 			->add('delete', SubmitType::class, [
-				'label' => 'project_settings.delete.button_label',
+				'label' => 'project_settings.project.delete.button_label',
 				'attr' => ['color' => 'danger'],
 			]);
 	}

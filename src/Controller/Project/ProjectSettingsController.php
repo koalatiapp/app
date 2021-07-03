@@ -7,6 +7,7 @@ use App\Form\Project\ProjectSettingsType;
 use App\Message\FaviconRequest;
 use App\Message\ScreenshotRequest;
 use App\Message\SitemapRequest;
+use App\Util\Testing\AvailableToolsFetcher;
 use App\Util\Url;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
@@ -17,6 +18,36 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ProjectSettingsController extends AbstractProjectController
 {
+	/**
+	 * @Route("/project/{id}/settings/team", name="project_settings_team")
+	 */
+	public function teamSettings(int $id): Response
+	{
+		$project = $this->getProject($id);
+
+		return $this->render('app/project/settings/team.html.twig', ['project' => $project]);
+	}
+
+	/**
+	 * @Route("/project/{id}/settings/checklist", name="project_settings_checklist")
+	 */
+	public function checklistSettings(int $id): Response
+	{
+		$project = $this->getProject($id);
+
+		return $this->render('app/project/settings/checklist.html.twig', ['project' => $project]);
+	}
+
+	/**
+	 * @Route("/project/{id}/settings/automated-testing", name="project_settings_automated_testing")
+	 */
+	public function automatedTestingSettings(int $id, AvailableToolsFetcher $availableToolsFetcher): Response
+	{
+		$project = $this->getProject($id);
+
+		return $this->render('app/project/settings/automated-testing.html.twig', ['project' => $project, 'tools' => $availableToolsFetcher->getTools()]);
+	}
+
 	/**
 	 * @Route("/project/{id}/settings", name="project_settings")
 	 */
@@ -39,12 +70,12 @@ class ProjectSettingsController extends AbstractProjectController
 					$em->remove($project);
 					$em->flush();
 
-					$this->addFlash('success', $translator->trans('project_settings.flash.deleted_successfully', ['%name%' => $project->getName()]));
+					$this->addFlash('success', $translator->trans('project_settings.project.flash.deleted_successfully', ['%name%' => $project->getName()]));
 
 					return $this->redirectToRoute('dashboard');
 				}
 
-				$form->get('deleteConfirmation')->addError(new FormError($translator->trans('project_settings.delete.error_confirmation')));
+				$form->get('deleteConfirmation')->addError(new FormError($translator->trans('project_settings.project.delete.error_confirmation')));
 			}
 			// Handle the good old form settings form regularly
 			elseif ($form->isValid()) {
@@ -52,7 +83,7 @@ class ProjectSettingsController extends AbstractProjectController
 			}
 		}
 
-		return $this->render('app/project/settings.html.twig', [
+		return $this->render('app/project/settings/project.html.twig', [
 			'project' => $project,
 			'form' => $form->createView(),
 		]);
@@ -65,7 +96,7 @@ class ProjectSettingsController extends AbstractProjectController
 
 		// Check if the provided website URL exists
 		if ($urlHasChanged && !$urlHelper->exists($websiteUrl)) {
-			$form->get('url')->addError(new FormError($translator->trans('project_settings.form.field.url.error_unreachable')));
+			$form->get('url')->addError(new FormError($translator->trans('project_settings.project.form.field.url.error_unreachable')));
 		}
 
 		if ($form->isValid()) {
@@ -74,7 +105,7 @@ class ProjectSettingsController extends AbstractProjectController
 			$em->persist($project);
 			$em->flush();
 
-			$this->addFlash('success', $translator->trans('project_settings.flash.updated_successfully', ['%name%' => $project->getName()]));
+			$this->addFlash('success', $translator->trans('project_settings.project.flash.updated_successfully', ['%name%' => $project->getName()]));
 
 			if ($urlHasChanged) {
 				$this->dispatchMessage(new ScreenshotRequest($project->getId()));

@@ -1,0 +1,6 @@
+{% include 'app/_parts/page_tabs.html.twig' with {page_tabs: [
+	{label: 'project_settings.tabs.project', route: 'project_settings', route_params: {id: project.id}},
+	{label: 'project_settings.tabs.team', route: 'project_settings_team', route_params: {id: project.id}},
+	{label: 'project_settings.tabs.automated_testing', route: 'project_settings_automated_testing', route_params: {id: project.id}},
+	{label: 'project_settings.tabs.checklist', route: 'project_settings_checklist', route_params: {id: project.id}},
+]} %}

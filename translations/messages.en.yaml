@@ -145,34 +145,53 @@ project_testing:
     title: Automated testing
 
 project_settings:
-    title: Project settings
     tabs:
+        project: Project
         basic_information: Basic information
         team: Team and roles
         automated_testing: Automated testing
         checklist: Checklist
         delete: Deletion
-    form:
-        title: Website information
-        submit_label: Update project
-        field:
-            name:
-                label: Project name
-                placeholder: My awesome project
-            url:
-                label: Website URL
-                placeholder: www.domain.com
-                error_unreachable: This URL is invalid or unreachable.
-            ignore:
-                label: Manage ignored recommendations
-    delete:
-        warning_text: "Warning: once you delete a project, there is no turning back. The project will be deleted instantly, and all of its related data will be removed as well. This cannot be undone."
-        confirmation_label: I am certain that I want to delete the project "%name%".
-        button_label: Delete this project
-        error_confirmation: You must check this box to proceed with the deletion of this project.
-    flash:
-        updated_successfully: Your project "%name%" has been updated successfully!
-        deleted_successfully: Your project "%name%" has been deleted successfully!
+    project:
+        title: Project settings
+        tabs:
+            basic_information: Basic information
+            delete: Deletion
+        form:
+            title: Website information
+            submit_label: Update project
+            field:
+                name:
+                    label: Project name
+                    placeholder: My awesome project
+                url:
+                    label: Website URL
+                    placeholder: www.domain.com
+                    error_unreachable: This URL is invalid or unreachable.
+                ignore:
+                    label: Manage ignored recommendations
+        delete:
+            warning_text: "Warning: once you delete a project, there is no turning back. The project will be deleted instantly, and all of its related data will be removed as well. This cannot be undone."
+            confirmation_label: I am certain that I want to delete the project "%name%".
+            button_label: Delete this project
+            error_confirmation: You must check this box to proceed with the deletion of this project.
+        flash:
+            updated_successfully: Your project "%name%" has been updated successfully!
+            deleted_successfully: Your project "%name%" has been deleted successfully!
+    team:
+        title: Team settings
+        tabs:
+            team: Team
+    automated_testing:
+        title: Automated testing settings
+        tabs:
+            tools: Tools
+            ignored_recommendations: Ignored
+    checklist:
+        title: Checklist settings
+        tabs:
+            checklist: Checklist
+
 
 entity:
     project:

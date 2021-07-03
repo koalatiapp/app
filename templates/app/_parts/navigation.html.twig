@@ -29,7 +29,7 @@
 							{% trans %}navigation.project.sublink.automated_testing{% endtrans %}
 						</a>
 					</li>
-					<li class="{{ current_route in ['project_settings'] ? 'active' : '' }}">
+					<li class="{{ current_route in ['project_settings', 'project_settings_team', 'project_settings_automated_testing', 'project_settings_checklist'] ? 'active' : '' }}">
 						<a href="{{ path('project_settings', {id: project.id}) }}">
 							{% trans %}navigation.project.sublink.settings{% endtrans %}
 						</a>

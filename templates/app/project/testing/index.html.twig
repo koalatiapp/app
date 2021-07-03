@@ -9,7 +9,7 @@
 {% block section_title %}{{ 'generic.project_section_title'|trans({'%name%': project.name}) }}{% endblock %}
 
 {% block page_actions %}
-	<nb-button href="{{ path("project_settings", {id: project.id}) }}#automated-testing" color="gray">
+	<nb-button href="{{ path("project_settings_automated_testing", {id: project.id}) }}#ignored" color="gray">
 		View testing preferences
 	</nb-button>
 	<request-testing-button projectId="{{ project.id }}">

@@ -1,0 +1,34 @@
+{% extends 'app_base.html.twig' %}
+
+{% block title %}{% trans %}project_settings.project.title{% endtrans %}{% endblock %}
+{% block section_title %}{{ 'generic.project_section_title'|trans({'%name%': project.name}) }}{% endblock %}
+
+{% block page_tabs %}
+	{% include 'app/project/settings/_tabs.html.twig' %}
+{% endblock %}
+
+{% block body %}
+	{{ form_start(form) }}
+		{% set submit_button = form_row(form.save) %}
+
+		<tabbed-container>
+			<div id="basic-information">
+				<h2>{% trans %}project_settings.project.tabs.basic_information{% endtrans %}</h2>
+				{{ form_row(form.name) }}
+				{{ form_row(form.url) }}
+				{{ submit_button|raw }}
+			</div>
+
+			<div id="delete">
+				<h2>{% trans %}project_settings.project.tabs.delete{% endtrans %}</h2>
+				<p>{% trans %}project_settings.project.delete.warning_text{% endtrans %}</p>
+				{{ form_row(form.deleteConfirmation) }}
+				{{ form_row(form.delete) }}
+			</div>
+		</tabbed-container>
+	{{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+	{{ encore_entry_script_tags('testing') }}
+{% endblock %}
