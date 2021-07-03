@@ -171,6 +171,10 @@ export class NbList extends LitElement {
 			return "";
 		}
 
+		if (this.page > pageCount + 1) {
+			this.page = pageCount + 1;
+		}
+
 		return html`
 			<div class="nb--list-pagination">
 				${[...Array(pageCount).keys()].map(i => html`
