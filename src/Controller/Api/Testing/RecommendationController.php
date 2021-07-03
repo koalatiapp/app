@@ -20,7 +20,7 @@ class RecommendationController extends AbstractApiController
 	 * Returns the list of recommendations for the project, grouped by type.
 	 *
 	 * Available query parameters:
-	 * - `project_id` - `int` (required)s
+	 * - `project_id` - `int` (required)
 	 *
 	 * @Route("/groups", methods={"GET","HEAD"}, name="group_list", options={"expose": true})
 	 */
