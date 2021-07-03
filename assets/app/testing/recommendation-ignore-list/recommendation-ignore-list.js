@@ -1,4 +1,3 @@
-import escapeHtml  from "escape-html";
 import { html, css } from "lit";
 import { ApiClient } from "../../../utils/api";
 import { AbstractDynamicList } from "../../abstract-dynamic-list";
@@ -40,7 +39,7 @@ export class RecommendationIgnoreList extends AbstractDynamicList {
 
 					return html`
 						<nb-markdown barebones>
-							<script type="text/markdown">${escapeHtml(strippedTitle)}</script>
+							<script type="text/markdown">${strippedTitle}</script>
 						</nb-markdown>
 						<div class="meta">
 							${Translator.trans("ignore_entry.listing.meta", {

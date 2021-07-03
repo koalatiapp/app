@@ -83,14 +83,14 @@ export class RecommendationDetails extends LitElement {
 			<div class="sample-recommendation-title">
 				<nb-markdown barebones>
 					<script type="text/markdown">
-						${escapeHtml(this.recommendationGroup.title)}
+						${this.recommendationGroup.title}
 					</script>
 				</nb-markdown>
 			</div>
 			<h3>${Translator.trans("recommendation.modal.description_heading")}</h3>
 			<nb-markdown>
 				<script type="text/markdown">
-					${escapeHtml(this.recommendationGroup.sample.parentResult.description)}
+					${this.recommendationGroup.sample.parentResult.description}
 				</script>
 			</nb-markdown>
 
@@ -150,7 +150,7 @@ export class RecommendationDetails extends LitElement {
 				${row.map(cellContent => html`<${tag}>
 					<nb-markdown barebones>
 						<script type="text/markdown">
-							${escapeHtml(cellContent)}
+							${cellContent}
 						</script>
 					</nb-markdown>
 				</${tag}>`)}
@@ -177,7 +177,7 @@ export class RecommendationDetails extends LitElement {
 				return html`<nb-markdown barebones>
 					<script type="text/markdown">
 						\`\`\`
-						${escapeHtml(snippet)}
+						${snippet}
 						\`\`\`
 					</script>
 				</nb-markdown>`;

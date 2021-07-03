@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import { login } from "../utilities";
 
 const stubTitle = "Add an alt attribute to all of your <img> tags to describe their content.";
-const stubTitleEscaped = "Add an alt attribute to all of your &lt;img&gt; tags to describe their content.";
+const stubTitleEscaped = "Add an alt attribute to all of your `<img>` tags to describe their content.";
 const stubDescriptionSnippet = "Alt text is a tenet of accessible web design."
 
 test("testing recommendations", async ({ page }) => {

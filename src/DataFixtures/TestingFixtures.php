@@ -48,7 +48,7 @@ class TestingFixtures extends Fixture implements DependentFixtureInterface
 				$recommendation = new Recommendation();
 				$recommendation->setType(Recommendation::TYPE_ISSUE)
 					->setUniqueName('images_alt_description_missing')
-					->setTemplate('Add an alt attribute to all of your <img> tags to describe their content.')
+					->setTemplate('Add an alt attribute to all of your `<img>` tags to describe their content.')
 					->setType(Recommendation::TYPE_ISSUE)
 					->setParentResult($result)
 					->setRelatedPage($page);

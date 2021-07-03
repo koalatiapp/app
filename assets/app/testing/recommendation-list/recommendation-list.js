@@ -1,4 +1,3 @@
-import escapeHtml  from "escape-html";
 import { html, css } from "lit";
 import { AbstractDynamicList } from "../../abstract-dynamic-list";
 import Modal from "../../../utils/modal";
@@ -45,7 +44,7 @@ export class RecommendationList extends AbstractDynamicList {
 
 					return html`
 						<nb-markdown barebones>
-							<script type="text/markdown">${escapeHtml(strippedTitle)}</script>
+							<script type="text/markdown">${strippedTitle}</script>
 						</nb-markdown>
 						<recommendation-details-link recommendationId=${item.sampleId}>
 							<i class="fad fa-circle-info"></i>&nbsp;
