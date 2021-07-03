@@ -87,7 +87,7 @@ class IgnoreEntriesController extends AbstractApiController
 		$em->persist($ignoreEntry);
 		$em->flush();
 
-		$this->updateDispatcher->dispatch($ignoreEntry, ['id' => $ignoreEntry->getId(), 'data' => $this->serializeData($ignoreEntry)]);
+		$this->updateDispatcher->dispatch($ignoreEntry, ['id' => $ignoreEntry->getId(), 'data' => $this->serializer->serialize($ignoreEntry)]);
 
 		return $this->apiSuccess($ignoreEntry);
 	}
