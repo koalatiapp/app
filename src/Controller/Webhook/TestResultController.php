@@ -2,47 +2,87 @@
 
 namespace App\Controller\Webhook;
 
+use App\Entity\Project;
 use App\Entity\Testing\Recommendation;
 use App\Entity\Testing\TestResult;
 use App\Entity\Testing\ToolResponse;
 use App\Exception\WebhookException;
+use App\Mercure\UpdateDispatcher;
 use App\Repository\PageRepository;
 use App\Repository\Testing\RecommendationRepository;
+use App\Util\ClientMessageSerializer;
+use App\Util\Testing\RecommendationGroup;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mercure\Update;
-use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class TestResultController extends AbstractController
 {
 	/**
+	 * @var array<int,Project>
+	 */
+	private array $updatedProjectsByPageId = [];
+
+	/**
+	 * @var array<int,array<string,Recommendation>>
+	 */
+	private array $completedRecommendations = [];
+
+	/**
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+	 */
+	public function __construct(
+		private RecommendationRepository $recommendationRepository,
+		private PageRepository $pageRepository,
+		private UpdateDispatcher $updateDispatcher,
+		private ClientMessageSerializer $serializer,
+	) {
+	}
+
+	/**
 	 * @Route("/webhook/test-result", name="webhook_test_result")
 	 */
-	public function testResult(Request $request, MessageBusInterface $bus, RecommendationRepository $recommendationRepository, PageRepository $pageRepository): Response
+	public function testResult(Request $request): Response
 	{
 		$payload = $this->getPayload($request);
 		// @TODO: add handling of tool responses where `$payload["success"]` is false
 		// @TODO: add a security check to webhook to ensure it comes from a legit source. This should probably be done via the firewall.
-		$toolResponse = $this->processToolResponse($payload, $recommendationRepository, $pageRepository);
+		$this->processToolResponse($payload);
 
 		// Communicate the new data to subscribed clients
-		$mercureUpdate = $this->generateClientUpdate($toolResponse);
-		$bus->dispatch($mercureUpdate);
+		$this->dispatchClientUpdates();
 
 		return new Response('The webhook request was handled successfully.');
 	}
 
-	private function generateClientUpdate(ToolResponse $toolResponse): Update
+	private function dispatchClientUpdates(): void
 	{
-		// @TODO: Implement Mercure update generation for tool results
+		$em = $this->getDoctrine()->getManager();
 
-		return new Update(
-			'http://koalati.com/test-result/',
-			json_encode($toolResponse->getId())
-		);
+		foreach ($this->updatedProjectsByPageId as $project) {
+			$em->refresh($project);
+			$completedRecommendations = $this->completedRecommendations[$project->getId()] ?? [];
+
+			// Process updates and creations
+			foreach ($project->getActiveRecommendationGroups() as $group) {
+				$this->updateDispatcher->prepare($group, ['id' => $group->getId(), 'data' => $this->serializer->serialize($group)]);
+				unset($completedRecommendations[$group->getUniqueName()]);
+			}
+
+			// Process completions
+			foreach ($completedRecommendations as $completedRecommendation) {
+				$group = new RecommendationGroup(new ArrayCollection([$completedRecommendation]));
+				$this->updateDispatcher->prepare($group, ['id' => $group->getId()]);
+			}
+		}
+
+		$this->updateDispatcher->dispatchPreparedUpdates();
 	}
 
 	/**
@@ -52,15 +92,15 @@ class TestResultController extends AbstractController
 	 *
 	 * @return ToolResponse toolResponse instance containing all of the extracted test results and recommendations
 	 */
-	private function processToolResponse(array $payload, RecommendationRepository $recommendationRepository, PageRepository $pageRepository): ToolResponse
+	private function processToolResponse(array $payload): ToolResponse
 	{
 		$now = new DateTime();
 		$em = $this->getDoctrine()->getManager();
 
 		// Generate the base tool response
 		$toolResponse = $this->createToolResponse($payload);
-		$matchingPages = $pageRepository->findByUrls([$toolResponse->getUrl()]);
-		$existingRecommendations = $this->getExistingRecommendations($toolResponse, $recommendationRepository);
+		$matchingPages = $this->pageRepository->findByUrls([$toolResponse->getUrl()]);
+		$existingRecommendations = $this->getExistingRecommendations($toolResponse);
 
 		foreach ($payload['results'] as $rawResult) {
 			$testResult = $this->createTestResult($rawResult);
@@ -88,8 +128,11 @@ class TestResultController extends AbstractController
 						->setUniqueName($recommendationUniqueName)
 						->setParentResult($testResult)
 						->setRelatedPage($page)
+						->setIsCompleted(false)
 						->setDateLastOccured($now);
 					$em->persist($recommendation);
+
+					$this->updatedProjectsByPageId[$page->getId()] = $page->getProject();
 
 					unset($existingRecommendations[$matchingIdentifier]);
 				}
@@ -100,6 +143,7 @@ class TestResultController extends AbstractController
 		foreach ($existingRecommendations as $oldRecommendation) {
 			$oldRecommendation->setDateCompleted($now);
 			$em->persist($oldRecommendation);
+			$this->completedRecommendations[$oldRecommendation->getProject()->getId()][$oldRecommendation->getUniqueName()] = $oldRecommendation;
 		}
 
 		$em->persist($toolResponse);
@@ -114,9 +158,9 @@ class TestResultController extends AbstractController
 	 *
 	 * @return array<string,Recommendation>
 	 */
-	private function getExistingRecommendations(ToolResponse $toolResponse, RecommendationRepository $recommendationRepository): array
+	private function getExistingRecommendations(ToolResponse $toolResponse): array
 	{
-		$existingRecommendations = $recommendationRepository->findFromToolResponse($toolResponse);
+		$existingRecommendations = $this->recommendationRepository->findFromToolResponse($toolResponse);
 		$recommendations = [];
 
 		foreach ($existingRecommendations as $recommendation) {
