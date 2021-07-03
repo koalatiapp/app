@@ -101,8 +101,7 @@ ignore_entry:
         title: Recommendation
         scope: Ignored in
         tool: Tool
-        date_created: Ignored since
-        created_by: Ignored by
+        meta: Ignored by %user% on %date%
 
 dashboard:
     title: Dashboard
