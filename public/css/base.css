@@ -36,3 +36,5 @@ a.text-link:hover { color: var(--color-gray-dark); }
 ul.bullet-list { padding-left: 1rem; list-style: disc; }
 ul.bullet-list li { line-height: 1.5; }
 ul.bullet-list li + li { margin-top: .5em; }
+
+*:not(:defined) { display: none; }
