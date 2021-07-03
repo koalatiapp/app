@@ -35,6 +35,10 @@ export class AbstractDynamicList extends NbList {
 		this.fetchListData();
 	}
 
+	/**
+	 * @param {string} endpoint
+	 * @param {FormData|object} body
+	 */
 	fetchListData(endpoint, body = {})
 	{
 		ApiClient.get(endpoint, body).then(response => {
@@ -45,6 +49,16 @@ export class AbstractDynamicList extends NbList {
 			if (mercureTopic) {
 				ApiClient.subscribe(mercureTopic, update => {
 					if (update.data) {
+						for (const index in this.items) {
+							if (this.items[index].id == update.id) {
+								const updatedList = [...this.items];
+								updatedList[index] = update.data;
+								this.items = updatedList;
+								return;
+							}
+						}
+
+						// If we got here, it means the item wasn't found - add it to the list.
 						this.items = this.items.concat([update.data]);
 					} else {
 						this.items = this.items.filter(item => item.id != update.id);
