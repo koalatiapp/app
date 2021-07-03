@@ -86,6 +86,6 @@ class TopicBuilder
 
 	private function getScopeUid(string $scope, int $scopeId): string
 	{
-		return hash('adler32', $scope.'-'.$scopeId);
+		return md5($scope.'-'.$scopeId);
 	}
 }

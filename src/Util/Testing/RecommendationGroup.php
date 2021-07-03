@@ -2,9 +2,11 @@
 
 namespace App\Util\Testing;
 
+use App\Entity\MercureEntityInterface;
 use App\Entity\Testing\Recommendation;
 use App\Entity\User;
 use App\Exception\WrongRecommendationTypeException;
+use App\Mercure\TopicBuilder;
 use Countable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -12,7 +14,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * A group of recommendations of the same type.
  */
-class RecommendationGroup implements Countable
+class RecommendationGroup implements Countable, MercureEntityInterface
 {
 	/**
 	 * @var ArrayCollection<int, Recommendation>
@@ -161,5 +163,90 @@ class RecommendationGroup implements Countable
 		}
 
 		return $groups;
+	}
+
+	/*
+	 * Mercure implementation (MercureEntityInterface)
+	 */
+
+	public static function getMercureTopics(): array
+	{
+		return [
+			TopicBuilder::SCOPE_SPECIFIC => 'http://koalati/recommendation-group/{id}',
+			TopicBuilder::SCOPE_PROJECT => 'http://koalati/{scope}/recommendation-group/{id}',
+			TopicBuilder::SCOPE_USER => 'http://koalati/{scope}/recommendation-group/{id}',
+			TopicBuilder::SCOPE_ORGANIZATION => 'http://koalati/{scope}/recommendation-group/{id}',
+		];
+	}
+
+	public function getMercureScope(string $scope): object | array | null
+	{
+		$sample = $this->getSample();
+		$project = $sample?->getProject();
+
+		return match ($scope) {
+			TopicBuilder::SCOPE_PROJECT => $project,
+			TopicBuilder::SCOPE_USER => $project?->getOwnerUser(),
+			TopicBuilder::SCOPE_ORGANIZATION => $project?->getOwnerOrganization(),
+			default => null
+		};
+	}
+
+	/**
+	 * @Groups({"default"})
+	 */
+	public function getId(): string
+	{
+		return $this->getUniqueMatchingIdentifier();
+	}
+
+	/**
+	 * Returns an identifier can be used to easily group together identical recommendations
+	 * that affect different pages within a project.
+	 *
+	 * The resulting value is a simple MD5 hash of the serialized values.
+	 */
+	public function getUniqueMatchingIdentifier(): string
+	{
+		$sample = $this->getSample();
+		$parentResponse = $sample->getParentResult()->getParentResponse();
+
+		return static::generateGroupMatchingIdentifier(
+			$sample->getProject()->getId(),
+			$parentResponse->getTool(),
+			$sample->getUniqueName()
+		);
+	}
+
+	/**
+	 * Returns an identifier can be used to easily group together identical recommendations
+	 * that affect different pages within a project.
+	 *
+	 * The resulting value is a simple MD5 hash of the serialized values.
+	 */
+	public static function generateGroupMatchingIdentifier(int $projectId, string $toolName, string $recommendationUniqueName): string
+	{
+		return md5(serialize([
+			$projectId,
+			$toolName,
+			$recommendationUniqueName,
+		]));
+	}
+
+	/**
+	 * Returns an identifier can be used to easily group together identical recommendations
+	 * that affect different pages within a project.
+	 *
+	 * The resulting value is a simple MD5 hash of the serialized values.
+	 */
+	public static function generateGroupMatchingIdentifierFromRecommendation(Recommendation $recommendation): string
+	{
+		$parentResponse = $recommendation->getParentResult()->getParentResponse();
+
+		return static::generateGroupMatchingIdentifier(
+			$recommendation->getProject()->getId(),
+			$parentResponse->getTool(),
+			$recommendation->getUniqueName()
+		);
 	}
 }

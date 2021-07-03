@@ -3,8 +3,10 @@
 namespace App\Controller\Api\Testing;
 
 use App\Controller\Api\AbstractApiController;
+use App\Mercure\TopicBuilder;
 use App\Repository\Testing\RecommendationRepository;
 use App\Security\ProjectVoter;
+use App\Util\Testing\RecommendationGroup;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -33,6 +35,8 @@ class RecommendationController extends AbstractApiController
 		$project = $this->getProject($projectId);
 		$recommendationGroups = $project->getActiveRecommendationGroups();
 
+		$this->setSuggestedMercureTopic($this->topicBuilder->getEntityGenericTopic(RecommendationGroup::class, TopicBuilder::SCOPE_PROJECT, $projectId));
+
 		return $this->apiSuccess($recommendationGroups);
 	}
 
@@ -57,6 +61,8 @@ class RecommendationController extends AbstractApiController
 
 		$recommendationGroups = $project->getActiveRecommendationGroups();
 		$recommendationGroup = $recommendationGroups[$recommendation->getUniqueName()];
+
+		$this->setSuggestedMercureTopic($this->topicBuilder->getEntityTopic($recommendationGroup, TopicBuilder::SCOPE_SPECIFIC));
 
 		return $this->apiSuccess($recommendationGroup, ['recommendation_group', 'recommendation']);
 	}

@@ -24,7 +24,7 @@ interface MercureEntityInterface
 	 */
 	public static function getMercureTopics(): array;
 
-	public function getId(): ?int;
+	public function getId(): int | string | null;
 
 	/**
 	 * Returns the entity that represents the provided scope.
