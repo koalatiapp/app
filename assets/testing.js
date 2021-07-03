@@ -4,3 +4,4 @@ import "./app/testing/recommendation-details";
 import "./app/testing/recommendation-details-link";
 import "./app/testing/recommendation-ignore-form";
 import "./app/testing/recommendation-ignore-list";
+import "./app/testing/request-testing-button";
