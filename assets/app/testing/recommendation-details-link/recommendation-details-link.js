@@ -7,7 +7,7 @@ export class RecommendationDetailsLink extends LitElement {
 		return css`
 			:host { display: inline; }
 			a { font-weight: 500; color: var(--color-blue); text-decoration: none; cursor: pointer; transition: all .15s ease; }
-			a:hover { color: var(--color-gray-dark); }
+			a:hover { color: var(--color-gray-darker); }
 
 			@media (prefers-color-scheme: dark) {
 				a { color: var(--color-blue-dark); }

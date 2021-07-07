@@ -20,7 +20,7 @@ export class SearchOverlay extends LitElement {
 				#search-inner input:focus { border-color: var(--color-blue-light); }
 				#search-inner .search-results { height: 150px; margin: 30px 0; overflow: auto; }
 				#search-inner .search-results .empty-state { font-weight: 500; color: #fff; }
-				#search-inner .search-results a { display: block; width: 100%; padding: 10px; margin-bottom: 10px; color: var(--color-gray-dark); text-decoration: none; background-color: var(--color-white); border-radius: 10px; }
+				#search-inner .search-results a { display: block; width: 100%; padding: 10px; margin-bottom: 10px; color: var(--color-gray-darker); text-decoration: none; background-color: var(--color-white); border-radius: 10px; }
 				#search-inner .search-results a .title { font-size: 1.1em; font-weight: 600; }
 				#search-inner .search-results a .snippet:not(:empty) { margin-top: 5px; font-size: .9em; font-weight: 500; }
 				#search-inner .search-results a.selected { text-decoration: underline; color: var(--color-blue-dark-faded); background-color: var(--color-gray-light); box-shadow: 0 3px 0 var(--color-blue);}

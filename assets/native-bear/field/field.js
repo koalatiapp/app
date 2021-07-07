@@ -8,7 +8,7 @@ export class NbField extends LitElement {
 			stylesReset,
 			css`
 				:host { display: block; }
-				.label { font-size: 1rem; font-weight: 500; color: var(--color-gray-dark); }
+				.label { font-size: 1rem; font-weight: 500; color: var(--color-gray-darker); }
 			`
 		];
 	}
