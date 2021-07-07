@@ -12,7 +12,7 @@ export class RecommendationIgnoreList extends AbstractDynamicList {
 				.nb--list-item { grid-template-areas: "title scope tool actions"; grid-template-columns: 1fr 5rem 5rem 2.5rem; }
 				.nb--list-item-column[nb-column="tool"] { font-size: .85rem; }
 				.nb--list-item-column[nb-column="tool"] a { color: var(--color-blue-80); }
-				.nb--list-item-column[nb-column="test"] { font-size: .85rem; text-align: center; color: var(--color-gray-dark); }
+				.nb--list-item-column[nb-column="test"] { font-size: .85rem; text-align: center; color: var(--color-gray-darker); }
 				.meta { font-size: .85em; color: var(--color-gray); }
 
 				nb-markdown { display: block; font-weight: 500; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }

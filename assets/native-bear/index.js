@@ -7,6 +7,7 @@ export {NbInput} from "./input/input";
 export {NbRadioList} from "./radio-list/radio-list";
 export {NbButton} from "./button/button";
 export {NbIconButton} from "./icon-button/icon-button";
+export {NbSwitch} from "./switch/switch";
 export {NbAccordion} from "./accordion/accordion";
 export {NbMarkdown} from "./markdown/markdown";
 export {NbLoadingSpinner} from "./loading-spinner/loading-spinner";

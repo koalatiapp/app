@@ -192,6 +192,11 @@ project_settings:
         tabs:
             checklist: Checklist
 
+tools:
+    listing:
+        tool: Tool
+        enabled: Enabled
+        disabled: Disabled
 
 entity:
     project:

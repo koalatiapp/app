@@ -17,6 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ProjectRepository::class)
+ * @SuppressWarnings("ExcessiveClassComplexity")
  */
 class Project
 {
@@ -105,6 +106,13 @@ class Project
 	 * @var \Doctrine\Common\Collections\Collection<int, IgnoreEntry>
 	 */
 	private $ignoreEntries;
+
+	/**
+	 * @ORM\Column(type="array", nullable=true)
+	 *
+	 * @var array<int,string>|null
+	 */
+	private ?array $disabledTools = [];
 
 	public function __construct()
 	{
@@ -213,25 +221,6 @@ class Project
 		$criteria = Criteria::create()->where(Criteria::expr()->eq('isIgnored', false));
 
 		return $this->getPages()->matching($criteria);
-	}
-
-	/**
-	 * Returns the list of Koalati automated tools to run for this project.
-	 *
-	 * @TODO: Check the project/user/organization's settings to get the list of tools (replacing this method stub)
-	 *
-	 * @return string[]
-	 */
-	public function getEnabledAutomatedTools(): array
-	{
-		return [
-			'@koalati/tool-seo',
-			'@koalati/tool-accessibility',
-			'@koalati/tool-console',
-			'@koalati/tool-loading-speed',
-			'@koalati/tool-responsive',
-			'@koalati/tool-social',
-		];
 	}
 
 	/**
@@ -377,5 +366,52 @@ class Project
 		}
 
 		return $this;
+	}
+
+	/**
+	 * Returns the list of Koalati automated tools that are disabled for this project.
+	 *
+	 * @TODO: Also check the user/organization's settings to get the list of tools
+	 *
+	 * @return array<int,string>
+	 */
+	public function getDisabledTools(): ?array
+	{
+		return $this->disabledTools ?: [];
+	}
+
+	/**
+	 * @param array<int,string>|null $disabledTools
+	 */
+	public function setDisabledTools(?array $disabledTools): self
+	{
+		$this->disabledTools = $disabledTools ?: [];
+
+		return $this;
+	}
+
+	public function enableTool(string $tool): self
+	{
+		$this->disabledTools = array_filter($this->getDisabledTools(), function ($disabledTool) use ($tool) {
+			return strcasecmp($tool, $disabledTool) != 0;
+		});
+
+		return $this;
+	}
+
+	public function disableTool(string $tool): self
+	{
+		if ($this->disabledTools === null) {
+			$this->disabledTools = [];
+		}
+
+		$this->disabledTools[] = strtolower(trim($tool));
+
+		return $this;
+	}
+
+	public function hasToolEnabled(string $tool): bool
+	{
+		return !in_array(strtolower(trim($tool)), $this->getDisabledTools());
 	}
 }

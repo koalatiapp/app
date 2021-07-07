@@ -18,6 +18,16 @@ class ProjectRepository extends ServiceEntityRepository
 	}
 
 	/**
+	 * {@inheritDoc}
+	 *
+	 * @return Project|null
+	 */
+	public function find($id, $lockMode = null, $lockVersion = null)
+	{
+		return parent::find($id, $lockMode, $lockVersion);
+	}
+
+	/**
 	 * Finds projects from a user's search query.
 	 *
 	 * @param array<string> $queryParts

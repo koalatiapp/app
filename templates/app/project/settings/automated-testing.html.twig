@@ -15,11 +15,11 @@
 		</div>
 		<div id="tools">
 			<h2>{% trans %}project_settings.automated_testing.tabs.tools{% endtrans %}</h2>
-
+			<testing-tool-list projectId="{{ project.id }}" light></testing-tool-list>
 		</div>
 	</tabbed-container>
 {% endblock %}
 
 {% block javascripts %}
-	{{ encore_entry_script_tags('testing') }}
+	{{ encore_entry_script_tags('settings') }}
 {% endblock %}

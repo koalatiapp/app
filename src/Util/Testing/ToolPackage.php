@@ -2,6 +2,8 @@
 
 namespace App\Util\Testing;
 
+use Symfony\Component\Serializer\Annotation\Groups;
+
 /**
  * Represents a Koalati tools-service approved automated tool.
  * The data contained by this class is expected to come direcly
@@ -9,8 +11,19 @@ namespace App\Util\Testing;
  */
 class ToolPackage
 {
+	/**
+	 * @Groups({"default"})
+	 */
 	public string $name;
+
+	/**
+	 * @Groups({"default"})
+	 */
 	public string $url;
+
+	/**
+	 * @Groups({"default"})
+	 */
 	public ?string $description;
 
 	public function __construct(string $name, ?string $description = null)
