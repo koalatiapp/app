@@ -1,6 +1,6 @@
 /* Field wrappers */
 fieldset { display: flex; min-width: 0; max-width: 100%; padding: 0; margin: 0; border: none; flex-direction: column; }
-fieldset label { font-size: .95rem; font-weight: 500; color: var(--color-gray-dark); }
+fieldset label { font-size: .95rem; font-weight: 500; color: var(--color-gray-darker); }
 fieldset input { margin: 6px 0; }
 fieldset + fieldset { margin-top: 15px; }
 /* Checkbox field wrappers */
@@ -9,7 +9,7 @@ fieldset.checkbox label { margin-top: 8px; padding-left: 10px; font-size: .9rem;
 /* Single CheckboxType and RadioType */
 .standalone-checkbox,
 .standalone-radio { display: grid; grid-template-columns: 30px minmax(0, 1fr); align-items: start; }
-:is(.standalone-checkbox, .standalone-radio) label { margin: 8px 0; font-size: .9rem; font-weight: 300; color: var(--color-gray-dark); cursor: pointer; }
+:is(.standalone-checkbox, .standalone-radio) label { margin: 8px 0; font-size: .9rem; font-weight: 300; color: var(--color-gray-darker); cursor: pointer; }
 :is(.standalone-checkbox, .standalone-radio) input:focus + label { text-decoration: underline solid 3px var(--color-gray-light); }
 /* Errors */
 fieldset .error { display: block; padding: 12px; padding-right: 42px; margin: 5px 0; font-size: .85rem; font-weight: 500; color: var(--notification-danger-text-color); background-color: var(--color-red-lighter); border-radius: 8px; position: relative; }

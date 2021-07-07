@@ -20,4 +20,7 @@ export default css`
 	.spacer { width: 100%; height: 1px; margin: 30px auto; background-color: #F4F4F4; border: none; }
 	.spacer { height: 0; }
 	.spacer.small { margin: .8rem auto; }
+
+	*:where(:focus-visible) { position: relative; outline: none; }
+	*:focus-visible::before { content: ' '; position: absolute; top: -7px; left: -7px; width: 100%; height: 100%; padding: 4px; border: 3px solid var(--color-blue-80); border-radius: .5rem; box-shadow: 0 0 100vmax 100vmax rgba(var(--shadow-rgb), .2); }
 `;

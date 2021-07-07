@@ -29,6 +29,7 @@ body { padding: 45px 60px; padding-left: calc(var(--sidebar-width) + 60px); font
 #quick-actions .actions a { display: block; padding: 10px; margin-top: 12px; font-size: .9rem; font-weight: 400; text-align: center; background-color: var(--color-white); border-radius: 10px; box-shadow: 0 3px 10px rgba(var(--shadow-rgb), .1); transition: color .25s ease, background-color .25s ease, box-shadow .25s ease; }
 #quick-actions .actions a:hover { color: #fff; background-color: var(--color-blue); box-shadow: 0 3px 15px rgba(var(--shadow-rgb), .35); }
 #quick-actions.open .toggle i { transform: rotate(45deg); }
+#quick-actions .actions:focus-within,
 #quick-actions.open .actions { opacity: 1; transform: scale(1); pointer-events: auto; }
 
 /* Layout: top bar */

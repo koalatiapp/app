@@ -35,7 +35,8 @@
 		--color-teal-lighter: #0a3235;
 		--color-gray-light: #292d47;
 		--color-gray-lighter: #191b2b;
-		--color-gray-dark: #c2cbff;
+		--color-gray-dark: var(--color-gray);
+		--color-gray-darker: #c2cbff;
 		--notification-text-color: #a4b8ff;
 		--notification-warning-text-color: #ecc486;
 		--notification-danger-text-color: #ffa0a0;
