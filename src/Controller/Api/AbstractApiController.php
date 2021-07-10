@@ -2,12 +2,12 @@
 
 namespace App\Controller\Api;
 
+use App\Controller\AbstractController;
 use App\Entity\Project;
 use App\Mercure\TopicBuilder;
 use App\Mercure\UpdateDispatcher;
 use App\Security\ProjectVoter;
 use App\Util\ClientMessageSerializer;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;

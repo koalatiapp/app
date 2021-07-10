@@ -2,6 +2,7 @@
 
 namespace App\Controller\Webhook;
 
+use App\Controller\AbstractController;
 use App\Entity\Project;
 use App\Entity\Testing\Recommendation;
 use App\Entity\Testing\TestResult;
@@ -14,7 +15,6 @@ use App\Util\ClientMessageSerializer;
 use App\Util\Testing\RecommendationGroup;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
