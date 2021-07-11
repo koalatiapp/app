@@ -1,0 +1,33 @@
+{% extends 'app_base.html.twig' %}
+
+{% block section_title %}{{ organization.name }}{% endblock %}
+{% block title %}{% trans %}organization.dashboard.title{% endtrans %}{% endblock %}
+
+{% block page_tabs %}
+	{% include 'app/_parts/organization_selector.html.twig' %}
+{% endblock %}
+
+{% block body %}
+    <div class="grid fill-small">
+        <div class="card">
+			<h2>{% trans %}organization.dashboard.feed{% endtrans %}</h2>
+		</div>
+		<div class="card">
+			<h2>{% trans %}organization.dashboard.member_list.title{% endtrans %}</h2>
+			<ul>
+				{% for member in organization.membersSortedByRole|slice(0, 5) %}
+					<member-list-item userName="{{ member.user.fullName }}" userRole="{{ member.highestRole }}" avatarUrl="{{ gravatar(member.user.email) }}" role="listitem"></member-list-item>
+				{% endfor %}
+			</ul>
+			{% if organization.membersSortedByRole|length > 5 %}
+				<p class="text-gray">{% trans with {"%count%": organization.membersSortedByRole|length - 5} %}organization.dashboard.member_list.x_more{% endtrans %}</p>
+			{% endif %}
+			<hr>
+			<div class="text-center">
+				<nb-button href="{{ path("organization_settings", {id: organization.id}) }}#members">
+					{% trans %}organization.dashboard.member_list.button{% endtrans %}
+				</nb-button>
+			</div>
+		</div>
+	</div>
+{% endblock %}

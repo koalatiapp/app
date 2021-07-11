@@ -1,0 +1,25 @@
+{% set route_name = app.request.attributes.get('_route') %}
+{% set route_params = app.request.attributes.get('_route_params') %}
+<div>
+	<nb-button size="small" color="gray">
+		{{ organization.name }}
+		&nbsp;&nbsp;
+		<i class="far fa-angle-down"></i>
+	</nb-button>
+	<ul class="floating-dropdown reveal-on-hover">
+		{% for organization_link in app.user.organizationLinks %}
+			<li>
+				<a href="{{ path(route_name, route_params|merge({id: organization_link.organization.id})) }}">
+					{{ organization_link.organization.name }}
+				</a>
+			</li>
+		{% endfor %}
+		<li>
+			<a href="{{ path("organization_create") }}" class="create">
+				<i class="far fa-plus"></i>
+				&nbsp;
+				{% trans %}organization.selector.create{% endtrans %}
+			</a>
+		</li>
+	</ul>
+</div>

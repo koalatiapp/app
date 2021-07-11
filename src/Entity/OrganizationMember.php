@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\OrganizationMemberRepository;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -14,6 +15,11 @@ class OrganizationMember
 	public const ROLE_ADMIN = 'ROLE_ADMIN';
 	public const ROLE_MEMBER = 'ROLE_MEMBER';
 	public const ROLE_VISITOR = 'ROLE_VISITOR';
+	public const ROLE_VALUES = [
+		self::ROLE_ADMIN => 100,
+		self::ROLE_MEMBER => 10,
+		self::ROLE_VISITOR => 1,
+	];
 
 	/**
 	 * @ORM\Id
@@ -49,6 +55,17 @@ class OrganizationMember
 	 * @Groups({"default"})
 	 */
 	private \DateTimeInterface $dateCreated;
+
+	/**
+	 * @param string|array<int,string> $roles
+	 */
+	public function __construct(Organization $organization, User $user, string | array $roles)
+	{
+		$this->setOrganization($organization);
+		$this->setUser($user);
+		$this->setRoles((array) $roles);
+		$this->setDateCreated(new DateTime());
+	}
 
 	public function getId(): ?int
 	{
@@ -113,5 +130,27 @@ class OrganizationMember
 		$this->dateCreated = $dateCreated;
 
 		return $this;
+	}
+
+	public function getHighestRole(): ?string
+	{
+		$highestValue = 0;
+		$highestRole = null;
+
+		foreach ($this->getRoles() as $role) {
+			if (self::ROLE_VALUES[$role] > $highestValue) {
+				$highestValue = self::ROLE_VALUES[$role];
+				$highestRole = $role;
+			}
+		}
+
+		return $highestRole;
+	}
+
+	public function calculateRoleValue(): int
+	{
+		$highestRole = $this->getHighestRole();
+
+		return self::ROLE_VALUES[$highestRole];
 	}
 }

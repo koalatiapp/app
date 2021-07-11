@@ -1,0 +1,32 @@
+{% extends 'app_base.html.twig' %}
+
+{% block section_title %}{{ organization.name }}{% endblock %}
+{% block title %}{% trans %}organization.settings.title{% endtrans %}{% endblock %}
+
+{% block page_tabs %}
+	{% include 'app/_parts/organization_selector.html.twig' %}
+{% endblock %}
+
+{% block body %}
+	<tabbed-container>
+		<div id="basic-information">
+			<h2>{% trans %}organization.settings.tabs.basic_information{% endtrans %}</h2>
+			{{ form(form) }}
+		</div>
+
+		<div id="members">
+			<h2>{% trans %}organization.settings.tabs.members{% endtrans %}</h2>
+			<ul>
+				{% for member in organization.membersSortedByRole %}
+					<member-list-item userName="{{ member.user.fullName }}" userRole="{{ member.highestRole }}" avatarUrl="{{ gravatar(member.user.email) }}" role="listitem"></member-list-item>
+				{% endfor %}
+			</ul>
+		</div>
+
+		<div id="deletion">
+			<h2>{% trans %}organization.settings.tabs.deletion{% endtrans %}</h2>
+			<p>{% trans %}organization.delete.warning_text{% endtrans %}</p>
+			{{ form(deletionForm) }}
+		</div>
+	</tabbed-container>
+{% endblock %}

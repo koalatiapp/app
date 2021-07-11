@@ -5,4 +5,5 @@ import "element-internals-polyfill";
 import "./utils/modal.js";
 import "./native-bear";
 import "./app/search-overlay";
+import "./app/member-list-item";
 import "zero-md";

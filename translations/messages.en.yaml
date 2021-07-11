@@ -38,6 +38,10 @@ navigation:
 
     team:
         label: Team
+        sublink:
+            dashboard: Dashboard
+            settings: Settings
+            create: Create a team
 
     settings:
         label: Settings
@@ -192,6 +196,49 @@ project_settings:
         tabs:
             checklist: Checklist
 
+organization:
+    selector:
+        create: Create a new team
+    create:
+        title: Create a team
+    delete:
+        warning_text: "Warning: once you delete a team, there is no turning back. The team and its projects will be deleted instantly, and all of their related data will be removed as well. This cannot be undone. The members' user accounts will still exist."
+        confirmation_label: I am certain that I want to delete the team "%name%".
+        button_label: Delete this team
+        error_confirmation: You must check this box to proceed with the deletion of this project.
+    form:
+        name: Team name
+        name_placeholder: Acme Corporation
+        create_label: Create your team
+        update_label: Save changes
+    dashboard:
+        title: Team dashboard
+        feed: Recent activities
+        member_list:
+            title: Members
+            x_more: ...and %count% more
+            button: Manager members
+    settings:
+        title: Team settings
+        tabs:
+            basic_information: Basic information
+            members: Members
+            deletion: Deletion
+    flash:
+        created_successfully: Your team "%name%" has been created successfully!
+        updated_successfully: Your team "%name%" has been updated successfully!
+        deleted_successfully: Your team "%name%" has been deleted successfully!
+    first:
+        title: It looks like you don't have a team yet...
+        join_existing:
+            title: Your team already exists?
+            request_invite: If your team already exists, you should request an invite from one of your team's managers or administrators.
+
+roles:
+    ROLE_ADMIN: Administrator
+    ROLE_MEMBER: Member
+    ROLE_VISITOR: Visitor
+
 tools:
     listing:
         tool: Tool
@@ -206,4 +253,5 @@ entity:
         status:NEW: New
         status:IN_PROGRESS: In progress
         status:COMPLETED: Completed
-
+    organization:
+        name: Team name

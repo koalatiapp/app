@@ -1,0 +1,16 @@
+{% extends 'app_base.html.twig' %}
+
+{% block title %}{% trans %}organization.first.title{% endtrans %}{% endblock %}
+
+{% block body %}
+    <div class="grid fill-small">
+        <div class="card">
+			<h2>{% trans %}organization.create.title{% endtrans %}</h2>
+			{{ form(form) }}
+		</div>
+        <div class="card secondary">
+			<h2>{% trans %}organization.first.join_existing.title{% endtrans %}</h2>
+			<p>{% trans %}organization.first.join_existing.request_invite{% endtrans %}</p>
+		</div>
+	</div>
+{% endblock %}

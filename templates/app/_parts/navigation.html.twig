@@ -12,8 +12,8 @@
                 <i class="far fa-laptop-mobile"></i>
                 <span>{% trans %}navigation.project.label{% endtrans %}</span>
             </a>
-			{% if project is defined and project.id %}
-				<ul>
+			<ul>
+				{% if project is defined and project.id %}
 					<li class="{{ current_route in ['project_dashboard'] ? 'active' : '' }}">
 						<a href="{{ path('project_dashboard', {id: project.id}) }}">
 							{% trans %}navigation.project.sublink.overview{% endtrans %}
@@ -34,8 +34,8 @@
 							{% trans %}navigation.project.sublink.settings{% endtrans %}
 						</a>
 					</li>
-				</ul>
-			{% endif %}
+				{% endif %}
+			</ul>
         </li>
         <li class="{{ current_route in ['resources'] ? 'active' : '' }}">
             <a href="#">
@@ -45,13 +45,31 @@
             <ul>
             </ul>
         </li>
-        <li class="{{ current_route in ['team'] ? 'active' : '' }}">
-            <a href="#">
+        <li class="{{ current_route in ['organization_dashboard', 'organization_create', 'organization_settings'] ? 'active' : '' }}">
+            <a href="{{ path('organization_dashboard') }}">
                 <i class="far fa-users"></i>
                 <span>{% trans %}navigation.team.label{% endtrans %}</span>
             </a>
-            <ul>
-            </ul>
+			<ul>
+				{% if organization is defined %}
+					<li class="{{ current_route in ['organization_dashboard'] ? 'active' : '' }}">
+						<a href="{{ path('organization_dashboard', {id: organization.id}) }}">
+							{% trans %}navigation.team.sublink.dashboard{% endtrans %}
+						</a>
+					</li>
+					<li class="{{ current_route in ['organization_settings'] ? 'active' : '' }}">
+						<a href="{{ path('organization_settings', {id: organization.id}) }}">
+							{% trans %}navigation.team.sublink.settings{% endtrans %}
+						</a>
+					</li>
+				{% else %}
+					<li class="active">
+						<a href="{{ path('organization_create') }}">
+							{% trans %}navigation.team.sublink.create{% endtrans %}
+						</a>
+					</li>
+				{% endif %}
+			</ul>
         </li>
         <li class="{{ current_route in ['settings'] ? 'active' : '' }}">
             <a href="#">
