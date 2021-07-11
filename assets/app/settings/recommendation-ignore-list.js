@@ -1,6 +1,6 @@
 import { html, css } from "lit";
-import { ApiClient } from "../../../utils/api";
-import { AbstractDynamicList } from "../../abstract-dynamic-list";
+import { ApiClient } from "../../utils/api";
+import { AbstractDynamicList } from "../abstract-dynamic-list";
 
 export class RecommendationIgnoreList extends AbstractDynamicList {
 	static get styles()

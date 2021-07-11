@@ -1,8 +1,8 @@
 import { html, css } from "lit";
-import { AbstractDynamicList } from "../../abstract-dynamic-list";
-import Modal from "../../../utils/modal";
-import fontawesomeImport from "../../../utils/fontawesome-import";
-import { ApiClient } from "../../../utils/api";
+import { AbstractDynamicList } from "../abstract-dynamic-list";
+import Modal from "../../utils/modal";
+import fontawesomeImport from "../../utils/fontawesome-import";
+import { ApiClient } from "../../utils/api";
 
 export class RecommendationList extends AbstractDynamicList {
 	static get styles()

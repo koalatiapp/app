@@ -1,9 +1,9 @@
 import escapeHtml  from "escape-html";
 import { LitElement, html, css } from "lit";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
-import stylesReset from "../../../native-bear/styles-reset.js";
-import { ApiClient } from "../../../utils/api/index.js";
-import faImport from "../../../utils/fontawesome-import";
+import stylesReset from "../../native-bear/styles-reset.js";
+import { ApiClient } from "../../utils/api/index.js";
+import faImport from "../../utils/fontawesome-import";
 
 export class RecommendationDetails extends LitElement {
 	static get styles()

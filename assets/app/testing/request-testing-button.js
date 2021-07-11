@@ -1,5 +1,5 @@
-import { ApiClient } from "../../../utils/api";
-import { NbButton } from "../../../native-bear";
+import { ApiClient } from "../../utils/api";
+import { NbButton } from "../../native-bear";
 
 export class RequestTestingButton extends NbButton {
 	static get styles()

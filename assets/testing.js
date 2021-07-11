@@ -1,6 +1,6 @@
-import "./app/testing/recommendation-type";
-import "./app/testing/recommendation-list";
-import "./app/testing/recommendation-details";
-import "./app/testing/recommendation-details-link";
-import "./app/testing/recommendation-ignore-form";
-import "./app/testing/request-testing-button";
+import "./app/testing/recommendation-type.js";
+import "./app/testing/recommendation-list.js";
+import "./app/testing/recommendation-details.js";
+import "./app/testing/recommendation-details-link.js";
+import "./app/testing/recommendation-ignore-form.js";
+import "./app/testing/request-testing-button.js";

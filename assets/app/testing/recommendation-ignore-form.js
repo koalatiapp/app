@@ -1,8 +1,8 @@
 import { LitElement, html, css } from "lit";
-import stylesReset from "../../../native-bear/styles-reset.js";
-import faImport from "../../../utils/fontawesome-import";
-import { ApiClient } from "../../../utils/api";
-import Modal from "../../../utils/modal.js";
+import stylesReset from "../../native-bear/styles-reset.js";
+import faImport from "../../utils/fontawesome-import";
+import { ApiClient } from "../../utils/api";
+import Modal from "../../utils/modal.js";
 
 export class RecommendationIgnoreForm extends LitElement {
 	static get styles()
