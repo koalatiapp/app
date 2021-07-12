@@ -7,6 +7,7 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Pyrrah\GravatarBundle\GravatarApi;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -27,7 +28,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
 	/**
 	 * @ORM\Column(type="string", length=180, unique=true)
-	 * @Groups({"default"})
 	 */
 	private ?string $email;
 
@@ -371,5 +371,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 		}
 
 		return $this;
+	}
+
+	/**
+	 * @Groups({"default"})
+	 */
+	public function getAvatarUrl(int $size = 80): string
+	{
+		$gravatarApi = new GravatarApi(['default' => 'retro']);
+
+		return $gravatarApi->getUrl($this->getEmail(), $size);
 	}
 }
