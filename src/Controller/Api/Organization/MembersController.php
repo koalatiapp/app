@@ -4,7 +4,7 @@ namespace App\Controller\Api\Organization;
 
 use App\Controller\Api\AbstractApiController;
 use App\Entity\OrganizationMember;
-use App\Repository\UserRepository;
+use App\Repository\OrganizationMemberRepository;
 use App\Security\OrganizationVoter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,25 +32,21 @@ class MembersController extends AbstractApiController
 	}
 
 	/**
-	 * @Route("/role/{userId}", methods={"POST", "PUT"}, name="role", options={"expose": true})
+	 * @Route("/{id}/role", methods={"POST", "PUT"}, name="role", options={"expose": true})
 	 */
-	public function updateRole(Request $request, int $userId, UserRepository $userRepository): JsonResponse
+	public function updateRole(Request $request, int $id, OrganizationMemberRepository $organizationMemberRepository): JsonResponse
 	{
-		$user = $userRepository->find($userId);
-		$organizationId = $request->request->get('organizationId');
+		$membership = $organizationMemberRepository->find($id);
 		$newRole = $request->request->get('role');
 
-		if (!$organizationId) {
-			return $this->apiError('You must provide a valid value for `organization_id`.');
+		if (!$this->isGranted(OrganizationVoter::MANAGE, $membership->getOrganization())) {
+			return $this->accessDenied();
 		}
-
-		$organization = $this->getOrganization($organizationId, OrganizationVoter::MANAGE);
-		$membership = $organization->getMemberFromUser($user);
 
 		if ($membership->getHighestRole() == OrganizationMember::ROLE_ADMIN && $newRole != OrganizationMember::ROLE_ADMIN) {
 			$hasOtherAdmins = false;
 
-			foreach ($organization->getMembers() as $otherMember) {
+			foreach ($membership->getOrganization()->getMembers() as $otherMember) {
 				if ($membership != $otherMember && $otherMember->getHighestRole() == OrganizationMember::ROLE_ADMIN) {
 					$hasOtherAdmins = true;
 					break;
@@ -70,7 +66,7 @@ class MembersController extends AbstractApiController
 
 		return $this->apiSuccess([
 			'message' => $this->translator->trans('organization.flash.member_role_updated_successfully', [
-				'%name%' => $user->getFullName(),
+				'%name%' => $membership->getUser()->getFullName(),
 				'%role%' => $this->translator->trans('roles.'.$newRole),
 			]),
 		]);

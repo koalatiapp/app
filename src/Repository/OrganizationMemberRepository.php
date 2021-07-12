@@ -16,32 +16,13 @@ class OrganizationMemberRepository extends ServiceEntityRepository
 		parent::__construct($registry, OrganizationMember::class);
 	}
 
-	// /**
-	//  * @return OrganizationMember[] Returns an array of OrganizationMember objects
-	//  */
-	/*
-	public function findByExampleField($value)
+	/**
+	 * {@inheritDoc}
+	 *
+	 * @return OrganizationMember|null
+	 */
+	public function find($id, $lockMode = null, $lockVersion = null)
 	{
-		return $this->createQueryBuilder('o')
-			->andWhere('o.exampleField = :val')
-			->setParameter('val', $value)
-			->orderBy('o.id', 'ASC')
-			->setMaxResults(10)
-			->getQuery()
-			->getResult()
-		;
+		return parent::find($id, $lockMode, $lockVersion);
 	}
-	*/
-
-	/*
-	public function findOneBySomeField($value): ?OrganizationMember
-	{
-		return $this->createQueryBuilder('o')
-			->andWhere('o.exampleField = :val')
-			->setParameter('val', $value)
-			->getQuery()
-			->getOneOrNullResult()
-		;
-	}
-	*/
 }

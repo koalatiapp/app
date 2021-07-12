@@ -43,7 +43,7 @@ export class OrganizationMembersList extends AbstractDynamicList {
 						"ROLE_ADMIN": Translator.trans("roles.ROLE_ADMIN"),
 						"ROLE_MEMBER": Translator.trans("roles.ROLE_MEMBER"),
 						"ROLE_VISITOR": Translator.trans("roles.ROLE_VISITOR"),
-					}} .eventData=${{organization_id: item.organization.id, user_id: item.user.id}} @select=${e => list.updateRoleCallback(e)}>
+					}} .eventData=${{id: item.id}} @select=${e => list.updateRoleCallback(e)}>
 						<span slot="toggle">${Translator.trans("roles." + item.highestRole)}</span>
 					</nb-dropdown>
 				`,
@@ -92,11 +92,10 @@ export class OrganizationMembersList extends AbstractDynamicList {
 
 	updateRoleCallback(e)
 	{
-		const organizationId = e.detail.organization_id;
-		const userId = e.detail.user_id;
+		const membershipId = e.detail.id;
 		const role = e.detail.value;
 
-		ApiClient.post("api_organization_members_role", { organizationId, userId, role }).then(response => {
+		ApiClient.post("api_organization_members_role", { id: membershipId, role }).then(response => {
 			if (typeof response == "undefined") {
 				const memberListItem = e.detail.dropdown.closest("li").querySelector("member-list-item");
 				const currentRole = memberListItem.userRole;
