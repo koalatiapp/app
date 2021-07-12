@@ -68,6 +68,11 @@ class MembersController extends AbstractApiController
 		$em->persist($membership);
 		$em->flush();
 
-		return $this->apiSuccess();
+		return $this->apiSuccess([
+			'message' => $this->translator->trans('organization.flash.member_role_updated_successfully', [
+				'%name%' => $user->getFullName(),
+				'%role%' => $this->translator->trans('roles.'.$newRole),
+			]),
+		]);
 	}
 }

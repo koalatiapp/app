@@ -101,6 +101,8 @@ export class OrganizationMembersList extends AbstractDynamicList {
 				const memberListItem = e.detail.dropdown.closest("li").querySelector("member-list-item");
 				const currentRole = memberListItem.userRole;
 				e.detail.dropdown.slottedToggleElement.innerHTML = Translator.trans("roles." + currentRole);
+			} else if (typeof response.data.message != "undefined") {
+				window.Flash.show("success", response.data.message);
 			}
 		});
 	}

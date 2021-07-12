@@ -232,7 +232,7 @@ organization:
         created_successfully: Your team "%name%" has been created successfully!
         updated_successfully: Your team "%name%" has been updated successfully!
         deleted_successfully: Your team "%name%" has been deleted successfully!
-        member_role_updated_successfully: "%name%'s has been updated successfully!"
+        member_role_updated_successfully: "%name%'s role has been updated to %role%"
         member_role_update_no_admins: You must make another member administrator before downgrading this user's role.
     first:
         title: It looks like you don't have a team yet...
