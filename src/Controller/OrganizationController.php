@@ -8,6 +8,7 @@ use App\Form\Organization\DeletionOrganizationType;
 use App\Form\Organization\NewOrganizationType;
 use App\Form\Organization\OrganizationType;
 use App\Repository\OrganizationRepository;
+use App\Security\OrganizationVoter;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -88,6 +89,8 @@ class OrganizationController extends AbstractController
 	public function settings(int $id, Request $request): Response
 	{
 		$organization = $this->organizationRepository->find($id);
+		$this->denyAccessUnlessGranted(OrganizationVoter::MANAGE, $organization);
+
 		$deletionForm = $this->processDeletionForm($organization, $request);
 
 		if (!$deletionForm) {

@@ -57,11 +57,13 @@
 							{% trans %}navigation.team.sublink.dashboard{% endtrans %}
 						</a>
 					</li>
-					<li class="{{ current_route in ['organization_settings'] ? 'active' : '' }}">
-						<a href="{{ path('organization_settings', {id: organization.id}) }}">
-							{% trans %}navigation.team.sublink.settings{% endtrans %}
-						</a>
-					</li>
+					{% if is_granted("manage", organization) %}
+						<li class="{{ current_route in ['organization_settings'] ? 'active' : '' }}">
+							<a href="{{ path('organization_settings', {id: organization.id}) }}">
+								{% trans %}navigation.team.sublink.settings{% endtrans %}
+							</a>
+						</li>
+					{% endif %}
 				{% else %}
 					<li class="active">
 						<a href="{{ path('organization_create') }}">

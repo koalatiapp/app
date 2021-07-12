@@ -19,15 +19,19 @@
 					<member-list-item userName="{{ member.user.fullName }}" userRole="{{ member.highestRole }}" avatarUrl="{{ gravatar(member.user.email) }}" role="listitem"></member-list-item>
 				{% endfor %}
 			</ul>
+
 			{% if organization.membersSortedByRole|length > 5 %}
 				<p class="text-gray">{% trans with {"%count%": organization.membersSortedByRole|length - 5} %}organization.dashboard.member_list.x_more{% endtrans %}</p>
 			{% endif %}
-			<hr>
-			<div class="text-center">
-				<nb-button href="{{ path("organization_settings", {id: organization.id}) }}#members">
-					{% trans %}organization.dashboard.member_list.button{% endtrans %}
-				</nb-button>
-			</div>
+
+			{% if is_granted("manage", organization) %}
+				<hr>
+				<div class="text-center">
+					<nb-button href="{{ path("organization_settings", {id: organization.id}) }}#members">
+						{% trans %}organization.dashboard.member_list.button{% endtrans %}
+					</nb-button>
+				</div>
+			{% endif %}
 		</div>
 	</div>
 {% endblock %}
