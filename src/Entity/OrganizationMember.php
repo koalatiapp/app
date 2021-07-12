@@ -132,6 +132,25 @@ class OrganizationMember
 		return $this;
 	}
 
+	public function setHighestRole(string $highestRole): self
+	{
+		$includedRoles = [];
+		$highestRoleValue = self::ROLE_VALUES[$highestRole];
+
+		foreach (self::ROLE_VALUES as $role => $value) {
+			if ($value <= $highestRoleValue) {
+				$includedRoles[] = $role;
+			}
+		}
+
+		$this->setRoles($includedRoles);
+
+		return $this;
+	}
+
+	/**
+	 * @Groups({"default"})
+	 */
 	public function getHighestRole(): ?string
 	{
 		$highestValue = 0;

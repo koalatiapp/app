@@ -16,11 +16,7 @@
 
 		<div id="members">
 			<h2>{% trans %}organization.settings.tabs.members{% endtrans %}</h2>
-			<ul>
-				{% for member in organization.membersSortedByRole %}
-					<member-list-item userName="{{ member.user.fullName }}" userRole="{{ member.highestRole }}" avatarUrl="{{ gravatar(member.user.email) }}" role="listitem"></member-list-item>
-				{% endfor %}
-			</ul>
+			<organization-members-list organizationId="{{ organization.id }}" light></organization-members-list>
 		</div>
 
 		<div id="deletion">
@@ -29,4 +25,8 @@
 			{{ form(deletionForm) }}
 		</div>
 	</tabbed-container>
+{% endblock %}
+
+{% block javascripts %}
+	{{ encore_entry_script_tags('settings') }}
 {% endblock %}

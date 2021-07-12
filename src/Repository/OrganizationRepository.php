@@ -15,4 +15,14 @@ class OrganizationRepository extends ServiceEntityRepository
 	{
 		parent::__construct($registry, Organization::class);
 	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * @return Organization|null
+	 */
+	public function find($id, $lockMode = null, $lockVersion = null)
+	{
+		return parent::find($id, $lockMode, $lockVersion);
+	}
 }

@@ -30,7 +30,7 @@ class ApiClient {
 		}
 
 		method = method.trim().toUpperCase();
-		return Routing.generate(endpoint, ["GET", "DELETE", "PUT"].includes(method) ? routeParams : {});
+		return Routing.generate(endpoint, routeParams);
 	}
 
 	/**

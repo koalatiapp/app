@@ -3,9 +3,11 @@
 namespace App\Controller\Api;
 
 use App\Controller\AbstractController;
+use App\Entity\Organization;
 use App\Entity\Project;
 use App\Mercure\TopicBuilder;
 use App\Mercure\UpdateDispatcher;
+use App\Security\OrganizationVoter;
 use App\Security\ProjectVoter;
 use App\Util\ClientMessageSerializer;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -13,6 +15,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mercure\Authorization;
 use Symfony\Component\Mercure\Discovery;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 abstract class AbstractApiController extends AbstractController
 {
@@ -34,6 +37,7 @@ abstract class AbstractApiController extends AbstractController
 		protected TopicBuilder $topicBuilder,
 		protected UpdateDispatcher $updateDispatcher,
 		protected ClientMessageSerializer $serializer,
+		protected TranslatorInterface $translator,
 		private Discovery $discovery,
 		private Authorization $authorization,
 		private RequestStack $requestStack
@@ -70,6 +74,34 @@ abstract class AbstractApiController extends AbstractController
 		$session->set('koalati_current_project_id', $project->getId());
 
 		return $project;
+	}
+
+	/**
+	 * @SuppressWarnings(PHPMD.ExitExpression)
+	 */
+	protected function getOrganization(?int $id, string $privilege = OrganizationVoter::VIEW): ?Organization
+	{
+		if (!$id) {
+			return null;
+		}
+
+		/**
+		 * @var \App\Repository\OrganizationRepository
+		 */
+		$repository = $this->getDoctrine()->getRepository(Organization::class);
+		$organization = $repository->find($id);
+
+		if (!$organization) {
+			$this->notFound()->send();
+			exit;
+		}
+
+		if (!$this->isGranted($privilege, $organization)) {
+			$this->accessDenied()->send();
+			exit;
+		}
+
+		return $organization;
 	}
 
 	protected function setSuggestedMercureTopic(string $topic): static
