@@ -8,6 +8,7 @@ export {NbSelect} from "./select/select";
 export {NbRadioList} from "./radio-list/radio-list";
 export {NbButton} from "./button/button";
 export {NbIconButton} from "./icon-button/icon-button";
+export {NbDropdown} from "./dropdown/dropdown";
 export {NbSwitch} from "./switch/switch";
 export {NbAccordion} from "./accordion/accordion";
 export {NbMarkdown} from "./markdown/markdown";
