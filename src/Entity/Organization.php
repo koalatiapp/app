@@ -110,7 +110,7 @@ class Organization
 		$membersArray = $this->getMembers()->toArray();
 		usort($membersArray, function (OrganizationMember $memberA, OrganizationMember $memberB) {
 			if ($memberA->calculateRoleValue() != $memberB->calculateRoleValue()) {
-				return $memberA->calculateRoleValue() > $memberB->calculateRoleValue() ? 1 : -1;
+				return $memberA->calculateRoleValue() > $memberB->calculateRoleValue() ? -1 : 1;
 			}
 
 			return strnatcasecmp($memberA->getUser()->getFullName(), $memberB->getUser()->getFullName());
