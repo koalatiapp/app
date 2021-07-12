@@ -32,6 +32,44 @@ class MembersController extends AbstractApiController
 	}
 
 	/**
+	 * @Route("/{id}", methods={"DELETE"}, name="delete", options={"expose": true})
+	 */
+	public function delete(int $id, OrganizationMemberRepository $organizationMemberRepository): JsonResponse
+	{
+		$membership = $organizationMemberRepository->find($id);
+
+		if (!$this->isGranted(OrganizationVoter::MANAGE, $membership->getOrganization())) {
+			return $this->accessDenied();
+		}
+
+		if ($membership->getHighestRole() == OrganizationMember::ROLE_ADMIN) {
+			$hasOtherAdmins = false;
+
+			foreach ($membership->getOrganization()->getMembers() as $otherMember) {
+				if ($membership != $otherMember && $otherMember->getHighestRole() == OrganizationMember::ROLE_ADMIN) {
+					$hasOtherAdmins = true;
+					break;
+				}
+			}
+
+			if (!$hasOtherAdmins) {
+				return $this->apiError($this->translator->trans('organization.flash.member_remove_no_admins'));
+			}
+		}
+
+		$em = $this->getDoctrine()->getManager();
+		$em->remove($membership);
+		$em->flush();
+
+		return $this->apiSuccess([
+			'message' => $this->translator->trans('organization.flash.member_removed_successfully', [
+				'%user%' => $membership->getUser()->getFullName(),
+				'%organization%' => $membership->getOrganization()->getName(),
+			]),
+		]);
+	}
+
+	/**
 	 * @Route("/{id}/role", methods={"POST", "PUT"}, name="role", options={"expose": true})
 	 */
 	public function updateRole(Request $request, int $id, OrganizationMemberRepository $organizationMemberRepository): JsonResponse

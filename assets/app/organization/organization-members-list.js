@@ -54,9 +54,9 @@ export class OrganizationMembersList extends AbstractDynamicList {
 			{
 				key: "actions",
 				label: null,
-				render: () => {
+				render: (item, list) => {
 					return html`
-						<nb-icon-button size="small" color="gray"><i class="fas fa-times"></i></nb-icon-button>
+						<nb-icon-button title=${Translator.trans("organization.settings.members.list.remove")} size="small" color="danger" @click=${() => list.removeMemberCallback(item)}><i class="fas fa-times"></i></nb-icon-button>
 					`;
 				},
 				placeholder: html`
@@ -104,6 +104,18 @@ export class OrganizationMembersList extends AbstractDynamicList {
 				window.Flash.show("success", response.data.message);
 			}
 		});
+	}
+
+	removeMemberCallback(item)
+	{
+		if (confirm(Translator.trans("organization.settings.members.list.remove_confirm", { user: item.user.firstName + " " + item.user.lastName, organization: item.organization.name }))) {
+			ApiClient.delete("api_organization_members_delete", { id: item.id }).then(response => {
+				if (typeof response != "undefined") {
+					this.items = this.items.filter(existingItem => existingItem.id != item.id);
+					window.Flash.show("success", response.data.message);
+				}
+			});
+		}
 	}
 }
 
