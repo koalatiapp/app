@@ -66,12 +66,12 @@ class Flash
 	_initClickToHide()
 	{
 		this.wrapper.addEventListener("click", (e) => {
-			if (!e.target.matches(".flash-message")) {
+			if (!e.target.matches(".flash-message, .flash-message *")) {
 				return;
 			}
 
 			e.preventDefault();
-			this._remove(e.target);
+			this._remove(e.target.closest(".flash-message"));
 		}, true);
 	}
 
