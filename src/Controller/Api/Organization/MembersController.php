@@ -3,6 +3,7 @@
 namespace App\Controller\Api\Organization;
 
 use App\Controller\Api\AbstractApiController;
+use App\Entity\Organization;
 use App\Entity\OrganizationMember;
 use App\Repository\OrganizationMemberRepository;
 use App\Security\OrganizationVoter;
@@ -108,5 +109,18 @@ class MembersController extends AbstractApiController
 				'%role%' => $this->translator->trans('roles.'.$newRole),
 			]),
 		]);
+	}
+
+	/**
+	 * @Route("/{id}/invitation", methods={"POST", "PUT"}, name="invite", options={"expose": true})
+	 */
+	public function sendInvitation(int $id): JsonResponse
+	{
+		$organization = $this->getOrganization($id, OrganizationVoter::MANAGE);
+
+		dump($organization);
+		// @TODO: Send invitation email
+
+		return $this->apiSuccess();
 	}
 }

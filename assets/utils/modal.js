@@ -19,7 +19,7 @@ const escapeKeydownCallback = function(e) {
 /**
   * Selector for the focusable elements within a modal
   */
-const focusableSelector = ":is(button, a, input, select, textarea, details, [contenteditable], [tabindex]:not([tabindex='-1'])):not([disabled]):not([readonly])";
+const focusableSelector = ":is(nb-button, nb-icon-button, nb-input, nb-select, button, a, input:not([type='hidden']), select, textarea, details, [contenteditable], [tabindex]:not([tabindex='-1'])):not([disabled]):not([readonly])";
 
 /**
   * Callback for the `keydown` event listener that handles the focus trap for modals.
@@ -58,7 +58,7 @@ export default class Modal {
 	 *
 	 * @param {object} [options={}] - Options for the modal's initialization
 	 * @param {string} [options.title] - Content to display as the title of the modal.
-	 * @param {string|Promise<string>} [options.content] - Content to display inside the modal.
+	 * @param {string|object|Promise<string|object>} [options.content] - Content to display inside the modal.
 	 * @param {string} [options.contentUrl] - A URL from which to fetch the content to display inside the modal.
 	 * @param {boolean} [options.confirmClose=false] - Whether the user should have to confirm when they want to close the modal.
 	 */
@@ -88,7 +88,7 @@ export default class Modal {
 	 *
 	 * @param {object} [options={}] - Options for the modal's initialization
 	 * @param {string} [options.title] - Content to display as the title of the modal.
-	 * @param {string|Promise<string>} [options.content] - Content to display inside the modal.
+	 * @param {string|object|Promise<string|object>} [options.content] - Content to display inside the modal.
 	 * @param {string} [options.contentUrl] - A URL from which to fetch the content to display inside the modal.
 	 * @param {boolean} [options.confirmClose=false] - Whether the user should have to confirm when they want to close the modal.
 	 */
@@ -180,7 +180,7 @@ export default class Modal {
 		const contentElement = this.dialogElement.querySelector(".modal-content");
 
 		// If the content is an object, it should be a lit HTML tagged template.
-		if (this.options?.content !== null && typeof this.options?.content == "object") {
+		if (this.options?.content !== null && typeof this.options?.content == "object" && !(this.options?.content instanceof Promise)) {
 			render(this.options?.content, contentElement);
 			return;
 		}
@@ -202,7 +202,13 @@ export default class Modal {
 		}
 
 		contentPromise.then(content => {
-			contentElement.innerHTML = content;
+			// If the content is an object, it should be a lit HTML tagged template.
+			if (content !== null && typeof content == "object") {
+				render(content, contentElement);
+			} else {
+				contentElement.innerHTML = content;
+			}
+
 			this._focusFirstElement();
 			this.dialogElement.dispatchEvent(new CustomEvent("content-loaded"));
 		}).catch(() => {

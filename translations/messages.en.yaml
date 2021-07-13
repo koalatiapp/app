@@ -225,6 +225,13 @@ organization:
             members: Members
             deletion: Deletion
         members:
+            invite:
+                button: Invite user(s)
+                modal:
+                    title: Invite people to your team
+                    first_name: First name
+                    email: Email address
+                    button_label: Send an invitation
             list:
                 user: User
                 role: Role
@@ -238,6 +245,7 @@ organization:
         member_role_update_no_admins: You must make another member administrator before downgrading this user's role.
         member_removed_successfully: User %user% has been removed from %organization% successfully.
         member_remove_no_admins: You must make another member administrator before removing this user from the team.
+        invitation_sent: Your invitation has been sent to %name%!
     first:
         title: It looks like you don't have a team yet...
         join_existing:

@@ -15,7 +15,14 @@
 		</div>
 
 		<div id="members">
-			<h2>{% trans %}organization.settings.tabs.members{% endtrans %}</h2>
+			<div class="container space-between">
+				<h2>{% trans %}organization.settings.tabs.members{% endtrans %}</h2>
+				<organization-invite-button size="small" organizationId="{{ organization.id }}">
+					<i class="fas fa-user-plus"></i>
+					&nbsp;&nbsp;
+					{% trans %}organization.settings.members.invite.button{% endtrans %}
+				</organization-invite-button>
+			</div>
 			<organization-members-list organizationId="{{ organization.id }}" light></organization-members-list>
 		</div>
 
@@ -28,5 +35,5 @@
 {% endblock %}
 
 {% block javascripts %}
-	{{ encore_entry_script_tags('settings') }}
+	{{ encore_entry_script_tags('organization') }}
 {% endblock %}
