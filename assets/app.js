@@ -7,3 +7,6 @@ import "./native-bear";
 import "./app/generic/search-overlay.js";
 import "./app/generic/member-list-item.js";
 import "zero-md";
+
+// App-wide utilities
+import "./utils/form-reset.js";
