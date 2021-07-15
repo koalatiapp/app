@@ -1,0 +1,8 @@
+framework:
+    mailer:
+        dsn: '%env(MAILER_DSN)%'
+        envelope:
+            sender: 'noreply@koalati.com'
+        headers:
+            from: 'Koalati <noreply@koalati.com>'
+            X-Auto-Response-Suppress: 'OOF, DR, RN, NRN, AutoReply'

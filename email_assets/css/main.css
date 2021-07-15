@@ -1,0 +1,49 @@
+/* Foundation overwrites (colors and fonts) */
+html { background: #f7f8fd; }
+body,
+table.body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+td,
+th { color: #13204D; }
+a { color: #2751E6; }
+a:visited { color: #2751E6; }
+h1 a,
+h1 a:visited,
+h2 a,
+h2 a:visited,
+h3 a,
+h3 a:visited,
+h4 a,
+h4 a:visited,
+h5 a,
+h5 a:visited,
+h6 a,
+h6 a:visited { color: #2751E6; }
+table.menu td.menu-item a,
+table.menu th.menu-item a { color: #2751E6; }
+table.button table td { color: white; background: #2751E6; border: none; border-radius: 13px; box-shadow: 0 2px 10px 0 rgba(17, 39, 119, 0.15); }
+table.button table td a { padding: 16px 30px; font-size: 14px; font-weight: 700; }
+*,
+p,
+td,
+th,
+a,
+table.button table td a { font-family: Poppins, Helvetica, Arial, sans-serif; }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 { font-family: Poppins, Helvetica, Arial, sans-serif; font-weight: 700; }
+table.container { width: 580px; border-top: 0; border-radius: 20px; box-shadow: 0 3px 15px 0 rgba(17, 39, 119, .05); }
+
+/* Utility classes */
+.text-small { font-size: 13px; }
+.text-smaller { font-size: 13px; }
+.text-gray { color: #ADB5D0; }

@@ -26,6 +26,7 @@ RUN set -eux; \
 		$PHPIZE_DEPS \
 		icu-dev \
 		libzip-dev \
+		libxslt-dev \
 		zlib-dev \
 	; \
 	apk add --update nodejs npm; \
@@ -36,6 +37,7 @@ RUN set -eux; \
 		mysqli \
 		pdo \
 		pdo_mysql \
+		xsl \
 	; \
 	pecl install \
 		apcu-${APCU_VERSION} \
