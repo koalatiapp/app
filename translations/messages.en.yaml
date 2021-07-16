@@ -246,11 +246,18 @@ organization:
         member_removed_successfully: User %user% has been removed from %organization% successfully.
         member_remove_no_admins: You must make another member administrator before removing this user from the team.
         invitation_sent: Your invitation has been sent to %name%!
+        invitation_already_sent: This user alrady has an invitation pending.
     first:
         title: It looks like you don't have a team yet...
         join_existing:
             title: Your team already exists?
             request_invite: If your team already exists, you should request an invite from one of your team's managers or administrators.
+
+organization_invitation:
+    flash:
+        error_already_used: This invitation has already been used on %date%.
+        error_expired: This invitation has expired.
+        error_already_a_member: You are already a member of this organization.
 
 roles:
     ROLE_ADMIN: Administrator
@@ -273,3 +280,15 @@ entity:
         status:COMPLETED: Completed
     organization:
         name: Team name
+
+email:
+    organization_invitation:
+        subject: "%inviter% wants you to join %organization% on Koalati"
+        introduction: >
+            <h1>Hey %firstName%!</h1>
+            <p>%inviter% has invited you to join their team (%organization%) on Koalati.</p>
+            <p>To join the team, simply click on the button below.</p>
+        button_label: Join %organization% on Koalati
+        footer: >
+            <p class="text-gray text-small">Please note that this invitation will expire on %expirationDate%.</p>
+            <p class="text-gray text-small">If you don't know who %inviter% is, or if this invitation is unwanted, you can either ignore this message or <a href="%spamReportUrl%">report it as spam</a>.</p>

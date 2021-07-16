@@ -1,0 +1,36 @@
+{% extends "email/_base.html.twig" %}
+
+{% block body %}
+	<spacer size="20"></spacer>
+
+	<row>
+		<columns>
+			{% trans with {
+				"%firstName%": invitation.firstName,
+				"%inviter%": invitation.inviter.fullName,
+				"%organization%": invitation.organization
+			} %}email.organization_invitation.introduction{% endtrans %}
+		</columns>
+	</row>
+
+	<row>
+		<columns>
+			<center>
+				<button href="{{ url("organization_invitation_accept", {id: invitation.id, hash: invitation.hash}) }}" size="large">
+					{% trans with {"%organization%": invitation.organization} %}email.organization_invitation.button_label{% endtrans %}
+				</button>
+			</center>
+		</columns>
+	</row>
+
+	<row>
+		<columns>
+			{# @TODO: Implement proper spam reporting for organization invitations #}
+			{% trans with {
+				"%expirationDate%": invitation.dateExpired|date("l, F jS"),
+				"%inviter%": invitation.inviter.fullName,
+				"%spamReportUrl%": "mailto:info@koalati.com",
+			} %}email.organization_invitation.footer{% endtrans %}
+		</columns>
+	</row>
+{% endblock %}

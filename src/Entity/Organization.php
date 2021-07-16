@@ -58,11 +58,19 @@ class Organization
 	 */
 	private Collection $ignoreEntries;
 
+	/**
+	 * @ORM\OneToMany(targetEntity=OrganizationInvitation::class, mappedBy="organization", orphanRemoval=true)
+	 *
+	 * @var \Doctrine\Common\Collections\Collection<int, OrganizationInvitation>
+	 */
+	private Collection $organizationInvitations;
+
 	public function __construct()
 	{
 		$this->members = new ArrayCollection();
 		$this->projects = new ArrayCollection();
 		$this->ignoreEntries = new ArrayCollection();
+		$this->organizationInvitations = new ArrayCollection();
 	}
 
 	public function getId(): ?int
@@ -220,5 +228,40 @@ class Organization
 		$member = $this->getMemberFromUser($user);
 
 		return $member?->getRoles() ?: [];
+	}
+
+	/**
+	 * @return Collection<int,OrganizationInvitation>
+	 */
+	public function getOrganizationInvitations(): Collection
+	{
+		return $this->organizationInvitations;
+	}
+
+	public function addOrganizationInvitation(OrganizationInvitation $organizationInvitation): self
+	{
+		if (!$this->organizationInvitations->contains($organizationInvitation)) {
+			$this->organizationInvitations[] = $organizationInvitation;
+			$organizationInvitation->setOrganization($this);
+		}
+
+		return $this;
+	}
+
+	public function removeOrganizationInvitation(OrganizationInvitation $organizationInvitation): self
+	{
+		if ($this->organizationInvitations->removeElement($organizationInvitation)) {
+			// set the owning side to null (unless already changed)
+			if ($organizationInvitation->getOrganization() === $this) {
+				$organizationInvitation->setOrganization(null);
+			}
+		}
+
+		return $this;
+	}
+
+	public function __toString()
+	{
+		return $this->getName();
 	}
 }

@@ -4,12 +4,17 @@ namespace App\Controller\Api\Organization;
 
 use App\Controller\Api\AbstractApiController;
 use App\Entity\Organization;
+use App\Entity\OrganizationInvitation;
 use App\Entity\OrganizationMember;
 use App\Repository\OrganizationMemberRepository;
 use App\Security\OrganizationVoter;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route("/api/organization/members", name="api_organization_members_")
@@ -114,12 +119,33 @@ class MembersController extends AbstractApiController
 	/**
 	 * @Route("/{id}/invitation", methods={"POST", "PUT"}, name="invite", options={"expose": true})
 	 */
-	public function sendInvitation(int $id): JsonResponse
+	public function sendInvitation(int $id, Request $request, MailerInterface $mailer, TranslatorInterface $translator): JsonResponse
 	{
 		$organization = $this->getOrganization($id, OrganizationVoter::MANAGE);
+		$firstName = trim($request->request->get('first_name'));
+		$email = strtolower(trim($request->request->get('email')));
 
-		dump($organization);
-		// @TODO: Send invitation email
+		// Check if there's already a pending invitation for that email
+		foreach ($organization->getOrganizationInvitations() as $invitation) {
+			if (!$invitation->hasExpired() && !$invitation->isUsed() && $invitation->getEmail() == $email) {
+				return $this->apiError($translator->trans('organization.flash.invitation_already_sent'));
+			}
+		}
+
+		$invitation = new OrganizationInvitation($firstName, $email, $organization, $this->getUser());
+
+		$em = $this->getDoctrine()->getManager();
+		$em->persist($invitation);
+		$em->flush();
+
+		$email = (new TemplatedEmail())
+			->to(new Address($email, $firstName))
+			->subject($translator->trans('email.organization_invitation.subject', ['%inviter%' => $this->getUser()->getFullName(), '%organization%' => $organization]))
+			->htmlTemplate('email/organization_invitation.html.twig')
+			->context([
+				'invitation' => $invitation,
+			]);
+		$mailer->send($email);
 
 		return $this->apiSuccess();
 	}
