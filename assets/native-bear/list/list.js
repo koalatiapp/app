@@ -28,7 +28,7 @@ export class NbList extends LitElement {
 				.nb--list-pagination { margin-top: 30px; text-align: center; }
 
 				/* Light background mode */
-				:host([light]) .nb--list-item { border: 1px solid var(--color-gray-light); box-shadow: 0 2px 5px rgba(var(--shadow-rgb), 0.075); }
+				:host([light]) .nb--list-item { background-color: var(--color-blue-lightest); border: 1px solid var(--color-gray-light); box-shadow: none; }
 
 				@media (prefers-color-scheme: dark) {
 					.nb--list-header { color: var(--color-gray); }

@@ -39,7 +39,7 @@ export class OrganizationMembersList extends AbstractDynamicList {
 				key: "role",
 				label: "organization.settings.members.list.role",
 				render: (item, list) => html`
-					<nb-dropdown reveal-on-hover .options=${{
+					<nb-dropdown reveal-on-hover color="lighter" .options=${{
 						"ROLE_ADMIN": Translator.trans("roles.ROLE_ADMIN"),
 						"ROLE_MEMBER": Translator.trans("roles.ROLE_MEMBER"),
 						"ROLE_VISITOR": Translator.trans("roles.ROLE_VISITOR"),

@@ -34,6 +34,7 @@ export class NbDropdown extends LitElement {
 	static get properties() {
 		return {
 			open: {type: Boolean},
+			color: {type: String},
 			eventData: {attribute: false},
 			options: {attribute: false}
 		};
@@ -45,6 +46,7 @@ export class NbDropdown extends LitElement {
 		this.open = false;
 		this.eventData = {};
 		this.options = [];
+		this.color = "gray";
 	}
 
 	render()
@@ -52,7 +54,7 @@ export class NbDropdown extends LitElement {
 		return html`
 			${fontawesomeImport}
 
-			<nb-button size="small" color="gray">
+			<nb-button size="small" color=${this.color} no-shadow>
 				<slot name="toggle"></slot>
 				&nbsp;&nbsp;&nbsp;
 				<i class="far fa-angle-down"></i>
