@@ -1,0 +1,20 @@
+{% extends 'app_base.html.twig' %}
+
+{% block section_title %}{{ organization.name }}{% endblock %}
+{% block title %}{% trans %}organization.leave.title{% endtrans %}{% endblock %}
+
+{% block page_tabs %}
+	{% include 'app/_parts/organization_selector.html.twig' %}
+{% endblock %}
+
+{% block body %}
+	<div class="card">
+		<h2>{% trans with {"%organization%": organization.name} %}organization.leave.content_title{% endtrans %}</h2>
+		<p>{% trans %}organization.leave.warning_text{% endtrans %}</p>
+		{{ form(form) }}
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+	{{ encore_entry_script_tags('organization') }}
+{% endblock %}

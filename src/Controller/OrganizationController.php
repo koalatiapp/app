@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Organization;
 use App\Entity\OrganizationMember;
 use App\Form\Organization\DeletionOrganizationType;
+use App\Form\Organization\LeaveOrganizationType;
 use App\Form\Organization\NewOrganizationType;
 use App\Form\Organization\OrganizationType;
 use App\Repository\OrganizationRepository;
@@ -14,7 +15,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route("/team", name="organization_")
@@ -27,7 +27,6 @@ class OrganizationController extends AbstractController
 	public function __construct(
 		public OrganizationRepository $organizationRepository,
 		public SluggerInterface $slugger,
-		public TranslatorInterface $translator
 	) {
 	}
 
@@ -56,7 +55,7 @@ class OrganizationController extends AbstractController
 				$em->persist($membership);
 				$em->flush();
 
-				$this->addFlash('success', $this->translator->trans('organization.flash.created_successfully', ['%name%' => $organization->getName()]));
+				$this->addFlash('success', 'organization.flash.created_successfully', ['%name%' => $organization->getName()]);
 
 				return $this->redirectToRoute('organization_dashboard', ['id' => $organization->getId()]);
 			}
@@ -80,6 +79,52 @@ class OrganizationController extends AbstractController
 
 		return $this->render('app/organization/dashboard.html.twig', [
 			'organization' => $id ? $organizationRepository->find($id) : $this->getDefaultOrganization(),
+		]);
+	}
+
+	/**
+	 * @Route("/{id}/leave", name="leave")
+	 */
+	public function leave(int $id, Request $request): Response
+	{
+		$organization = $this->organizationRepository->find($id);
+		$this->denyAccessUnlessGranted(OrganizationVoter::VIEW, $organization);
+
+		$form = $this->createForm(LeaveOrganizationType::class, $organization);
+		$form->handleRequest($request);
+
+		if ($form->isSubmitted() && $form->isValid()) {
+			$membership = $organization->getMemberFromUser($this->getUser());
+
+			if ($membership->getHighestRole() == OrganizationMember::ROLE_ADMIN) {
+				$hasOtherAdmin = false;
+
+				foreach ($organization->getMembers() as $otherMember) {
+					if ($otherMember != $membership && $otherMember->getHighestRole() == OrganizationMember::ROLE_ADMIN) {
+						$hasOtherAdmin = true;
+						break;
+					}
+				}
+
+				if (!$hasOtherAdmin) {
+					$this->addFlash('danger', 'organization.flash.member_leave_no_admins');
+
+					return $this->redirectToRoute('organization_leave', ['id' => $id]);
+				}
+			}
+
+			$em = $this->getDoctrine()->getManager();
+			$em->remove($membership);
+			$em->flush();
+
+			$this->addFlash('success', 'organization.flash.member_left_successfully', ['%organization%' => $organization->getName()]);
+
+			return $this->redirectToRoute('dashboard');
+		}
+
+		return $this->render('app/organization/leave.html.twig', [
+			'organization' => $organization,
+			'form' => $form->createView(),
 		]);
 	}
 
@@ -126,7 +171,7 @@ class OrganizationController extends AbstractController
 			$em->flush();
 
 			if ($deletionForm->isValid()) {
-				$this->addFlash('success', $this->translator->trans('organization.flash.deleted_successfully', ['%name%' => $organization->getName()]));
+				$this->addFlash('success', 'organization.flash.deleted_successfully', ['%name%' => $organization->getName()]);
 
 				return null;
 			}
@@ -149,7 +194,7 @@ class OrganizationController extends AbstractController
 				$em->persist($organization);
 				$em->flush();
 
-				$this->addFlash('success', $this->translator->trans('organization.flash.updated_successfully', ['%name%' => $organization->getName()]));
+				$this->addFlash('success', 'organization.flash.updated_successfully', ['%name%' => $organization->getName()]);
 			}
 		}
 

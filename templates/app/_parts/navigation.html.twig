@@ -45,7 +45,7 @@
             <ul>
             </ul>
         </li>
-        <li class="{{ current_route in ['organization_dashboard', 'organization_create', 'organization_settings'] ? 'active' : '' }}">
+        <li class="{{ current_route in ['organization_dashboard', 'organization_create', 'organization_settings', 'organization_leave'] ? 'active' : '' }}">
             <a href="{{ path('organization_dashboard') }}">
                 <i class="far fa-users"></i>
                 <span>{% trans %}navigation.team.label{% endtrans %}</span>
@@ -64,6 +64,11 @@
 							</a>
 						</li>
 					{% endif %}
+					<li class="{{ current_route in ['organization_leave'] ? 'active' : '' }}">
+						<a href="{{ path('organization_leave', {id: organization.id}) }}">
+							{% trans %}navigation.team.sublink.leave{% endtrans %}
+						</a>
+					</li>
 				{% else %}
 					<li class="active">
 						<a href="{{ path('organization_create') }}">

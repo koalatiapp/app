@@ -49,6 +49,11 @@ class OrganizationVoter extends Voter
 		}
 
 		$member = $organization->getMemberFromUser($user);
+
+		if (!$member) {
+			return false;
+		}
+
 		$roleValue = $member->calculateRoleValue();
 
 		$requiredRoleValue = match ($attribute) {
