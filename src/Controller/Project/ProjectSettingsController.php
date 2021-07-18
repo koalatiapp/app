@@ -14,7 +14,6 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ProjectSettingsController extends AbstractProjectController
 {
@@ -51,7 +50,7 @@ class ProjectSettingsController extends AbstractProjectController
 	/**
 	 * @Route("/project/{id}/settings", name="project_settings")
 	 */
-	public function projectSettings(Request $request, Url $urlHelper, TranslatorInterface $translator, int $id): Response
+	public function projectSettings(Request $request, Url $urlHelper, int $id): Response
 	{
 		$project = $this->getProject($id);
 		$originalProject = clone $project;
@@ -70,16 +69,16 @@ class ProjectSettingsController extends AbstractProjectController
 					$em->remove($project);
 					$em->flush();
 
-					$this->addFlash('success', $translator->trans('project_settings.project.flash.deleted_successfully', ['%name%' => $project->getName()]));
+					$this->addFlash('success', 'project_settings.project.flash.deleted_successfully', ['%name%' => $project->getName()]);
 
 					return $this->redirectToRoute('dashboard');
 				}
 
-				$form->get('deleteConfirmation')->addError(new FormError($translator->trans('project_settings.project.delete.error_confirmation')));
+				$form->get('deleteConfirmation')->addError(new FormError($this->translator->trans('project_settings.project.delete.error_confirmation')));
 			}
 			// Handle the good old form settings form regularly
 			elseif ($form->isValid()) {
-				$this->processChanges($form, $project, $originalProject, $urlHelper, $translator);
+				$this->processChanges($form, $project, $originalProject, $urlHelper);
 			}
 		}
 
@@ -89,14 +88,14 @@ class ProjectSettingsController extends AbstractProjectController
 		]);
 	}
 
-	private function processChanges(Form $form, Project $project, Project $originalProject, Url $urlHelper, TranslatorInterface $translator): void
+	private function processChanges(Form $form, Project $project, Project $originalProject, Url $urlHelper): void
 	{
 		$websiteUrl = $urlHelper->standardize($project->getUrl(), false);
 		$urlHasChanged = $originalProject->getUrl() != $project->getUrl();
 
 		// Check if the provided website URL exists
 		if ($urlHasChanged && !$urlHelper->exists($websiteUrl)) {
-			$form->get('url')->addError(new FormError($translator->trans('project_settings.project.form.field.url.error_unreachable')));
+			$form->get('url')->addError(new FormError($this->translator->trans('project_settings.project.form.field.url.error_unreachable')));
 		}
 
 		if ($form->isValid()) {
@@ -105,7 +104,7 @@ class ProjectSettingsController extends AbstractProjectController
 			$em->persist($project);
 			$em->flush();
 
-			$this->addFlash('success', $translator->trans('project_settings.project.flash.updated_successfully', ['%name%' => $project->getName()]));
+			$this->addFlash('success', 'project_settings.project.flash.updated_successfully', ['%name%' => $project->getName()]);
 
 			if ($urlHasChanged) {
 				$this->dispatchMessage(new ScreenshotRequest($project->getId()));

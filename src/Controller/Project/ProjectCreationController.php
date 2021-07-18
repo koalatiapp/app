@@ -12,14 +12,13 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ProjectCreationController extends AbstractProjectController
 {
 	/**
 	 * @Route("/project/create", name="project_creation")
 	 */
-	public function projectCreation(Url $urlHelper, Request $request, TranslatorInterface $translator): Response
+	public function projectCreation(Url $urlHelper, Request $request): Response
 	{
 		$project = new Project();
 		$project->setOwnerUser($this->getUser());
@@ -44,7 +43,7 @@ class ProjectCreationController extends AbstractProjectController
 				$this->dispatchMessage(new ScreenshotRequest($project->getId()));
 				$this->dispatchMessage(new FaviconRequest($project->getId()));
 				$this->dispatchMessage(new SitemapRequest($project->getId()));
-				$this->addFlash('success', $translator->trans('project_creation.flash.created_successfully', ['%name%' => $project->getName()]));
+				$this->addFlash('success', 'project_creation.flash.created_successfully', ['%name%' => $project->getName()]);
 
 				return $this->redirectToRoute('project_dashboard', ['id' => $project->getId()]);
 			}

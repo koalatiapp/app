@@ -35,8 +35,8 @@ abstract class AbstractController extends DefaultAbstractController
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @param string                    $message
-	 * @param array<string,string>|null $messageParams
+	 * @param string                   $message
+	 * @param array<string,mixed>|null $messageParams
 	 */
 	protected function addFlash(string $type, $message, ?array $messageParams = []): void
 	{
