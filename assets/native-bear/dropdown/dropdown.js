@@ -8,7 +8,7 @@ export class NbDropdown extends LitElement {
 		return [
 			stylesReset,
 			css`
-				:host { display: block; position: relative; }
+				:host { display: inline-block; position: relative; }
 
 				.dropdown-list { display: block; padding: 0; margin: 0; list-style: none; white-space: nowrap; background-color: var(--color-white); border-radius: 10px; box-shadow: 0 3px 15px rgba(var(--shadow-rgb), .2); opacity: 0; position: absolute; z-index: 1; pointer-events: none; transition: opacity .25s ease; }
 				.dropdown-list li:not(:first-child) { border-top: 1px solid var(--color-gray-light); }
