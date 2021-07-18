@@ -16,10 +16,11 @@ jobs:
               with:
                   path: /tmp/composer-cache
                   key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
-            uses: shivammathur/setup-php@master
+            - name: Setup PHP
+              uses: shivammathur/setup-php@master
               with:
-              php-version: '8.0'
-              extension-csv: xsl
+                php-version: '8.0'
+                extension-csv: xsl
             - name: Install PHP dependencies (composer install)
               uses: php-actions/composer@v5
             - name: Use Node.js 12.x
