@@ -36,7 +36,7 @@ export class RequestTestingButton extends NbButton {
 
 		ApiClient.post("api_testing_request_create", { project_id: this.projectId }, null)
 			.then(() => {
-				window.Flash.show("success", Translator.trans("asdsd"));
+				window.Flash.show("success", Translator.trans("automated_testing.testing_request_created"));
 				setTimeout(() => {
 					this.loading = false;
 				}, 60000);

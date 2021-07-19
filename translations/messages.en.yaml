@@ -64,6 +64,9 @@ search:
     empty_state: No results were found.
     result_snippet_empty_state: No description or preview available.
 
+automated_testing:
+    testing_request_created: We're running the tests again, the results should start appearing in just a few seconds.
+
 recommendation:
     next: Next recommendation
     view_more: View more details
