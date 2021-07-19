@@ -30,7 +30,7 @@ navigation:
         sublink:
             overview: Overview
             checklist: Checklist
-            automated_testing: Automated testing
+            automated_testing: Recommendations
             settings: Settings
 
     resources:
@@ -72,6 +72,8 @@ recommendation:
     view_more: View more details
     ignore: Ignore
     mark_as_done: Mark as done
+    view_settings: Manage preferences
+    run_again: Refresh recommendations
     type:
         issue: Issue
         essential: Essential
@@ -150,14 +152,14 @@ project_dashboard:
     title: Overview
 
 project_testing:
-    title: Automated testing
+    title: Recommendations
 
 project_settings:
     tabs:
         project: Project
         basic_information: Basic information
         team: Team and roles
-        automated_testing: Automated testing
+        automated_testing: Recommendations
         checklist: Checklist
         delete: Deletion
     project:
@@ -191,7 +193,7 @@ project_settings:
         tabs:
             team: Team
     automated_testing:
-        title: Automated testing settings
+        title: Recommendation settings
         tabs:
             tools: Tools
             ignored_recommendations: Ignored

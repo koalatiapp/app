@@ -10,10 +10,10 @@
 
 {% block page_actions %}
 	<nb-button href="{{ path("project_settings_automated_testing", {id: project.id}) }}#ignored" color="gray">
-		View testing preferences
+		{% trans %}recommendation.view_settings{% endtrans %}
 	</nb-button>
 	<request-testing-button projectId="{{ project.id }}">
-		Run tests again
+		{% trans %}recommendation.run_again{% endtrans %}
 	</request-testing-button>
 {% endblock %}
 
