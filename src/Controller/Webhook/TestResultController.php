@@ -173,11 +173,11 @@ class TestResultController extends AbstractController
 	/**
 	 * Standardizes the raw recommendation into the expected array format.
 	 *
-	 * @param string|array<string,mixed> $rawRecommendation
+	 * @param string|array<int,mixed> $rawRecommendation
 	 *
 	 * @return array<string,mixed>
 	 */
-	private function standardizeRawRecommendation(mixed $rawRecommendation): array
+	private function standardizeRawRecommendation(string | array $rawRecommendation): array
 	{
 		// Fallback for tools still using the old format of string recommendations
 		if (is_string($rawRecommendation)) {
@@ -186,6 +186,13 @@ class TestResultController extends AbstractController
 				'params' => null,
 				'type' => Recommendation::TYPE_ISSUE,
 				'uniqueName' => substr($rawRecommendation, 0, 255),
+			];
+		} elseif (is_array($rawRecommendation)) {
+			$rawRecommendation = [
+				'template' => $rawRecommendation[0],
+				'params' => $rawRecommendation[1],
+				'type' => Recommendation::TYPE_ISSUE,
+				'uniqueName' => substr($rawRecommendation[0], 0, 255),
 			];
 		}
 
