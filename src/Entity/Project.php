@@ -2,8 +2,10 @@
 
 namespace App\Entity;
 
+use App\Entity\Checklist\Checklist;
 use App\Entity\Testing\IgnoreEntry;
 use App\Entity\Testing\Recommendation;
+use App\Entity\Trait\OwnedEntity;
 use App\Repository\ProjectRepository;
 use App\Util\Testing\RecommendationGroup;
 use DateTime;
@@ -21,6 +23,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Project
 {
+	use OwnedEntity;
+
 	public const STATUS_NEW = 'NEW';
 	public const STATUS_IN_PROGRESS = 'IN_PROGRESS';
 	public const STATUS_COMPLETED = 'COMPLETED';
@@ -46,20 +50,6 @@ class Project
 	 * @Groups({"default"})
 	 */
 	private $name;
-
-	/**
-	 * @var \App\Entity\User|null
-	 * @ORM\ManyToOne(targetEntity=User::class, inversedBy="personalProjects")
-	 * @Groups({"default"})
-	 */
-	private $ownerUser;
-
-	/**
-	 * @var \App\Entity\Organization|null
-	 * @ORM\ManyToOne(targetEntity=Organization::class, inversedBy="projects")
-	 * @Groups({"default"})
-	 */
-	private $ownerOrganization;
 
 	/**
 	 * @var \DateTimeInterface
@@ -114,6 +104,11 @@ class Project
 	 */
 	private ?array $disabledTools = [];
 
+	/**
+	 * @ORM\OneToOne(targetEntity=Checklist::class, mappedBy="project", cascade={"persist", "remove"})
+	 */
+	private ?Checklist $checklist;
+
 	public function __construct()
 	{
 		$this->dateCreated = new DateTime();
@@ -136,18 +131,6 @@ class Project
 	public function setName(string $name): self
 	{
 		$this->name = $name;
-
-		return $this;
-	}
-
-	public function getOwnerUser(): ?User
-	{
-		return $this->ownerUser;
-	}
-
-	public function setOwnerUser(?User $ownerUser): self
-	{
-		$this->ownerUser = $ownerUser;
 
 		return $this;
 	}
@@ -233,23 +216,6 @@ class Project
 	public function getPriority(): int
 	{
 		return 1;
-	}
-
-	public function getOwnerOrganization(): ?Organization
-	{
-		return $this->ownerOrganization;
-	}
-
-	public function setOwnerOrganization(?Organization $ownerOrganization): self
-	{
-		$this->ownerOrganization = $ownerOrganization;
-
-		return $this;
-	}
-
-	public function getOwner(): Organization | User
-	{
-		return $this->getOwnerOrganization() ?: $this->getOwnerUser();
 	}
 
 	/**
@@ -413,5 +379,22 @@ class Project
 	public function hasToolEnabled(string $tool): bool
 	{
 		return !in_array(strtolower(trim($tool)), $this->getDisabledTools());
+	}
+
+	public function getChecklist(): ?Checklist
+	{
+		return $this->checklist;
+	}
+
+	public function setChecklist(Checklist $checklist): self
+	{
+		// set the owning side of the relation if necessary
+		if ($checklist->getProject() !== $this) {
+			$checklist->setProject($this);
+		}
+
+		$this->checklist = $checklist;
+
+		return $this;
 	}
 }
