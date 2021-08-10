@@ -11,7 +11,7 @@ export class ChecklistItemList extends AbstractDynamicList {
 			super.styles,
 			css`
 				.nb--list-header { display: none; }
-				.nb--list-item { grid-template-areas: "checkbox title"; grid-template-columns: 2rem 1fr; }
+				.nb--list-item { grid-template-areas: "checkbox title"; grid-template-columns: 1.5rem 1fr; }
 
 				nb-markdown { display: block; font-weight: 500; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; cursor: pointer; }
 				.view-item-details { font-size: .85em; font-weight: 500; color: var(--color-blue); text-decoration: none; cursor: pointer; transition: all .15s ease; }
@@ -40,7 +40,7 @@ export class ChecklistItemList extends AbstractDynamicList {
 				key: "checkbox",
 				label: "",
 				render: (item, list) => html`
-					<input type="checkbox" id="checklist-item-${item.id}-checkbox" aria-labelledby="checklist-item-${item.id}-title" ?checked=${item.isCompleted} @change=${() => list._toggleItemCompletionCallback(item)}>
+					<nb-checkbox id="checklist-item-${item.id}-checkbox" aria-labelledby="checklist-item-${item.id}-title" ?checked=${item.isCompleted} @change=${() => list._toggleItemCompletionCallback(item)}></nb-checkbox>
 				`,
 				placeholder: html`
 					<div class="nb--list-item-column-placeholder" style="width: 3ch; height: 3ch;">&nbsp;</div>
@@ -103,7 +103,7 @@ export class ChecklistItemList extends AbstractDynamicList {
 		}
 		this.requestUpdate("items");
 
-		ApiClient.post("api_checklist_item_toggle", { id: item.id, is_completed: item.isCompleted }, null);
+		ApiClient.post("api_checklist_item_toggle", { id: item.id, is_completed: item.isCompleted ? 1 : 0 }, null);
 	}
 
 	_showItemDetailsCallback(item)
