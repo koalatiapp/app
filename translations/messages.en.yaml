@@ -164,6 +164,7 @@ project_checklist:
         title: Checklist - step-by-step
     item:
         view_more: Learn more
+        resources: "Here are some Koalati-curated resources to help:"
 
 project_settings:
     tabs:

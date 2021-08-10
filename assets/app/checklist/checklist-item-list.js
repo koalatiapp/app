@@ -144,10 +144,11 @@ export class ChecklistItemList extends AbstractDynamicList {
 					<script type="text/markdown">${item.description}</script>
 				</nb-markdown>
 				<hr>
-				<ul>
+				<strong class="text-large">${Translator.trans("project_checklist.item.resources")}</strong>
+				<ul class="grid cols-2" style="--grid-gap: 1rem;">
 					${item.resourceUrls?.length ? item.resourceUrls.map(url => html`
 						<li>
-							<a href=${url} target="_blank">${url}</a>
+							<link-preview-card url=${url}></link-preview-card>
 						</li>`
 					) : ""}
 				</ul>
