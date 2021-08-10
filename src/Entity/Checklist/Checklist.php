@@ -4,6 +4,7 @@ namespace App\Entity\Checklist;
 
 use App\Entity\Project;
 use App\Repository\Checklist\ChecklistRepository;
+use DateTime;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -56,6 +57,7 @@ class Checklist
 	{
 		$this->itemGroups = new ArrayCollection();
 		$this->items = new ArrayCollection();
+		$this->dateUpdated = new DateTime();
 	}
 
 	public function getId(): ?int

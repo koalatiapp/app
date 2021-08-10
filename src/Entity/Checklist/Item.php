@@ -48,7 +48,7 @@ class Item
 	/**
 	 * @ORM\Column(type="boolean")
 	 */
-	private ?bool $isCompleted;
+	private ?bool $isCompleted = false;
 
 	public function getId(): ?int
 	{

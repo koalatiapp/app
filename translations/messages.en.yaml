@@ -154,6 +154,15 @@ project_dashboard:
 project_testing:
     title: Recommendations
 
+project_checklist:
+    tabs:
+        overview: Overview
+        detailed: Step-by-step
+    overview:
+        title: Checklist - overview
+    detailed:
+        title: Checklist - step-by-step
+
 project_settings:
     tabs:
         project: Project
