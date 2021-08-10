@@ -4,6 +4,7 @@ namespace App\Entity\Checklist;
 
 use App\Repository\Checklist\ItemRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ItemRepository::class)
@@ -13,6 +14,7 @@ class Item
 	/**
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
+	 * @Groups({"default"})
 	 * @ORM\Column(type="integer")
 	 */
 	private ?int $id;
@@ -30,16 +32,19 @@ class Item
 
 	/**
 	 * @ORM\Column(type="text")
+	 * @Groups({"default"})
 	 */
 	private ?string $title;
 
 	/**
 	 * @ORM\Column(type="text")
+	 * @Groups({"default"})
 	 */
 	private ?string $description;
 
 	/**
 	 * @ORM\Column(type="array", nullable=true)
+	 * @Groups({"default"})
 	 *
 	 * @var array<int,string>
 	 */
@@ -47,6 +52,7 @@ class Item
 
 	/**
 	 * @ORM\Column(type="boolean")
+	 * @Groups({"default"})
 	 */
 	private ?bool $isCompleted = false;
 
