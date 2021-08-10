@@ -19,13 +19,22 @@ class LinkMetasController extends AbstractApiController
 	/**
 	 * Fetches the meta data for a given URL and returns it as JSON.
 	 *
+	 * Query parameters:
+	 * - `url` (string): URL of the page to get metadata from.
+	 * - `cache` (bool): Whether cache is allowed or not. (defaults to `true`)
+	 *
 	 * @Route("", methods={"GET"}, name="", options={"expose": true})
 	 */
 	public function getMetas(Request $request, MetaFetcher $metaFetcher): JsonResponse
 	{
 		$url = $request->query->get('url');
+		$allowCache = (bool) $request->query->get('cache', true);
 		$urlHash = md5($url);
 		$cache = new FilesystemAdapter();
+
+		if (!$allowCache) {
+			$cache->deleteItem("link_metas.$urlHash");
+		}
 
 		$metas = $cache->get("link_metas.$urlHash", function (ItemInterface $item) use ($metaFetcher, $url) {
 			$item->expiresAfter(3600 * 24 * LinkMetasController::CACHE_DURATION_IN_DAYS);
@@ -33,6 +42,7 @@ class LinkMetasController extends AbstractApiController
 			return $metaFetcher->getMetas($url);
 		});
 
-		return $this->apiSuccess($metas);
+		return $this->enableResponseCache(3600 * 24 * LinkMetasController::CACHE_DURATION_IN_DAYS)
+			->apiSuccess($metas);
 	}
 }
