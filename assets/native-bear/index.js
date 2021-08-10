@@ -4,7 +4,7 @@ import "element-internals-polyfill";
 export {NbList} from "./list/list";
 export {NbField} from "./field/field";
 export {NbInput} from "./input/input";
-export {NBCheckbox} from "./checkbox/checkbox";
+export {NbCheckbox} from "./checkbox/checkbox";
 export {NbSelect} from "./select/select";
 export {NbRadioList} from "./radio-list/radio-list";
 export {NbButton} from "./button/button";

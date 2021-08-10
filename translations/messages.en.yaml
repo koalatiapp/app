@@ -162,6 +162,8 @@ project_checklist:
         title: Checklist - overview
     detailed:
         title: Checklist - step-by-step
+    item:
+        view_more: Learn more
 
 project_settings:
     tabs:
