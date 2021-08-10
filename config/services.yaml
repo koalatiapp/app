@@ -79,3 +79,15 @@ services:
     App\Util\Screenshot\Driver\ApiFlash:
         arguments:
             - '%env(APIFLASH_ACCESS_KEY)%'
+
+    App\Util\Meta\Driver\UrlMeta:
+        arguments:
+            - '%env(URLMETA_ACCOUNT_EMAIL)%'
+            - '%env(URLMETA_API_KEY)%'
+
+    App\Util\Meta\Driver\OpenGraphIo:
+        arguments:
+            - '%env(OPENGRAPHIO_API_KEY)%'
+
+    App\Util\Meta\MetaDriverInterface:
+        alias: App\Util\Meta\Driver\OpenGraphIo
