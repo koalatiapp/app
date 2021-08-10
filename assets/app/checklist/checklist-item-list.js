@@ -109,9 +109,23 @@ export class ChecklistItemList extends AbstractDynamicList {
 	_showItemDetailsCallback(item)
 	{
 		new Modal({
-			title: Translator.trans("recommendation.ignore_form.title"),
+			title: html`
+				<nb-markdown barebones>
+					<script type="text/markdown">${item.title}</script>
+				</nb-markdown>
+			`,
 			content: html`
-				${item.title}
+				<nb-markdown barebones>
+					<script type="text/markdown">${item.description}</script>
+				</nb-markdown>
+				<hr>
+				<ul>
+					${item.resourceUrls?.length ? item.resourceUrls.map(url => html`
+						<li>
+							<a href=${url} target="_blank">${url}</a>
+						</li>`
+					) : ""}
+				</ul>
 			`
 		});
 	}
