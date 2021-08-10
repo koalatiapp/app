@@ -33,6 +33,7 @@ class UrlMeta implements MetaDriverInterface
 
 		return new Metadata(
 			$url,
+			$rawMetas['site']['name'] ?? null,
 			$rawMetas['title'] ?? null,
 			$rawMetas['description'] ?? null,
 			$rawMetas['image'] ?? null,

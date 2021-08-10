@@ -7,28 +7,36 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class Metadata
 {
 	/**
-	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+	 * @Groups({"default"})
 	 */
-	public function __construct(
-		/*
-		 * @Groups({"default"})
-		 */
-		public string $url,
+	public string $url;
 
-		/*
-		 * @Groups({"default"})
-		 */
-		public ?string $title,
+	/**
+	 * @Groups({"default"})
+	 */
+	public ?string $siteName;
 
-		/*
-		 * @Groups({"default"})
-		 */
-		public ?string $description,
+	/**
+	 * @Groups({"default"})
+	 */
+	public ?string $title;
 
-		/*
-		 * @Groups({"default"})
-		 */
-		public ?string $imageUrl
-	) {
+	/**
+	 * @Groups({"default"})
+	 */
+	public ?string $description;
+
+	/**
+	 * @Groups({"default"})
+	 */
+	public ?string $imageUrl;
+
+	public function __construct(string $url, ?string $siteName, ?string $title, ?string $description, ?string $imageUrl)
+	{
+		$this->url = $url;
+		$this->siteName = $siteName;
+		$this->title = $title;
+		$this->description = $description;
+		$this->imageUrl = $imageUrl;
 	}
 }

@@ -31,6 +31,7 @@ class OpenGraphIo implements MetaDriverInterface
 
 		return new Metadata(
 			$rawMetas['url'] ?? $url,
+			$rawMetas['site_name'] ?? null,
 			$rawMetas['title'] ?? null,
 			$rawMetas['description'] ?? null,
 			$rawMetas['image'] ?? null,
