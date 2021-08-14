@@ -93,6 +93,11 @@ export class ChecklistItemList extends AbstractDynamicList {
 		];
 	}
 
+	supportedDynamicActions()
+	{
+		return ["update"];
+	}
+
 	constructor()
 	{
 		super();

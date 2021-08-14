@@ -36,6 +36,36 @@ export class AbstractDynamicList extends NbList {
 	}
 
 	/**
+	 * Returns the list of dynamic actions that are supported by this list.
+	 * Available actions:
+	 * - `"update"`
+	 * - `"add"`
+	 * - `"delete"`
+	 *
+	 * @returns {string[]} Array of supported actions
+	*/
+	supportedDynamicActions()
+	{
+		return ["update", "add", "delete"];
+	}
+
+	/**
+	 * Whether the given action is supported or not by the list.
+	 * Available actions:
+	 * - `"update"`
+	 * - `"add"`
+	 * - `"delete"`
+	 *
+	 * @final
+	 * @param {string} action
+	 * @returns {boolean} Whether the action is supported by this list.
+	 */
+	supportsDynamicAction(action)
+	{
+		return this.supportedDynamicActions().includes(action.trim().toLowerCase());
+	}
+
+	/**
 	 * @param {string} endpoint
 	 * @param {FormData|object} body
 	 */
@@ -51,16 +81,20 @@ export class AbstractDynamicList extends NbList {
 					if (update.data) {
 						for (const index in this.items) {
 							if (this.items[index].id == update.id) {
-								const updatedList = [...this.items];
-								updatedList[index] = update.data;
-								this.items = updatedList;
+								if (this.supportsDynamicAction("update")) {
+									const updatedList = [...this.items];
+									updatedList[index] = update.data;
+									this.items = updatedList;
+								}
 								return;
 							}
 						}
 
 						// If we got here, it means the item wasn't found - add it to the list.
-						this.items = this.items.concat([update.data]);
-					} else {
+						if (this.supportsDynamicAction("add")) {
+							this.items = this.items.concat([update.data]);
+						}
+					} else if (this.supportsDynamicAction("delete")) {
 						this.items = this.items.filter(item => item.id != update.id);
 					}
 				});
