@@ -74,10 +74,14 @@ export class AbstractDynamicList extends NbList {
 		ApiClient.get(endpoint, body).then(response => {
 			this.items = Array.isArray(response.data) ? response.data : Object.values(response.data);
 
+			this.dispatchEvent(new CustomEvent("items-initialized"));
+
 			// Subscribe to live updates
 			const mercureTopic = response._response.headers.get("suggested-mercure-topic");
 			if (mercureTopic) {
 				ApiClient.subscribe(mercureTopic, update => {
+					let itemsHaveChanged = false;
+
 					if (update.data) {
 						for (const index in this.items) {
 							if (this.items[index].id == update.id) {
@@ -85,17 +89,29 @@ export class AbstractDynamicList extends NbList {
 									const updatedList = [...this.items];
 									updatedList[index] = update.data;
 									this.items = updatedList;
+									itemsHaveChanged = true;
 								}
-								return;
+								break;
 							}
 						}
 
-						// If we got here, it means the item wasn't found - add it to the list.
-						if (this.supportsDynamicAction("add")) {
-							this.items = this.items.concat([update.data]);
+						if (!itemsHaveChanged) {
+							// If we got here, it means the item wasn't found - add it to the list.
+							if (this.supportsDynamicAction("add")) {
+								this.items = this.items.concat([update.data]);
+							}
 						}
 					} else if (this.supportsDynamicAction("delete")) {
+						const originalLength = this.items.length;
 						this.items = this.items.filter(item => item.id != update.id);
+
+						if (this.items.length != originalLength) {
+							itemsHaveChanged = true;
+						}
+					}
+
+					if (itemsHaveChanged) {
+						this.dispatchEvent(new CustomEvent("items-updated"));
 					}
 				});
 			}

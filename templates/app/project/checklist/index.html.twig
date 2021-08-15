@@ -16,8 +16,9 @@
 
 {% block body %}
 	{% for group in project.checklist.itemGroups %}
-		<h2>{{ group.name }}</h2>
-		<checklist-item-list projectId="{{ project.id }}" groupId="{{ group.id }}"></checklist-item-list>
+		<checklist-group projectId="{{ project.id }}" groupId="{{ group.id }}">
+			{{ group.name }}
+		</checklist-group>
 		<hr class="spacer">
 	{% endfor %}
 {% endblock %}
