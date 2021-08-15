@@ -9,7 +9,7 @@ export class ChecklistGroup extends LitElement {
 			stylesReset,
 			css`
 				.progression { display: inline-block; padding: .35em .75em; margin-left: .35rem; font-size: 0.75rem; font-weight: 500; vertical-align: middle; color: var(--color-blue-dark-faded); background-color: var(--color-blue-10); border-radius: 15px; }
-				.completion-indicator { display: inline-block; color: var(--color-green); }
+				.completion-indicator { display: inline-block; margin-left: .35rem; color: var(--color-green); }
 				.completion-indicator:not(.previously-completed) { animation: completion-appearance .25s cubic-bezier(0.25, 0.1, 0.37, 2.5) forwards; }
 
 				@keyframes completion-appearance {
