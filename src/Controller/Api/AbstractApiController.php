@@ -13,8 +13,11 @@ use App\Util\ClientMessageSerializer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\EventListener\AbstractSessionListener;
+/*
 use Symfony\Component\Mercure\Authorization;
 use Symfony\Component\Mercure\Discovery;
+*/
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 abstract class AbstractApiController extends AbstractController
@@ -31,6 +34,12 @@ abstract class AbstractApiController extends AbstractController
 	private ?string $suggestedMercureTopic = null;
 
 	/**
+	 * The duration for which the current request's response will be cached.
+	 * This can be defined with `enableResponseCache()`.
+	 */
+	private int $cacheDuration = 0;
+
+	/**
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.serializer)
 	 */
 	public function __construct(
@@ -38,9 +47,11 @@ abstract class AbstractApiController extends AbstractController
 		protected UpdateDispatcher $updateDispatcher,
 		protected ClientMessageSerializer $serializer,
 		protected TranslatorInterface $translator,
+		private RequestStack $requestStack,
+		/*
 		private Discovery $discovery,
 		private Authorization $authorization,
-		private RequestStack $requestStack
+		*/
 	) {
 	}
 
@@ -161,6 +172,12 @@ abstract class AbstractApiController extends AbstractController
 
 		$this->addSuggestedMercureTopicToResponse($response);
 
+		if ($this->cacheDuration > 0) {
+			$response->headers->set(AbstractSessionListener::NO_AUTO_CACHE_CONTROL_HEADER, 'true');
+			$response->setPublic();
+			$response->setMaxAge($this->cacheDuration);
+		}
+
 		return $response;
 	}
 
@@ -178,5 +195,12 @@ abstract class AbstractApiController extends AbstractController
 	protected function accessDenied(): JsonResponse
 	{
 		return $this->apiError('You do not have access to this resource.', 403);
+	}
+
+	protected function enableResponseCache(int $duration = 3600): self
+	{
+		$this->cacheDuration = $duration;
+
+		return $this;
 	}
 }

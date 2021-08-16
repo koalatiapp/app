@@ -6,6 +6,7 @@ import "./utils/modal.js";
 import "./native-bear";
 import "./app/generic/search-overlay.js";
 import "./app/generic/member-list-item.js";
+import "./app/generic/link-preview-card.js";
 import "zero-md";
 
 // App-wide utilities

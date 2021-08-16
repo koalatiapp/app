@@ -57,7 +57,7 @@ export default class Modal {
 	/**
 	 *
 	 * @param {object} [options={}] - Options for the modal's initialization
-	 * @param {string} [options.title] - Content to display as the title of the modal.
+	 * @param {string|object} [options.title] - Content to display as the title of the modal.
 	 * @param {string|object|Promise<string|object>} [options.content] - Content to display inside the modal.
 	 * @param {string} [options.contentUrl] - A URL from which to fetch the content to display inside the modal.
 	 * @param {boolean} [options.confirmClose=false] - Whether the user should have to confirm when they want to close the modal.
@@ -87,7 +87,7 @@ export default class Modal {
 	/**
 	 *
 	 * @param {object} [options={}] - Options for the modal's initialization
-	 * @param {string} [options.title] - Content to display as the title of the modal.
+	 * @param {string|object} [options.title] - Content to display as the title of the modal.
 	 * @param {string|object|Promise<string|object>} [options.content] - Content to display inside the modal.
 	 * @param {string} [options.contentUrl] - A URL from which to fetch the content to display inside the modal.
 	 * @param {boolean} [options.confirmClose=false] - Whether the user should have to confirm when they want to close the modal.
@@ -145,7 +145,9 @@ export default class Modal {
 		dialog.setAttribute("aria-hidden", "true");
 		dialog.innerHTML = `
 			<header class="modal-header">
-				<div class="modal-title" id="modal-title-${this.guid}">${this.options.title ?? ""}</div>
+				<div class="modal-title" id="modal-title-${this.guid}">
+					${typeof this.options.title != "object" ? this.options.title ?? "" : ""}
+				</div>
 				<div class="modal-actions">
 					<nb-icon-button class="modal-close" size="small" color="gray">
 						<i class="far fa-times" aria-label="Close this dialog"></i>
@@ -154,6 +156,11 @@ export default class Modal {
 			</header>
 			<div class="modal-content" id="modal-content-${this.guid}">${this._hasStaticContent() ? (this.options?.content ?? "") : ""}</div>
 		`;
+
+		if (typeof this.options.title == "object") {
+			render(this.options.title, dialog.querySelector(".modal-title"));
+		}
+
 		this.wrapperElement.prepend(dialog);
 
 		return dialog;

@@ -1,0 +1,28 @@
+{% extends 'app_base.html.twig' %}
+
+{% block title %}{% trans %}project_checklist.overview.title{% endtrans %}{% endblock %}
+{% block section_title %}{{ 'generic.project_section_title'|trans({'%name%': project.name}) }}{% endblock %}
+
+{% block page_tabs %}
+	{% include 'app/_parts/page_tabs.html.twig' with {page_tabs: [
+		{label: 'project_checklist.tabs.overview', route: 'project_checklist', route_params: {id: project.id}},
+		{label: 'project_checklist.tabs.detailed', route: 'project_checklist_detailed', route_params: {id: project.id}},
+	]} %}
+{% endblock %}
+
+{% block page_actions %}
+
+{% endblock %}
+
+{% block body %}
+	{% for group in project.checklist.itemGroups %}
+		<checklist-group projectId="{{ project.id }}" groupId="{{ group.id }}">
+			{{ group.name }}
+		</checklist-group>
+		<hr class="spacer">
+	{% endfor %}
+{% endblock %}
+
+{% block javascripts %}
+	{{ encore_entry_script_tags('checklist') }}
+{% endblock %}

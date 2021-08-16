@@ -19,8 +19,8 @@
 							{% trans %}navigation.project.sublink.overview{% endtrans %}
 						</a>
 					</li>
-					<li>
-						<a href="#">
+					<li class="{{ current_route in ['project_checklist'] ? 'active' : '' }}">
+						<a href="{{ path('project_checklist', {id: project.id}) }}">
 							{% trans %}navigation.project.sublink.checklist{% endtrans %}
 						</a>
 					</li>
