@@ -1,5 +1,6 @@
 import { LitElement, html, css } from "lit";
 import stylesReset from "../styles-reset.js";
+import fontAwesomeImport from "../../utils/fontawesome-import.js";
 
 export class NbCheckbox extends LitElement {
 	static get formAssociated()
@@ -14,10 +15,13 @@ export class NbCheckbox extends LitElement {
 			css`
 				:host { display: inline-flex; align-items: center; }
 
+				.input-wrapper { position: relative; }
 				input { display: inline-block; width: 1.375rem; height: 1.375rem; flex: 0 0 1.375rem; padding: 0; border: 2px solid var(--color-gray-light); border-radius: 3px; box-shadow: 0 1px 8px 0 rgba(var(--shadow-rgb), .05); appearance: none; cursor: pointer; }
-				input:checked { background-color: var(--color-gray-light); background-image: url('/ext/fontawesome/svgs/regular/check.svg'); background-size: 90%; background-position: center; background-repeat: no-repeat; border-color: var(--color-blue-light); }
+				input:checked { background-color: var(--color-gray-light); border-color: var(--color-blue-light); }
 				input:hover { box-shadow: 0 2px 10px 0 rgba(var(--shadow-rgb), .15); }
 				input:focus-visibles { border-color: var(--color-blue); box-shadow: 0 2px 10px 0 rgba(var(--shadow-rgb), .25); }
+				.checkmark { width: 1em; margin: auto; font-size: 0.9rem; color: var(--color-black); transform: scale(0); position: absolute; top: 0.5em; left: 1px; right: 0px; pointer-events: none; transition: transform .15s ease-in; }
+				input:checked + .checkmark { transform: scale(1); transition: transform 0.35s cubic-bezier(0, 1.85, 1, 1) 0s; }
 
 				label { margin-left: 5px; }
 
@@ -58,7 +62,11 @@ export class NbCheckbox extends LitElement {
 	render()
 	{
 		return html`
-			<input type="checkbox" id=${this.inputId} name=${this.disableAutofill ? "" : this.name} value=${this.value} ?checked=${this.checked} ?readonly=${this.readonly} ?disabled=${this.disabled} @change=${this._updateValue}>
+			${fontAwesomeImport}
+			<span class="input-wrapper">
+				<input type="checkbox" id=${this.inputId} name=${this.disableAutofill ? "" : this.name} value=${this.value} ?checked=${this.checked} ?readonly=${this.readonly} ?disabled=${this.disabled} @change=${this._updateValue}>
+				<i class="far fa-check checkmark" aria-hidden="true"></i>
+			</span>
 			${this.label ? html`<label for=${this.inputId}>${this.label}</label>` : ""}
 	  	`;
 	}
