@@ -39,9 +39,13 @@ class UserRegistrationType extends AbstractType
 			->add('spacer', SpacerType::class, [
 				'attr' => ['class' => 'spacer small'],
 			])
-			->add('policies', ParagraphType::class, [
-				'data' => 'registration.form.field.policies',
-				'attr' => ['class' => 'text-smaller text-center'],
+			->add('termsOfService', ParagraphType::class, [
+				'data' => 'registration.form.field.termsOfService',
+				'attr' => ['class' => 'text-smaller text-center text-blue-gray'],
+			])
+			->add('privacyPolicy', ParagraphType::class, [
+				'data' => 'registration.form.field.privacyPolicy',
+				'attr' => ['class' => 'text-smaller text-center text-blue-gray'],
 			])
 		;
 	}

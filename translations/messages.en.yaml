@@ -29,7 +29,8 @@ registration:
             firstName: First name
             email: Email address
             password: Password
-            policies: By creating a Koalati account, you're agreeing to accept the <a href="https://koalati.com/terms-of-service">Koalati terms of service</a>.
+            termsOfService: By creating a Koalati account, you're agreeing to accept the <a href="https://www.koalati.com/terms-of-service">Koalati terms of service</a>.
+            privacyPolicy: Ethics and privacy is paramount at Koalati. To see what type of data we collect and how we handle it, take a look at the <a href="https://www.koalati.com/privacy-policy">Koalati privacy policy</a>.
 
 navigation:
     dashboard:
