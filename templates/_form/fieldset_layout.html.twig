@@ -16,7 +16,9 @@
 				{%- else -%}
 					{{- label|trans(label_translation_parameters, translation_domain)|raw -}}
 				{%- endif -%}
-			{%- endif -%}"/>
+			{%- endif -%}">
+            {{ form_errors(form) }}
+		</nb-input>
 	{%- endif -%}
 {%- endblock form_widget_simple -%}
 
@@ -157,7 +159,6 @@
         {%- set widget_attr = {attr: {'aria-describedby': id ~ "_help"}} -%}
     {%- endif -%}
     <fieldset{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %}>
-        {{- form_errors(form) -}}
         {{- form_widget(form, widget_attr) -}}
         {{- form_help(form) -}}
     </fieldset>

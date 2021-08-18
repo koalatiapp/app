@@ -1,0 +1,8 @@
+{% block paragraph_row %}
+	{{- form_widget(form) -}}
+{% endblock %}
+{% block paragraph_label %}{% endblock %}
+{% block paragraph_widget %}
+    <p {% with {attr: attr} %}{{ block('attributes') }}{% endwith %}>{{ form.vars.data|trans|raw }}</p>
+{% endblock %}
+{% block paragraph_errors %}{% endblock %}

@@ -21,6 +21,16 @@ login:
             password: Password
             remember_me: Keep me signed in
 
+registration:
+    form:
+        title: Create your account
+        submit_label: Create my account
+        field:
+            firstName: First name
+            email: Email address
+            password: Password
+            policies: By creating a Koalati account, you're agreeing to accept the <a href="https://koalati.com/terms-of-service">Koalati terms of service</a>.
+
 navigation:
     dashboard:
         label: Dashboard

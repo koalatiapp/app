@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Pyrrah\GravatarBundle\GravatarApi;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -15,6 +16,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="`user`")
+ * @UniqueEntity(fields="email", message="user.error.unique_email")
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -45,13 +47,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	private string $password;
 
 	/**
-	 * @ORM\Column(type="string", length=255, nullable=true)
+	 * @ORM\Column(type="string", length=255)
 	 * @Groups({"default"})
 	 */
 	private ?string $firstName;
 
 	/**
-	 * @ORM\Column(type="string", length=255)
+	 * @ORM\Column(type="string", length=255, nullable=true)
 	 * @Groups({"default"})
 	 */
 	private ?string $lastName;
@@ -190,7 +192,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 		return $this->firstName;
 	}
 
-	public function setFirstName(?string $firstName): self
+	public function setFirstName(string $firstName): self
 	{
 		$this->firstName = $firstName;
 
@@ -202,7 +204,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 		return $this->lastName;
 	}
 
-	public function setLastName(string $lastName): self
+	public function setLastName(?string $lastName): self
 	{
 		$this->lastName = $lastName;
 

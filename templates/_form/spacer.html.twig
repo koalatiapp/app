@@ -1,0 +1,8 @@
+{% block spacer_row %}
+	{{- form_widget(form) -}}
+{% endblock %}
+{% block spacer_label %}{% endblock %}
+{% block spacer_widget %}
+    <hr {% with {attr: attr} %}{{ block('attributes') }}{% endwith %}>
+{% endblock %}
+{% block spacer_errors %}{% endblock %}

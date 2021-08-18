@@ -12,7 +12,7 @@ export class NbInput extends LitElement {
 		return [
 			stylesReset,
 			css`
-				:host { display: block; }
+				:host { display: block; max-width: 100%; }
 				.input { display: block; width: 100%; max-width: 100%; padding: 8px 15px; margin: 6px 0; font-family: inherit; font-size: .95rem; font-weight: 400; line-height: 1.5rem; color: var(--color-gray-darker); background-color: var(--color-white); border: 2px solid var(--color-gray-light); border-radius: 8px; outline: none; box-shadow: 0 2px 10px 0 rgba(var(--shadow-rgb), .025); box-sizing: border-box; -webkit-font-smoothing: antialiased; transition: border-color .25s ease, box-shadow .25s ease; }
 				.input:hover { box-shadow: 0 2px 10px 0 rgba(var(--shadow-rgb), .15); }
 				.input:focus { border-color: var(--color-blue); box-shadow: 0 2px 10px 0 rgba(var(--shadow-rgb), .15); }
@@ -69,6 +69,7 @@ export class NbInput extends LitElement {
 	{
 		return html`
 			${this.label ? html`<label for=${this.inputId}>${this.label}</label>` : ""}
+			<slot></slot>
 			<input class="input" id=${this.inputId} name=${this.disableAutofill ? "" : this.name} type=${this.type} placeholder=${this.placeholder} value=${this.value}  ?readonly=${this.readonly} ?disabled=${this.disabled} @input=${this._updateValue}>
 	  	`;
 	}
