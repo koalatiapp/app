@@ -38,6 +38,7 @@ export class NbInput extends LitElement {
 			name: {type: String},
 			type: {type: String},
 			placeholder: {type: String},
+			autocomplete: {type: String},
 			value: {type: String|Number},
 			step: {type: Number},
 			required: {type: Boolean},
@@ -58,6 +59,7 @@ export class NbInput extends LitElement {
 		this.value = "";
 		this.type = "text";
 		this.placeholder = "";
+		this.autocomplete = "";
 		this._required = false;
 		this.readonly = false;
 		this.disabled = false;
@@ -70,7 +72,7 @@ export class NbInput extends LitElement {
 		return html`
 			${this.label ? html`<label for=${this.inputId}>${this.label}</label>` : ""}
 			<slot></slot>
-			<input class="input" id=${this.inputId} name=${this.disableAutofill ? "" : this.name} type=${this.type} placeholder=${this.placeholder} value=${this.value}  ?readonly=${this.readonly} ?disabled=${this.disabled} @input=${this._updateValue}>
+			<input class="input" id=${this.inputId} name=${this.disableAutofill ? "" : this.name} type=${this.type} placeholder=${this.placeholder} autocomplete=${this.autocomplete} value=${this.value}  ?readonly=${this.readonly} ?disabled=${this.disabled} @input=${this._updateValue}>
 	  	`;
 	}
 

@@ -3,6 +3,18 @@
 	{%- if type == 'hidden' -%}
     	<input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
 	{%- else -%}
+		{%- set autocomplete_type = attr.autocomplete is defined ? attr.autocomplete : null -%}
+
+		{%- if autocomplete_type != null -%}
+			{# Nothing to do - we'll use the user-defined one #}
+		{%- elseif type == 'email' or type == 'tel' or type == 'url' -%}
+			{%- set autocomplete_type = type -%}
+		{%- elseif type == 'password' -%}
+			{%- set autocomplete_type = 'new-password' -%}
+		{%- endif -%}
+
+		{% set attr = attr|merge({'autocomplete': autocomplete_type}) %}
+
 		<nb-input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}
 			label="{%- if translation_domain is same as(false) -%}
 				{%- if label_html is same as(false) -%}
