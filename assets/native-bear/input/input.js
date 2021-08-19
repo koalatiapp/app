@@ -59,7 +59,7 @@ export class NbInput extends LitElement {
 		this.value = "";
 		this.type = "text";
 		this.placeholder = "";
-		this.autocomplete = "";
+		this.autocomplete = "on";
 		this._required = false;
 		this.readonly = false;
 		this.disabled = false;

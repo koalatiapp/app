@@ -16,7 +16,8 @@ describe("nb-input", () => {
 		assert.shadowDom.equal(
 			el,
 			`
-				<input type="text" name="my_input" class="input" id="my-input" value="my value" placeholder="">
+				<slot></slot>
+				<input type="text" name="my_input" class="input" id="my-input" value="my value" placeholder="" autocomplete="on">
 			`
 		);
 	});
@@ -29,7 +30,8 @@ describe("nb-input", () => {
 			el,
 			`
 				<label for="my-input">My test input</label>
-				<input type="text" name="my_input" class="input" id="my-input" value="my value" placeholder="">
+				<slot></slot>
+				<input type="text" name="my_input" class="input" id="my-input" value="my value" placeholder="" autocomplete="on">
 			`
 		);
 	});
