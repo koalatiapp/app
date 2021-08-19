@@ -15,6 +15,7 @@ export class NbButton extends LitElement {
 				.button.small { padding: 10px 20px; font-weight: 500; }
 				.button.danger { --button-bg-color: var(--color-red); --button-bg-color-hover: var(--color-red-light); }
 				.button.warning { --button-bg-color: var(--color-orange); --button-bg-color-hover: var(--color-orange-light); }
+				.button.white { --button-bg-color: var(--color-white); --button-bg-color-hover: var(--color-blue-light); color: var(--color-blue); }
 				.button.gray { --button-bg-color: #d9ddea; --button-bg-color-hover: var(--color-gray); color: var(--color-gray-darker); }
 				.button.dark { --button-bg-color: var(--color-blue-dark); }
 				.button.light { --button-bg-color: var(--color-blue-50); --button-text-color: white; --button-bg-color-hover: var(--color-blue-80); }

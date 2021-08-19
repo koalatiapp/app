@@ -23,7 +23,7 @@ class UserRegistrationType extends AbstractType
 		$builder
 			->add('firstName', TextType::class, [
 				'label' => 'registration.form.field.firstName',
-				'attr' => ['class' => 'medium'],
+				'attr' => ['class' => 'medium', 'autocomplete' => 'given-name'],
 			])
 			->add('email', EmailType::class, [
 				'label' => 'registration.form.field.email',
