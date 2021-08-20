@@ -60,7 +60,6 @@ password_reset:
         introduction: >
             <h1>Hey %firstName%!</h1>
             <p>To reset your password, please click the button below or visit the following link: <a href="%link%">%link%</a></p>
-            <p>To join the team, simply click on the button below.</p>
         button_label: Reset your password
         footer: >
             <p class="text-gray text-small">Please note that this link will expire in %expirationTime%.</p>
