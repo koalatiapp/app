@@ -65,7 +65,6 @@ password_reset:
             <p class="text-gray text-small">Please note that this link will expire in %expirationTime%.</p>
             <p class="text-gray text-small">If you didn't request a password reset, please ignore this message.</p>
 
-
 navigation:
     dashboard:
         label: Dashboard
@@ -108,6 +107,9 @@ search:
     placeholder: Search throughout Koalati
     empty_state: No results were found.
     result_snippet_empty_state: No description or preview available.
+    type:
+        project: Project
+        organization: Team
 
 automated_testing:
     testing_request_created: We're running the tests again, the results should start appearing in just a few seconds.

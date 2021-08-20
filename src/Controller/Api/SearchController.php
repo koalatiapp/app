@@ -28,6 +28,9 @@ class SearchController extends AbstractApiController
 		$queryParts = $this->getPartsFromQuery($query);
 
 		$this->searchProjects($queryParts);
+		$this->searchOrganizations($queryParts);
+
+		$this->sortResults($query);
 
 		return $this->apiSuccess([
 			'query' => $query,
@@ -38,25 +41,38 @@ class SearchController extends AbstractApiController
 	/**
 	 * Returns the standardized query parts/words as an array of string.
 	 *
-	 * @return array<string>
+	 * @return array<int,string>
 	 */
-	protected function getPartsFromQuery(string $query)
+	protected function getPartsFromQuery(string $query): array
 	{
 		return explode(' ', strtolower(trim($query)));
 	}
 
 	/**
 	 * Adds a search result to the response.
-	 *
-	 * @return void
 	 */
-	protected function addResult(string $url, string $title, ?string $snippet = null)
+	protected function addResult(string $url, string $title, ?string $snippet = null): void
 	{
 		$this->results[] = [
 			'url' => $url,
 			'title' => $title,
 			'snippet' => $snippet,
 		];
+	}
+
+	/**
+	 * Sorts the result by placing the closest linguistic matches first.
+	 */
+	protected function sortResults(string $query): void
+	{
+		$truncatedQuery = strtolower(trim(substr($query, 0, 255)));
+
+		usort($this->results, function ($resultA, $resultB) use ($truncatedQuery) {
+			$levenshteinA = levenshtein(strtolower($resultA['title']), $truncatedQuery);
+			$levenshteinB = levenshtein(strtolower($resultB['title']), $truncatedQuery);
+
+			return $levenshteinA > $levenshteinB ? 1 : -1;
+		});
 	}
 
 	/**
@@ -76,7 +92,31 @@ class SearchController extends AbstractApiController
 
 		foreach ($projects as $project) {
 			$url = $this->generateUrl('project_dashboard', ['id' => $project->getId()]);
-			$this->addResult($url, $project->getName());
+			$this->addResult($url, $project->getName(), $this->translator->trans('search.type.project'));
+		}
+	}
+
+	/**
+	 * Runs the search query on organizations/teams.
+	 *
+	 * @param array<string> $queryParts
+	 *
+	 * @return void
+	 */
+	protected function searchOrganizations(array $queryParts)
+	{
+		/** @var \App\Entity\OrganizationMember $link */
+		foreach ($this->getUser()->getOrganizationLinks() as $link) {
+			$organization = $link->getOrganization();
+
+			foreach ($queryParts as $part) {
+				if (strpos(strtolower($organization->getName()), strtolower($part)) === false) {
+					continue 2;
+				}
+			}
+
+			$url = $this->generateUrl('organization_dashboard', ['id' => $organization->getId()]);
+			$this->addResult($url, $organization->getName(), $this->translator->trans('search.type.organization'));
 		}
 	}
 }
