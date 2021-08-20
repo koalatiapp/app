@@ -39,6 +39,34 @@ registration:
             termsOfService: By creating a Koalati account, you're agreeing to accept the <a href="https://www.koalati.com/terms-of-service">Koalati terms of service</a>.
             privacyPolicy: Ethics and privacy are paramount at Koalati. To see what type of data we collect and how we handle it, take a look at the <a href="https://www.koalati.com/privacy-policy">Koalati privacy policy</a>.
 
+password_reset:
+    email_form:
+        page_title: Reset your password
+        title: Reset your password
+        email_label: Enter your email
+        explanation: Once you submit this form, we will send you a link to reset your password via email.
+        submit: Send me my reset link
+    check_email:
+        page_title: Check your email
+        explanation: If an account matching your email exists, then an email was just sent that contains a link that you can use to reset your password. This link will expire in %time%.
+        spam: If you don't receive an email please check your spam folder or <a href="%link%">try again</a>.
+        back_to_login: Go back to login
+    password_form:
+        page_title: Create new password
+        title: Create new password
+        submit: Save new password
+    email:
+        subject: "Your password reset request"
+        introduction: >
+            <h1>Hey %firstName%!</h1>
+            <p>To reset your password, please click the button below or visit the following link: <a href="%link%">%link%</a></p>
+            <p>To join the team, simply click on the button below.</p>
+        button_label: Reset your password
+        footer: >
+            <p class="text-gray text-small">Please note that this link will expire in %expirationTime%.</p>
+            <p class="text-gray text-small">If you didn't request a password reset, please ignore this message.</p>
+
+
 navigation:
     dashboard:
         label: Dashboard

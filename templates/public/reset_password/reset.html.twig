@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% trans %}password_reset.password_form.page_title{% endtrans %}{% endblock %}
+
+{% block body %}
+	<section>
+		<div class="container center column">
+			<img id="big-branding" src="{{ asset("media/brand/koalati-logo-v.svg") }}" alt="Koalati's logo" width="250">
+
+    		<h1>{% trans %}password_reset.password_form.title{% endtrans %}</h1>
+
+			<div class="card small">
+				{{ form_start(resetForm) }}
+					{{ form_row(resetForm.plainPassword) }}
+				{{ form_end(resetForm) }}
+			</div>
+		</div>
+	</section>
+{% endblock %}
+

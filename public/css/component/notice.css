@@ -1,5 +1,5 @@
-.notice { display: block; width: 100%; padding: 12px 15px; padding-left: 45px; margin: 30px auto; font-size: .95rem; font-weight: 600; line-height: 1.2; color: white; background-color: var(--color-blue); border-radius: 13px; box-shadow: 0 3px 15px 0 rgba(var(--shadow-rgb), .1); position: relative; }
-.notice::before { content: '\f05a'; font-family: var(--fa-style-family); font-size: 22px; line-height: 1; position: absolute; top: 10px; left: 10px; }
+.notice { display: block; width: 100%; padding: 12px 15px; padding-left: 45px; margin-bottom: 30px; font-size: .9rem; font-weight: 400; line-height: 1.35; color: white; background-color: var(--color-blue); border-radius: 13px; box-shadow: 0 3px 15px 0 rgba(var(--shadow-rgb), .1); position: relative; }
+.notice::before { content: '\f05a'; font-family: var(--fa-style-family); font-size: 22px; font-weight: 600; line-height: 1; position: absolute; top: 10px; left: 10px; }
 .notice.warning { background-color: var(--color-orange); }
 .notice.warning::before { content: '\f06a'; }
 .notice.danger { background-color: var(--color-red); }
