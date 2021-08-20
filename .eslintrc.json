@@ -7,7 +7,6 @@
 	"globals": {
 		"Routing": "readonly",
 		"Translator": "readonly",
-		"wretch": "readonly",
 		"chai": "readonly"
 	},
     "extends": [

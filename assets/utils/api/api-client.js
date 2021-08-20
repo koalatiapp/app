@@ -44,10 +44,11 @@ class ApiClient {
 	 * 	- `ApiClient.ERROR_FLASH`: automatically displays the error in a temporary Flash message.
 	 * 	- function: calls the provided callback with the error message as a parameter
 	 *  - null: throws an `ApiError`
+	 * @param {AbortController|null} abortController The abort controller to use for the request (optional)
 	 * @returns {object|undefined} The response data object, or undefined if an error is returned from the API.
 	 * @throws {ApiError} Only thrown when the `errorCallback` is null or an unknown option.
 	 */
-	async _request(method, endpoint, body = {}, errorCallback = ApiClient.ERROR_FLASH)
+	async _request(method, endpoint, body = {}, errorCallback = ApiClient.ERROR_FLASH, abortController = null)
 	{
 		method = method.trim().toUpperCase();
 
@@ -65,6 +66,10 @@ class ApiClient {
 		const fetchOptions = {
 			method: method,
 		};
+
+		if (abortController) {
+			fetchOptions.signal = abortController.signal;
+		}
 
 		if (!["GET", "DELETE"].includes(method)) {
 			fetchOptions.body = body;
@@ -102,9 +107,9 @@ class ApiClient {
 	 * @returns {Promise<object|undefined>} The response object, or undefined if an error is returned from the API.
 	 * @throws {ApiError} Only thrown when the `errorCallback` is null or an unknown option.
 	 */
-	get(endpoint, body = {}, errorCallback = ApiClient.ERROR_FLASH)
+	get(endpoint, body = {}, errorCallback = ApiClient.ERROR_FLASH, abortController = null)
 	{
-		return this._request("GET", endpoint, body, errorCallback);
+		return this._request("GET", endpoint, body, errorCallback, abortController);
 	}
 
 	/**
@@ -115,12 +120,13 @@ class ApiClient {
 	 * 	- `ApiClient.ERROR_FLASH`: automatically displays the error in a temporary Flash message.
 	 * 	- function: calls the provided callback with the error message as a parameter
 	 *  - null: throws an `ApiError`
+	 * @param {AbortController|null} abortController The abort controller to use for the request (optional)
 	 * @returns {Promise<object|undefined>} The response object, or undefined if an error is returned from the API.
 	 * @throws {ApiError} Only thrown when the `errorCallback` is null or an unknown option.
 	 */
-	post(endpoint, body = {}, errorCallback = ApiClient.ERROR_FLASH)
+	post(endpoint, body = {}, errorCallback = ApiClient.ERROR_FLASH, abortController = null)
 	{
-		return this._request("POST", endpoint, body, errorCallback);
+		return this._request("POST", endpoint, body, errorCallback, abortController);
 	}
 
 	/**
@@ -131,12 +137,13 @@ class ApiClient {
 	 * 	- `ApiClient.ERROR_FLASH`: automatically displays the error in a temporary Flash message.
 	 * 	- function: calls the provided callback with the error message as a parameter
 	 *  - null: throws an `ApiError`
+	 * @param {AbortController|null} abortController The abort controller to use for the request (optional)
 	 * @returns {Promise<object|undefined>} The response object, or undefined if an error is returned from the API.
 	 * @throws {ApiError} Only thrown when the `errorCallback` is null or an unknown option.
 	 */
-	put(endpoint, body = {}, errorCallback = ApiClient.ERROR_FLASH)
+	put(endpoint, body = {}, errorCallback = ApiClient.ERROR_FLASH, abortController = null)
 	{
-		return this._request("PUT", endpoint, body, errorCallback);
+		return this._request("PUT", endpoint, body, errorCallback, abortController);
 	}
 
 	/**
@@ -147,12 +154,13 @@ class ApiClient {
 	 * 	- `ApiClient.ERROR_FLASH`: automatically displays the error in a temporary Flash message.
 	 * 	- function: calls the provided callback with the error message as a parameter
 	 *  - null: throws an `ApiError`
+	 * @param {AbortController|null} abortController The abort controller to use for the request (optional)
 	 * @returns {Promise<object|undefined>} The response object, or undefined if an error is returned from the API.
 	 * @throws {ApiError} Only thrown when the `errorCallback` is null or an unknown option.
 	 */
-	patch(endpoint, body = {}, errorCallback = ApiClient.ERROR_FLASH)
+	patch(endpoint, body = {}, errorCallback = ApiClient.ERROR_FLASH, abortController = null)
 	{
-		return this._request("PATCH", endpoint, body, errorCallback);
+		return this._request("PATCH", endpoint, body, errorCallback, abortController);
 	}
 
 	/**
@@ -163,12 +171,13 @@ class ApiClient {
 	 * 	- `ApiClient.ERROR_FLASH`: automatically displays the error in a temporary Flash message.
 	 * 	- function: calls the provided callback with the error message as a parameter
 	 *  - null: throws an `ApiError`
+	 * @param {AbortController|null} abortController The abort controller to use for the request (optional)
 	 * @returns {Promise<object|undefined>} The response object, or undefined if an error is returned from the API.
 	 * @throws {ApiError} Only thrown when the `errorCallback` is null or an unknown option.
 	 */
-	delete(endpoint, body = {}, errorCallback = ApiClient.ERROR_FLASH)
+	delete(endpoint, body = {}, errorCallback = ApiClient.ERROR_FLASH, abortController = null)
 	{
-		return this._request("DELETE", endpoint, body, errorCallback);
+		return this._request("DELETE", endpoint, body, errorCallback, abortController);
 	}
 
 	/**

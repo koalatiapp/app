@@ -1,4 +1,5 @@
 import { LitElement, html, css } from "lit";
+import { ApiClient } from "../../utils/api/index.js";
 import stylesReset from "../../native-bear/styles-reset.js";
 
 const resultsCache = {};
@@ -24,6 +25,7 @@ export class SearchOverlay extends LitElement {
 				#search-inner .search-results a .title { font-size: 1.1em; font-weight: 600; }
 				#search-inner .search-results a .snippet:not(:empty) { margin-top: 5px; font-size: .9em; font-weight: 500; }
 				#search-inner .search-results a.selected { text-decoration: underline; color: var(--color-blue-dark-faded); background-color: var(--color-gray-light); box-shadow: 0 3px 0 var(--color-blue);}
+				#search-inner .button-container { text-align: center; }
 
 				@media (prefers-color-scheme: dark) {
 					#search-inner .search-results a.selected { color: var(--color-blue-darker); }
@@ -190,22 +192,10 @@ export class SearchOverlay extends LitElement {
 			}
 
 			// Query the server for the search results
-			wretch(Routing.generate("json_search"))
-				.signal(controller)
-				.formUrl({ query })
-				.post()
-				.onAbort(() => {})
-				.json()
-				.then(response => {
-					if (typeof response == "undefined") {
-						resolve();
-						return;
-					}
-
-					resultsCache[query] = response.results;
-					resolve(response.results);
-				})
-				.catch(() => { resolve([]); });
+			ApiClient.post("api_search", { query }, null, controller).then(response => {
+				resultsCache[query] = response.data.results;
+				resolve(response.data.results);
+			}).catch(() => { resolve(); });
 		});
 	}
 

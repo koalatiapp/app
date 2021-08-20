@@ -2,13 +2,15 @@
 
 namespace App\Controller\Api;
 
-use App\Controller\AbstractController;
 use App\Entity\Project;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class SearchController extends AbstractController
+/**
+ * @Route("/api/search", name="api_search")
+ */
+class SearchController extends AbstractApiController
 {
 	/**
 	 * Contains the search results for the query.
@@ -18,16 +20,16 @@ class SearchController extends AbstractController
 	protected $results = [];
 
 	/**
-	 * @Route("/json/search", name="json_search", options={"expose": true})
+	 * @Route("", methods={"POST"}, name="", options={"expose": true})
 	 */
-	public function jsonSearch(Request $request): Response
+	public function search(Request $request): Response
 	{
 		$query = $request->request->get('query');
 		$queryParts = $this->getPartsFromQuery($query);
 
 		$this->searchProjects($queryParts);
 
-		return $this->json([
+		return $this->apiSuccess([
 			'query' => $query,
 			'results' => $this->results,
 		]);
