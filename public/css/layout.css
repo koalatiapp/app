@@ -18,3 +18,7 @@
 .container.space-between { justify-content: space-between; }
 .container.align-center { align-items: center; }
 .container.column { flex-direction: column; }
+
+@media (max-width: 1080px) {
+	.grid { display: flex; flex-direction: column; }
+}

@@ -19,6 +19,7 @@ export class NbInput extends LitElement {
 				.input::placeholder { color: var(--color-gray); }
 
 				label { font-size: 1rem; font-weight: 500; color: var(--color-gray-darker); }
+				:host([required]) label::after { content: ' *'; color: var(--color-red); font-size: .85em; vertical-align: top; }
 
 				/* Sizes */
 				:host(.tiny) { width: 8ch; }

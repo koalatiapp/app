@@ -160,6 +160,26 @@ ignore_entry:
         tool: Tool
         meta: Ignored by %user% on %date%
 
+user:
+    first_name: First name
+    last_name: Last name
+    email: Email address
+    job_title: Job title
+
+user_settings:
+    tabs:
+        profile: Profile
+        security: Security
+        subscription: Subscription
+        contact: Contact preferences
+    profile:
+        title: Update your profile
+        form:
+            submit_label: Update profile
+        flash:
+            success: Your profile has been updated!
+
+
 dashboard:
     title: Dashboard
     tabs:

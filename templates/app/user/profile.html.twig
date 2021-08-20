@@ -1,0 +1,20 @@
+{% extends 'app_base.html.twig' %}
+
+{% block page_tabs %}
+	{% include 'app/user/_tabs.html.twig' %}
+{% endblock %}
+
+{% block title %}{% trans %}user_settings.profile.title{% endtrans %}{% endblock %}
+
+{% block body %}
+    <div class="grid large-fill">
+        <div class="card">
+			{{ form(form) }}
+		</div>
+		<div class="card">
+			<h3>Profile picture</h3>
+			<p>At the moment, we don't handle profile pictures ourselves. To change your profile picture, you can go to <a href="http://en.gravatar.com/emails/" target="_blank" class="text-link">Gravatar's website</a> and log in (or create an account) with the same email address you use on Koalati.</p>
+			<p>Alternatively, you can also wait until we roll out our own profile picture system.</p>
+		</div>
+	</div>
+{% endblock %}
