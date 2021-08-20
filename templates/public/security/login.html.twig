@@ -1,53 +1,69 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in{% endblock %}
+{% block title %}{% trans %}login.page_title{% endtrans %}{% endblock %}
 
 {% block head %}
 	<style>
-		#login-section { padding-top: 60px; }
-		#login-branding { width: 250px; max-width: 75%; }
+		form { width: 40ch; max-width: 100%; }
+		form a { color: var(--color-blue); text-decoration: underline; }
+		form a:hover { color: var(--color-blue-dark); text-decoration: underline; }
 	</style>
 {% endblock %}
 
 {% block body %}
-	<section id="login-section">
-		<div class="container center column">
-			<img id="login-branding" src="{{ asset("media/brand/koalati-logo-v.svg") }}" alt="Koalati's logo" width="250">
+	<div class="wave-hero">
+		<div>
+			<header>
+				<a href="https://www.koalati.com" class="brand-logo">
+					<img src="{{ asset("media/brand/koalati-logo.svg") }}" alt="Koalati" width="150">
+				</a>
+			</header>
+			<section id="form-section">
+				<div class="container center column">
+					<h1>{% trans %}login.form.title{% endtrans %}</h1>
 
-			<form method="post" class="card small">
-				<h1>{% trans %}login.form.title{% endtrans %}</h1>
+					<form method="post">
+						{% if error %}
+							<fieldset class="errors">
+								<div class="error">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+							</fieldset>
+						{% endif %}
 
-				{% if error %}
-					<fieldset class="errors">
-						<div class="error">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-					</fieldset>
-				{% endif %}
+						<fieldset>
+							<label for="input-email">{% trans %}login.form.field.email{% endtrans %}</label>
+							<nb-input type="email" value="{{ last_username }}" name="email" id="input-email" required autofocus></nb-input>
+						</fieldset>
 
-				<fieldset>
-					<label for="input-email">{% trans %}login.form.field.email{% endtrans %}</label>
-					<nb-input type="email" value="{{ last_username }}" name="email" id="input-email" required autofocus>
-				</fieldset>
+						<fieldset>
+							<label for="input-password">{% trans %}login.form.field.password{% endtrans %}</label>
+							<nb-input type="password" name="password" id="input-password" required></nb-input>
+							<a href="{{ path('app_forgot_password_request') }}" class="text-smaller">
+								{% trans %}login.forgot_password{% endtrans %}
+							</a>
+						</fieldset>
 
-				<fieldset>
-					<label for="input-password">{% trans %}login.form.field.password{% endtrans %}</label>
-					<nb-input type="password" name="password" id="input-password" required>
-				</fieldset>
+						<fieldset class="checkbox">
+							<nb-checkbox name="_remember_me" label="{% trans %}login.form.field.remember_me{% endtrans %}"></nb-checkbox>
+						</fieldset>
 
-				<fieldset class="checkbox">
-					<input type="checkbox" name="_remember_me" id="remember-me">
-					<label for="remember-me">{% trans %}login.form.field.remember_me{% endtrans %}</label>
-				</fieldset>
+						<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-				<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+						<hr>
 
-				<hr>
-
-				<div class="button-container center">
-					<nb-button type="submit" id="submit">
-						{% trans %}login.form.submit_label{% endtrans %}
-					</nb-button>
+						<div class="button-container center">
+							<nb-button type="submit" id="submit">
+								{% trans %}login.form.submit_label{% endtrans %}
+							</nb-button>
+						</div>
+					</form>
 				</div>
-			</form>
+			</section>
 		</div>
-	</section>
+		<div class="wave-section">
+			<div class="container center column">
+				<strong class="text-large">{% trans %}login.no_account{% endtrans %}</strong>
+				<nb-button href="{{ path('registration') }}" color="white">{% trans %}login.register{% endtrans %}</nb-button>
+			</div>
+		</div>
+	</div>
 {% endblock %}

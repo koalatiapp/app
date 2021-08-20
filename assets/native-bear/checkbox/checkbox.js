@@ -15,7 +15,7 @@ export class NbCheckbox extends LitElement {
 			css`
 				:host { display: inline-flex; align-items: center; }
 
-				.input-wrapper { position: relative; }
+				.input-wrapper { position: relative; line-height: 0; }
 				input { display: inline-block; width: 1.375rem; height: 1.375rem; flex: 0 0 1.375rem; padding: 0; border: 2px solid var(--color-gray-light); border-radius: 3px; box-shadow: 0 1px 8px 0 rgba(var(--shadow-rgb), .05); appearance: none; cursor: pointer; }
 				input:checked { background-color: var(--color-gray-light); border-color: var(--color-blue-light); }
 				input:hover { box-shadow: 0 2px 10px 0 rgba(var(--shadow-rgb), .15); }
@@ -23,10 +23,10 @@ export class NbCheckbox extends LitElement {
 				.checkmark { width: 1em; margin: auto; font-size: 0.9rem; color: var(--color-black); transform: scale(0); position: absolute; top: 0.5em; left: 1px; right: 0px; pointer-events: none; transition: transform .15s ease-in; }
 				input:checked + .checkmark { transform: scale(1); transition: transform 0.35s cubic-bezier(0, 1.85, 1, 1) 0s; }
 
-				label { margin-left: 5px; }
+				label { margin-left: 5px; color: var(--color-gray-darker); cursor: pointer; }
 
 				@media (prefers-color-scheme: dark) {
-
+					label { var(--color-gray); }
 				}
 			`
 		];

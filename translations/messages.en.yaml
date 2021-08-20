@@ -13,6 +13,7 @@ branding:
     name: Koalati
 
 login:
+    page_title: Sign in
     form:
         title: Sign in
         submit_label: Sign in
@@ -20,8 +21,14 @@ login:
             email: Email
             password: Password
             remember_me: Keep me signed in
+    forgot_password: Forgot your password?
+    no_account: Don't have an account?
+    register: Create an account
 
 registration:
+    page_title: Create your account
+    already_registered: Already have an account?
+    login: Sign in
     form:
         title: Create your account
         submit_label: Create my account

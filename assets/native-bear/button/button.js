@@ -15,7 +15,7 @@ export class NbButton extends LitElement {
 				.button.small { padding: 10px 20px; font-weight: 500; }
 				.button.danger { --button-bg-color: var(--color-red); --button-bg-color-hover: var(--color-red-light); }
 				.button.warning { --button-bg-color: var(--color-orange); --button-bg-color-hover: var(--color-orange-light); }
-				.button.white { --button-bg-color: var(--color-white); --button-bg-color-hover: var(--color-blue-light); color: var(--color-blue); }
+				.button.white { --button-bg-color: #fff; --button-bg-color-hover: var(--color-blue-light); --button-text-color: var(--color-blue); }
 				.button.gray { --button-bg-color: #d9ddea; --button-bg-color-hover: var(--color-gray); color: var(--color-gray-darker); }
 				.button.dark { --button-bg-color: var(--color-blue-dark); }
 				.button.light { --button-bg-color: var(--color-blue-50); --button-text-color: white; --button-bg-color-hover: var(--color-blue-80); }
@@ -26,6 +26,7 @@ export class NbButton extends LitElement {
 
 				@media (prefers-color-scheme: dark) {
 					.button.gray { --button-bg-color: #393f56; --button-bg-color-hover: var(--color-gray-light); color: var(--color-gray); }
+					.button.white { --button-bg-color: var(--color-black); --button-bg-color-hover: var(--color-gray-dark); --button-text-color-hover: var(--color-blue-dark); }
 				}
 			`
 		];
