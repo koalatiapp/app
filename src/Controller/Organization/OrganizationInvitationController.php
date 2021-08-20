@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Organization;
 
+use App\Controller\AbstractController;
 use App\Entity\OrganizationMember;
 use App\Repository\OrganizationInvitationRepository;
 use Symfony\Component\HttpFoundation\Response;

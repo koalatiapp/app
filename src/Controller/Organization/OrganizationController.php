@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Organization;
 
+use App\Controller\AbstractController;
 use App\Entity\Organization;
 use App\Entity\OrganizationMember;
 use App\Form\Organization\DeletionOrganizationType;

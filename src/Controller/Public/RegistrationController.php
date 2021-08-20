@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Public;
 
+use App\Controller\AbstractController;
 use App\Entity\User;
 use App\Form\UserRegistrationType;
 use App\Security\LoginFormAuthenticator;
