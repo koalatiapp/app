@@ -1,0 +1,20 @@
+{% extends 'app_base.html.twig' %}
+
+{% block page_tabs %}
+	{% include 'app/user/_tabs.html.twig' %}
+{% endblock %}
+
+{% block title %}{% trans %}user_settings.security.title{% endtrans %}{% endblock %}
+
+{% block body %}
+    <div class="grid cols-2">
+        <div class="card">
+			<h2>{% trans %}user_settings.security.email.title{% endtrans %}</h2>
+			{{ form(emailForm) }}
+		</div>
+        <div class="card">
+			<h2>{% trans %}user_settings.security.password.title{% endtrans %}</h2>
+			{{ form(passwordForm) }}
+		</div>
+	</div>
+{% endblock %}

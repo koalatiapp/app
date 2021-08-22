@@ -178,7 +178,24 @@ user_settings:
             submit_label: Update profile
         flash:
             success: Your profile has been updated!
-
+    security:
+        title: Security settings
+        password:
+            title: Change your password
+            form:
+                current_password: Current password
+                new_password: New password
+                submit_label: Change password
+            flash:
+                success: Your password has been updated!
+        email:
+            title: Update your email address
+            form:
+                email: New email address
+                current_password: Current password
+                submit_label: Change email address
+            flash:
+                success: Your email address has been updated!
 
 dashboard:
     title: Dashboard
