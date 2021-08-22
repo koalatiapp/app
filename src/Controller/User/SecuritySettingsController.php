@@ -5,6 +5,7 @@ namespace App\Controller\User;
 use App\Controller\AbstractController;
 use App\Form\User\UserChangeEmailType;
 use App\Form\User\UserChangePasswordType;
+use App\Form\User\UserDeleteAccountType;
 use App\Security\LoginFormAuthenticator;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -47,6 +48,11 @@ class SecuritySettingsController extends AbstractController
 	{
 		$passwordForm = $this->processPasswordForm($request);
 		$emailForm = $this->processEmailForm($request);
+		$deletionForm = $this->processDeletionForm($request);
+
+		if ($deletionForm instanceof Response) {
+			return $deletionForm;
+		}
 
 		if ($emailForm instanceof Response) {
 			return $emailForm;
@@ -55,6 +61,7 @@ class SecuritySettingsController extends AbstractController
 		return $this->render('app/user/security.html.twig', [
 			'passwordForm' => $passwordForm->createView(),
 			'emailForm' => $emailForm->createView(),
+			'deletionForm' => $deletionForm->createView(),
 		]);
 	}
 
@@ -101,5 +108,26 @@ class SecuritySettingsController extends AbstractController
 		}
 
 		return $emailForm;
+	}
+
+	private function processDeletionForm(Request $request): FormInterface | Response
+	{
+		$user = $this->getUser();
+		$deletionForm = $this->createForm(UserDeleteAccountType::class, $user);
+		$deletionForm->handleRequest($request);
+
+		if ($deletionForm->isSubmitted() && $deletionForm->isValid()) {
+			$em = $this->getDoctrine()->getManager();
+			$em->remove($user);
+			$em->flush();
+
+			$token = new AnonymousToken('default', 'anon.');
+			$this->tokenStorage->setToken($token);
+			$request->getSession()->invalidate();
+
+			return $this->redirectToRoute('login');
+		}
+
+		return $deletionForm;
 	}
 }

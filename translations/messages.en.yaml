@@ -196,6 +196,18 @@ user_settings:
                 submit_label: Change email address
             flash:
                 success: Your email address has been updated!
+        delete_account:
+            title: Delete your account
+            explanation: >
+                <p>When you delete your account, all of your personal information will be deleted immediately.</p>
+                <p>Teams in which you were a member will still be able to see any contributions you have made, but will not be able to interact with you anymore.</p>
+                <p>If you are the sole administrator of a team, you must transfer ownership to another user before you delete your account. If you do not, a team member will have to submit a support request to request administrator privileges.</p>
+            form:
+                current_password: Current password
+                confirmation_label: I am certain that I want to delete my Koalati account, and understand that all of my account's data will be irrecoverable afterwards.
+                submit_label: Delete my account
+            flash:
+                success: Your email address has been updated!
 
 dashboard:
     title: Dashboard

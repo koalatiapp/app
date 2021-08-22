@@ -17,4 +17,12 @@
 			{{ form(passwordForm) }}
 		</div>
 	</div>
+	<div class="grid">
+        <div class="card">
+			<h2>{% trans %}user_settings.security.delete_account.title{% endtrans %}</h2>
+			{% trans %}user_settings.security.delete_account.explanation{% endtrans %}
+			<hr>
+			{{ form(deletionForm) }}
+		</div>
+	</div>
 {% endblock %}
