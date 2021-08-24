@@ -29,7 +29,7 @@ export class OrganizationMembersList extends AbstractDynamicList {
 				key: "user",
 				label: "organization.settings.members.list.user",
 				render: (item) => html`
-					<member-list-item userName=${item.user.firstName + " " + item.user.lastName} userRole=${item.highestRole} avatarUrl=${item.user.avatarUrl}></member-list-item>
+					<member-list-item userName=${item.user.firstName + " " + (item.user.lastName || "")} userRole=${item.highestRole} avatarUrl=${item.user.avatarUrl}></member-list-item>
 				`,
 				placeholder: html`
 					<div class="nb--list-item-column-placeholder" style="width: 8ch;">&nbsp;</div>
