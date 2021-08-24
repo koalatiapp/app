@@ -327,7 +327,7 @@ organization:
         update_label: Save changes
     dashboard:
         title: Team dashboard
-        feed: Recent activities
+        feed: Recent activity
         member_list:
             title: Members
             x_more: ...and %count% more

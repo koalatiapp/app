@@ -8,20 +8,9 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 
 class UserDeletionListener
 {
-	/**
-	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-	 */
-	public function __construct(
-		private UserDeletionManager $userDeletionManager
-	) {
-	}
-
-	/**
-	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.event)
-	 */
 	public function preRemove(User $user, LifecycleEventArgs $event): void
 	{
-		$em = $this->userDeletionManager->deleteRelations($user);
-		$em->flush();
+		$userDeletionManager = new UserDeletionManager($event->getEntityManager());
+		$userDeletionManager->deleteRelations($user);
 	}
 }

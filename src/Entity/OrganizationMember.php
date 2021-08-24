@@ -34,14 +34,14 @@ class OrganizationMember
 	 * @ORM\JoinColumn(nullable=false)
 	 * @Groups({"default"})
 	 */
-	private Organization $organization;
+	private ?Organization $organization;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=User::class, inversedBy="organizationLinks")
 	 * @ORM\JoinColumn(nullable=false)
 	 * @Groups({"default"})
 	 */
-	private User $user;
+	private ?User $user;
 
 	/**
 	 * @var array<string>

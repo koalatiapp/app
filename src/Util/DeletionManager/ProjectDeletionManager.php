@@ -28,8 +28,6 @@ class ProjectDeletionManager
 		$this->collectionDeletionManager->deleteItems($project->getRecommendations());
 		$this->collectionDeletionManager->deleteItems($project->getPages());
 
-		$this->em->remove($project);
-
 		return $this->em;
 	}
 }
