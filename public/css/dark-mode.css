@@ -58,12 +58,14 @@
 	hr,
 	.spacer { background-color: var(--color-gray-light); }
 
+	/* Focus */
+	*:focus-visible::before { box-shadow: 0 0 100vmax 100vmax rgba(var(--shadow-rgb), .5); }
+
 	/* Navigation */
 	#sidebar nav > ul > li.active { background-color: var(--color-gray-light); }
 
 	/* Forms */
 	fieldset label { color: var(--color-gray); }
-	:is(.standalone-checkbox, .standalone-radio) label { color: var(--color-gray); }
 
 	/* Inputs */
 	input,

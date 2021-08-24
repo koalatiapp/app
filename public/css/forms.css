@@ -6,11 +6,6 @@ fieldset + fieldset { margin-top: 15px; }
 /* Checkbox field wrappers */
 fieldset.checkbox { flex-direction: row; align-items: flex-start; }
 fieldset.checkbox label { margin-top: 8px; padding-left: 10px; font-size: .9rem; font-weight: 400; -webkit-font-smoothing: antialiased; cursor: pointer; }
-/* Single CheckboxType and RadioType */
-.standalone-checkbox,
-.standalone-radio { display: grid; grid-template-columns: 30px minmax(0, 1fr); align-items: start; }
-:is(.standalone-checkbox, .standalone-radio) label { margin: 8px 0; font-size: .9rem; font-weight: 300; color: var(--color-gray-darker); cursor: pointer; }
-:is(.standalone-checkbox, .standalone-radio) input:focus + label { text-decoration: underline solid 3px var(--color-gray-light); }
 /* Errors */
 fieldset .error { display: block; padding: 12px; padding-right: 42px; margin: 5px 0; font-size: .85rem; font-weight: 500; color: var(--notification-danger-text-color); background-color: var(--color-red-lighter); border-radius: 8px; position: relative; }
 fieldset .error::after { content: '\f06a'; display: flex; justify-content: center; align-items: center; font-family: var(--fa-style-family); font-size: 22px; font-weight: 600; line-height: 1rem; position: absolute; top: 0; right: 12px; bottom: 0; }
