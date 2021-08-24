@@ -110,6 +110,13 @@ services:
                 event: 'preRemove'
                 entity: 'App\Entity\Project'
                 lazy: true
+    App\EventListener\OrganizationDeletionListener:
+        tags:
+            -
+                name: 'doctrine.orm.entity_listener'
+                event: 'preRemove'
+                entity: 'App\Entity\Organization'
+                lazy: true
     App\EventListener\OrganizationMemberDeletionListener:
         tags:
             -
