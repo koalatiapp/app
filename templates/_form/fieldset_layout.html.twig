@@ -184,13 +184,28 @@
     </div>
 {%- endblock button_row -%}
 
+{%- block checkbox_widget -%}
+	<nb-checkbox {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}{% if checked %}checked="checked" {% endif %}
+		label="{%- if translation_domain is same as(false) -%}
+			{%- if label_html is same as(false) -%}
+				{{- label -}}
+			{%- else -%}
+				{{- label|raw -}}
+			{%- endif -%}
+		{%- else -%}
+			{%- if label_html is same as(false) -%}
+				{{- label|trans(label_translation_parameters, translation_domain) -}}
+			{%- else -%}
+				{{- label|trans(label_translation_parameters, translation_domain)|raw -}}
+			{%- endif -%}
+		{%- endif -%}">
+	</nb-checkbox>
+{%- endblock -%}
+{%- block checkbox_label -%}{%- endblock -%}
 {%- block checkbox_row -%}
     <fieldset{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %}>
         {{- form_errors(form) -}}
-        <div class="standalone-checkbox">
-			{{- form_widget(form) -}}
-        	{{- form_label(form) -}}
-		</div>
+		{{- form_widget(form) -}}
         {{- form_help(form) -}}
     </fieldset>
 {%- endblock checkbox_row -%}
