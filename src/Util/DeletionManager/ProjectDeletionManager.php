@@ -19,9 +19,11 @@ class ProjectDeletionManager
 	{
 		// Delete checklist
 		$checklist = $project->getChecklist();
-		$this->collectionDeletionManager->deleteItems($checklist->getItems());
-		$this->collectionDeletionManager->deleteItems($checklist->getItemGroups());
-		$this->em->remove($checklist);
+		if ($checklist) {
+			$this->collectionDeletionManager->deleteItems($checklist->getItems());
+			$this->collectionDeletionManager->deleteItems($checklist->getItemGroups());
+			$this->em->remove($checklist);
+		}
 
 		$this->collectionDeletionManager->deleteItems($project->getIgnoreEntries());
 		$this->collectionDeletionManager->deleteItems($project->getTeamMembers());
