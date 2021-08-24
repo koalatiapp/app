@@ -7,6 +7,10 @@
 		form { width: 40ch; max-width: 100%; }
 		form a { color: var(--color-blue); text-decoration: underline; }
 		form a:hover { color: var(--color-blue-dark); text-decoration: underline; }
+
+		@media (prefers-color-scheme: dark) {
+			form a { color: var(--color-blue-faded); }
+		}
 	</style>
 {% endblock %}
 
