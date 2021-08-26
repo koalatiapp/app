@@ -42,6 +42,7 @@ class ProjectChecklistController extends AbstractProjectController
 		}
 
 		$em->flush();
+		$em->refresh($project);
 	}
 
 	/**
