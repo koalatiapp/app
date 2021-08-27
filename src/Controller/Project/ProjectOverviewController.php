@@ -28,7 +28,7 @@ class ProjectOverviewController extends AbstractProjectController
 	}
 
 	/**
-	 * @Route("/project/{id}/", name="project_dashboard")
+	 * @Route("/project/{id}/", name="project_dashboard", options={"expose": true})
 	 */
 	public function projectDashboard(int $id): Response
 	{

@@ -11,6 +11,8 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        bind:
+            Symfony\Component\Serializer\Serializer $simpleSerializer: '@SimpleSerializer'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -29,11 +31,21 @@ services:
         tags: ['controller.service_arguments']
 
     # Configure the serializer for entities by default
-    Symfony\Component\Serializer\SerializerInterface:
+    SimpleSerializer:
         class: Symfony\Component\Serializer\Serializer
         arguments:
             - ['@DateTimeNormalizer', '@JsonSerializableNormalizer', '@GetSetMethodNormalizer', '@ObjectNormalizer']
             - ['@JsonEncoder']
+
+    Symfony\Component\Serializer\SerializerInterface:
+        class: Symfony\Component\Serializer\Serializer
+        arguments:
+            - ['@ProjectNormalizer', '@DateTimeNormalizer', '@JsonSerializableNormalizer', '@GetSetMethodNormalizer', '@ObjectNormalizer']
+            - ['@JsonEncoder']
+
+    ProjectNormalizer:
+        class: App\Serializer\ProjectNormalizer
+        tags: [serializer.normalizer]
 
     GetSetMethodNormalizer:
         class: Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer

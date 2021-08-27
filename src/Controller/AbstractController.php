@@ -21,7 +21,7 @@ abstract class AbstractController extends DefaultAbstractController
 	/**
 	 * Get a user from the Security Token Storage.
 	 *
-	 * @return User|object|null
+	 * @return User|null
 	 *
 	 * @throws \LogicException If SecurityBundle is not available
 	 *

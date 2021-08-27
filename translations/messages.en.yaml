@@ -311,6 +311,7 @@ project_settings:
             checklist: Checklist
 
 organization:
+    name: Team name
     selector:
         create: Create a new team
     create:
@@ -392,16 +393,13 @@ tools:
         enabled: Enabled
         disabled: Disabled
 
-entity:
-    project:
-        name: Title
-        date_created: Created
-        status: Status
-        status:NEW: New
-        status:IN_PROGRESS: In progress
-        status:COMPLETED: Completed
-    organization:
-        name: Team name
+project:
+    name: Title
+    date_created: Created
+    status: Status
+    status:NEW: New
+    status:IN_PROGRESS: In progress
+    status:COMPLETED: Completed
 
 email:
     organization_invitation:

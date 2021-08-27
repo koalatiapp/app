@@ -27,27 +27,3 @@
 		{% endfor %}
 	</div>
 {% endmacro %}
-
-{# Simple list of projects with nanme and favicon #}
-{% macro project_list(projects) %}
-	<div class="project-list">
-		<div class="list-headings">
-			<div></div>
-			<div>{% trans %}entity.project.name{% endtrans %}</div>
-			<div>{% trans %}entity.project.date_created{% endtrans %}</div>
-			<div>{% trans %}entity.project.status{% endtrans %}</div>
-			<div></div>
-		</div>
-		<div class="list">
-			{% for project in projects %}
-				<a href="{{ path('project_dashboard', {id: project.id}) }}" class="list-row">
-					<img src="{{ project|favicon }}" class="favicon">
-					<strong class="name">{{ project.name }}</strong>
-					<div class="date">{{ project.dateCreated|ago }}</div>
-					<div class="status {{ project.status|lower }}">{{ ('entity.project.status:' ~ project.status)|trans }}</div>
-					<i class="far fa-angle-right"></i>
-				</a>
-			{% endfor %}
-		</div>
-	</div>
-{% endmacro %}

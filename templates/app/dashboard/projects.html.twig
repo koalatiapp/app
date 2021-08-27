@@ -1,9 +1,8 @@
 {% extends 'app_base.html.twig' %}
-{% from 'app/_macros/project.html.twig' import project_thumbnails, project_list %}
+{% from 'app/_macros/project.html.twig' import project_thumbnails %}
 
 {% block head %}
     <link rel="stylesheet" href="{{ asset('css/component/project/thumbnail.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/component/project/list.css') }}">
 {% endblock %}
 
 {% block section_title %}{% trans %}dashboard.title{% endtrans %}{% endblock %}
@@ -31,5 +30,5 @@
 {% block body %}
 	{{ project_thumbnails(projects|slice(0, 4)) }}
 	<hr class="spacer">
-	{{ project_list(projects) }}
+	<project-list></project-list>
 {% endblock %}

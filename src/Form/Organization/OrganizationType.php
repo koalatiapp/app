@@ -18,7 +18,7 @@ class OrganizationType extends AbstractType
 	{
 		$builder
 			->add('name', TextType::class, [
-				'label' => 'entity.organization.name',
+				'label' => 'organization.name',
 				'attr' => ['placeholder' => 'organization.form.name_placeholder', 'class' => 'medium'],
 			])
 			->add('save', SubmitType::class, [
