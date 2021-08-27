@@ -30,7 +30,7 @@ class Checklist
 
 	/**
 	 * @ORM\OneToOne(targetEntity=Project::class, inversedBy="checklist", cascade={"persist", "remove"})
-	 * @ORM\JoinColumn(nullable=false)
+	 * @ORM\JoinColumn(name="project_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
 	 */
 	private ?Project $project;
 

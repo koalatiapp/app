@@ -31,14 +31,14 @@ class OrganizationMember
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=Organization::class, inversedBy="members")
-	 * @ORM\JoinColumn(nullable=false)
+	 * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
 	 * @Groups({"default"})
 	 */
 	private ?Organization $organization;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=User::class, inversedBy="organizationLinks")
-	 * @ORM\JoinColumn(nullable=false)
+	 * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
 	 * @Groups({"default"})
 	 */
 	private ?User $user;

@@ -52,7 +52,7 @@ class Recommendation
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=Page::class, inversedBy="recommendations")
-	 * @ORM\JoinColumn(nullable=false)
+	 * @ORM\JoinColumn(name="page_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
 	 * @Groups({"recommendation"})
 	 * @MaxDepth(1)
 	 */
@@ -72,7 +72,7 @@ class Recommendation
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=TestResult::class, inversedBy="recommendations")
-	 * @ORM\JoinColumn(nullable=false)
+	 * @ORM\JoinColumn(name="parent_result_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
 	 * @Groups({"recommendation"})
 	 * @MaxDepth(1)
 	 */

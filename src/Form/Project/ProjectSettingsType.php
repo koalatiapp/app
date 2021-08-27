@@ -21,11 +21,11 @@ class ProjectSettingsType extends AbstractType
 		$builder
 			->add('name', TextType::class, [
 				'label' => 'project_settings.project.form.field.name.label',
-				'attr' => ['placeholder' => 'project_settings.form.field.name.placeholder', 'class' => 'medium'],
+				'attr' => ['placeholder' => 'project_settings.project.form.field.name.placeholder', 'class' => 'medium'],
 			])
 			->add('url', UrlType::class, [
 				'label' => 'project_settings.project.form.field.url.label',
-				'attr' => ['placeholder' => 'project_settings.form.field.url.placeholder', 'class' => 'medium'],
+				'attr' => ['placeholder' => 'project_settings.project.form.field.url.placeholder', 'class' => 'medium'],
 			])
 			->add('save', SubmitType::class, [
 				'label' => 'project_settings.project.form.submit_label',

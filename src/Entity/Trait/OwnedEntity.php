@@ -9,18 +9,18 @@ use Symfony\Component\Serializer\Annotation\Groups;
 trait OwnedEntity
 {
 	/**
-	 * @var \App\Entity\User|null
-	 * @ORM\ManyToOne(targetEntity=User::class, inversedBy="personalProjects")
+	 * @ORM\ManyToOne(targetEntity=User::class)
+	 * @ORM\JoinColumn(name="owner_user_id", referencedColumnName="id", onDelete="CASCADE")
 	 * @Groups({"default"})
 	 */
-	private $ownerUser;
+	private ?User $ownerUser;
 
 	/**
-	 * @var \App\Entity\Organization|null
-	 * @ORM\ManyToOne(targetEntity=Organization::class, inversedBy="projects")
+	 * @ORM\ManyToOne(targetEntity=Organization::class)
+	 * @ORM\JoinColumn(name="owner_organization_id", referencedColumnName="id", onDelete="CASCADE")
 	 * @Groups({"default"})
 	 */
-	private $ownerOrganization;
+	private ?Organization $ownerOrganization;
 
 	public function getOwnerUser(): ?User
 	{

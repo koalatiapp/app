@@ -21,7 +21,7 @@ class ItemGroup
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=Checklist::class, inversedBy="itemGroups")
-	 * @ORM\JoinColumn(nullable=false)
+	 * @ORM\JoinColumn(name="checklist_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
 	 */
 	private ?Checklist  $checklist;
 

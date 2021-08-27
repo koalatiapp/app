@@ -70,7 +70,7 @@ class TestResult
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=ToolResponse::class, inversedBy="testResults")
-	 * @ORM\JoinColumn(nullable=false)
+	 * @ORM\JoinColumn(name="parent_response_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
 	 */
 	private ToolResponse $parentResponse;
 

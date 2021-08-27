@@ -17,12 +17,13 @@ class OrganizationMemberDeletionManager
 
 	public function deleteRelations(OrganizationMember $membership): EntityManagerInterface
 	{
+		// @TODO: Handle auto-deletion of organizations when all members have been deleted via SQL onDelete cascades (which is the likeliest scenario)
 		$organization = $membership->getOrganization();
 
 		if ($organization) {
 			$organization->removeMember($membership);
 
-			if ($organization->getMembers()->count() <= 1) {
+			if ($organization->getMembers()->count() == 0) {
 				$this->em->remove($organization);
 			}
 		}

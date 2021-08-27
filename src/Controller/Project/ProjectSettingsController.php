@@ -65,11 +65,12 @@ class ProjectSettingsController extends AbstractProjectController
 			// Handle deletion first without regular form validation
 			if ($this->isRequestingDeletion($form, $request)) {
 				if ($form->get('deleteConfirmation')->getData() === true) {
+					$projectName = $project->getName();
 					$em = $this->getDoctrine()->getManager();
 					$em->remove($project);
 					$em->flush();
 
-					$this->addFlash('success', 'project_settings.project.flash.deleted_successfully', ['%name%' => $project->getName()]);
+					$this->addFlash('success', 'project_settings.project.flash.deleted_successfully', ['%name%' => $projectName]);
 
 					return $this->redirectToRoute('dashboard');
 				}

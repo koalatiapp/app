@@ -21,12 +21,14 @@ class ProjectMember
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=Project::class, inversedBy="teamMembers")
+	 * @ORM\JoinColumn(name="project_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
 	 * @Groups({"default"})
 	 */
 	private ?Project $project;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=User::class, inversedBy="projectLinks")
+	 * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
 	 * @Groups({"default"})
 	 */
 	private ?User $user;

@@ -53,16 +53,19 @@ class IgnoreEntry implements MercureEntityInterface
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=Organization::class, inversedBy="ignoreEntries")
+	 * @ORM\JoinColumn(name="target_organization_id", referencedColumnName="id", onDelete="CASCADE")
 	 */
 	private ?Organization $targetOrganization = null;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=User::class, inversedBy="ignoreEntries")
+	 * @ORM\JoinColumn(name="target_user_id", referencedColumnName="id", onDelete="CASCADE")
 	 */
 	private ?User $targetUser = null;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=Project::class, inversedBy="ignoreEntries")
+	 * @ORM\JoinColumn(name="target_project_id", referencedColumnName="id", onDelete="CASCADE")
 	 */
 	private ?Project $targetProject = null;
 
@@ -75,6 +78,7 @@ class IgnoreEntry implements MercureEntityInterface
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=Page::class, inversedBy="ignoreEntries")
+	 * @ORM\JoinColumn(name="page_id", referencedColumnName="id", onDelete="CASCADE")
 	 */
 	private ?Page $targetPage = null;
 

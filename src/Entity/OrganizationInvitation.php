@@ -59,7 +59,7 @@ class OrganizationInvitation
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=Organization::class, inversedBy="organizationInvitations")
-	 * @ORM\JoinColumn(nullable=false)
+	 * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
 	 */
 	private Organization $organization;
 

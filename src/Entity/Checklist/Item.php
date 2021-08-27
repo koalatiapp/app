@@ -23,12 +23,13 @@ class Item implements MercureEntityInterface
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=Checklist::class, inversedBy="items")
-	 * @ORM\JoinColumn(nullable=false)
+	 * @ORM\JoinColumn(name="checklist_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
 	 */
 	private ?Checklist $checklist;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=ItemGroup::class, inversedBy="items")
+	 * @ORM\JoinColumn(name="parent_group_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
 	 */
 	private ?ItemGroup $parentGroup;
 
