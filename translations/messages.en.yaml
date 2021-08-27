@@ -329,6 +329,9 @@ organization:
     dashboard:
         title: Team dashboard
         feed: Recent activity
+        projects:
+            title: Team projects
+            empty_state: There are no team projects yet.
         member_list:
             title: Members
             x_more: ...and %count% more

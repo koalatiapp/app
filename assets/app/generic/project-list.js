@@ -105,6 +105,11 @@ export class ProjectList extends AbstractDynamicList {
 	{
 		super.fetchListData("api_projects_list", { owner_type: this.ownerType, owner_organization_id: this.organizationId });
 	}
+
+	_emptyStateLabel()
+	{
+		return Translator.trans("organization.dashboard.projects.empty_state");
+	}
 }
 
 customElements.define("project-list", ProjectList);

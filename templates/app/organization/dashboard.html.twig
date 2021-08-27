@@ -34,4 +34,7 @@
 			{% endif %}
 		</div>
 	</div>
+	<hr class="spacer">
+	<h2>{% trans %}organization.dashboard.projects.title{% endtrans %}</h2>
+	<project-list organizationId="{{ organization.id }}"></project-list>
 {% endblock %}

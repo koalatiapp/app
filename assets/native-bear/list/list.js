@@ -9,7 +9,7 @@ import stylesReset from "../styles-reset.js";
  *
  * Other methods that can be redefined are:
  * - `_itemIdentifierCallback`
- * - `_emptyState`
+ * - `_emptyStateLabel`
  */
 export class NbList extends LitElement {
 	static get styles()
@@ -112,10 +112,15 @@ export class NbList extends LitElement {
 		return this.items === null;
 	}
 
+	_emptyStateLabel()
+	{
+		return Translator.trans("generic.list.empty_state");
+	}
+
 	_renderEmptyState()
 	{
 		return html`<div class="nb--list-empty-state">
-			${Translator.trans("generic.list.empty_state")}
+			${this._emptyStateLabel()}
 		</div>`;
 	}
 
