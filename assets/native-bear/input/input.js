@@ -29,6 +29,7 @@ export class NbInput extends LitElement {
 
 				@media (prefers-color-scheme: dark) {
 					.input { color: var(--color-black); background-color: var(--color-gray-lighter); border-color: #444867; }
+					.input::placeholder { color: var(--color-gray-light); }
 				}
 			`
 		];
