@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Checklist\ChecklistTemplate;
 use App\Entity\Testing\IgnoreEntry;
 use App\Repository\OrganizationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -65,12 +66,20 @@ class Organization
 	 */
 	private Collection $organizationInvitations;
 
+	/**
+	 * @ORM\OneToMany(targetEntity=ChecklistTemplate::class, mappedBy="ownerOrganization")
+	 *
+	 * @var \Doctrine\Common\Collections\Collection<int, ChecklistTemplate>
+	 */
+	private ?Collection $checklistTemplates;
+
 	public function __construct()
 	{
 		$this->members = new ArrayCollection();
 		$this->projects = new ArrayCollection();
 		$this->ignoreEntries = new ArrayCollection();
 		$this->organizationInvitations = new ArrayCollection();
+		$this->checklistTemplates = new ArrayCollection();
 	}
 
 	public function getId(): ?int
@@ -254,6 +263,36 @@ class Organization
 			// set the owning side to null (unless already changed)
 			if ($organizationInvitation->getOrganization() === $this) {
 				$organizationInvitation->setOrganization(null);
+			}
+		}
+
+		return $this;
+	}
+
+	/**
+	 * @return Collection<int, ChecklistTemplate>
+	 */
+	public function getChecklistTemplates(): Collection
+	{
+		return $this->checklistTemplates;
+	}
+
+	public function addChecklistTemplate(ChecklistTemplate $checklistTemplate): self
+	{
+		if (!$this->checklistTemplates->contains($checklistTemplate)) {
+			$this->checklistTemplates[] = $checklistTemplate;
+			$checklistTemplate->setOwnerOrganization($this);
+		}
+
+		return $this;
+	}
+
+	public function removeChecklistTemplate(ChecklistTemplate $checklistTemplate): self
+	{
+		if ($this->checklistTemplates->removeElement($checklistTemplate)) {
+			// set the owning side to null (unless already changed)
+			if ($checklistTemplate->getOwnerOrganization() === $this) {
+				$checklistTemplate->setOwnerOrganization(null);
 			}
 		}
 

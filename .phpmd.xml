@@ -11,10 +11,32 @@
     </description>
 
     <!-- Import the entire unused code rule set -->
-    <rule ref="rulesets/codesize.xml" />
     <rule ref="rulesets/controversial.xml" />
-    <rule ref="rulesets/design.xml" />
     <rule ref="rulesets/unusedcode.xml" />
+
+		<rule ref="rulesets/codesize.xml">
+			<exclude name="TooManyMethods" />
+			<exclude name="TooManyPublicMethods" />
+		</rule>
+		<rule ref="rulesets/codesize.xml/TooManyMethods">
+			<properties>
+				<property name="ignorepattern" value="(^(set|get|add|remove))i" />
+			</properties>
+		</rule>
+		<rule ref="rulesets/codesize.xml/TooManyPublicMethods">
+			<properties>
+				<property name="ignorepattern" value="(^(set|get|add|remove))i" />
+			</properties>
+		</rule>
+
+		<rule ref="rulesets/design.xml">
+			<exclude name="CouplingBetweenObjects" />
+		</rule>
+		<rule ref="rulesets/design.xml/CouplingBetweenObjects">
+			<properties>
+				<property name="maximum" value="20" />
+			</properties>
+		</rule>
 
 		<rule ref="rulesets/cleancode.xml">
 			<exclude name="IfStatementAssignment" />

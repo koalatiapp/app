@@ -2,7 +2,9 @@
 
 namespace App\Entity;
 
+use App\Entity\Checklist\ChecklistTemplate;
 use App\Entity\Testing\IgnoreEntry;
+use App\Entity\Trait\CollectionManagingEntity;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -18,8 +20,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ORM\Table(name="`user`")
  * @UniqueEntity(fields="email", message="user.error.unique_email")
  */
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+final class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+	use CollectionManagingEntity;
+
 	/**
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
@@ -84,6 +88,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	private Collection $projectLinks;
 
 	/**
+	 * @ORM\OneToMany(targetEntity=ChecklistTemplate::class, mappedBy="ownerUser")
+	 *
+	 * @var \Doctrine\Common\Collections\Collection<int, ChecklistTemplate>
+	 */
+	private ?Collection $checklistTemplates;
+
+	/**
 	 * @ORM\OneToMany(targetEntity=IgnoreEntry::class, mappedBy="targetUser")
 	 *
 	 * @var \Doctrine\Common\Collections\Collection<int, IgnoreEntry>
@@ -96,6 +107,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 		$this->organizationLinks = new ArrayCollection();
 		$this->projectLinks = new ArrayCollection();
 		$this->ignoreEntries = new ArrayCollection();
+		$this->checklistTemplates = new ArrayCollection();
 	}
 
 	public function getId(): ?int
@@ -268,24 +280,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
 	public function addPersonalProject(Project $project): self
 	{
-		if (!$this->personalProjects->contains($project)) {
-			$this->personalProjects[] = $project;
-			$project->setOwnerUser($this);
-		}
-
-		return $this;
+		return $this->addCollectionElement('personalProjects', $project, 'OwnerUser');
 	}
 
 	public function removePersonalProject(Project $project): self
 	{
-		if ($this->personalProjects->removeElement($project)) {
-			// set the owning side to null (unless already changed)
-			if ($project->getOwnerUser() === $this) {
-				$project->setOwnerUser(null);
-			}
-		}
-
-		return $this;
+		return $this->removeCollectionElement('personalProjects', $project, 'OwnerUser');
 	}
 
 	/**
@@ -298,24 +298,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
 	public function addOrganizationLink(OrganizationMember $organizationLink): self
 	{
-		if (!$this->organizationLinks->contains($organizationLink)) {
-			$this->organizationLinks[] = $organizationLink;
-			$organizationLink->setUser($this);
-		}
-
-		return $this;
+		return $this->addCollectionElement('organizationLinks', $organizationLink, 'User');
 	}
 
 	public function removeOrganizationLink(OrganizationMember $organizationLink): self
 	{
-		if ($this->organizationLinks->removeElement($organizationLink)) {
-			// set the owning side to null (unless already changed)
-			if ($organizationLink->getUser() === $this) {
-				$organizationLink->setUser(null);
-			}
-		}
-
-		return $this;
+		return $this->removeCollectionElement('organizationLinks', $organizationLink, 'User');
 	}
 
 	/**
@@ -328,21 +316,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
 	public function addProjectLink(ProjectMember $projectLink): self
 	{
-		if (!$this->projectLinks->contains($projectLink)) {
-			$this->projectLinks[] = $projectLink;
-			$projectLink->addUser($this);
-		}
-
-		return $this;
+		return $this->addCollectionElement('projectLinks', $projectLink, 'User');
 	}
 
 	public function removeProjectLink(ProjectMember $projectLink): self
 	{
-		if ($this->projectLinks->removeElement($projectLink)) {
-			$projectLink->setUser(null);
-		}
-
-		return $this;
+		return $this->removeCollectionElement('projectLinks', $projectLink, 'User');
 	}
 
 	/**
@@ -355,24 +334,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
 	public function addIgnoreEntry(IgnoreEntry $ignoreEntry): self
 	{
-		if (!$this->ignoreEntries->contains($ignoreEntry)) {
-			$this->ignoreEntries[] = $ignoreEntry;
-			$ignoreEntry->setTargetUser($this);
-		}
-
-		return $this;
+		return $this->addCollectionElement('ignoreEntries', $ignoreEntry, 'TargetUser');
 	}
 
 	public function removeIgnoreEntry(IgnoreEntry $ignoreEntry): self
 	{
-		if ($this->ignoreEntries->removeElement($ignoreEntry)) {
-			// set the owning side to null (unless already changed)
-			if ($ignoreEntry->getTargetUser() === $this) {
-				$ignoreEntry->setTargetUser(null);
-			}
-		}
-
-		return $this;
+		return $this->removeCollectionElement('ignoreEntries', $ignoreEntry, 'TargetUser');
 	}
 
 	/**
@@ -383,5 +350,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 		$gravatarApi = new GravatarApi(['default' => 'retro']);
 
 		return $gravatarApi->getUrl($this->getEmail(), $size);
+	}
+
+	/**
+	 * @return Collection<int, ChecklistTemplate>
+	 */
+	public function getChecklistTemplates(): Collection
+	{
+		return $this->checklistTemplates;
+	}
+
+	public function addChecklistTemplate(ChecklistTemplate $checklistTemplate): self
+	{
+		return $this->addCollectionElement('checklistTemplates', $checklistTemplate, 'OwnerUser');
+	}
+
+	public function removeChecklistTemplate(ChecklistTemplate $checklistTemplate): self
+	{
+		return $this->removeCollectionElement('checklistTemplates', $checklistTemplate, 'OwnerUser');
 	}
 }

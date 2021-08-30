@@ -15,6 +15,7 @@
 
 # OS specifics
 .DS_STORE
+*.icloud$
 
 # Node / NPM
 node_modules

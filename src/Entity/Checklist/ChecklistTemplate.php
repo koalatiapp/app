@@ -2,19 +2,19 @@
 
 namespace App\Entity\Checklist;
 
-use App\Entity\Trait\OwnedEntity;
+use App\Entity\Organization;
+use App\Entity\User;
 use App\Repository\Checklist\ChecklistTemplateRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ChecklistTemplateRepository::class)
  */
 class ChecklistTemplate
 {
-	use OwnedEntity;
-
 	/**
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
@@ -43,6 +43,19 @@ class ChecklistTemplate
 	 * @var array<mixed,mixed>
 	 */
 	private ?array $checklistContent = [];
+	/**
+	 * @ORM\ManyToOne(targetEntity=User::class, inversedBy="checklistTemplates")
+	 * @ORM\JoinColumn(name="owner_user_id", referencedColumnName="id", onDelete="CASCADE")
+	 * @Groups({"default"})
+	 */
+	private ?User $ownerUser;
+
+	/**
+	 * @ORM\ManyToOne(targetEntity=Organization::class, inversedBy="checklistTemplates")
+	 * @ORM\JoinColumn(name="owner_organization_id", referencedColumnName="id", onDelete="CASCADE")
+	 * @Groups({"default"})
+	 */
+	private ?Organization $ownerOrganization;
 
 	/**
 	 * @ORM\OneToMany(targetEntity=Checklist::class, mappedBy="template")
@@ -148,5 +161,34 @@ class ChecklistTemplate
 		}
 
 		return $this;
+	}
+
+	public function getOwnerUser(): ?User
+	{
+		return $this->ownerUser;
+	}
+
+	public function setOwnerUser(?User $ownerUser): self
+	{
+		$this->ownerUser = $ownerUser;
+
+		return $this;
+	}
+
+	public function getOwnerOrganization(): ?Organization
+	{
+		return $this->ownerOrganization;
+	}
+
+	public function setOwnerOrganization(?Organization $ownerOrganization): self
+	{
+		$this->ownerOrganization = $ownerOrganization;
+
+		return $this;
+	}
+
+	public function getOwner(): Organization | User
+	{
+		return $this->getOwnerOrganization() ?: $this->getOwnerUser();
 	}
 }

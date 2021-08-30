@@ -5,7 +5,6 @@ namespace App\Entity;
 use App\Entity\Checklist\Checklist;
 use App\Entity\Testing\IgnoreEntry;
 use App\Entity\Testing\Recommendation;
-use App\Entity\Trait\OwnedEntity;
 use App\Repository\ProjectRepository;
 use App\Util\Testing\RecommendationGroup;
 use DateTime;
@@ -23,8 +22,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Project
 {
-	use OwnedEntity;
-
 	public const STATUS_NEW = 'NEW';
 	public const STATUS_IN_PROGRESS = 'IN_PROGRESS';
 	public const STATUS_COMPLETED = 'COMPLETED';
@@ -108,6 +105,20 @@ class Project
 	 * @ORM\OneToOne(targetEntity=Checklist::class, mappedBy="project", cascade={"persist", "remove"})
 	 */
 	private ?Checklist $checklist;
+
+	/**
+	 * @ORM\ManyToOne(targetEntity=User::class, inversedBy="personalProjects")
+	 * @ORM\JoinColumn(name="owner_user_id", referencedColumnName="id", onDelete="CASCADE")
+	 * @Groups({"default"})
+	 */
+	private ?User $ownerUser;
+
+	/**
+	 * @ORM\ManyToOne(targetEntity=Organization::class, inversedBy="projects")
+	 * @ORM\JoinColumn(name="owner_organization_id", referencedColumnName="id", onDelete="CASCADE")
+	 * @Groups({"default"})
+	 */
+	private ?Organization $ownerOrganization;
 
 	public function __construct()
 	{
@@ -216,6 +227,35 @@ class Project
 	public function getPriority(): int
 	{
 		return 1;
+	}
+
+	public function getOwnerUser(): ?User
+	{
+		return $this->ownerUser;
+	}
+
+	public function setOwnerUser(?User $ownerUser): self
+	{
+		$this->ownerUser = $ownerUser;
+
+		return $this;
+	}
+
+	public function getOwnerOrganization(): ?Organization
+	{
+		return $this->ownerOrganization;
+	}
+
+	public function setOwnerOrganization(?Organization $ownerOrganization): self
+	{
+		$this->ownerOrganization = $ownerOrganization;
+
+		return $this;
+	}
+
+	public function getOwner(): Organization | User
+	{
+		return $this->getOwnerOrganization() ?: $this->getOwnerUser();
 	}
 
 	/**
