@@ -31,6 +31,7 @@ class ProjectNormalizer implements ContextAwareNormalizerInterface
 		// Add favicon and thumbnail URLs
 		$data['faviconUrl'] = $this->projectStorage->faviconUrl($project);
 		$data['thumbnailUrl'] = $this->projectStorage->thumbnailUrl($project);
+		$data['status'] = $project->getStatus();
 
 		return $data;
 	}

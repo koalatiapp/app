@@ -24,6 +24,7 @@ class Project
 {
 	public const STATUS_NEW = 'NEW';
 	public const STATUS_IN_PROGRESS = 'IN_PROGRESS';
+	public const STATUS_MAINTENANCE = 'MAINTENANCE';
 	public const STATUS_COMPLETED = 'COMPLETED';
 	public const ROLE_ADMIN = 'ROLE_ADMIN';
 	public const ROLE_MANAGE = 'ROLE_MANAGE';
@@ -63,13 +64,6 @@ class Project
 	 * @Groups({"default"})
 	 */
 	private $url;
-
-	/**
-	 * @var string
-	 * @ORM\Column(type="string", length=32)
-	 * @Groups({"default"})
-	 */
-	private $status;
 
 	/**
 	 * @var Collection<int, Page>
@@ -123,7 +117,6 @@ class Project
 	public function __construct()
 	{
 		$this->dateCreated = new DateTime();
-		$this->status = self::STATUS_NEW;
 		$this->pages = new ArrayCollection();
 		$this->teamMembers = new ArrayCollection();
 		$this->ignoreEntries = new ArrayCollection();
@@ -166,18 +159,6 @@ class Project
 	public function setUrl(string $url): self
 	{
 		$this->url = $url;
-
-		return $this;
-	}
-
-	public function getStatus(): string
-	{
-		return $this->status;
-	}
-
-	public function setStatus(string $status): self
-	{
-		$this->status = $status;
 
 		return $this;
 	}
@@ -436,5 +417,30 @@ class Project
 		$this->checklist = $checklist;
 
 		return $this;
+	}
+
+	public function getChecklistProgress(): float
+	{
+		return $this->getChecklist()?->getCompletionPercentage() ?: 0;
+	}
+
+	public function getStatus(): string
+	{
+		$checklist = $this->getChecklist();
+		$checklistCompletion = $checklist?->getCompletionPercentage() ?: 0;
+
+		if (!$checklist || !$checklistCompletion) {
+			return self::STATUS_NEW;
+		}
+
+		if ($checklistCompletion == 1) {
+			if ($this->getActiveRecommendations()->count() == 0) {
+				return self::STATUS_COMPLETED;
+			}
+
+			return self::STATUS_MAINTENANCE;
+		}
+
+		return self::STATUS_IN_PROGRESS;
 	}
 }

@@ -10,7 +10,7 @@ export class ProjectList extends AbstractDynamicList {
 			super.styles,
 			css`
 				.nb--list-header,
-				.nb--list-item { grid-template-areas: "icon title createdDate actions"; grid-template-columns: 25px 1fr 1fr 2ch; }
+				.nb--list-item { grid-template-areas: "icon title status createdDate actions"; grid-template-columns: 25px 1fr 12ch 1fr 2ch; }
 				.nb--list-item { position: relative; }
 				.nb--list-item:hover { position: relative; box-shadow: 0 2px 13px rgba(var(--shadow-rgb), 0.1); }
 				.nb--list-item-column[nb-column="icon"] { display: grid; align-content: center; }
@@ -19,6 +19,11 @@ export class ProjectList extends AbstractDynamicList {
 				.url { font-size: .75rem; color: var(--color-gray); }
 				.nb--list-item-column[nb-column="createdDate"] { color: var(--color-gray-dark); }
 				a { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+				[nb-column="status"] [data-status="NEW"] { color: var(--color-blue-50); }
+				[nb-column="status"] [data-status="IN_PROGRESS"] { color: var(--color-blue-80); }
+				[nb-column="status"] [data-status="MAINTENANCE"] { color: var(--color-green); }
+				[nb-column="status"] [data-status="COMPLETED"] { color: var(--color-gray-dark); }
 			`
 		];
 	}
@@ -54,6 +59,18 @@ export class ProjectList extends AbstractDynamicList {
 				placeholder: html`
 					<div class="nb--list-item-column-placeholder" style="width: 15ch;">&nbsp;</div>
 					<div class="nb--list-item-column-placeholder" style="width: 25ch; line-height: .75rem;">&nbsp;</div>
+				`
+			},
+			{
+				key: "status",
+				label: "project.status",
+				render: (item) => html`
+					<span data-status=${item.status}>
+						${Translator.trans("project.status:" + item.status)}
+					</span>
+				`,
+				placeholder: html`
+					<div class="nb--list-item-column-placeholder" style="width: 4ch;">&nbsp;</div>
 				`
 			},
 			{

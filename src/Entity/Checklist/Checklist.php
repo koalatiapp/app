@@ -160,4 +160,19 @@ class Checklist
 
 		return $this;
 	}
+
+	public function getCompletionPercentage(): float
+	{
+		$items = $this->getItems();
+		$completedCount = 0;
+		$totalCount = $items->count();
+
+		foreach ($this->getItems() as $item) {
+			if ($item->getIsCompleted()) {
+				$completedCount++;
+			}
+		}
+
+		return $completedCount / max($totalCount, 0);
+	}
 }

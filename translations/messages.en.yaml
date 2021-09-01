@@ -403,6 +403,7 @@ project:
     status: Status
     status:NEW: New
     status:IN_PROGRESS: In progress
+    status:MAINTENANCE: Maintenance
     status:COMPLETED: Completed
 
 email:
