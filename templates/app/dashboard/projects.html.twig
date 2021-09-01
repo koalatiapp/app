@@ -30,5 +30,5 @@
 {% block body %}
 	{{ project_thumbnails(projects|slice(0, 4)) }}
 	<hr class="spacer">
-	<project-list></project-list>
+	<project-list emptyState="{% trans %}dashboard.projects.empty_state{% endtrans %}">></project-list>
 {% endblock %}

@@ -26,7 +26,8 @@ export class ProjectList extends AbstractDynamicList {
 	static get properties() {
 		return {
 			...super.properties,
-			organizationId: {type: Number}
+			organizationId: {type: Number},
+			emptyState: {type: String}
 		};
 	}
 
@@ -86,6 +87,7 @@ export class ProjectList extends AbstractDynamicList {
 		super();
 		this.ownerType = null;
 		this.organizationId = null;
+		this.emptyState = Translator.trans("generic.list.empty_state");
 	}
 
 	connectedCallback()
@@ -108,7 +110,7 @@ export class ProjectList extends AbstractDynamicList {
 
 	_emptyStateLabel()
 	{
-		return Translator.trans("organization.dashboard.projects.empty_state");
+		return this.emptyState;
 	}
 }
 
