@@ -76,6 +76,7 @@ navigation:
             checklist: Checklist
             automated_testing: Recommendations
             settings: Settings
+        creation_pending: Creating a project...
 
     resources:
         label: Resources

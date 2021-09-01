@@ -34,6 +34,10 @@
 							{% trans %}navigation.project.sublink.settings{% endtrans %}
 						</a>
 					</li>
+				{% elseif current_route == "project_creation" %}
+					<li class="active">
+						<a href="#" aria-current="page">{% trans %}navigation.project.creation_pending{% endtrans %}</a>
+					</li>
 				{% endif %}
 			</ul>
         </li>
