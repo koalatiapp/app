@@ -34,13 +34,11 @@
 						{% endif %}
 
 						<fieldset>
-							<label for="input-email">{% trans %}login.form.field.email{% endtrans %}</label>
-							<nb-input type="email" value="{{ last_username }}" name="email" id="input-email" required autofocus></nb-input>
+							<nb-input type="email" value="{{ last_username }}" name="email" id="input-email" label="{% trans %}login.form.field.email{% endtrans %}" required autofocus></nb-input>
 						</fieldset>
 
 						<fieldset>
-							<label for="input-password">{% trans %}login.form.field.password{% endtrans %}</label>
-							<nb-input type="password" name="password" id="input-password" required></nb-input>
+							<nb-input type="password" name="password" id="input-password" label="{% trans %}login.form.field.password{% endtrans %}" required></nb-input>
 							<a href="{{ path('app_forgot_password_request') }}" class="text-smaller">
 								{% trans %}login.forgot_password{% endtrans %}
 							</a>
