@@ -20,7 +20,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ORM\Table(name="`user`")
  * @UniqueEntity(fields="email", message="user.error.unique_email")
  */
-final class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
 	use CollectionManagingEntity;
 
