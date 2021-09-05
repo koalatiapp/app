@@ -2,6 +2,7 @@
 
 namespace App\Controller\Project;
 
+use App\Message\TestingRequest;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -13,6 +14,10 @@ class ProjectTestingController extends AbstractProjectController
 	public function projectTesting(int $id): Response
 	{
 		$project = $this->getProject($id);
+
+		if (!$project->getRecommendations()->count()) {
+			$this->dispatchMessage(new TestingRequest($id));
+		}
 
 		return $this->render('app/project/testing/index.html.twig', [
 			'project' => $project,
