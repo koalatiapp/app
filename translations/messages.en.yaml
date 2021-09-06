@@ -247,6 +247,52 @@ project_creation:
 
 project_dashboard:
     title: Overview
+    up_next:
+        title: Up next...
+        not_started:
+            explanation: >
+                <p>It looks like you're just starting the quality control process for %projectName%.</p>
+                <p>We recommend you start by going through a <strong>quality control checklist</strong> to validate and improve your website.</p>
+            cta: Get started with the checklist
+        checklist_started:
+            explanation: >
+                <p>You've started going through the <strong>quality control checklist</strong> for %projectName%: we recommend you complete it before you go to the next step.</p>
+            cta: Keep working on the checklist
+        generate_recommendations:
+            explanation: >
+                <p>Koalati can scan your website and come up with <strong>relevant recommendations</strong> to help improve %projectName%.</p>
+                <p>We suggest you head to the Recommendations section to start scanning yoru website and view those recommendations.</p>
+            cta: View recommendations
+        implement_recommendations:
+            explanation: >
+                <p>We have <strong>%recommendationCount% recommendations</strong> to help improve %projectName%.</p>
+                <p>We suggest you take a look at them and implement as many of them as possible.</p>
+            cta: View recommendations
+        all_done:
+            explanation: >
+                <p>You're all done: we don't have any more recommendations or suggestions for %projectName%.</p>
+                <p>Well done! 🙌🎉</p>
+    summary:
+        title: Project summary
+        step:
+            checklist:
+                title: Quality control checklist
+                not_start: not started yet
+                in_progress: in progress
+                completed: completed
+            recommendations:
+                title: Possible improvements
+                count: "%count% possible improvements"
+                not_scanned: website not scanned yet
+                completed: no recommendations left!
+            bug_reports:
+                title: Bug reports
+                not_available: not available yet
+    links:
+        checklist: Checklist
+        recommendations: Recommendations
+        settings: Project settings
+
 
 project_testing:
     title: Recommendations

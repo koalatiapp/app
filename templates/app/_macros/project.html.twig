@@ -2,7 +2,7 @@
 {% macro project_thumbnails(projects) %}
 	<div class="grid cols-4">
 		{% for project in projects %}
-			<a href="{{ path('project_dashboard', {id: project.id}) }}" class="project-thumbnail">
+			<a href="{{ path('project_dashboard', {id: project.id}) }}" class="clickable-thumbnail">
 				<div class="thumbnail">
 					<img src="{{ project|thumbnail }}">
 				</div>

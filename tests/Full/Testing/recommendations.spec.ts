@@ -10,7 +10,7 @@ test("testing recommendations", async ({ page }) => {
 
 	// Go to the project's testing page
 	await page.click("text=View all projects");
-	await page.click(".project-thumbnail:has-text('Koalati')");
+	await page.click(".clickable-thumbnail:has-text('Koalati')");
 	await page.click("#sidebar nav a:has-text('Recommendations')");
 	await page.waitForSelector(`.nb--list-item >> text=${stubTitle}`);
 

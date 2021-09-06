@@ -161,18 +161,24 @@ class Checklist
 		return $this;
 	}
 
+	/**
+	 * @return Collection<int,Item>
+	 */
+	public function getCompletedItems(): Collection
+	{
+		return $this->getItems()->filter(fn (Item $item) => $item->getIsCompleted());
+	}
+
 	public function getCompletionPercentage(): float
 	{
+		$completedItems = $this->getCompletedItems();
 		$items = $this->getItems();
-		$completedCount = 0;
-		$totalCount = $items->count();
 
-		foreach ($this->getItems() as $item) {
-			if ($item->getIsCompleted()) {
-				$completedCount++;
-			}
-		}
+		return $completedItems->count() / max($items->count(), 1);
+	}
 
-		return $completedCount / max($totalCount, 0);
+	public function isCompleted(): bool
+	{
+		return !$this->getItems()->filter(fn (Item $item) => !$item->getIsCompleted())->count();
 	}
 }

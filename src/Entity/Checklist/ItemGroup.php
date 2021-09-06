@@ -23,7 +23,7 @@ class ItemGroup
 	 * @ORM\ManyToOne(targetEntity=Checklist::class, inversedBy="itemGroups")
 	 * @ORM\JoinColumn(name="checklist_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
 	 */
-	private ?Checklist  $checklist;
+	private ?Checklist $checklist;
 
 	/**
 	 * @ORM\Column(type="string", length=255)
@@ -99,5 +99,26 @@ class ItemGroup
 		}
 
 		return $this;
+	}
+
+	/**
+	 * @return Collection<int,Item>
+	 */
+	public function getCompletedItems(): Collection
+	{
+		return $this->getItems()->filter(fn (Item $item) => $item->getIsCompleted());
+	}
+
+	public function getCompletionPercentage(): float
+	{
+		$completedItems = $this->getCompletedItems();
+		$items = $this->getItems();
+
+		return $completedItems->count() / max($items->count(), 1);
+	}
+
+	public function isCompleted(): bool
+	{
+		return (bool) $this->getItems()->filter(fn (Item $item) => !$item->getIsCompleted())->count();
 	}
 }

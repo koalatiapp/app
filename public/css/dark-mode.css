@@ -82,9 +82,9 @@
 	.text-blue-faded { color: #6481e6; }
 	.text-blue-gray { color: #9ca8d6; }
 
-	/* Component: Project: Thumbnail */
-	.project-thumbnail .thumbnail::after { background-color: black; }
-	.project-thumbnail .thumbnail img { filter: brightness(.75); }
+	/* Component: Thumbnail */
+	.clickable-thumbnail .thumbnail::after { background-color: black; }
+	.clickable-thumbnail .thumbnail img { filter: brightness(.75); }
 
 	/* Lists */
 	.list-headings { color: var(--color-gray); }
