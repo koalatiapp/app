@@ -1,6 +1,5 @@
 import escapeHtml  from "escape-html";
 import { LitElement, html, css } from "lit";
-import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import stylesReset from "../../native-bear/styles-reset.js";
 import { ApiClient } from "../../utils/api/index.js";
 import faImport from "../../utils/fontawesome-import";
@@ -15,6 +14,11 @@ export class RecommendationDetails extends LitElement {
 				.sample-recommendation-title { padding: 1em; margin: 0; margin-bottom: 2em; font-weight: 500; color: var(--color-blue-dark-faded); background-color: var(--color-gray-light); border-radius: 3px; box-shadow: 0 2px 5px rgb(var(--shadow-rgb), .1); }
 				.page-url { font-size: .8em; font-weight: 400; color: var(--color-blue-dark-faded); }
 				.page-empty-state { color: var(--color-gray); }
+
+				table { width: 100%; }
+				th { padding: .5rem; text-align: left; vertical-align: bottom; }
+				td { padding: .5rem; vertical-align: top; border-bottom: 2px solid var(--color-gray-light); background-color: white; }
+				td img { max-width: 200px; }
 
 				@media (prefers-color-scheme: dark) {
 					.sample-recommendation-title { color: var(--color-gray); }
@@ -98,7 +102,7 @@ export class RecommendationDetails extends LitElement {
 
 			<h3>${Translator.trans("recommendation.modal.pages_heading")}</h3>
 			${this.recommendationGroup.recommendations.map(recommendation => {
-				const renderedTable = this.constructor._renderTable(recommendation.parentResult.tableData);
+				const renderedTable = this.constructor._renderTable(recommendation.parentResult.dataTable);
 				const renderedSnippets = this.constructor._renderSnippets(recommendation.parentResult.snippets);
 				const hasDetails = renderedSnippets || renderedTable;
 
@@ -143,17 +147,30 @@ export class RecommendationDetails extends LitElement {
 		}
 
 		let isFirstRow = true;
+
 		const renderRow = row => {
-			const tag = unsafeHTML(isFirstRow ? "th" : "td");
+			if (isFirstRow) {
+				isFirstRow = false;
+
+				return html`<tr>
+					${row.map(cellContent => html`<th>
+						<nb-markdown barebones>
+							<script type="text/markdown">
+								${cellContent}
+							</script>
+						</nb-markdown>
+					</th>`)}
+				</tr>`;
+			}
 
 			return html`<tr>
-				${row.map(cellContent => html`<${tag}>
+				${row.map(cellContent => html`<td>
 					<nb-markdown barebones>
 						<script type="text/markdown">
 							${cellContent}
 						</script>
 					</nb-markdown>
-				</${tag}>`)}
+				</td>`)}
 			</tr>`;
 		};
 

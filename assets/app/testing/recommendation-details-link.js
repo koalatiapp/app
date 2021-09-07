@@ -44,6 +44,7 @@ export class RecommendationDetailsLink extends LitElement {
 
 		new Modal({
 			title: Translator.trans("recommendation.modal.title"),
+			size: "large",
 			content: html`
 				<recommendation-details .recommendationGroup=${this.recommendationGroup} recommendationId=${this.recommendationId}>
 			`
