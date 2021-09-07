@@ -12,8 +12,6 @@
 	{% include 'app/_parts/page_tabs.html.twig' with {page_tabs: [
 	    {label: 'dashboard.tabs.overview', route: 'dashboard'},
 	    {label: 'dashboard.tabs.projects', route: 'projects'},
-	    {label: 'dashboard.tabs.inbox', route: 'inbox'},
-	    {label: 'dashboard.tabs.news', route: 'koalati_news'},
 	]} %}
 {% endblock %}
 
@@ -37,7 +35,7 @@
 				</div>
 			{% endif %}
         </div>
-        <div class="card">
+        <div class="card not-yet-available" aria-hidden="true">
             <h2>{% trans %}dashboard.notifications.title{% endtrans %}</h2>
             <div class="notification">
                 <div class="icon">
@@ -71,8 +69,8 @@
 
     <hr class="spacer">
 
-    <h2>{% trans %}dashboard.news.title{% endtrans %}</h2>
-    <div class="grid small-small-fill">
+    <h2 class="not-yet-available" aria-hidden="true">{% trans %}dashboard.news.title{% endtrans %}</h2>
+    <div class="grid small-small-fill not-yet-available" aria-hidden="true">
         <div class="card secondary">
             <h3>Lorem ipsum dolor sit amet</h3>
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit minima culpa cupiditate quas exercitationem beatae vel ullam.</p>
@@ -84,7 +82,7 @@
         <div class="card blue centered">
             <p>Want to see more?</p>
             <div class="button-container">
-                <nb-button href="#">Read the blog</nb-button>
+                <nb-button href="#" disabled>Read the blog</nb-button>
             </div>
         </div>
     </div>

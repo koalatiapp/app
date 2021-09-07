@@ -369,4 +369,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	{
 		return $this->removeCollectionElement('checklistTemplates', $checklistTemplate, 'OwnerUser');
 	}
+
+	public function getDefaultOrganization(): ?Organization
+	{
+		$organizationLink = $this->getOrganizationLinks()->first() ?: null;
+
+		return $organizationLink?->getOrganization();
+	}
 }

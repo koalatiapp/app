@@ -41,7 +41,8 @@
 				{% endif %}
 			</ul>
         </li>
-        <li class="{{ current_route in ['resources'] ? 'active' : '' }}">
+        {#
+		<li class="{{ current_route in ['resources'] ? 'active' : '' }}">
             <a href="#">
                 <i class="far fa-toolbox"></i>
                 <span>{% trans %}navigation.resources.label{% endtrans %}</span>
@@ -49,6 +50,7 @@
             <ul>
             </ul>
         </li>
+		#}
         <li class="{{ current_route in ['organization_dashboard', 'organization_create', 'organization_settings', 'organization_leave'] ? 'active' : '' }}">
             <a href="{{ path('organization_dashboard') }}">
                 <i class="far fa-users"></i>
@@ -82,13 +84,11 @@
 				{% endif %}
 			</ul>
         </li>
-        <li class="{{ current_route in ['settings'] ? 'active' : '' }}">
-            <a href="#">
+        <li class="{{ current_route in ['edit_profile', 'manage_account_security', 'manage_contact_preferences', 'manage_subscription'] ? 'active' : '' }}">
+            <a href="{{ path('edit_profile') }}">
                 <i class="far fa-gear"></i>
                 <span>{% trans %}navigation.settings.label{% endtrans %}</span>
             </a>
-            <ul>
-            </ul>
         </li>
         <li class="{{ current_route in ['help'] ? 'active' : '' }}">
             <a href="#">
