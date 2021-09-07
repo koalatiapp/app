@@ -1,6 +1,6 @@
 {% set route_name = app.request.attributes.get('_route') %}
 {% set route_params = app.request.attributes.get('_route_params') %}
-<div>
+<div id="organization-selector-wrapper">
 	<nb-button size="small" color="gray">
 		{{ organization.name }}
 		&nbsp;&nbsp;
@@ -22,4 +22,18 @@
 			</a>
 		</li>
 	</ul>
+
+	<script>
+		(() => {
+			const hash = window.location.hash.replace("#", "");
+
+			if (hash) {
+				const links = document.querySelectorAll("#organization-selector-wrapper a");
+
+				for (const link of links) {
+					link.href += "#" + hash;
+				}
+			}
+		})();
+	</script>
 </div>
