@@ -9,7 +9,7 @@
 	.progress-bar { display: block; width: 100%; height: 2rem; position: relative; --progress-bar-color: var(--color-blue-20); --progress-background-color: var(--color-gray-lighter); }
 	.progress-bar.main { height: 3rem; --progress-bar-color: var(--color-blue-80); --progress-background-color: var(--color-blue-10);}
 	.progress-bar label { display: flex; align-items: center; font-size: .8rem; font-weight: 500; color: var(--color-blue-dark); position: absolute; top: 0; bottom: 0; left: .5rem; }
-	.progress-bar progress { display: block; width: 100%; height: 100%; margin: 0; padding: 0; vertical-align: top; appearance: none; }
+	.progress-bar progress { display: block; width: 100%; height: 100%; margin: 0; padding: 0; vertical-align: top; -webkit-appearance: none; appearance: none; }
 	.progress-bar progress::-webkit-progress-bar { background: transparent; border: 2px solid var(--progress-bar-color); border-radius: 5px; }
 	.progress-bar progress::-webkit-progress-value { background: var(--progress-bar-color); }
 	.progress-bar progress::after { content:  attr(value) "%"; display: flex; align-items: center; color: var(--color-blue-dark); position: absolute; top: 0; bottom: 0; right: .5rem; }

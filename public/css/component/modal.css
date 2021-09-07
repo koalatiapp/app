@@ -11,7 +11,7 @@
 .modal[aria-hidden="true"] + .modal-backdrop { opacity: 0; pointer-events: none; }
 
 /* Loading overlay */
-.modal-content[aria-busy="true"]::before { content: ' '; display: block; background-color: var(--modal-loading-overlay-bg-color, white); opacity: .75; backdrop-filter: blur(5px); position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 100; }
+.modal-content[aria-busy="true"]::before { content: ' '; display: block; background-color: var(--modal-loading-overlay-bg-color, white); opacity: .75; -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 100; }
 .modal-content[aria-busy="true"]::after { content: '\f1ce'; display: inline-block; font-family: var(--fa-style-family); font-size: 2.5rem; color: var(--modal-loading-overlay-spinner-color, var(--color-blue-light)); animation: fa-spin 2s linear infinite; position: absolute; top: calc(50% - .5em); left: calc(50% - .5em); z-index: 101; }
 
 @media (prefers-color-scheme: dark) {

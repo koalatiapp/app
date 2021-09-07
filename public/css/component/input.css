@@ -10,12 +10,12 @@ input::placeholder,
 textarea::placeholder { color: var(--color-gray); }
 
 /* Checkbox inputs */
-input[type="checkbox"] { display: inline-block; width: 22px; height: 22px; padding: 0; border: 2px solid var(--color-gray-light); border-radius: 3px; box-shadow: 0 1px 8px 0 rgba(var(--shadow-rgb), .05); appearance: none; cursor: pointer; }
+input[type="checkbox"] { display: inline-block; width: 22px; height: 22px; padding: 0; border: 2px solid var(--color-gray-light); border-radius: 3px; box-shadow: 0 1px 8px 0 rgba(var(--shadow-rgb), .05); -webkit-appearance: none; appearance: none; cursor: pointer; }
 input[type="checkbox"]:checked { background-color: var(--color-gray-light); background-image: url('/ext/fontawesome/svgs/regular/check.svg'); background-size: 90%; background-position: center; background-repeat: no-repeat; border-color: var(--color-blue-light); }
 input[type="checkbox"]:focus { border-color: var(--color-blue); box-shadow: 0 2px 10px 0 rgba(var(--shadow-rgb), .25); }
 
 /* Radio inputs */
-input[type="radio"] { display: inline-block; width: 22px; height: 22px; padding: 0; border: 2px solid var(--color-gray-light); border-radius: 50%; box-shadow: 0 1px 8px 0 rgba(var(--shadow-rgb), .05); appearance: none; cursor: pointer; }
+input[type="radio"] { display: inline-block; width: 22px; height: 22px; padding: 0; border: 2px solid var(--color-gray-light); border-radius: 50%; box-shadow: 0 1px 8px 0 rgba(var(--shadow-rgb), .05); -webkit-appearance: none; appearance: none; cursor: pointer; }
 input[type="radio"]:checked { background-color: var(--color-gray-light); background-image: url('/ext/fontawesome/svgs/solid/circle.svg'); background-size: 90%; background-position: center; background-repeat: no-repeat; border-color: var(--color-blue-light); }
 input[type="radio"]:focus { border-color: var(--color-blue); box-shadow: 0 2px 10px 0 rgba(var(--shadow-rgb), .25); }
 

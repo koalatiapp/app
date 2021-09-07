@@ -17,7 +17,7 @@ export class NbDropdown extends LitElement {
 				.dropdown-list > li:first-child button { border-radius: 10px 10px 0 0; }
 				.dropdown-list > li:last-child button { border-radius: 0 0 10px 10px; }
 
-				.dropdown-button { display: block; width: 100%; height: 100%; padding: 10px 15px; margin: 0; text-align: left; color: inherit; background-color: transparent; border: none; appearance: none; cursor: pointer; }
+				.dropdown-button { display: block; width: 100%; height: 100%; padding: 10px 15px; margin: 0; text-align: left; color: inherit; background-color: transparent; border: none; -webkit-appearance: none; appearance: none; cursor: pointer; }
 				.dropdown-button:hover { background-color: var(--color-gray-light); }
 
 				:host([open]),
