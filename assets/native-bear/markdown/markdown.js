@@ -33,6 +33,13 @@ export class NbMarkdown extends ZeroMd {
 				p { display: inline; margin: 0; }
 			`;
 		}
+
+		if (this.hasAttribute("custom-css")) {
+			this.config.hostCss = `
+				${this.config.hostCss}
+				${this.getAttribute("custom-css")}
+			`;
+		}
 	}
 
 	connectedCallback()

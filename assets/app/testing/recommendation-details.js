@@ -15,7 +15,7 @@ export class RecommendationDetails extends LitElement {
 				.page-url { font-size: .8em; font-weight: 400; color: var(--color-blue-dark-faded); }
 				.page-empty-state { color: var(--color-gray); }
 
-				table { width: 100%; }
+				table { width: 100%; table-layout: fixed; }
 				th { padding: .5rem; text-align: left; vertical-align: bottom; }
 				td { padding: .5rem; vertical-align: top; border-bottom: 2px solid var(--color-gray-light); background-color: white; }
 				td img { max-width: 200px; }
@@ -154,7 +154,7 @@ export class RecommendationDetails extends LitElement {
 
 				return html`<tr>
 					${row.map(cellContent => html`<th>
-						<nb-markdown barebones>
+						<nb-markdown barebones custom-css="img { min-width: 50px; max-width: min(250px, 100%); } a { word-break: break-all; }">
 							<script type="text/markdown">
 								${cellContent}
 							</script>
@@ -165,7 +165,7 @@ export class RecommendationDetails extends LitElement {
 
 			return html`<tr>
 				${row.map(cellContent => html`<td>
-					<nb-markdown barebones>
+					<nb-markdown barebones custom-css="img { min-width: 50px; max-width: min(250px, 100%); } a { word-break: break-all; }">
 						<script type="text/markdown">
 							${cellContent}
 						</script>
