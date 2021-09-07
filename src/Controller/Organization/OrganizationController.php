@@ -33,7 +33,9 @@ class OrganizationController extends AbstractController
 
 	private function getDefaultOrganization(): ?Organization
 	{
-		return $this->getUser()->getOrganizationLinks()->first()?->getOrganization();
+		$organizationLink = $this->getUser()->getOrganizationLinks()->first() ?: null;
+
+		return $organizationLink?->getOrganization();
 	}
 
 	/**
