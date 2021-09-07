@@ -21,6 +21,11 @@ export class NbSwitch extends LitElement {
 					:host([checked]) .switch { background-color: var(--color-blue); border-color: var(--color-blue); }
 					:host([checked]) .ball { background-color: var(--color-black); }
 				}
+
+				/* Safari support */
+				@supports not (aspect-ratio: 1) {
+					.ball { width: calc(1.2rem - 4px); }
+				  }
 			`
 		];
 	}
@@ -41,7 +46,12 @@ export class NbSwitch extends LitElement {
 		this.offLabel = null;
 		this.checked = false;
 		this.internals = this.attachInternals();
-		this.internals.role = "switch";
+
+		try {
+			this.internals.role = "switch";
+		} catch (_) {
+			// Looks like you're on Safari. Though luck!
+		}
 		this.internals.ariaChecked = this.checked ? "true" : "false";
 		this.setAttribute("role", "switch");
 	}
