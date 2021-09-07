@@ -12,7 +12,7 @@ export class SearchOverlay extends LitElement {
 		return [
 			stylesReset,
 			css`
-				#search-overlay { position: fixed; top: 0; left: 0; display: grid; width: 100%; height: 100%; place-items: center; background-color: rgba(0, 5, 19, .6); backdrop-filter: blur(5px); opacity: 0; pointer-events: none; transition: opacity .35s ease, transform .35s ease; }
+				#search-overlay { position: fixed; top: 0; left: 0; display: grid; width: 100%; height: 100%; place-items: center; background-color: rgba(0, 5, 19, .6); -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); opacity: 0; pointer-events: none; transition: opacity .35s ease, transform .35s ease; }
 				#search-overlay[aria-hidden="false"] { opacity: 1; pointer-events: auto; z-index: 1000; }
 
 				#search-inner { width: 500px; max-width: 90%; }
