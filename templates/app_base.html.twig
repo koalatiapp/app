@@ -56,7 +56,12 @@
         </header>
 
         <div id="top-bar">
-            {% block page_tabs %}<ul id="page-tabs"></ul>{% endblock %}
+			<div id="top-bar-left-navigation">
+				<nb-icon-button id="navigation-toggle" size="small" onclick="document.body.classList.toggle('navigation-open')">
+					<i class="fas fa-bars"></i>
+				</nb-icon-button>
+            	{% block page_tabs %}<ul id="page-tabs"></ul>{% endblock %}
+			</div>
             {% include 'app/_parts/global_actions.html.twig' %}
         </div>
 
