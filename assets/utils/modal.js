@@ -138,7 +138,7 @@ export default class Modal {
 	_createDialog()
 	{
 		const dialog = document.createElement("div");
-		dialog.className = "modal";
+		dialog.className = "modal " + (this.options.size || "");
 		dialog.setAttribute("role", "dialog");
 		dialog.setAttribute("aria-labelledby", `modal-title-${this.guid}`);
 		dialog.setAttribute("aria-describedby", `modal-content-${this.guid}`);
