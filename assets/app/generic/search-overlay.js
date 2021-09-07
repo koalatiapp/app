@@ -63,6 +63,11 @@ export class SearchOverlay extends LitElement {
 				this.close();
 			}
 		});
+
+		document.querySelector("#search-toggle").addEventListener("click", (e) => {
+			e.preventDefault();
+			this.open();
+		});
 	}
 
 	render()
