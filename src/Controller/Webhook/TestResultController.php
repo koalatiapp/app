@@ -184,14 +184,14 @@ class TestResultController extends AbstractController
 			$rawRecommendation = [
 				'template' => $rawRecommendation,
 				'params' => null,
-				'type' => Recommendation::TYPE_ISSUE,
+				'type' => Recommendation::TYPE_OPTIMIZATION,
 				'uniqueName' => substr($rawRecommendation, 0, 255),
 			];
 		} elseif (is_array($rawRecommendation)) {
 			$rawRecommendation = [
 				'template' => $rawRecommendation[0],
 				'params' => $rawRecommendation[1],
-				'type' => Recommendation::TYPE_ISSUE,
+				'type' => ($rawRecommendation[2] ?? null) ?: Recommendation::TYPE_OPTIMIZATION,
 				'uniqueName' => substr($rawRecommendation[0], 0, 255),
 			];
 		}
