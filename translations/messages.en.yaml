@@ -296,6 +296,17 @@ project_dashboard:
 
 project_testing:
     title: Recommendations
+    explanation:
+        heading: How does this work?
+        intro: Koalati analyzes your website to find problems and potential improvements.
+        items:
+            issue: "%type% are problems that should be fixed right away."
+            essential: "%type% are improvements with a good impact on user experience or SEO."
+            optimization: "%type% are additional improvement recommandations that should only be done once the issues and essentials are covered."
+        type:
+            issue: Issues
+            essential: Essentials
+            optimization: Optimizations
 
 project_checklist:
     tabs:

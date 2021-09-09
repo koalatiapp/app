@@ -1,5 +1,4 @@
 {% extends 'app_base.html.twig' %}
-{% from 'app/_macros/testing.html.twig' import recommendation_card %}
 
 {% block head %}
     <link rel="stylesheet" href="{{ asset('css/component/testing/recommendations.css') }}">
@@ -18,24 +17,26 @@
 {% endblock %}
 
 {% block body %}
-    <div class="grid small-fill">
-		{% if project.activeRecommendationGroups|length %}
-			{{ recommendation_card((project.activeRecommendationGroups|first).sample, "recommendation.next"|trans) }}
-		{% else %}
-			<div class="card empty-state">
-				<h3>{% trans %}recommendation.empty_state.title{% endtrans %}</h3>
-				<p>{% trans %}recommendation.empty_state.explanation{% endtrans %}</p>
-			</div>
-		{% endif %}
-        <div class="card secondary">
-			<h3>How does this work?</h3>
-			<p>Koalati analyzes your website to find problems and potential improvements.</p>
-			<ul class="bullet-list">
-				<li><strong class="text-red">Issues</strong> are problems that should be fixed right away.</li>
-				<li><strong class="text-blue-faded">Essentials</strong> are improvements with a good impact on user experience or SEO. </li>
-				<li><strong class="text-blue-gray">Optimizations</strong> are additional improvement recommandations that should only be done once the issues and essentials are covered.</li>
-			</ul>
-		</div>
+	<div class="card">
+		<h3>{% trans %}project_testing.explanation.heading{% endtrans %}</h3>
+		<p>{% trans %}project_testing.explanation.intro{% endtrans %}</p>
+		<ul class="bullet-list">
+			<li>
+				{% trans with {"%type%": '<strong class="text-red">' ~ 'project_testing.explanation.type.issue'|trans ~ '</strong>'} %}
+					project_testing.explanation.items.issue
+				{% endtrans %}
+			</li>
+			<li>
+				{% trans with {"%type%": '<strong class="text-blue-faded">' ~ 'project_testing.explanation.type.essential'|trans ~ '</strong>'} %}
+					project_testing.explanation.items.essential
+				{% endtrans %}
+			</li>
+			<li>
+				{% trans with {"%type%": '<strong class="text-blue-gray">' ~ 'project_testing.explanation.type.optimization'|trans ~ '</strong>'} %}
+					project_testing.explanation.items.optimization
+				{% endtrans %}
+			</li>
+		</ul>
 	</div>
 
 	<hr class="spacer">
