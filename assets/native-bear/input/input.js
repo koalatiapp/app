@@ -18,6 +18,8 @@ export class NbInput extends LitElement {
 				.input:focus { border-color: var(--color-blue); box-shadow: 0 2px 10px 0 rgba(var(--shadow-rgb), .15); }
 				.input::placeholder { color: var(--color-gray); }
 
+				textarea { resize: vertical; }
+
 				label { font-size: 1rem; font-weight: 500; color: var(--color-gray-darker); }
 				:host([required]) label::after { content: ' *'; color: var(--color-red); font-size: .85em; vertical-align: top; }
 
@@ -47,6 +49,7 @@ export class NbInput extends LitElement {
 			readonly: {type: Boolean},
 			disabled: {type: Boolean},
 			disableAutofill: {type: Boolean},
+			rows: {type: Number},
 			label: {type: String},
 			inputId: {type: String},
 		};
@@ -62,6 +65,7 @@ export class NbInput extends LitElement {
 		this.type = "text";
 		this.placeholder = "";
 		this.autocomplete = "on";
+		this.rows = 3;
 		this._required = false;
 		this.readonly = false;
 		this.disabled = false;
@@ -71,6 +75,14 @@ export class NbInput extends LitElement {
 
 	render()
 	{
+		if (this.type == "textarea") {
+			return html`
+				${this.label ? html`<label for=${this.inputId}>${this.label}</label>` : ""}
+				<slot></slot>
+				<textarea class="input" id=${this.inputId} name=${this.disableAutofill ? "" : this.name} placeholder=${this.placeholder} rows=${this.rows} ?readonly=${this.readonly} ?disabled=${this.disabled} @input=${this._updateValue}>${this.value}</textarea>
+			  `;
+		}
+
 		return html`
 			${this.label ? html`<label for=${this.inputId}>${this.label}</label>` : ""}
 			<slot></slot>

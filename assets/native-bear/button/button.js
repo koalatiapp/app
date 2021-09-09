@@ -129,7 +129,7 @@ export class NbButton extends LitElement {
 			window.addEventListener("keydown", (e) => {
 				const form = e.target.closest("form");
 
-				if (!form || e.key != "Enter" || e.target.matches("textarea, nb-button")) {
+				if (!form || e.key != "Enter" || e.target.matches("textarea, nb-input[type='textarea'], nb-button")) {
 					return;
 				}
 
