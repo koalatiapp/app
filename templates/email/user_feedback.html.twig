@@ -1,0 +1,32 @@
+{% extends "email/_base.html.twig" %}
+
+{% block body %}
+	<spacer size="20"></spacer>
+
+	<row>
+		<columns>
+			<h1>Feedback</h1>
+			<strong>Type:</strong> {{ type }}<br>
+			<strong>Message:</strong><br>
+			<pre>{{ message }}</pre>
+		</columns>
+	</row>
+
+	<row>
+		<columns>
+			<h2>Debugging information</h2>
+			<strong>URL:</strong> {{ url }}<br>
+			<strong>Date:</strong> {{ 'now'|date('Y-m-d H:i:s') }}<br>
+			<strong>User ID:</strong> {{ user.id }}<br>
+		</columns>
+	</row>
+
+	<row>
+		<columns>
+		<h2>Contact information</h2>
+		<strong>First name:</strong> {{ user.firstName }}<br>
+		<strong>Last name:</strong> {{ user.lastName }}<br>
+		<strong>Email:</strong> {{ user.email }}<br>
+		</columns>
+	</row>
+{% endblock %}

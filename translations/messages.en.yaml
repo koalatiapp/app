@@ -463,6 +463,11 @@ project:
     status:MAINTENANCE: Maintenance
     status:COMPLETED: Completed
 
+feedback:
+    flash:
+        success: Your feedback has been sent successfully! Thank you for helping make the web better.
+        error: Your message couldn't be sent. Please try again.
+
 email:
     organization_invitation:
         subject: "%inviter% wants you to join %organization% on Koalati"
