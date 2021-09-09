@@ -5,7 +5,6 @@ namespace App\Util\Testing;
 use App\Entity\MercureEntityInterface;
 use App\Entity\Testing\Recommendation;
 use App\Entity\User;
-use App\Exception\WrongRecommendationTypeException;
 use App\Mercure\TopicBuilder;
 use Countable;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -20,6 +19,11 @@ class RecommendationGroup implements Countable, MercureEntityInterface
 	 * @var ArrayCollection<int, Recommendation>
 	 */
 	private ArrayCollection $recommendations;
+
+	/**
+	 * Indicates whether the recommendation collection is sorted by priority or not.
+	 */
+	private bool $isSorted = false;
 
 	/**
 	 * @param ArrayCollection<int, Recommendation> $recommendations
@@ -41,11 +45,8 @@ class RecommendationGroup implements Countable, MercureEntityInterface
 
 	public function add(Recommendation $recommendation): self
 	{
-		if ($this->getType() != null && $recommendation->getType() != $this->getType()) {
-			throw new WrongRecommendationTypeException();
-		}
-
 		$this->recommendations->add($recommendation);
+		$this->isSorted = false;
 
 		return $this;
 	}
@@ -63,7 +64,11 @@ class RecommendationGroup implements Countable, MercureEntityInterface
 	 */
 	public function getSample(): ?Recommendation
 	{
-		return $this->recommendations->first() ?: null;
+		if (!$this->isSorted) {
+			$this->sort();
+		}
+
+		return $this->getRecommendations()->first() ?: null;
 	}
 
 	/**
@@ -139,6 +144,24 @@ class RecommendationGroup implements Countable, MercureEntityInterface
 	public function getCount(): int
 	{
 		return $this->count();
+	}
+
+	private function sort(): self
+	{
+		/**
+		 * @var \ArrayIterator<int, Recommendation> $recommendationIterator
+		 */
+		$recommendationIterator = $this->getRecommendations()->getIterator();
+		$recommendationIterator->uasort(function ($a, $b) {
+			$priorities = Recommendation::TYPE_PRIORITIES;
+
+			return $priorities[$a->getType()] > $priorities[$b->getType()] ? 1 : -1;
+		});
+
+		$this->recommendations = new ArrayCollection(iterator_to_array($recommendationIterator));
+		$this->isSorted = true;
+
+		return $this;
 	}
 
 	/**
