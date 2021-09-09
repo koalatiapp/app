@@ -322,16 +322,6 @@ class Project
 	{
 		$groups = RecommendationGroup::fromLooseRecommendations($this->getActiveRecommendations());
 
-		uasort($groups, function (RecommendationGroup $groupA, RecommendationGroup $groupB) {
-			$priorities = Recommendation::TYPE_PRIORITIES;
-
-			if ($priorities[$groupA->getType()] != $priorities[$groupB->getType()]) {
-				return $priorities[$groupA->getType()] > $priorities[$groupB->getType()] ? 1 : -1;
-			}
-
-			return $groupA->count() < $groupB->count();
-		});
-
 		return new ArrayCollection($groups);
 	}
 
