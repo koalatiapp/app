@@ -29,6 +29,8 @@ class TestResultController extends AbstractController
 	 */
 	private array $updatedProjectsByPageId = [];
 
+	private ?string $tool = null;
+
 	/**
 	 * @var array<int,array<string,Recommendation>>
 	 */
@@ -71,6 +73,10 @@ class TestResultController extends AbstractController
 
 			// Process updates and creations
 			foreach ($project->getActiveRecommendationGroups() as $group) {
+				if ($group->getTool() != $this->tool) {
+					continue;
+				}
+
 				$this->updateDispatcher->prepare($group, ['id' => $group->getId(), 'data' => $this->serializer->serialize($group)]);
 				unset($completedRecommendations[$group->getUniqueName()]);
 			}
@@ -99,6 +105,8 @@ class TestResultController extends AbstractController
 
 		// Generate the base tool response
 		$toolResponse = $this->createToolResponse($payload);
+		$this->tool = $toolResponse->getTool();
+
 		$matchingPages = $this->pageRepository->findByUrls([$toolResponse->getUrl()]);
 		$existingRecommendations = $this->getExistingRecommendations($toolResponse);
 
