@@ -3,6 +3,9 @@
 		<i class="far fa-plus"></i>
 	</a>
 	<div class="actions">
+		<feedback-form-toggle>
+			{% trans %}feedback.cta{% endtrans %}
+		</feedback-form-toggle>
 		{% if app.user.defaultOrganization %}
 			<a href="{{ path('organization_settings', {id: app.user.defaultOrganization.id}) }}#members">{% trans %}quick_actions.add_team_member{% endtrans %}</a>
 		{% endif %}

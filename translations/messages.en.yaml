@@ -464,6 +464,17 @@ project:
     status:COMPLETED: Completed
 
 feedback:
+    cta: Submit feedback
+    form:
+        title: Help us improve Koalati
+        type:
+            label: Type of feedback
+            bug: Bug report
+            suggestion: Suggestion
+            other: Other
+        message:
+            label: What would you like to tell us?
+        submit: Send feedback
     flash:
         success: Your feedback has been sent successfully! Thank you for helping make the web better.
         error: Your message couldn't be sent. Please try again.

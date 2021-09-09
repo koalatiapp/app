@@ -13,10 +13,25 @@ export class FeedbackFormToggle extends LitElement {
 	connectedCallback()
 	{
 		super.connectedCallback();
+		this._becomeClickable();
+	}
 
+	_becomeClickable()
+	{
 		this.addEventListener("click", (e) => {
 			e.preventDefault();
 			this.showFeedbackForm();
+		});
+
+		this.setAttribute("tabindex", 0);
+
+		this.addEventListener("keydown", (e) => {
+			if (e.key != "Enter") {
+				return;
+			}
+
+			e.preventDefault();
+			this.click();
 		});
 	}
 
@@ -30,23 +45,23 @@ export class FeedbackFormToggle extends LitElement {
 	showFeedbackForm()
 	{
 		new Modal({
-			title: "Help us improve Koalati",
+			title: Translator.trans("feedback.form.title"),
 			content: html`
 				<form @submit=${this.constructor._submitCallback}>
-					<nb-radio-list name="type" label="Type of feedback" required>
-						<option value="bug" selected>Bug report</option>
-						<option value="suggestion">Suggestion</option>
-						<option value="other">Other</option>
+					<nb-radio-list name="type" label="${Translator.trans("feedback.form.type.label")}" required>
+						<option value="bug" selected>${Translator.trans("feedback.form.type.bug")}</option>
+						<option value="suggestion">${Translator.trans("feedback.form.type.suggestion")}</option>
+						<option value="other">${Translator.trans("feedback.form.type.other")}</option>
 					</nb-radio-list>
 
 					<hr class="spacer small">
 
-					<nb-input name="message" type="textarea" label="What would you like to tell us?" rows="6" required></nb-input>
+					<nb-input name="message" type="textarea" label="${Translator.trans("feedback.form.message.label")}" rows="6" required></nb-input>
 
 					<hr>
 
 					<div class="button-container center">
-						<nb-button type="submit">Send feedback</nb-button>
+						<nb-button type="submit">${Translator.trans("feedback.form.submit")}</nb-button>
 					</div>
 				</form>
 			`
