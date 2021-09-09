@@ -1,0 +1,44 @@
+{% extends 'app_base.html.twig' %}
+
+{% block title %}{% trans %}help.title{% endtrans %}{% endblock %}
+
+{% block head %}
+	<style>
+		#contact-list li { display: flex; align-items: center; gap: .65rem; margin-bottom: 1rem; }
+		#contact-list i { display: inline-flex; width: 2.5rem; height: 2.5rem; justify-content: center; align-items: center; font-size: 1.15rem; line-height: 1; color: white; background-color: var(--color-blue); border-radius: 1rem; }
+		#contact-list a { font-weight: 600; color: var(--color-blue); }
+		#contact-list a:hover { color: var(--color-black); }
+	</style>
+{% endblock %}
+
+{% block body %}
+    <div class="grid small-fill">
+        <div class="card">
+            <h2>{% trans %}help.contact{% endtrans %}</h2>
+			<ul id="contact-list">
+				<li>
+					<i class="fab fa-twitter" aria-hidden="true"></i>
+					<div>Tweet <a href="https://twitter.com/koalatiweb" class="blue-link link-blue">@koalati</a></div>
+				</li>
+				<li>
+					<i class="fab fa-discord" aria-hidden="true"></i>
+					<div>Join <a href="https://twitter.com/koalatiweb" class="blue-link link-blue">Koalati's Discord</a></div>
+				</li>
+				<li>
+					<i class="fas fa-envelope" aria-hidden="true"></i>
+					<div>Send us an email at <a href="mailto:info@koalati.com" class="blue-link link-blue">info@koalati.com</a></div>
+				</li>
+			</ul>
+        </div>
+        <div class="card">
+            <h2>{% trans %}help.feedback.title{% endtrans %}</h2>
+			<p>{% trans %}help.feedback.content{% endtrans %}</p>
+			<hr>
+			<div class="button-container center">
+				<feedback-form-toggle>
+					<nb-button>{% trans %}help.feedback.button{% endtrans %}</nb-button>
+				</feedback-form-toggle>
+			</div>
+        </div>
+    </div>
+{% endblock %}

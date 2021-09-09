@@ -479,6 +479,16 @@ feedback:
         success: Your feedback has been sent successfully! Thank you for helping make the web better.
         error: Your message couldn't be sent. Please try again.
 
+help:
+    title: Help and support
+    contact: Reach out
+    feedback:
+        title: Tell us what you think
+        content: >
+            <p>We're working hard to make Koalati the best quality control platform for you.</p>
+            <p>If you would like to tell us what you think of the platform and what you think we should improve, you can reach out to us on social media, on Discord, or send us feedback by clicking on the button below.</p>
+        button: I have some feedback for Koalati
+
 email:
     organization_invitation:
         subject: "%inviter% wants you to join %organization% on Koalati"
