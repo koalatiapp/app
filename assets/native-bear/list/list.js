@@ -11,6 +11,7 @@ import stylesReset from "../styles-reset.js";
  * - `_itemIdentifierCallback`
  * - `_emptyStateLabel`
  */
+// @TODO: Add documentation for <nb-list> and AbstractDynamicList
 export class NbList extends LitElement {
 	static get styles()
 	{
