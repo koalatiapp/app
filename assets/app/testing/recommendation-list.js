@@ -63,7 +63,16 @@ export class RecommendationList extends AbstractDynamicList {
 				render: (item) => html`<recommendation-type type=${item.type}></recommendation-type>`,
 				placeholder: html`
 					<div class="nb--list-item-column-placeholder" style="width: 8ch;">&nbsp;</div>
-				`
+				`,
+				sortingValue: (item) => {
+					const priorities = {
+						"ISSUE": 1,
+						"ESSENTIAL": 2,
+						"OPTIMIZATION": 3,
+					};
+
+					return parseFloat(priorities[item.type] + "." + item.count);
+				}
 			},
 			{
 				key: "occurences",
@@ -99,6 +108,8 @@ export class RecommendationList extends AbstractDynamicList {
 	{
 		super();
 		this.projectId = null;
+		this.sortBy = "type";
+		this.sortDirection = "DESC";
 	}
 
 	render()

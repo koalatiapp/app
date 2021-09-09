@@ -207,13 +207,13 @@ export class NbList extends LitElement {
 
 	_sortItems(items)
 	{
-		if (this.sortBy === null || !this.columns[this.sortBy]?.sortingValue) {
+		if (this.sortBy === null || !this.constructor._columns[this.sortBy]?.sortingValue) {
 			return items;
 		}
 
 		return items.sort((a, b) => {
-			let valueA = this.columns[this.sortBy].sortingValue(a);
-			let valueB = this.columns[this.sortBy].sortingValue(b);
+			let valueA = this.constructor._columns[this.sortBy].sortingValue(a);
+			let valueB = this.constructor._columns[this.sortBy].sortingValue(b);
 
 			valueA = valueA === null ? "" : valueA.toString();
 			valueB = valueB === null ? "" : valueB.toString();
