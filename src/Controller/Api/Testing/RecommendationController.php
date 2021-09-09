@@ -4,6 +4,7 @@ namespace App\Controller\Api\Testing;
 
 use App\Controller\Api\AbstractApiController;
 use App\Mercure\TopicBuilder;
+use App\Message\TestingRequest;
 use App\Repository\Testing\RecommendationRepository;
 use App\Security\ProjectVoter;
 use App\Util\Testing\RecommendationGroup;
@@ -96,6 +97,13 @@ class RecommendationController extends AbstractApiController
 		}
 
 		$em->flush();
+
+		// Trigger a new testing request for this tool
+		$testingRequest = new TestingRequest(
+			$project->getId(),
+			$recommendationGroup->getSample()->getParentResult()->getParentResponse()->getTool()
+		);
+		$this->dispatchMessage($testingRequest);
 
 		return $this->apiSuccess($recommendationGroup);
 	}
