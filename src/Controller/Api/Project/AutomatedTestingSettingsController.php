@@ -28,9 +28,6 @@ class AutomatedTestingSettingsController extends AbstractApiController
 		$availableTools = $availableToolsFetcher->getTools();
 		$list = [];
 
-		// @TODO: Remove this once the npm package fetching keyword has changed (from "koalati" to "koalati-tool")
-		unset($availableTools['@koalati/results-validator']);
-
 		foreach ($availableTools as $tool) {
 			$list[] = [
 				'id' => $tool->name,

@@ -8,7 +8,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class AvailableToolsFetcher
 {
-	private const NPM_KEYWORD = 'koalati';
+	private const NPM_KEYWORD = 'koalati-tool';
 	private FilesystemAdapter $cache;
 
 	/**
