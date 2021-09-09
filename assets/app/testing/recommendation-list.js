@@ -66,9 +66,9 @@ export class RecommendationList extends AbstractDynamicList {
 				`,
 				sortingValue: (item) => {
 					const priorities = {
-						"ISSUE": 1,
+						"ISSUE": 3,
 						"ESSENTIAL": 2,
-						"OPTIMIZATION": 3,
+						"OPTIMIZATION": 1,
 					};
 
 					return parseFloat(priorities[item.type] + "." + item.count);
