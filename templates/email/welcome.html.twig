@@ -1,0 +1,41 @@
+{% extends "email/_base.html.twig" %}
+
+{% block body %}
+	<spacer size="20"></spacer>
+
+	<row>
+		<columns>
+			{% trans with {
+				"%firstName%": user.firstName,
+			} %}email.welcome.introduction{% endtrans %}
+		</columns>
+	</row>
+
+	<row>
+		<columns>
+			<center>
+				<button href="{{ url("project_creation") }}" size="large">
+					{% trans %}email.welcome.create_project{% endtrans %}
+				</button>
+			</center>
+		</columns>
+	</row>
+
+	<row>
+		<columns>
+			<hr>
+		</columns>
+	</row>
+
+	<row>
+		<columns>
+			{% trans %}email.welcome.features{% endtrans %}
+		</columns>
+	</row>
+
+	<row>
+		<columns>
+			{% trans %}email.welcome.socials{% endtrans %}
+		</columns>
+	</row>
+{% endblock %}

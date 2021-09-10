@@ -6,8 +6,11 @@ use App\Controller\AbstractController;
 use App\Entity\User;
 use App\Form\UserRegistrationType;
 use App\Security\LoginFormAuthenticator;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
@@ -27,7 +30,7 @@ class RegistrationController extends AbstractController
 	/**
 	 * @Route("/sign-up", name="registration")
 	 */
-	public function signUp(Request $request, UserAuthenticatorInterface $authenticator, LoginFormAuthenticator $loginFormAuthenticator): Response
+	public function signUp(Request $request, UserAuthenticatorInterface $authenticator, LoginFormAuthenticator $loginFormAuthenticator, MailerInterface $mailer): Response
 	{
 		$user = new User();
 		$form = $this->createForm(UserRegistrationType::class, $user);
@@ -41,6 +44,15 @@ class RegistrationController extends AbstractController
 			$em = $this->getDoctrine()->getManager();
 			$em->persist($user);
 			$em->flush();
+
+			$email = (new TemplatedEmail())
+				->to(new Address($user->getEmail(), $user->getFirstName()))
+				->subject($this->translator->trans('email.welcome.subject'))
+				->htmlTemplate('email/welcome.html.twig')
+				->context([
+					'user' => $user,
+				]);
+			$mailer->send($email);
 
 			return $authenticator->authenticateUser($user, $loginFormAuthenticator, $request);
 		}
