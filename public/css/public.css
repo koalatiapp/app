@@ -1,6 +1,10 @@
 body { font-family: Poppins, sans-serif; font-size: 14px; font-weight: 400; line-height: 1.35; color: var(--color-black); background-color: #eff2ff; background-image: radial-gradient(circle, rgba(255, 255, 255, .9) 0%, #eff2ff 100%); background-size: 100% 190vh; background-position: center top -75vh; background-repeat: no-repeat; background-attachment: fixed; }
 section { padding: 75px 0; }
 
+footer { display: flex; justify-content: center; gap: 1.5rem; width: 100%; height: 4rem; padding: 1rem; margin-top: -4rem; font-size: .75rem; line-height: 1rem; }
+footer a { color: var(--color-gray-dark); }
+footer a:hover { text-decoration: underline; }
+
 #big-branding { width: 250px; max-width: 75%; }
 
 .wave-hero { display: grid; grid-template-columns: 2fr 1fr; min-height: 100vh; }
