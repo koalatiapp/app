@@ -12,6 +12,10 @@ generic:
 branding:
     name: Koalati
 
+footer:
+    privacy_policy: Privacy policy
+    terms_of_service: Terms of service
+
 login:
     page_title: Sign in
     form:

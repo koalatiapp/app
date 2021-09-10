@@ -54,7 +54,10 @@ body { padding: 45px 60px; padding-left: calc(var(--sidebar-width) + 60px); font
 
 /* Layout: page wrapper */
 #page-wrapper { margin-top: 40px; }
-#page-content { margin-top: 20px; }
+#page-content { min-height: calc(100vh - 300px); margin-top: 20px; }
+#page-wrapper footer { display: flex; margin-top: 45px; justify-content: flex-end; gap: 1.5rem; text-align: right; font-size: .75rem; }
+#page-wrapper footer a { color: var(--color-gray-light); }
+#page-wrapper footer a:hover { text-decoration: underline; }
 
 /* Page header */
 #page-header { display: flex; justify-content: space-between; align-items: flex-end; }
