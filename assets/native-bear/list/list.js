@@ -93,6 +93,7 @@ export class NbList extends LitElement {
 		this.page = 1;
 		this.sortBy = null;
 		this.sortDirection = "asc";
+		this._searchQuery = null;
 	}
 
 	render()
@@ -108,6 +109,32 @@ export class NbList extends LitElement {
 		`;
 	}
 
+	/**
+	 * Enables filtering of items based on the provided search query.
+	 * If the search query is empty or null, any existing filter is removed.
+	 *
+	 * @param {string|null} query The user's search query
+	 */
+	applySearchQuery(query)
+	{
+		if (!query || !query.trim().length) {
+			query = null;
+		}
+
+		this._searchQuery = query;
+		this.requestUpdate();
+	}
+
+	/**
+	 * Clears any existing search filter
+	 */
+	clearSearchQuery()
+	{
+		this.applySearchQuery(null);
+
+		return this;
+	}
+
 	get isLoading()
 	{
 		return this.items === null;
@@ -121,7 +148,7 @@ export class NbList extends LitElement {
 	_renderEmptyState()
 	{
 		return html`<div class="nb--list-empty-state">
-			${this._emptyStateLabel()}
+			${this._searchQuery ? Translator.trans("generic.list.no_search_results") : this._emptyStateLabel()}
 		</div>`;
 	}
 
@@ -193,7 +220,9 @@ export class NbList extends LitElement {
 	get _itemsArray()
 	{
 		const items = this.items !== null ? this.items : [];
-		return Array.isArray(items) ? items : Object.values(items);
+		const itemsArray = Array.isArray(items) ? items : Object.values(items);
+
+		return this._filterItems(itemsArray);
 	}
 
 	get _pageItems()
@@ -203,6 +232,28 @@ export class NbList extends LitElement {
 		const endIndex = startIndex + this.itemsPerPage;
 
 		return sortedItems.slice(startIndex, endIndex);
+	}
+
+	_filterItems(items)
+	{
+		if (!this._searchQuery) {
+			return items;
+		}
+
+		const defaultFilterCallback = (item) => {
+			let itemString = "";
+			for (const value of Object.values(item)) {
+				if (["string", "number"].indexOf(typeof value) != -1 && value.toString().toLowerCase().indexOf("koalati") == -1) {
+					itemString += value + " ";
+				}
+			}
+			itemString = itemString.trim().toLowerCase();
+			const queryString = this._searchQuery.trim().toLowerCase();
+			return itemString.indexOf(queryString) != -1;
+		};
+		const filterCallback = this._filterCallback || defaultFilterCallback;
+
+		return items.filter(filterCallback);
 	}
 
 	_sortItems(items)
