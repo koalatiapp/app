@@ -8,11 +8,15 @@
 {% block section_title %}{{ 'generic.project_section_title'|trans({'%name%': project.name}) }}{% endblock %}
 
 {% block page_actions %}
-	<nb-button href="{{ path("project_settings_automated_testing", {id: project.id}) }}#ignored" color="gray">
+	<nb-button href="{{ path("project_settings_automated_testing", {id: project.id}) }}#ignored" color="gray" class="tablet-hidden">
 		{% trans %}recommendation.view_settings{% endtrans %}
 	</nb-button>
 	<request-testing-button projectId="{{ project.id }}">
-		{% trans %}recommendation.run_again{% endtrans %}
+		<span class="mobile-hidden">
+			{% trans %}recommendation.run_again{% endtrans %}
+			&nbsp;
+		</span>
+		<i class="far fa-rotate"></i>
 	</request-testing-button>
 {% endblock %}
 

@@ -44,3 +44,16 @@ ul.bullet-list li + li { margin-top: .5em; }
 *:focus-visible::before { content: ' '; position: absolute; top: -7px; left: -7px; width: 100%; height: 100%; padding: 4px; border: 3px solid var(--color-blue-80); border-radius: .5rem; box-shadow: 0 0 100vmax 100vmax rgba(var(--shadow-rgb), .2); }
 
 *:not(:defined) { display: none; }
+
+@media (max-width: 1080px) {
+	.tablet-hidden { display: none !important; }
+}
+
+@media (max-width: 767px) {
+	hr,
+	.spacer { margin: 15px auto; }
+	hr.small,
+	.spacer.small { margin: 10px auto; }
+
+	.mobile-hidden { display: none !important; }
+}

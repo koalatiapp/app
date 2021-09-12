@@ -11,7 +11,7 @@ export class RecommendationList extends AbstractDynamicList {
 			super.styles,
 			css`
 				.nb--list-header,
-				.nb--list-item { grid-template-areas: "title type occurences actions"; grid-template-columns: 1fr 10rem 5.5rem 12rem; }
+				.nb--list-item { grid-template-areas: "title _ type occurences actions"; grid-template-columns: 1fr 1rem 6rem 5.25rem 9rem; }
 				.nb--list-item-column[nb-column="type"] { font-size: .85rem; }
 				.nb--list-item-column[nb-column="occurences"] { font-size: .85rem; text-align: center; color: var(--color-gray-darker); }
 
@@ -21,6 +21,13 @@ export class RecommendationList extends AbstractDynamicList {
 				.nb--list-item[pending-completion] { opacity: .35; pointer-events: none; }
 				.nb--list-item[pending-completion] .nb--list-item-column { opacity: .5; }
 				.nb--list-item[pending-completion] [nb-column="title"] { text-decoration: line-through; }
+
+				@media (max-width: 767px) {
+					.nb--list-header,
+					.nb--list-item { grid-template-areas: "title actions"; grid-template-columns: 1fr 9rem; }
+					[nb-column="type"],
+					[nb-column="occurences"] { display: none; }
+				}
 			`
 		];
 	}

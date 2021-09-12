@@ -11,6 +11,15 @@ template.innerHTML = `
 		nav a[aria-selected="true"] { font-weight: 500; color: var(--tabbed-page-navigation-text-color-active); }
 		main { width: 100%; max-width: 100%; padding: 30px; background-color: var(--tabbed-page-content-bg-color, #fff); border-radius: 13px; box-shadow: 0 3px 15px 0 rgba(var(--shadow-rgb), .05); position: relative; }
 		::slotted([aria-hidden="true"]) { display: none; }
+
+		@media (max-width: 767px) {
+			:host { display: flex; flex-direction: column; }
+			nav { width: 100%; border-radius: 13px; border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+			nav [role='tablist'] { padding: 5px; }
+			nav a { padding: 7px; }
+			nav a:not(:first-child) { margin-top: 0; }
+			main { width: 100%; padding: 15px; border-radius: 13px; border-top-left-radius: 0; border-top-right-radius: 0; }
+		}
 	</style>
 	<nav>
 		<div role="tablist" id="tabbed-container-tablist">

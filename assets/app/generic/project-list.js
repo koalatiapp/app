@@ -20,10 +20,17 @@ export class ProjectList extends AbstractDynamicList {
 				.nb--list-item-column[nb-column="createdDate"] { color: var(--color-gray-dark); }
 				a { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 
+				[nb-column="title"] { overflow: hidden; }
 				[nb-column="status"] [data-status="NEW"] { color: var(--color-blue-50); }
 				[nb-column="status"] [data-status="IN_PROGRESS"] { color: var(--color-blue-80); }
 				[nb-column="status"] [data-status="MAINTENANCE"] { color: var(--color-green); }
 				[nb-column="status"] [data-status="COMPLETED"] { color: var(--color-gray-dark); }
+
+				@media (max-width: 767px) {
+					.nb--list-item { grid-template-areas: "icon title actions"; grid-template-columns: 25px 1fr 2ch; }
+					[nb-column="status"],
+					[nb-column="createdDate"] { display: none; }
+				}
 			`
 		];
 	}
