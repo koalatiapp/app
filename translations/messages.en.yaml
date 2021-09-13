@@ -282,7 +282,7 @@ project_dashboard:
         step:
             checklist:
                 title: Quality control checklist
-                not_start: not started yet
+                not_started: not started yet
                 in_progress: in progress
                 completed: completed
             recommendations:
