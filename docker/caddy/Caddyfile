@@ -31,7 +31,7 @@ route {
     }
     vulcain
     push
-    php_fastcgi {$CADDY_PHP_LINK:unix//var/run/php/php-fpm.sock}
+    php_fastcgi unix//var/run/php/php-fpm.sock
     encode zstd gzip
     file_server
 }
