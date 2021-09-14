@@ -1,7 +1,8 @@
 sentry:
     register_error_listener: false
     dsn: '%env(SENTRY_DSN)%'
-    traces_sample_rate: 0.25
     messenger:
         enabled: true # flushes Sentry messages at the end of each message handling
         capture_soft_fails: true # captures exceptions marked for retry too
+    options:
+        traces_sample_rate: 0.25
