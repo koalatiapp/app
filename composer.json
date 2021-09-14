@@ -19,6 +19,7 @@
     "league/flysystem-aws-s3-v3": "^2.0",
     "phpdocumentor/reflection-docblock": "^5.2",
     "pyrrah/gravatar-bundle": "^1.1",
+    "sentry/sentry-symfony": "^4.2",
     "symfony/asset": "5.3.*",
     "symfony/config": "5.3.*",
     "symfony/console": "5.3.*",
