@@ -58,18 +58,7 @@ class UpdateDispatcher
 		$envelopes = [];
 
 		foreach ($this->pendingUpdates as $update) {
-			try {
-				$envelopes[] = $this->bus->dispatch($update);
-			} catch (RuntimeException $exception) {
-				$this->logger->error(
-					implode("\n\t", [
-						$exception->getMessage(),
-						$exception->getTraceAsString(),
-						$exception->getPrevious()?->getMessage(),
-						$exception->getPrevious()?->getTraceAsString(),
-					])
-				);
-			}
+			$envelopes[] = $this->bus->dispatch($update);
 		}
 
 		$this->pendingUpdates = [];
