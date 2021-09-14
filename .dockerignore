@@ -17,7 +17,6 @@
 **/node_modules
 .editorconfig
 .env.*.local
-.env.local
 .env.local.php
 .php_cs.cache
 bin/*
