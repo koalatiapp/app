@@ -3,6 +3,8 @@
 namespace App\Mercure;
 
 use App\Entity\MercureEntityInterface;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Mercure\Exception\RuntimeException;
 use Symfony\Component\Mercure\Update;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -21,7 +23,7 @@ class UpdateDispatcher
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.bus)
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.topicBuilder)
 	 */
-	public function __construct(private TopicBuilder $topicBuilder, private MessageBusInterface $bus)
+	public function __construct(private TopicBuilder $topicBuilder, private MessageBusInterface $bus, private LoggerInterface $logger)
 	{
 	}
 
@@ -56,7 +58,18 @@ class UpdateDispatcher
 		$envelopes = [];
 
 		foreach ($this->pendingUpdates as $update) {
-			$envelopes[] = $this->bus->dispatch($update);
+			try {
+				$envelopes[] = $this->bus->dispatch($update);
+			} catch (RuntimeException $exception) {
+				$this->logger->error(
+					implode("\n\t", [
+						$exception->getMessage(),
+						$exception->getTraceAsString(),
+						$exception->getPrevious()?->getMessage(),
+						$exception->getPrevious()?->getTraceAsString(),
+					])
+				);
+			}
 		}
 
 		$this->pendingUpdates = [];
