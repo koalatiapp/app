@@ -2,6 +2,7 @@
 import "element-internals-polyfill";
 
 // Features and components
+import "./utils/sentry.js";
 import "./utils/modal.js";
 import "./native-bear";
 import "./app/generic/search-overlay.js";
