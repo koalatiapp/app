@@ -6,3 +6,6 @@ sentry:
         capture_soft_fails: true # captures exceptions marked for retry too
     options:
         traces_sample_rate: 0.25
+    tracing:
+        dbal: # DB queries
+            enabled: true # @TODO: Re-enable this when https://github.com/getsentry/sentry-symfony/issues/488 is fixed
