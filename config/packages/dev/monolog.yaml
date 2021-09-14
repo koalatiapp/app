@@ -1,5 +1,9 @@
 monolog:
     handlers:
+        sentry:
+            type: sentry
+            level: !php/const Monolog\Logger::ERROR
+            hub_id: Sentry\State\HubInterface
         main:
             type: stream
             path: "%kernel.logs_dir%/%kernel.environment%.log"

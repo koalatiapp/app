@@ -4,7 +4,6 @@ namespace App\Mercure;
 
 use App\Entity\MercureEntityInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Mercure\Exception\RuntimeException;
 use Symfony\Component\Mercure\Update;
 use Symfony\Component\Messenger\MessageBusInterface;
 
