@@ -17,7 +17,7 @@ export class RecommendationDetails extends LitElement {
 
 				table { width: 100%; table-layout: fixed; }
 				th { padding: .5rem; text-align: left; vertical-align: bottom; }
-				td { padding: .5rem; vertical-align: top; border-bottom: 2px solid var(--color-gray-light); background-color: white; }
+				td { padding: .5rem; vertical-align: top; border-bottom: 2px solid var(--color-gray-light); background-color: var(--color-white); }
 				td img { max-width: 200px; }
 
 				@media (prefers-color-scheme: dark) {
