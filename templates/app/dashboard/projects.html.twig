@@ -13,12 +13,12 @@
 {% block section_title %}{% trans %}dashboard.title{% endtrans %}{% endblock %}
 {% block title %}{% trans %}dashboard.tabs.projects{% endtrans %}{% endblock %}
 
-{% block page_tabs %}
+{#% block page_tabs %}
 	{% include 'app/_parts/page_tabs.html.twig' with {page_tabs: [
 	    {label: 'dashboard.tabs.overview', route: 'dashboard'},
 	    {label: 'dashboard.tabs.projects', route: 'projects'},
 	]} %}
-{% endblock %}
+{% endblock %#}
 
 {% block page_actions %}
 	<div class="typed-input" id="project-search-bar">
