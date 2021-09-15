@@ -46,10 +46,13 @@
 
 {%- block choice_widget_expanded -%}
     <fieldset {{ block('widget_container_attributes') }}>
-    {%- for child in form %}
-        {{- form_widget(child) -}}
-        {{- form_label(child, null, {translation_domain: choice_translation_domain}) -}}
-    {% endfor -%}
+		<nb-radio-list label="{{ form.vars.label|trans }}" {{ block('widget_attributes') }}>
+			{%- for choice in form %}
+				<option value="{{ choice.vars.value }}" {{ form.vars.data == choice.vars.value ? "selected" : "" }}>
+					{{ choice.vars.label|trans(choice.vars.label_translation_parameters) }}
+				</option>
+			{% endfor -%}
+		</nb-radio-list>
     </fieldset>
 {%- endblock choice_widget_expanded -%}
 

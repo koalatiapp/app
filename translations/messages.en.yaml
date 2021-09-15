@@ -247,6 +247,8 @@ project_creation:
             url:
                 label: Enter your website's URL
                 placeholder: www.domain.com
+            owner:
+                label: Who manages this project?
     flash:
         created_successfully: Your project "%name%" has been created successfully!
 
@@ -467,6 +469,9 @@ project:
     status:IN_PROGRESS: In progress
     status:MAINTENANCE: Maintenance
     status:COMPLETED: Completed
+    owner:
+        self: You
+        team: "%teamName% (team)"
 
 feedback:
     cta: Submit feedback

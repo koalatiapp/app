@@ -22,8 +22,19 @@ class ProjectCreationController extends AbstractProjectController
 	{
 		$project = new Project();
 		$project->setOwnerUser($this->getUser());
+		$availableOrganizationsById = [];
 
-		$form = $this->createForm(NewProjectType::class, $project);
+		$formOptions = [
+			'available_owners' => NewProjectType::getDefaultAvailableOwners(),
+		];
+
+		foreach ($this->getUser()->getOrganizationLinks() as $organizationLink) {
+			$organization = $organizationLink->getOrganization();
+			$formOptions['available_owners'][$organization->getId()] = $organization->getId();
+			$availableOrganizationsById[$organization->getId()] = $organization;
+		}
+
+		$form = $this->createForm(NewProjectType::class, $project, $formOptions);
 		$form->handleRequest($request);
 
 		if ($form->isSubmitted() && $form->isValid()) {
@@ -36,6 +47,14 @@ class ProjectCreationController extends AbstractProjectController
 
 			if ($form->isValid()) {
 				$project->setUrl($websiteUrl);
+
+				// Set ownership
+				$ownerValue = $form->get('owner')->getData();
+				if (is_numeric($ownerValue) && isset($availableOrganizationsById[$ownerValue])) {
+					$project->setOwnerUser(null);
+					$project->setOwnerOrganization($availableOrganizationsById[$ownerValue]);
+				}
+
 				$em = $this->getDoctrine()->getManager();
 				$em->persist($project);
 				$em->flush();
