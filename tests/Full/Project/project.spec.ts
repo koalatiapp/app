@@ -32,5 +32,5 @@ test("creates, edits and deletes a project", async ({ page }) => {
 	await page.click("text=I am certain that I want to delete the project");
 	await page.click("text=Delete this project");
 	await page.waitForSelector("text=has been deleted successfully");
-	expect(await page.evaluate(() => window.location.pathname)).toBe("/");
+	expect(await page.evaluate(() => window.location.pathname)).toBe("/projects");
 });
