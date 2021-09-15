@@ -12,11 +12,16 @@ class DashboardController extends AbstractController
 	 */
 	public function overview(): Response
 	{
+		return $this->redirectToRoute('projects');
+
+		// @TODO: Implement dashboard and remove redirection
+		/*
 		$projects = $this->getUser()->getAllProjects();
 
 		return $this->render('app/dashboard/index.html.twig', [
 			'projects' => $projects->slice(0, 3),
 		]);
+		*/
 	}
 
 	/**

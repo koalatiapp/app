@@ -9,7 +9,7 @@ test("testing recommendations", async ({ page }) => {
 	await login(page);
 
 	// Go to the project's testing page
-	await page.click("text=View all projects");
+	// await page.click("text=View all projects"); @TODO: Re-enable this when the dashboard is up and running
 	await page.click(".clickable-thumbnail:has-text('Koalati')");
 	await page.click("#sidebar nav a:has-text('Recommendations')");
 	await page.waitForSelector(`.nb--list-item >> text=${stubTitle}`);

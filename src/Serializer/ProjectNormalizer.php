@@ -28,10 +28,12 @@ class ProjectNormalizer implements ContextAwareNormalizerInterface
 	{
 		$data = $this->simpleSerializer->normalize($project, $format, $context);
 
-		// Add favicon and thumbnail URLs
-		$data['faviconUrl'] = $this->projectStorage->faviconUrl($project);
-		$data['thumbnailUrl'] = $this->projectStorage->thumbnailUrl($project);
-		$data['status'] = $project->getStatus();
+		if (is_array($data)) {
+			// Add favicon and thumbnail URLs
+			$data['faviconUrl'] = $this->projectStorage->faviconUrl($project);
+			$data['thumbnailUrl'] = $this->projectStorage->thumbnailUrl($project);
+			$data['status'] = $project->getStatus();
+		}
 
 		return $data;
 	}

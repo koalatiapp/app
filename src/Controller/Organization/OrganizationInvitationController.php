@@ -26,7 +26,7 @@ class OrganizationInvitationController extends AbstractController
 		}
 
 		if ($invitation->isUsed()) {
-			$this->addFlash('danger', 'organization_invitation.flash.error_already_used', ['%date%' => $invitation->getDateUsed()]);
+			$this->addFlash('danger', 'organization_invitation.flash.error_already_used', ['%date%' => $invitation->getDateUsed()->format('Y-m-d')]);
 
 			return $this->redirectToRoute('dashboard');
 		}

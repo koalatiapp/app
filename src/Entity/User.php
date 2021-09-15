@@ -206,7 +206,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
 	public function setFirstName(string $firstName): self
 	{
-		$this->firstName = $firstName;
+		$this->firstName = strip_tags($firstName);
 
 		return $this;
 	}
@@ -218,7 +218,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
 	public function setLastName(?string $lastName): self
 	{
-		$this->lastName = $lastName;
+		$this->lastName = strip_tags($lastName);
 
 		return $this;
 	}
@@ -235,7 +235,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
 	public function setJobTitle(?string $jobTitle): self
 	{
-		$this->jobTitle = $jobTitle;
+		$this->jobTitle = strip_tags($jobTitle);
 
 		return $this;
 	}

@@ -52,10 +52,17 @@
         </li>
 		#}
         <li class="{{ current_route in ['organization_dashboard', 'organization_create', 'organization_settings', 'organization_leave'] ? 'active' : '' }}">
-            <a href="{{ path('organization_dashboard') }}">
-                <i class="far fa-users"></i>
-                <span>{% trans %}navigation.team.label{% endtrans %}</span>
-            </a>
+			{% if organization is defined %}
+				<a href="{{ path('organization_dashboard', {id: organization.id}) }}">
+					<i class="far fa-users"></i>
+					<span>{% trans %}navigation.team.label{% endtrans %}</span>
+				</a>
+			{% else %}
+				<a href="{{ path('organization_dashboard') }}">
+					<i class="far fa-users"></i>
+					<span>{% trans %}navigation.team.label{% endtrans %}</span>
+				</a>
+			{% endif %}
 			<ul>
 				{% if organization is defined %}
 					<li class="{{ current_route in ['organization_dashboard'] ? 'active' : '' }}">

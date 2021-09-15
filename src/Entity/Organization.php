@@ -94,7 +94,7 @@ class Organization
 
 	public function setName(string $name): self
 	{
-		$this->name = $name;
+		$this->name = strip_tags($name);
 
 		return $this;
 	}

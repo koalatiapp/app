@@ -6,7 +6,9 @@
 		<feedback-form-toggle>
 			{% trans %}feedback.cta{% endtrans %}
 		</feedback-form-toggle>
-		{% if app.user.defaultOrganization %}
+		{% if organization is defined %}
+			<a href="{{ path('organization_settings', {id: organization.id}) }}#members">{% trans %}quick_actions.add_team_member{% endtrans %}</a>
+		{% elseif app.user.defaultOrganization %}
 			<a href="{{ path('organization_settings', {id: app.user.defaultOrganization.id}) }}#members">{% trans %}quick_actions.add_team_member{% endtrans %}</a>
 		{% endif %}
 		<a href="{{ path('project_creation') }}">{% trans %}quick_actions.create_project{% endtrans %}</a>

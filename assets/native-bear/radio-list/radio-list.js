@@ -16,6 +16,7 @@ export class NbRadioList extends LitElement {
 
 				fieldset { padding: 0; margin: 0; border: none; }
 				legend { font-size: 1rem; font-weight: 500; color: var(--color-gray-darker); }
+				:host([required]) legend::after { content: ' *'; color: var(--color-red); font-size: .85em; vertical-align: top; }
 				.option-wrapper { margin-top: .5rem; }
 				label { font-size: 1rem; font-weight: 400; color: var(--color-gray-darker); cursor: pointer; }
 				input { display: inline-block; width: 1rem; height: 1rem; margin: 0.2rem .2rem 0 .2rem; vertical-align: top; background-color: var(--color-gray-lighter); box-shadow: 0 0 0px 1px var(--color-blue-80); border-radius: 50%; outline: none; -webkit-appearance: none; appearance: none; transition: box-shadow .15s ease-in-out; }
