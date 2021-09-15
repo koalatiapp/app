@@ -46,6 +46,10 @@
 		<script src="{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}"></script>
 		<script src="{{ url('bazinga_jstranslation_js') }}"></script>
         <link rel="stylesheet" href="{{ asset('css/dark-mode.css') }}">
+
+		{% if app.environment == "prod" %}
+			<script defer data-domain="app.koalati.com" src="https://plausible.io/js/plausible.js"></script>
+		{% endif %}
     </head>
     <body>
         {% block body %}{% endblock %}
