@@ -24,7 +24,7 @@ test("testing recommendations", async ({ page }) => {
 	await page.waitForSelector("recommendation-details[aria-busy='false']");
 
 	// Validate the contents of the details dialog
-	const detailsModal = await page.$("recommendation-details");
+	const detailsModal = await page.$("recommendation-details[aria-busy='false']");
 	expect(await detailsModal.$(`text=${stubTitle}`)).toBeTruthy();
 	expect(await detailsModal.$(`text=${stubDescriptionSnippet}`)).toBeTruthy();
 	expect(await detailsModal.$(`text=Homepage - Koalati`)).toBeTruthy();
