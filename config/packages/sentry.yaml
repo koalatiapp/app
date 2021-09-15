@@ -8,4 +8,4 @@ sentry:
         traces_sample_rate: 0.25
     tracing:
         dbal: # DB queries
-            enabled: true # @TODO: Re-enable this when https://github.com/getsentry/sentry-symfony/issues/488 is fixed
+            enabled: false # @TODO: Re-enable this when https://github.com/getsentry/sentry-symfony/issues/488 is fixed
