@@ -32,6 +32,15 @@
 		<meta name="theme-color" content="#1d2c5e" media="(prefers-color-scheme: dark)">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
+		<meta name="description" content="A QA platform for web agencies and developers who care.">
+		<meta property="og:site_name" content="Koalati">
+		<meta property="og:title" content="{{ block("title") ?: "Streamlined quality control for web developers" }}">
+		<meta property="og:image" content="{{ absolute_url(asset('media/og-image.jpg')) }}">
+		<meta property="og:type" content="website">
+		<meta name="twitter:card" content="summary_large_image">
+		<meta name="twitter:site" content="@koalatiweb">
+		<meta name="twitter:creator" content="@cunrakes">
+
         {% block head %}{% endblock %}
 
 		<script src="{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}"></script>
