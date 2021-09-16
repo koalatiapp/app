@@ -29,7 +29,7 @@ export class RecommendationDetails extends LitElement {
 
 	static get properties() {
 		return {
-			recommendationId: {type: Number},
+			recommendationId: {type: String},
 			recommendationGroup: {attribute: false},
 			_loading: {state: true},
 		};

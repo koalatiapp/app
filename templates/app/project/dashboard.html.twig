@@ -30,25 +30,25 @@
 				{% trans with {"%projectName%": project.name} %}project_dashboard.up_next.not_started.explanation{% endtrans %}
 				<hr>
 				<div class="button-container margin-top">
-					<nb-button href="{{ path('project_checklist', {id: project.id}) }}">{% trans %}project_dashboard.up_next.not_started.cta{% endtrans %}</nb-button>
+					<nb-button href="{{ path('project_checklist', {id: project.id|hashids_encode}) }}">{% trans %}project_dashboard.up_next.not_started.cta{% endtrans %}</nb-button>
 				</div>
 			{% elseif not project.checklist.completed %}
 				{% trans with {"%projectName%": project.name} %}project_dashboard.up_next.checklist_started.explanation{% endtrans %}
 				<hr>
 				<div class="button-container margin-top">
-					<nb-button href="{{ path('project_checklist', {id: project.id}) }}">{% trans %}project_dashboard.up_next.checklist_started.cta{% endtrans %}</nb-button>
+					<nb-button href="{{ path('project_checklist', {id: project.id|hashids_encode}) }}">{% trans %}project_dashboard.up_next.checklist_started.cta{% endtrans %}</nb-button>
 				</div>
 			{% elseif project.activeRecommendationGroups|length %}
 				{% trans with {"%recommendationCount%": project.activeRecommendationGroups|length, "%projectName%": project.name} %}project_dashboard.up_next.implement_recommendations.explanation{% endtrans %}
 				<hr>
 				<div class="button-container margin-top">
-					<nb-button href="{{ path('project_testing', {id: project.id}) }}">{% trans %}project_dashboard.up_next.implement_recommendations.cta{% endtrans %}</nb-button>
+					<nb-button href="{{ path('project_testing', {id: project.id|hashids_encode}) }}">{% trans %}project_dashboard.up_next.implement_recommendations.cta{% endtrans %}</nb-button>
 				</div>
 			{% elseif not project.recommendations|length %}
 				{% trans with {"%projectName%": project.name} %}project_dashboard.up_next.generate_recommendations.explanation{% endtrans %}
 				<hr>
 				<div class="button-container margin-top">
-					<nb-button href="{{ path('project_testing', {id: project.id}) }}">{% trans %}project_dashboard.up_next.generate_recommendations.cta{% endtrans %}</nb-button>
+					<nb-button href="{{ path('project_testing', {id: project.id|hashids_encode}) }}">{% trans %}project_dashboard.up_next.generate_recommendations.cta{% endtrans %}</nb-button>
 				</div>
 			{% else %}
 				{% trans with {"%projectName%": project.name} %}project_dashboard.up_next.all_done.explanation{% endtrans %}
@@ -94,7 +94,7 @@
 	<hr class="spacer small">
 
 	<div class="grid cols-4">
-		<a href="{{ path('project_checklist', {id: project.id}) }}" class="clickable-thumbnail">
+		<a href="{{ path('project_checklist', {id: project.id|hashids_encode}) }}" class="clickable-thumbnail">
 			<div class="thumbnail">
 				<img src="{{ asset('media/feature-thumbnail/checklist.png') }}" alt="">
 			</div>
@@ -103,7 +103,7 @@
 				<i class="far fa-angle-right"></i>
 			</div>
 		</a>
-		<a href="{{ path('project_testing', {id: project.id}) }}" class="clickable-thumbnail">
+		<a href="{{ path('project_testing', {id: project.id|hashids_encode}) }}" class="clickable-thumbnail">
 			<div class="thumbnail">
 				<img src="{{ asset('media/feature-thumbnail/recommendations.png') }}" alt="">
 			</div>
@@ -112,7 +112,7 @@
 				<i class="far fa-angle-right"></i>
 			</div>
 		</a>
-		<a href="{{ path('project_settings', {id: project.id}) }}" class="clickable-thumbnail">
+		<a href="{{ path('project_settings', {id: project.id|hashids_encode}) }}" class="clickable-thumbnail">
 			<div class="thumbnail">
 				<img src="{{ asset('media/feature-thumbnail/settings.png') }}" alt="">
 			</div>

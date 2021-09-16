@@ -2,7 +2,7 @@
 {% macro project_thumbnails(projects) %}
 	<div class="grid cols-4">
 		{% for project in projects %}
-			<a href="{{ path('project_dashboard', {id: project.id}) }}" class="clickable-thumbnail">
+			<a href="{{ path('project_dashboard', {id: project.id|hashids_encode}) }}" class="clickable-thumbnail">
 				<div class="thumbnail">
 					<img src="{{ project|thumbnail }}">
 				</div>
@@ -19,7 +19,7 @@
 {% macro project_list_simple(projects) %}
 	<div class="project-list-simple">
 		{% for project in projects %}
-			<a href="{{ path('project_dashboard', {id: project.id}) }}">
+			<a href="{{ path('project_dashboard', {id: project.id|hashids_encode}) }}">
 				<img src="{{ project|favicon }}" class="favicon">
 				<div class="name">{{ project.name }}</div>
 				<i class="far fa-angle-right"></i>

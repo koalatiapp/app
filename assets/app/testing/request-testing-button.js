@@ -10,7 +10,7 @@ export class RequestTestingButton extends NbButton {
 	static get properties() {
 		return {
 			...super.properties,
-			projectId: { type: Number },
+			projectId: { type: String },
 		};
 	}
 

@@ -29,7 +29,7 @@
 			{% if is_granted("manage", organization) %}
 				<hr>
 				<div class="text-center">
-					<nb-button href="{{ path("organization_settings", {id: organization.id}) }}#members">
+					<nb-button href="{{ path("organization_settings", {id: organization.id|hashids_encode}) }}#members">
 						{% trans %}organization.dashboard.member_list.button{% endtrans %}
 					</nb-button>
 				</div>
