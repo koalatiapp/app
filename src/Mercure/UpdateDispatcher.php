@@ -84,10 +84,6 @@ class UpdateDispatcher
 	{
 		$envelopes = [];
 
-		if (isset($data['id']) && is_numeric($data['id'])) {
-			$data['id'] = $this->idHasher->encode($data['id']);
-		}
-
 		foreach ($this->generateUpdates($entity, $data, $specificScope) as $update) {
 			$envelopes[] = $this->bus->dispatch($update);
 		}
@@ -106,6 +102,10 @@ class UpdateDispatcher
 	private function generateUpdates(MercureEntityInterface $entity, array $data, ?string $specificScope = null): array
 	{
 		$updates = [];
+
+		if (isset($data['id']) && is_numeric($data['id'])) {
+			$data['id'] = $this->idHasher->encode($data['id']);
+		}
 
 		foreach (array_keys($entity::getMercureTopics()) as $scope) {
 			if ($specificScope && $specificScope != $scope) {

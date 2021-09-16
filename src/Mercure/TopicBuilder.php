@@ -99,6 +99,10 @@ class TopicBuilder
 
 	private function getScopeUid(string $scope, int | string $scopeId): string
 	{
+		if (is_numeric($scopeId)) {
+			$scopeId = $this->idHasher->encode($scopeId);
+		}
+
 		return md5($scope.'-'.$scopeId);
 	}
 }
