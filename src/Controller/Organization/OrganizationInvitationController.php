@@ -52,6 +52,6 @@ class OrganizationInvitationController extends AbstractController
 		$em->persist($membership);
 		$em->flush();
 
-		return $this->redirectToRoute('organization_dashboard', ['id' => $invitation->getOrganization()->getId()]);
+		return $this->redirectToRoute('organization_dashboard', ['id' => $this->idHasher->encode($invitation->getOrganization()->getId())]);
 	}
 }
