@@ -3,6 +3,7 @@
 namespace App\Mercure;
 
 use App\Entity\MercureEntityInterface;
+use Hashids\HashidsInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Mercure\Update;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -21,9 +22,15 @@ class UpdateDispatcher
 	/**
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.bus)
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.topicBuilder)
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.logger)
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.idHasher)
 	 */
-	public function __construct(private TopicBuilder $topicBuilder, private MessageBusInterface $bus, private LoggerInterface $logger)
-	{
+	public function __construct(
+		private TopicBuilder $topicBuilder,
+		private MessageBusInterface $bus,
+		private LoggerInterface $logger,
+		private HashidsInterface $idHasher
+	) {
 	}
 
 	/**
@@ -76,6 +83,10 @@ class UpdateDispatcher
 	public function dispatch(MercureEntityInterface $entity, array $data, ?string $specificScope = null): array
 	{
 		$envelopes = [];
+
+		if (isset($data['id']) && is_numeric($data['id'])) {
+			$data['id'] = $this->idHasher->encode($data['id']);
+		}
 
 		foreach ($this->generateUpdates($entity, $data, $specificScope) as $update) {
 			$envelopes[] = $this->bus->dispatch($update);

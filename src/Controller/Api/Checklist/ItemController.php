@@ -41,6 +41,10 @@ class ItemController extends AbstractApiController
 		$this->setSuggestedMercureTopic($this->topicBuilder->getEntityGenericTopic(Item::class, TopicBuilder::SCOPE_PROJECT, $projectId));
 
 		if ($groupId) {
+			if (!is_numeric($groupId)) {
+				$groupId = $this->idHasher->decode($groupId)[0];
+			}
+
 			/** @var ItemGroup */
 			$group = $checklist->getItemGroups()->filter(fn ($group) => $group->getId() == $groupId)->first();
 

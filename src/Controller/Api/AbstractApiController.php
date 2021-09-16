@@ -58,10 +58,14 @@ abstract class AbstractApiController extends AbstractController
 	/**
 	 * @SuppressWarnings(PHPMD.ExitExpression)
 	 */
-	protected function getProject(?int $id, string $privilege = ProjectVoter::VIEW): ?Project
+	protected function getProject(int | string | null $id, string $privilege = ProjectVoter::VIEW): ?Project
 	{
 		if (!$id) {
 			return null;
+		}
+
+		if (!is_numeric($id)) {
+			$id = $this->idHasher->decode($id)[0];
 		}
 
 		/**
@@ -90,10 +94,14 @@ abstract class AbstractApiController extends AbstractController
 	/**
 	 * @SuppressWarnings(PHPMD.ExitExpression)
 	 */
-	protected function getOrganization(?int $id, string $privilege = OrganizationVoter::VIEW): ?Organization
+	protected function getOrganization(int | string | null $id, string $privilege = OrganizationVoter::VIEW): ?Organization
 	{
 		if (!$id) {
 			return null;
+		}
+
+		if (!is_numeric($id)) {
+			$id = $this->idHasher->decode($id)[0];
 		}
 
 		/**

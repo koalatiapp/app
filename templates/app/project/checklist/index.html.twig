@@ -16,7 +16,7 @@
 
 {% block body %}
 	{% for group in project.checklist.itemGroups %}
-		<checklist-group projectId="{{ project.id }}" groupId="{{ group.id }}">
+		<checklist-group projectId="{{ project.id|hashids_encode }}" groupId="{{ group.id|hashids_encode }}">
 			{{ group.name }}
 		</checklist-group>
 		<hr class="spacer">
