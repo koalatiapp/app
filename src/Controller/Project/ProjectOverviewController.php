@@ -4,6 +4,7 @@ namespace App\Controller\Project;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ProjectOverviewController extends AbstractProjectController
@@ -17,7 +18,11 @@ class ProjectOverviewController extends AbstractProjectController
 	public function projectShortcut(Request $request): Response
 	{
 		if ($currentProjectId = $request->getSession()->get(static::getCurrentProjectSessionKey())) {
-			$project = $this->getProject($currentProjectId);
+			try {
+				$project = $this->getProject($currentProjectId);
+			} catch (NotFoundHttpException $exception) {
+				$project = null;
+			}
 
 			if ($project) {
 				return $this->redirectToRoute('project_dashboard', ['id' => $project->getId()]);
