@@ -20,7 +20,7 @@ jobs:
               uses: php-actions/composer@v6
               with:
                 php_version: 8.0
-                php_extensions: xsl
+                php_extensions: xsl bcmath
             - name: Use Node.js 12.x
               uses: actions/setup-node@v1
               with:
