@@ -39,12 +39,18 @@ services:
 
     Symfony\Component\Serializer\SerializerInterface:
         class: Symfony\Component\Serializer\Serializer
+        public: true
         arguments:
-            - ['@ProjectNormalizer', '@DateTimeNormalizer', '@JsonSerializableNormalizer', '@GetSetMethodNormalizer', '@ObjectNormalizer']
+            - ['@ProjectNormalizer', '@DefaultNormalizer']
             - ['@JsonEncoder']
 
     ProjectNormalizer:
         class: App\Serializer\ProjectNormalizer
+        tags: [serializer.normalizer]
+
+    DefaultNormalizer:
+        class: App\Serializer\DefaultNormalizer
+        public: true
         tags: [serializer.normalizer]
 
     GetSetMethodNormalizer:
