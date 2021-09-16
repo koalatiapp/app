@@ -4,8 +4,8 @@ namespace App\Serializer;
 
 use App\Entity\Project;
 use App\Storage\ProjectStorage;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Serializer\Normalizer\ContextAwareNormalizerInterface;
-use Symfony\Component\Serializer\Serializer;
 
 /**
  * Adds favicon and thumbnail URLs to the data using the `ProjectStorage`.
@@ -16,7 +16,7 @@ class ProjectNormalizer implements ContextAwareNormalizerInterface
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	public function __construct(
-		private Serializer $simpleSerializer,
+		private ContainerInterface $container,
 		private ProjectStorage $projectStorage
 	) {
 	}
@@ -26,7 +26,7 @@ class ProjectNormalizer implements ContextAwareNormalizerInterface
 	 */
 	public function normalize($project, string $format = null, array $context = [])
 	{
-		$data = $this->simpleSerializer->normalize($project, $format, $context);
+		$data = $this->container->get('DefaultNormalizer')->normalize($project, $format, $context);
 
 		if (is_array($data)) {
 			// Add favicon and thumbnail URLs

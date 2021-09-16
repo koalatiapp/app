@@ -162,6 +162,9 @@
     "guzzlehttp/psr7": {
         "version": "1.7.0"
     },
+    "hashids/hashids": {
+        "version": "4.1.0"
+    },
     "http-interop/http-factory-guzzle": {
         "version": "1.2.0"
     },
@@ -281,6 +284,30 @@
     },
     "ralouphie/getallheaders": {
         "version": "3.0.3"
+    },
+    "roukmoute/hashids-bundle": {
+        "version": "1.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "1.4",
+            "ref": "cbd9de476f57c91bd6f8a4db1fd0ed05befa8fc4"
+        },
+        "files": [
+            "config/packages/roukmoute_hashids.yaml"
+        ]
+    },
+    "sensio/framework-extra-bundle": {
+        "version": "5.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "5.2",
+            "ref": "fb7e19da7f013d0d422fa9bce16f5c510e27609b"
+        },
+        "files": [
+            "config/packages/sensio_framework_extra.yaml"
+        ]
     },
     "sentry/sdk": {
         "version": "3.1.0"

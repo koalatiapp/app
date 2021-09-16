@@ -18,7 +18,7 @@ export class OrganizationMembersList extends AbstractDynamicList {
 	static get properties() {
 		return {
 			...super.properties,
-			organizationId: {type: Number}
+			organizationId: {type: String}
 		};
 	}
 

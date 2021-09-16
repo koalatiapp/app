@@ -26,7 +26,7 @@ export class ChecklistGroup extends LitElement {
 
 	static get properties() {
 		return {
-			projectId: {type: Number},
+			projectId: {type: String},
 			groupId: {type: String},
 			itemCount: {type: Number},
 			completedItemCount: {type: Number},

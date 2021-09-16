@@ -39,8 +39,8 @@ export class ChecklistItemList extends AbstractDynamicList {
 	static get properties() {
 		return {
 			...super.properties,
-			projectId: {type: Number},
-			groupId: {type: Number},
+			projectId: {type: String},
+			groupId: {type: String},
 		};
 	}
 

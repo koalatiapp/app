@@ -18,7 +18,7 @@ export class RecommendationDetailsLink extends LitElement {
 
 	static get properties() {
 		return {
-			recommendationId: {type: Number}
+			recommendationId: {type: String}
 		};
 	}
 
