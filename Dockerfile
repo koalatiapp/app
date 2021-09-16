@@ -38,6 +38,7 @@ RUN set -eux; \
 		pdo \
 		pdo_mysql \
 		xsl \
+		bcmath \
 	; \
 	pecl install \
 		apcu-${APCU_VERSION} \

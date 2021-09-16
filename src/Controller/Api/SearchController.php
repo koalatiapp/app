@@ -91,7 +91,7 @@ class SearchController extends AbstractApiController
 		$projects = $repository->findBySearchQuery($queryParts, $this->getUser());
 
 		foreach ($projects as $project) {
-			$url = $this->generateUrl('project_dashboard', ['id' => $project->getId()]);
+			$url = $this->generateUrl('project_dashboard', ['id' => $this->idHasher->encode($project->getId())]);
 			$this->addResult($url, $project->getName(), $this->translator->trans('search.type.project'));
 		}
 	}
@@ -115,7 +115,7 @@ class SearchController extends AbstractApiController
 				}
 			}
 
-			$url = $this->generateUrl('organization_dashboard', ['id' => $organization->getId()]);
+			$url = $this->generateUrl('organization_dashboard', ['id' => $this->idHasher->encode($organization->getId())]);
 			$this->addResult($url, $organization->getName(), $this->translator->trans('search.type.organization'));
 		}
 	}

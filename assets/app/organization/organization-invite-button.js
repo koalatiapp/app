@@ -14,7 +14,7 @@ export class OrganizationInviteButton extends NbButton {
 	static get properties() {
 		return {
 			...super.properties,
-			organizationId: { type: Number },
+			organizationId: { type: String },
 			organization: { attribute: false },
 		};
 	}

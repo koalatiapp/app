@@ -60,7 +60,7 @@ class OrganizationController extends AbstractController
 
 				$this->addFlash('success', 'organization.flash.created_successfully', ['%name%' => $organization->getName()]);
 
-				return $this->redirectToRoute('organization_dashboard', ['id' => $organization->getId()]);
+				return $this->redirectToRoute('organization_dashboard', ['id' => $this->idHasher->encode($organization->getId())]);
 			}
 		}
 
@@ -72,7 +72,7 @@ class OrganizationController extends AbstractController
 	}
 
 	/**
-	 * @Route("/{id}", name="dashboard", requirements={"id"="\d*"})
+	 * @Route("/{id}", name="dashboard")
 	 */
 	public function dashboard(int $id = null, OrganizationRepository $organizationRepository): Response
 	{
@@ -112,7 +112,7 @@ class OrganizationController extends AbstractController
 				if (!$hasOtherAdmin) {
 					$this->addFlash('danger', 'organization.flash.member_leave_no_admins');
 
-					return $this->redirectToRoute('organization_leave', ['id' => $id]);
+					return $this->redirectToRoute('organization_leave', ['id' => $this->idHasher->encode($id)]);
 				}
 			}
 

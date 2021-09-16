@@ -1,0 +1,4 @@
+# Read the documentation: https://github.com/roukmoute/HashidsBundle/blob/master/README.md
+roukmoute_hashids:
+    salt: '%env(APP_SECRET)%'
+    min_hash_length: 10

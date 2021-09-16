@@ -9,7 +9,7 @@
 	<ul class="floating-dropdown reveal-on-hover">
 		{% for organization_link in app.user.organizationLinks %}
 			<li>
-				<a href="{{ path(route_name, route_params|merge({id: organization_link.organization.id})) }}">
+				<a href="{{ path(route_name, route_params|merge({id: organization_link.organization.id|hashids_encode})) }}">
 					{{ organization_link.organization.name }}
 				</a>
 			</li>

@@ -3,6 +3,7 @@
 namespace App\Mercure;
 
 use App\Entity\MercureEntityInterface;
+use Hashids\HashidsInterface;
 
 /**
  * Handles generation and dispatching of Mercure updates for
@@ -15,6 +16,16 @@ class TopicBuilder
 	public const SCOPE_PROJECT = 'project';
 	public const SCOPE_USER = 'user';
 	public const SCOPE_ORGANIZATION = 'organization';
+
+	protected HashidsInterface $idHasher;
+
+	/**
+	 * @required
+	 */
+	public function setIdHasher(HashidsInterface $idHasher): void
+	{
+		$this->idHasher = $idHasher;
+	}
 
 	/**
 	 * Returns the topic of a specific scope for a given entity.
@@ -34,13 +45,13 @@ class TopicBuilder
 			$topics = [];
 
 			foreach ($genericTopic as $topic) {
-				$topics[] = str_replace('{id}', (string) $entity->getId(), $topic);
+				$topics[] = str_replace('{id}', $this->idHasher->encode($entity->getId()), $topic);
 			}
 
 			return $topics;
 		}
 
-		return str_replace('{id}', (string) $entity->getId(), $genericTopic);
+		return str_replace('{id}', (string) $this->idHasher->encode($entity->getId()), $genericTopic);
 	}
 
 	/**
@@ -52,7 +63,7 @@ class TopicBuilder
 	 *
 	 * @return string|array<int,string>|null
 	 */
-	public function getEntityGenericTopic(MercureEntityInterface | string $entity, string $scope, ?int $scopeId = null): string | array | null
+	public function getEntityGenericTopic(MercureEntityInterface | string $entity, string $scope, int | string | null $scopeId = null): string | array | null
 	{
 		$entityTopics = $entity::getMercureTopics();
 		$topicTemplate = $entityTopics[$scope];
@@ -68,7 +79,7 @@ class TopicBuilder
 				$topics = [];
 
 				foreach ($scopes as $scopeEntity) {
-					$topics[] = $this->getEntityGenericTopic($entity, $scope, $scopeEntity->getId());
+					$topics[] = $this->getEntityGenericTopic($entity, $scope, $this->idHasher->encode($scopeEntity->getId()));
 				}
 
 				return $topics;
@@ -78,14 +89,20 @@ class TopicBuilder
 
 			if (!$scopeId) {
 				return null;
+			} elseif (is_numeric($scopeId)) {
+				$scopeId = $this->idHasher->encode($scopeId);
 			}
 		}
 
 		return str_replace('{scope}', $scope.'/'.$this->getScopeUid($scope, $scopeId), $topicTemplate);
 	}
 
-	private function getScopeUid(string $scope, int $scopeId): string
+	private function getScopeUid(string $scope, int | string $scopeId): string
 	{
+		if (is_numeric($scopeId)) {
+			$scopeId = $this->idHasher->encode($scopeId);
+		}
+
 		return md5($scope.'-'.$scopeId);
 	}
 }
