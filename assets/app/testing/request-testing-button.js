@@ -42,6 +42,7 @@ export class RequestTestingButton extends NbButton {
 				window.Flash.show("success", Translator.trans("automated_testing.testing_request_created"));
 
 				for (const progressIndicator of querySelectorAllAnywhere("recommendation-progress-indicator")) {
+					progressIndicator._loaded = false;
 					progressIndicator._loading = true;
 
 					setTimeout(() => progressIndicator.fetchStatus(), 10000);
