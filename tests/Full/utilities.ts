@@ -1,4 +1,4 @@
-import { Page } from "@playwright/test"
+import { Page, ElementHandle } from "@playwright/test"
 
 const login = async (page: Page, email: string = "name@email.com", password: string = "123456") => {
 	await page.goto("https://localhost/");
@@ -7,4 +7,10 @@ const login = async (page: Page, email: string = "name@email.com", password: str
 	await Promise.all([page.waitForNavigation(), page.click("nb-button:has-text('Sign in')")]);
 };
 
-export { login };
+const waitForLitElementRender = async (elementHandle: ElementHandle) => {
+	return await elementHandle.evaluate(async function(element: any) {
+		return await element.updateComplete;
+	});
+};
+
+export { login, waitForLitElementRender };
