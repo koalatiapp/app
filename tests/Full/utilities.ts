@@ -7,10 +7,4 @@ const login = async (page: Page, email: string = "name@email.com", password: str
 	await Promise.all([page.waitForNavigation(), page.click("nb-button:has-text('Sign in')")]);
 };
 
-const waitForLitElementRender = async (elementHandle: ElementHandle) => {
-	return await elementHandle.evaluate(async function(element: any) {
-		return await element.updateComplete;
-	});
-};
-
-export { login, waitForLitElementRender };
+export { login };

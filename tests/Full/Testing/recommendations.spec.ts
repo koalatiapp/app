@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { login, waitForLitElementRender } from "../utilities";
+import { login } from "../utilities";
 
 const stubTitle = "Add an alt attribute to all of your <img> tags to describe their content.";
 const stubTitleEscaped = "Add an alt attribute to all of your `<img>` tags to describe their content.";
@@ -25,7 +25,7 @@ test("testing recommendations", async ({ page }) => {
 
 	// Validate the contents of the details dialog
 	const detailsModal = await page.$("recommendation-details[aria-busy='false']");
-	await waitForLitElementRender(detailsModal);
+	await page.waitForTimeout(500);
 	expect(await detailsModal.$(`text=${stubTitle}`)).toBeTruthy();
 	expect(await detailsModal.$(`text=${stubDescriptionSnippet}`)).toBeTruthy();
 	expect(await detailsModal.$(`text=Homepage - Koalati`)).toBeTruthy();
