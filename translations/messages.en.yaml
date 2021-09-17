@@ -126,7 +126,8 @@ automated_testing:
     testing_request_created: We're running the tests again, the results should start appearing in just a few seconds.
     progress:
         loading_first_results: We're scanning your website, please stand by! 🤓
-        scanning_status_indicator: "Still scanning your website: all of your pages should be scanned in about %time%."
+        scanning_status_indicator: We're scanning your website...
+        time_left: Estimated time left
         results_below: "All of your pages have been scanned: check out your results below!"
 
 recommendation:

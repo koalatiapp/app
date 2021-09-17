@@ -8,8 +8,11 @@ export class RecommendationProgressIndicator extends LitElement {
 	{
 		return css`
 			div:first-child,
-			div:not(:last-child) { margin-bottom: 1rem; }
-			div:not(:first-child) { margin-top: 1rem; }
+			div:not(:last-child) { margin-bottom: 1em; }
+			div:not(:first-child) { margin-top: 1em; }
+
+			.timer { font-size: 1.1em; font-weight: 700; color: var(--color-blue-faded); line-height: 1.35; }
+			.timer .label { display: block; font-size: .8em; font-weight: 400; line-height: 1.35; }
 		`;
 	}
 
@@ -52,7 +55,11 @@ export class RecommendationProgressIndicator extends LitElement {
 		if (this.hasRequestsPending) {
 			return html`
 				<nb-loading-spinner></nb-loading-spinner>
-				<div>${Translator.trans("automated_testing.progress.scanning_status_indicator", {time: this.getFormattedTimeLeft()})}</div>
+				<div>${Translator.trans("automated_testing.progress.scanning_status_indicator")}</div>
+				<div class="timer">
+					<span class="label">${Translator.trans("automated_testing.progress.time_left")}:</span>
+					${this.getFormattedTimeLeft()}
+				</div>
 			`;
 		}
 
