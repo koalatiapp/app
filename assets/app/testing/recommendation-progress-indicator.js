@@ -30,11 +30,14 @@ export class RecommendationProgressIndicator extends LitElement {
 	constructor()
 	{
 		super();
-		this._loading = false;
-		this._loaded = false;
 		this.hasRequestsPending = false;
 		this.pendingRequestCount = 0;
 		this.timeLeftInMs = 0;
+		this._loading = false;
+		this._loaded = false;
+		this._timerInterval = null;
+		this._nextRefreshTimeout = null;
+		this._nextRefreshTimestamp = null;
 	}
 
 	firstUpdated()
@@ -99,6 +102,10 @@ export class RecommendationProgressIndicator extends LitElement {
 		return parts.join(" ");
 	}
 
+	/**
+	 * Fetches the testing status from the API
+	 * and updates the indicator accordingly.
+	 */
 	fetchStatus()
 	{
 		this._loading = true;
@@ -116,14 +123,7 @@ export class RecommendationProgressIndicator extends LitElement {
 				}
 
 				if (this.hasRequestsPending) {
-					const interval = setInterval(() => {
-						this.timeLeftInMs = Math.max(0, this.timeLeftInMs - 1000);
-					}, 1000);
-					setTimeout(() => {
-						clearInterval(interval);
-						this.fetchStatus();
-					}, this.timeLeftInMs / Math.max(1, this.pendingRequestCount));
-					console.log(this.timeLeftInMs / Math.max(1, this.pendingRequestCount));
+					this._scheduleNextRefresh();
 				}
 			})
 			.catch((error) => {
@@ -131,6 +131,64 @@ export class RecommendationProgressIndicator extends LitElement {
 
 				setTimeout(() => this.fetchStatus(), 10000);
 			});
+	}
+
+	/**
+	 * Signals to the progress indicator that the status
+	 * has likely changed, and that it should soon look
+	 * into re-fetching the status from the server.
+	 */
+	requestStatusUpdate()
+	{
+		const delay = 5000;
+		const timestampAfterDelay = (new Date()).getTime() + delay;
+
+		if (this._nextRefreshTimestamp && timestampAfterDelay > this._nextRefreshTimestamp) {
+			return;
+		}
+
+		this._scheduleNextRefresh(delay);
+	}
+
+	/**
+	 * Initializes a countdown for the timer and queues
+	 * a `fetchStatus()` call in a specified (or not)
+	 * amount of time.
+	 *
+	 * @param {Number|null} delay
+	 */
+	_scheduleNextRefresh(delay = null)
+	{
+		this._startTimerInterval();
+
+		if (!delay) {
+			delay = this.timeLeftInMs / Math.max(1, this.pendingRequestCount);
+		}
+
+		delay = Math.max(delay, 1000);
+
+		setTimeout(() => {
+			this._nextRefreshTimestamp = null;
+			this.fetchStatus();
+		}, delay);
+
+		this._nextRefreshTimestamp = (new Date()).getTime() + delay;
+	}
+
+	_clearTimerInterval()
+	{
+		if (this._timerInterval) {
+			clearInterval(this._timerInterval);
+			this._timerInterval = null;
+		}
+	}
+
+	_startTimerInterval()
+	{
+		this._clearTimerInterval();
+		this._timerInterval = setInterval(() => {
+			this.timeLeftInMs = Math.max(0, this.timeLeftInMs - 1000);
+		}, 1000);
 	}
 }
 
