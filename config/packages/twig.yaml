@@ -4,3 +4,5 @@ twig:
     paths:
         '%kernel.project_dir%/email_assets/images': email-images
         '%kernel.project_dir%/email_assets/css': email-styles
+    globals:
+        asset_version: '%env(KOALATI_RELEASE_VERSION)%'
