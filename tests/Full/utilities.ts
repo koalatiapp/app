@@ -1,4 +1,4 @@
-import { Page } from "@playwright/test"
+import { Page, ElementHandle } from "@playwright/test"
 
 const login = async (page: Page, email: string = "name@email.com", password: string = "123456") => {
 	await page.goto("https://localhost/");

@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ ('error_page.' ~ error_code ~ '.page_title')|trans }}{% endblock %}
+
+{% block head %}
+	<style>
+		@-webkit-keyframes error-logo-shake
+		{
+			0% { filter: grayscale(0) hue-rotate(0deg) blur(0px); }
+			9.99% { filter: grayscale(0) hue-rotate(0deg) blur(0px); }
+			10% { filter: grayscale(0) hue-rotate(135deg) blur(0px); }
+			15% { filter: grayscale(0) hue-rotate(135deg) blur(0px); }
+			15.01% { filter: grayscale(1) hue-rotate(0deg) blur(0px); }
+			39.99% { filter: grayscale(0) hue-rotate(0deg) blur(0px); }
+			40% { filter: grayscale(0) hue-rotate(135deg) blur(0px); }
+			45% { filter: grayscale(0) hue-rotate(135deg) blur(0px); }
+			45.01% { filter: grayscale(1) hue-rotate(0deg) blur(0px); }
+			84.99% { filter: grayscale(1) hue-rotate(0deg) blur(0px); transform: rotate(0deg); }
+			85% { filter: grayscale(1) hue-rotate(0deg) blur(2px); transform: rotate(1.5deg); }
+			89% { filter: grayscale(1) hue-rotate(0deg) blur(2px); transform: rotate(1.5deg); }
+			89.01% { filter: grayscale(1) hue-rotate(0deg) blur(0px); transform: rotate(0deg); }
+			99.99% { filter: grayscale(1) hue-rotate(0deg) blur(0px); }
+			100% { filter: grayscale(0) hue-rotate(0deg) blur(0px); }
+		}
+		@keyframes error-logo-shake
+		{
+			0% { filter: grayscale(0) hue-rotate(0deg) blur(0px); }
+			9.99% { filter: grayscale(0) hue-rotate(0deg) blur(0px); }
+			10% { filter: grayscale(0) hue-rotate(135deg) blur(0px); }
+			15% { filter: grayscale(0) hue-rotate(135deg) blur(0px); }
+			15.01% { filter: grayscale(1) hue-rotate(0deg) blur(0px); }
+			39.99% { filter: grayscale(0) hue-rotate(0deg) blur(0px); }
+			40% { filter: grayscale(0) hue-rotate(135deg) blur(0px); }
+			45% { filter: grayscale(0) hue-rotate(135deg) blur(0px); }
+			45.01% { filter: grayscale(1) hue-rotate(0deg) blur(0px); }
+			84.99% { filter: grayscale(1) hue-rotate(0deg) blur(0px); transform: rotate(0deg); }
+			85% { filter: grayscale(1) hue-rotate(0deg) blur(2px); transform: rotate(1.5deg); }
+			89% { filter: grayscale(1) hue-rotate(0deg) blur(2px); transform: rotate(1.5deg); }
+			89.01% { filter: grayscale(1) hue-rotate(0deg) blur(0px); transform: rotate(0deg); }
+			99.99% { filter: grayscale(1) hue-rotate(0deg) blur(0px); }
+			100% { filter: grayscale(0) hue-rotate(0deg) blur(0px); }
+		}
+
+		#big-branding { transform-origin: center top; -webkit-animation: error-logo-shake 3s linear infinite; animation: error-logo-shake 3s linear infinite; }
+	</style>
+{% endblock %}
+
+{% block body %}
+	<section>
+		<div class="container center column">
+			<img id="big-branding" src="{{ asset("media/brand/koalati-logo-v.svg") }}" alt="Koalati's logo" width="250">
+
+    		<h1>{{ ('error_page.' ~ error_code ~ '.heading')|trans }}</h1>
+			<div class="card small">
+				{{ ('error_page.' ~ error_code ~ '.explanation')|trans|raw }}
+
+				<hr>
+
+				<div class="button-container center">
+					<nb-button href="{{ path('dashboard') }}">{% trans %}error_page.go_back{% endtrans %}</nb-button>
+				</div>
+			</div>
+		</div>
+	</section>
+{% endblock %}
