@@ -8,6 +8,7 @@ use Exception;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class Client implements ClientInterface
 {
@@ -62,7 +63,9 @@ class Client implements ClientInterface
 		$response = $this->httpClient->request($method, $endpoint, $options);
 		$statusCode = $response->getStatusCode();
 
-		if ($statusCode == 403) {
+		if ($statusCode == 401) {
+			throw new UnauthorizedHttpException('The tools API denied access because your request lacked proper authorization. Make sure to provide a valid bearer token in the "TOOLS_API_BEARER_TOKEN" environment variable.');
+		} elseif ($statusCode == 403) {
 			throw new AccessDeniedHttpException(sprintf('The tools API denied access to the "%s" endpoint. Make sure to provide a valid bearer token in the "TOOLS_API_BEARER_TOKEN" environment variable.', $endpoint));
 		} elseif ($statusCode == 404) {
 			throw new NotFoundHttpException(sprintf('The tools API endpoint "%s" could not be found. Make sure to provide a valid API URL in the "TOOLS_API_URL" environment variable.', $endpoint));
