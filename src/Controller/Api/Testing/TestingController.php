@@ -46,18 +46,11 @@ class TestingController extends AbstractApiController
 	 * Available query parameters:
 	 * - `project_id` - `int` (required)
 	 *
-	 * @Route("/project-status", methods={"GET"}, name="project_status", options={"expose": true})
+	 * @Route("/project-status/{id}", methods={"GET"}, name="project_status", options={"expose": true})
 	 */
-	public function projectStatus(Request $request, StatusEndpoint $statusApi): JsonResponse
+	public function projectStatus(string $id, StatusEndpoint $statusApi): JsonResponse
 	{
-		$projectId = $request->request->get('project_id');
-
-		if (!$projectId) {
-			return $this->apiError('You must provide a valid value for `project_id`.');
-		}
-
-		$projectId = $this->idHasher->decode($projectId)[0];
-		$project = $this->getProject($projectId, ProjectVoter::PARTICIPATE);
+		$project = $this->getProject($id);
 		$status = $statusApi->project($project);
 
 		return $this->apiSuccess($status);

@@ -80,7 +80,7 @@ final class StatusEndpoint extends AbstractEndpoint
 	 */
 	public function project(Project $project): array
 	{
-		$response = $this->client->request('GET', '/status/time-estimates', [
+		$response = $this->client->request('GET', '/status/project', [
 			'url' => $project->getUrl(),
 		]);
 

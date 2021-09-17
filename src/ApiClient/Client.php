@@ -59,14 +59,26 @@ class Client implements ClientInterface
 	{
 		$method = trim(strtoupper($method));
 		$endpoint = '/'.ltrim($endpoint, '/');
-		$options = $method == 'GET' ? [] : ['body' => $body];
-		$response = $this->httpClient->request($method, $endpoint, $options);
+		$options = ['body' => $body];
+		$queryString = '';
+
+		if ($method == 'GET') {
+			$options = [];
+			$queryString = http_build_query($body);
+		}
+
+		$url = $endpoint;
+
+		if ($queryString) {
+			$queryPrefix = str_contains($endpoint, '?') ? '&' : '?';
+			$url .= $queryPrefix.$queryString;
+		}
+
+		$response = $this->httpClient->request($method, $url, $options);
 		$statusCode = $response->getStatusCode();
 
-		if ($statusCode == 401) {
+		if ($statusCode == 401 || $statusCode == 403) {
 			throw new UnauthorizedHttpException('The tools API denied access because your request lacked proper authorization. Make sure to provide a valid bearer token in the "TOOLS_API_BEARER_TOKEN" environment variable.');
-		} elseif ($statusCode == 403) {
-			throw new AccessDeniedHttpException(sprintf('The tools API denied access to the "%s" endpoint. Make sure to provide a valid bearer token in the "TOOLS_API_BEARER_TOKEN" environment variable.', $endpoint));
 		} elseif ($statusCode == 404) {
 			throw new NotFoundHttpException(sprintf('The tools API endpoint "%s" could not be found. Make sure to provide a valid API URL in the "TOOLS_API_URL" environment variable.', $endpoint));
 		} elseif ($statusCode != 200) {

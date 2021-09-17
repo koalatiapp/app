@@ -1,5 +1,6 @@
 import { ApiClient } from "../../utils/api";
 import { NbButton } from "../../native-bear";
+import querySelectorAllAnywhere from "../../utils/query-selector-all-anywhere.js";
 
 export class RequestTestingButton extends NbButton {
 	static get styles()
@@ -32,14 +33,19 @@ export class RequestTestingButton extends NbButton {
 
 	_submitTestingRequest()
 	{
-		this.loading = true;
+		for (const refreshButton of querySelectorAllAnywhere("request-testing-button")) {
+			refreshButton.loading = true;
+		}
 
 		ApiClient.post("api_testing_request_create", { project_id: this.projectId }, null)
 			.then(() => {
 				window.Flash.show("success", Translator.trans("automated_testing.testing_request_created"));
-				setTimeout(() => {
-					this.loading = false;
-				}, 60000);
+
+				for (const progressIndicator of querySelectorAllAnywhere("recommendation-progress-indicator")) {
+					progressIndicator._loading = true;
+
+					setTimeout(() => progressIndicator.fetchStatus(), 10000);
+				}
 			})
 			.catch((error) => {
 				console.error(error);
