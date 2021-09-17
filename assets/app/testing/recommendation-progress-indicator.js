@@ -13,6 +13,7 @@ export class RecommendationProgressIndicator extends LitElement {
 
 			.timer { font-size: 1.1em; font-weight: 700; color: var(--color-blue-faded); line-height: 1.35; }
 			.timer .label { display: block; font-size: .8em; font-weight: 400; line-height: 1.35; }
+			.unknown-time-estimate { font-size: 3rem; }
 		`;
 	}
 
@@ -61,7 +62,7 @@ export class RecommendationProgressIndicator extends LitElement {
 				<div>${Translator.trans("automated_testing.progress.scanning_status_indicator")}</div>
 				<div class="timer">
 					<span class="label">${Translator.trans("automated_testing.progress.time_left")}:</span>
-					${this.getFormattedTimeLeft()}
+					${this.timeLeftInMs >= 1000 ? this.getFormattedTimeLeft() : html`<span class="unknown-time-estimate">🤷</span>`}
 				</div>
 			`;
 		}
