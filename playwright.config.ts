@@ -10,6 +10,7 @@ const config: PlaywrightTestConfig = {
 	workers: 1,
 	use: {
 		// Browser options
+		video: "retain-on-failure",
 
 		// Context options
 		ignoreHTTPSErrors: true,
