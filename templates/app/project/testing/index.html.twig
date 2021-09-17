@@ -11,7 +11,7 @@
 	<nb-button href="{{ path("project_settings_automated_testing", {id: project.id|hashids_encode}) }}#ignored" color="gray" class="tablet-hidden">
 		{% trans %}recommendation.view_settings{% endtrans %}
 	</nb-button>
-	<request-testing-button projectId="{{ project.id }}">
+	<request-testing-button projectId="{{ project.id|hashids_encode }}">
 		<span class="mobile-hidden">
 			{% trans %}recommendation.run_again{% endtrans %}
 			&nbsp;
@@ -21,26 +21,31 @@
 {% endblock %}
 
 {% block body %}
-	<div class="card">
-		<h3>{% trans %}project_testing.explanation.heading{% endtrans %}</h3>
-		<p>{% trans %}project_testing.explanation.intro{% endtrans %}</p>
-		<ul class="bullet-list">
-			<li>
-				{% trans with {"%type%": '<strong class="text-red">' ~ 'project_testing.explanation.type.issue'|trans ~ '</strong>'} %}
-					project_testing.explanation.items.issue
-				{% endtrans %}
-			</li>
-			<li>
-				{% trans with {"%type%": '<strong class="text-blue-faded">' ~ 'project_testing.explanation.type.essential'|trans ~ '</strong>'} %}
-					project_testing.explanation.items.essential
-				{% endtrans %}
-			</li>
-			<li>
-				{% trans with {"%type%": '<strong class="text-blue-gray">' ~ 'project_testing.explanation.type.optimization'|trans ~ '</strong>'} %}
-					project_testing.explanation.items.optimization
-				{% endtrans %}
-			</li>
-		</ul>
+	<div class="grid small-fill">
+		<div class="card centered">
+			<recommendation-progress-indicator projectId="{{ project.id|hashids_encode }}"></recommendation-progress-indicator>
+		</div>
+		<div class="card">
+			<h3>{% trans %}project_testing.explanation.heading{% endtrans %}</h3>
+			<p>{% trans %}project_testing.explanation.intro{% endtrans %}</p>
+			<ul class="bullet-list">
+				<li>
+					{% trans with {"%type%": '<strong class="text-red">' ~ 'project_testing.explanation.type.issue'|trans ~ '</strong>'} %}
+						project_testing.explanation.items.issue
+					{% endtrans %}
+				</li>
+				<li>
+					{% trans with {"%type%": '<strong class="text-blue-faded">' ~ 'project_testing.explanation.type.essential'|trans ~ '</strong>'} %}
+						project_testing.explanation.items.essential
+					{% endtrans %}
+				</li>
+				<li>
+					{% trans with {"%type%": '<strong class="text-blue-gray">' ~ 'project_testing.explanation.type.optimization'|trans ~ '</strong>'} %}
+						project_testing.explanation.items.optimization
+					{% endtrans %}
+				</li>
+			</ul>
+		</div>
 	</div>
 
 	<hr class="spacer">

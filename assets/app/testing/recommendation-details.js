@@ -63,6 +63,10 @@ export class RecommendationDetails extends LitElement {
 
 		if (!this.recommendationGroup && !this._loading) {
 			this._loadRecommendationGroup().then(recommendationGroup => {
+				if (!Array.isArray(recommendationGroup.recommendations)) {
+					recommendationGroup.recommendations = Object.values(recommendationGroup.recommendations);
+				}
+
 				this.recommendationGroup = recommendationGroup;
 			});
 		}

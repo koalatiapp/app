@@ -2,6 +2,8 @@
 
 namespace App\ApiClient\Endpoint;
 
+use App\Entity\Project;
+
 final class StatusEndpoint extends AbstractEndpoint
 {
 	/**
@@ -69,5 +71,19 @@ final class StatusEndpoint extends AbstractEndpoint
 		$response = $this->client->request('GET', '/status/time-estimates');
 
 		return $response['data'];
+	}
+
+	/**
+	 * Returns the processing status for a given project.
+	 *
+	 * @return array<mixed>
+	 */
+	public function project(Project $project): array
+	{
+		$response = $this->client->request('GET', '/status/project', [
+			'url' => $project->getUrl(),
+		]);
+
+		return $response['data'] ?? [];
 	}
 }
