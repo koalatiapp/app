@@ -75,6 +75,30 @@ password_reset:
             <p class="text-gray text-small">Please note that this link will expire in %expirationTime%.</p>
             <p class="text-gray text-small">If you didn't request a password reset, please ignore this message.</p>
 
+error_page:
+    go_back: Go back to Koalati
+    404:
+        page_title: Not found
+        heading: "404 - Not found"
+        explanation: >
+            <p>Sorry, we can't seem to find the page or resource you're looking for.</p>
+            <p>Perhaps you followed an outdated link? Or maybe we did a bad quality control job... that would be ironic, eh?</p>
+            <p>Either way, there's not much to be done. We suggest you just go back to the app and have a wonderful day!</p>
+    403:
+        page_title: Access denied
+        heading: "403 - Access denied"
+        explanation: >
+            <p>Sorry, but you're not allowed to access this.</p>
+            <p>If a team member sent you this link, we suggest you ask them to grant you access.</p>
+    unknown:
+        page_title: Server error
+        heading: "Server error"
+        explanation: >
+            <p>Well, this is embarassing.</p>
+            <p>It seems that your request could not be processed correctly due to an error on our end.</p>
+            <p>We've been notified of this already; we will get to work and fix this problem as soon as possible.</p>
+            <p>Apologies for the inconvenience!</p>
+
 navigation:
     dashboard:
         label: Dashboard
