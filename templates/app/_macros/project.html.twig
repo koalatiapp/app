@@ -27,3 +27,8 @@
 		{% endfor %}
 	</div>
 {% endmacro %}
+
+{# Simple link with project name in breadcrumbs #}
+{%- macro project_breadcrumb_link(project) -%}
+	<a href="{{ path('project_dashboard', {id: project.id|hashids_encode}) }}">{{ project.name }}</a>
+{%- endmacro -%}
