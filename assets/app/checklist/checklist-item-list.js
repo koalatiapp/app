@@ -11,27 +11,16 @@ export class ChecklistItemList extends AbstractDynamicList {
 			super.styles,
 			css`
 				.nb--list-header { display: none; }
-				.nb--list-item { grid-template-areas: "checkbox title details"; grid-template-columns: 1.5rem 1fr 12ch; }
+				.nb--list-item { grid-template-areas: "checkbox title"; grid-template-columns: 1.5rem 1fr; }
 
 				.nb--list-item-column[nb-column="checkbox"] { display: flex; }
-				nb-markdown { display: block; font-weight: 500; cursor: pointer; }
-				.view-item-details { display: block; font-size: .85em; font-weight: 500; text-align: right; color: var(--color-blue); text-decoration: none; cursor: pointer; transition: all .15s ease; }
-				.view-item-details.responsive-only { display: inline-block; text-align: left; }
-				.view-item-details:hover { fcolor: var(--color-gray-darker);}
+				nb-markdown { display: block; font-weight: 500; }
+				.view-item-details { display: inline-bblock; font-size: .85em; font-weight: 500; text-align: left; color: var(--color-blue); text-decoration: none; cursor: pointer; transition: all .15s ease; }
+				.view-item-details:hover { color: var(--color-gray-darker);}
 
 				@media (prefers-color-scheme: dark) {
 					.view-item-details { color: var(--color-blue-dark); }
 					.view-item-details:hover { color: var(--color-gray); }
-				}
-
-				@media (min-width: 992px) {
-					.view-item-details.responsive-only { display: none; }
-				}
-
-				@media (max-width: 991px) {
-					.nb--list-item { grid-template-areas: "checkbox title"; grid-template-columns: 1.5rem 1fr; }
-					.view-item-details:not(.responsive-only) { display: none; }
-					[nb-column="details"] { display: none; }
 				}
 			`
 		];
@@ -63,24 +52,9 @@ export class ChecklistItemList extends AbstractDynamicList {
 				label: "",
 				render: (item, list) => {
 					return html`
-						<nb-markdown barebones id="checklist-item-${item.id}-title" @click=${() => list.shadowRoot.querySelector(`#checklist-item-${item.id}-checkbox`).click()}>
+						<nb-markdown barebones id="checklist-item-${item.id}-title">
 							<script type="text/markdown">${item.title}</script>
 						</nb-markdown>
-						<a href="#" class="view-item-details responsive-only" @click=${e => { e.preventDefault(); list._showItemDetailsCallback(item); }}>
-							<i class="fad fa-circle-info"></i>&nbsp;
-							${Translator.trans("project_checklist.item.view_more")}
-						</a>
-					`;
-				},
-				placeholder: html`
-					<div class="nb--list-item-column-placeholder" style="width: 90%;">&nbsp;</div>
-				`
-			},
-			{
-				key: "details",
-				label: "",
-				render: (item, list) => {
-					return html`
 						<a href="#" class="view-item-details" @click=${e => { e.preventDefault(); list._showItemDetailsCallback(item); }}>
 							<i class="fad fa-circle-info"></i>&nbsp;
 							${Translator.trans("project_checklist.item.view_more")}
@@ -88,7 +62,7 @@ export class ChecklistItemList extends AbstractDynamicList {
 					`;
 				},
 				placeholder: html`
-					<div class="nb--list-item-column-placeholder" style="width: 15ch;">&nbsp;</div>
+					<div class="nb--list-item-column-placeholder" style="width: 90%;">&nbsp;</div>
 				`
 			},
 		];
