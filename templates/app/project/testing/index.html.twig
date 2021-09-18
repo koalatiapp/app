@@ -2,6 +2,7 @@
 
 {% block head %}
     <link rel="stylesheet" href="{{ asset('css/component/testing/recommendations.css') }}">
+	{{ encore_entry_script_tags('testing') }}
 {% endblock %}
 
 {% block title %}{% trans %}project_testing.title{% endtrans %}{% endblock %}
@@ -51,8 +52,4 @@
 	<hr class="spacer">
 
 	<recommendation-list projectId="{{ project.id }}"></recommendation-list>
-{% endblock %}
-
-{% block javascripts %}
-	{{ encore_entry_script_tags('testing') }}
 {% endblock %}

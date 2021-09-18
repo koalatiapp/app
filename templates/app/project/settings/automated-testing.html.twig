@@ -3,6 +3,10 @@
 {% block title %}{% trans %}project_settings.automated_testing.title{% endtrans %}{% endblock %}
 {% block section_title %}{{ 'generic.project_section_title'|trans({'%name%': project.name}) }}{% endblock %}
 
+{% block head %}
+	{{ encore_entry_script_tags('settings') }}
+{% endblock %}
+
 {% block page_tabs %}
 	{% include 'app/project/settings/_tabs.html.twig' %}
 {% endblock %}
@@ -18,8 +22,4 @@
 			<testing-tool-list projectId="{{ project.id }}" light></testing-tool-list>
 		</div>
 	</tabbed-container>
-{% endblock %}
-
-{% block javascripts %}
-	{{ encore_entry_script_tags('settings') }}
 {% endblock %}
