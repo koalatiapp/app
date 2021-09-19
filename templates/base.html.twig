@@ -50,6 +50,8 @@
 		{% if app.environment == "prod" %}
 			<script defer data-domain="app.koalati.com" src="https://plausible.io/js/plausible.js"></script>
 		{% endif %}
+
+		{{ encore_entry_script_tags('app') }}
     </head>
     <body>
         {% block body %}{% endblock %}
@@ -59,7 +61,6 @@
 			<a href="https://koalati.com/terms-of-use-and-privacy-policy">{% trans %}footer.privacy_policy{% endtrans %}</a>
 		</footer>
 
-		{{ encore_entry_script_tags('app') }}
         {% block javascripts %}{% endblock %}
     </body>
 </html>

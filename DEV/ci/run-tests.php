@@ -136,7 +136,7 @@ try {
 	);
 	runCommand(
 		'Generating fixtures... ',
-		'docker-compose exec -T php ./bin/console doctrine:fixtures:load -n',
+		'docker-compose exec -T php ./bin/console doctrine:fixtures:load --append -n',
 		$verboseMode
 	);
 

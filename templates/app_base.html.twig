@@ -47,6 +47,8 @@
 		{% if app.environment == "prod" %}
 			<script defer data-domain="app.koalati.com" src="https://plausible.io/js/plausible.js"></script>
 		{% endif %}
+
+        {{ encore_entry_script_tags('app') }}
     </head>
     <body>
         {% include 'app/_parts/flash_messages.html.twig' %}
@@ -95,7 +97,6 @@
 
         <search-overlay></search-overlay>
 
-        {{ encore_entry_script_tags('app') }}
 		<script type="module" src="{{ asset('js/base/flash-messages.js') }}"></script>
 		<script src="{{ asset('js/base/quick-actions.js') }}"></script>
 
