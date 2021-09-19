@@ -52,12 +52,12 @@ export class SearchOverlay extends LitElement {
 
 		// Register keybinds for the toggling of the seach overlay
 		window.addEventListener("keydown", (e) => {
-			// Open the search overlay when the Cmd/Ctrl+F/K shortcut is pressed
+			// Open the search overlay when the Cmd/Ctrl+K shortcut is pressed
 			if (!this.isOpen && (e.ctrlKey || e.metaKey) && e.key == "k") {
 				e.preventDefault();
 				this.open();
 			}
-			// Close thee search overlay when the Escape key is pressed
+			// Close the search overlay when the Escape key is pressed
 			else if (this.isOpen && e.key == "Escape") {
 				e.preventDefault();
 				this.close();
