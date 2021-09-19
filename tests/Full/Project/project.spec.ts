@@ -25,7 +25,7 @@ test("creates, edits and deletes a project", async ({ page }) => {
 	await page.fill("text=Project name", "My New Website");
 	await page.click("text=Update project");
 	await page.waitForSelector("text=has been updated successfully");
-	expect(await page.$("text=Project: My New Website")).toBeTruthy();
+	expect(await page.$("text=My New Website")).toBeTruthy();
 
 	// Delete the project
 	await page.click("a:has-text('Deletion')");
