@@ -62,6 +62,13 @@ if [ "$1" = 'php-fpm' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 
 	setfacl -R -m u:www-data:rwX -m u:"$(whoami)":rwX var
 	setfacl -dR -m u:www-data:rwX -m u:"$(whoami)":rwX var
+
+	# Start the messenger via a cron job
+	# @TODO: Find a better way to run the messenger (giving it its own container would likely be the way to go)
+	echo "Setting up cronjob for Symfony's messenger"
+	echo "* * * * * /srv/app/bin/console messenger:consume --time-limit=55 async > /dev/null 2>&1" > /etc/crontabs/root
+	echo "" >> /etc/crontabs/root
+	crond -b -l 8
 fi
 
 exec docker-php-entrypoint "$@"
