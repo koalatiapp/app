@@ -58,9 +58,9 @@ Here is a detailed list of all the environment variables, why they are needed, a
 | MYSQL_PORT                | Database (Docker config)            | MySQL port                                                                                      |
 | MYSQL_VERSION             | Database (Docker config)            | MySQL server version                                                                            |
 | ADMINER_PORT              | Database management (Docker config) | Port on which Adminer should run                                                                |
-| TOOLS_API_JWT_SECRET      | Tool service configuration          | Corresponds to (JWT_SECRET)[https://github.com/koalatiapp/tools-service#environment-variables]  |
-| TOOLS_API_AUTH_ACCESS_TOKEN | Tool service configuration        | Corresponds to (AUTH_ACCESS_TOKEN)[https://github.com/koalatiapp/tools-service#environment-variables] |
-| TOOLS_API_PGUSER          | Tool service configuration          | Corresponds to (PGUSER)[https://github.com/koalatiapp/tools-service#environment-variables]      |
-| TOOLS_API_PGPASSWORD      | Tool service configuration          | Corresponds to (PGPASSWORD)[https://github.com/koalatiapp/tools-service#environment-variables]  |
-| TOOLS_API_PGDATABASE      | Tool service configuration          | Corresponds to (PGDATABASE)[https://github.com/koalatiapp/tools-service#environment-variables]  |
-| TOOLS_API_PGVERSION       | Tool service configuration          | Corresponds to (PGVERSION)[https://github.com/koalatiapp/tools-service#environment-variables]   |
+| TOOLS_API_JWT_SECRET      | Tool service configuration          | Corresponds to [JWT_SECRET](https://github.com/koalatiapp/tools-service#environment-variables)  |
+| TOOLS_API_AUTH_ACCESS_TOKEN | Tool service configuration        | Corresponds to [AUTH_ACCESS_TOKEN](https://github.com/koalatiapp/tools-service#environment-variables) |
+| TOOLS_API_PGUSER          | Tool service configuration          | Corresponds to [PGUSER](https://github.com/koalatiapp/tools-service#environment-variables)      |
+| TOOLS_API_PGPASSWORD      | Tool service configuration          | Corresponds to [PGPASSWORD](https://github.com/koalatiapp/tools-service#environment-variables)  |
+| TOOLS_API_PGDATABASE      | Tool service configuration          | Corresponds to [PGDATABASE](https://github.com/koalatiapp/tools-service#environment-variables)  |
+| TOOLS_API_PGVERSION       | Tool service configuration          | Corresponds to [PGVERSION](https://github.com/koalatiapp/tools-service#environment-variables)   |
