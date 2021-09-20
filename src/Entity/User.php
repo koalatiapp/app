@@ -6,6 +6,8 @@ use App\Entity\Checklist\ChecklistTemplate;
 use App\Entity\Testing\IgnoreEntry;
 use App\Entity\Trait\CollectionManagingEntity;
 use App\Repository\UserRepository;
+use DateTime;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -69,6 +71,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	private ?string $jobTitle;
 
 	/**
+	 * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
+	 */
+	private ?DateTimeInterface $dateCreated;
+
+	/**
+	 * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
+	 */
+	private ?DateTimeInterface $dateLastLoggedIn;
+
+	/**
 	 * @var Collection<int, Project>
 	 * @ORM\OneToMany(targetEntity=Project::class, mappedBy="ownerUser")
 	 * @ORM\OrderBy({"dateCreated" = "DESC"})
@@ -103,6 +115,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
 	public function __construct()
 	{
+		$this->dateCreated = new DateTime();
+		$this->dateLastLoggedIn = new DateTime();
 		$this->personalProjects = new ArrayCollection();
 		$this->organizationLinks = new ArrayCollection();
 		$this->projectLinks = new ArrayCollection();
@@ -236,6 +250,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	public function setJobTitle(?string $jobTitle): self
 	{
 		$this->jobTitle = strip_tags($jobTitle);
+
+		return $this;
+	}
+
+	public function getDateCreated(): DateTimeInterface
+	{
+		return $this->dateCreated;
+	}
+
+	public function setDateCreated(DateTimeInterface $dateCreated): self
+	{
+		$this->dateCreated = $dateCreated;
+
+		return $this;
+	}
+
+	public function getDateLastLoggedIn(): DateTimeInterface
+	{
+		return $this->dateLastLoggedIn;
+	}
+
+	public function setDateLastLoggedIn(DateTimeInterface $dateLastLoggedIn): self
+	{
+		$this->dateLastLoggedIn = $dateLastLoggedIn;
 
 		return $this;
 	}
