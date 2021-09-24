@@ -505,6 +505,7 @@ project:
     status:MAINTENANCE: Maintenance
     status:COMPLETED: Completed
     owner:
+        generic: Owner
         self: You
         team: "%teamName% (team)"
 
