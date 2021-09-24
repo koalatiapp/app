@@ -431,7 +431,7 @@ organization:
         feed: Recent activity
         projects:
             title: Team projects
-            empty_state: There are no team projects yet.
+            empty_state: There are no team projects yet for %teamName%.
         member_list:
             title: Members
             x_more: ...and %count% more
