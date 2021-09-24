@@ -33,5 +33,5 @@
 {% block body %}
 	{{ project_thumbnails(projects|slice(0, 4)) }}
 	<hr class="spacer">
-	<project-list emptyState="{% trans %}dashboard.projects.empty_state{% endtrans %}">></project-list>
+	<project-list show-owners emptyState="{% trans %}dashboard.projects.empty_state{% endtrans %}">></project-list>
 {% endblock %}
