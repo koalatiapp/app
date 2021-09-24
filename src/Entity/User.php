@@ -300,7 +300,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 			}
 		}
 
-		return $projects;
+		// Sort projects by date
+		$projectArray = $projects->toArray();
+		usort($projectArray, function (Project $projectA, Project $projectB) {
+			return $projectA->getDateCreated()->getTimestamp() > $projectB->getDateCreated()->getTimestamp() ? -1 : 1;
+		});
+
+		return new ArrayCollection($projectArray);
 	}
 
 	/**
