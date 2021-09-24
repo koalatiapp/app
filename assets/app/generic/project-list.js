@@ -48,7 +48,6 @@ export class ProjectList extends AbstractDynamicList {
 		return {
 			...super.properties,
 			organizationId: {type: String},
-			emptyState: {type: String},
 		};
 	}
 
@@ -130,7 +129,6 @@ export class ProjectList extends AbstractDynamicList {
 		super();
 		this.ownerType = null;
 		this.organizationId = null;
-		this.emptyState = Translator.trans("generic.list.empty_state");
 		this.sortBy = "createdDate";
 		this.sortDirection = "desc";
 	}
