@@ -291,16 +291,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 			$projects->add($projectLink->getProject());
 		}
 
-		// Add all projects of organizations where the user is an admin
+		// Add all projects of organizations in which the user is a member
 		foreach ($this->getOrganizationLinks() as $organizationLink) {
 			$organization = $organizationLink->getOrganization();
-			$isAdminWithinOrg = in_array(OrganizationMember::ROLE_ADMIN, $organizationLink->getRoles());
-
-			if ($isAdminWithinOrg) {
-				foreach ($organization->getProjects() as $organizationProject) {
-					if (!$projects->contains($organizationProject)) {
-						$projects->add($organizationProject);
-					}
+			foreach ($organization->getProjects() as $organizationProject) {
+				if (!$projects->contains($organizationProject)) {
+					$projects->add($organizationProject);
 				}
 			}
 		}
