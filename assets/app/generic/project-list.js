@@ -88,7 +88,8 @@ export class ProjectList extends AbstractDynamicList {
 				`,
 				placeholder: html`
 					<div class="nb--list-item-column-placeholder" style="width: 70%;">&nbsp;</div>
-				`
+				`,
+				sortingValue: item => item.dateCreated
 			},
 			{
 				key: "actions",
@@ -112,6 +113,8 @@ export class ProjectList extends AbstractDynamicList {
 		this.ownerType = null;
 		this.organizationId = null;
 		this.emptyState = Translator.trans("generic.list.empty_state");
+		this.sortBy = "createdDate";
+		this.sortDirection = "desc";
 	}
 
 	connectedCallback()
@@ -130,6 +133,15 @@ export class ProjectList extends AbstractDynamicList {
 	fetchListData()
 	{
 		super.fetchListData("api_projects_list", { owner_type: this.ownerType, owner_organization_id: this.organizationId });
+	}
+
+	_getProjectOwnerName(item)
+	{
+		if (item.ownerOrganization) {
+			return item.ownerOrganization.name;
+		}
+
+		return Translator.trans("generic.you");
 	}
 
 	_emptyStateLabel()
