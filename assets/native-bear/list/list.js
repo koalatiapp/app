@@ -48,6 +48,7 @@ export class NbList extends LitElement {
 			page: {type: Number},
 			sortBy: {type: String},
 			sortDirection: {type: String},
+			emptyState: {type: String},
 			_loading: {state: true},
 		};
 	}
@@ -94,6 +95,7 @@ export class NbList extends LitElement {
 		this.sortBy = null;
 		this.sortDirection = "asc";
 		this._searchQuery = null;
+		this.emptyState = Translator.trans("generic.list.empty_state");
 	}
 
 	render()
@@ -142,7 +144,7 @@ export class NbList extends LitElement {
 
 	_emptyStateLabel()
 	{
-		return Translator.trans("generic.list.empty_state");
+		return this.emptyState;
 	}
 
 	_renderEmptyState()

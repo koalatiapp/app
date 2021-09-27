@@ -42,7 +42,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	/**
 	 * @var array<string>
 	 * @ORM\Column(type="json")
-	 * @Groups({"default"})
 	 */
 	private array $roles = [];
 
@@ -291,21 +290,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 			$projects->add($projectLink->getProject());
 		}
 
-		// Add all projects of organizations where the user is an admin
+		// Add all projects of organizations in which the user is a member
 		foreach ($this->getOrganizationLinks() as $organizationLink) {
 			$organization = $organizationLink->getOrganization();
-			$isAdminWithinOrg = in_array(OrganizationMember::ROLE_ADMIN, $organizationLink->getRoles());
-
-			if ($isAdminWithinOrg) {
-				foreach ($organization->getProjects() as $organizationProject) {
-					if (!$projects->contains($organizationProject)) {
-						$projects->add($organizationProject);
-					}
+			foreach ($organization->getProjects() as $organizationProject) {
+				if (!$projects->contains($organizationProject)) {
+					$projects->add($organizationProject);
 				}
 			}
 		}
 
-		return $projects;
+		// Sort projects by date
+		$projectArray = $projects->toArray();
+		usort($projectArray, function (Project $projectA, Project $projectB) {
+			return $projectA->getDateCreated()->getTimestamp() > $projectB->getDateCreated()->getTimestamp() ? -1 : 1;
+		});
+
+		return new ArrayCollection($projectArray);
 	}
 
 	/**
