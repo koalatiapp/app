@@ -16,7 +16,7 @@ test("creates, edits and deletes a project", async ({ page }) => {
 
 	// Wait for confirmation message
 	await page.waitForSelector("text=has been created successfully")
-	expect(await page.evaluate(() => window.location.pathname)).toMatch(/^\/project\/\d+\//);
+	expect(await page.evaluate(() => window.location.pathname)).toMatch(/^\/project\/[a-zA-Z0-9]+\//);
 
 	// Go to project settings
 	await page.click("#sidebar li.active a:has-text('Settings')");
