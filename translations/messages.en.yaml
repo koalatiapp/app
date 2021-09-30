@@ -461,6 +461,7 @@ organization:
                 role: Role
                 remove: Remove from team
                 remove_confirm: Are you sure you want to remove %user% from %organization%?
+                downgrade_self_confirm: Are you sure you want to downgrade your own role within this team? If you proceed, you will lose access to certain features.
     flash:
         created_successfully: Your team "%name%" has been created successfully!
         updated_successfully: Your team "%name%" has been updated successfully!

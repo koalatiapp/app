@@ -43,7 +43,7 @@ export class OrganizationMembersList extends AbstractDynamicList {
 						"ROLE_ADMIN": Translator.trans("roles.ROLE_ADMIN"),
 						"ROLE_MEMBER": Translator.trans("roles.ROLE_MEMBER"),
 						"ROLE_VISITOR": Translator.trans("roles.ROLE_VISITOR"),
-					}} .eventData=${{id: item.id}} @select=${e => list.updateRoleCallback(e)}>
+					}} .eventData=${{id: item.id, userId: item.user.id, originalRole: item.highestRole}} @select=${e => list.updateRoleCallback(e)}>
 						<span slot="toggle">${Translator.trans("roles." + item.highestRole)}</span>
 					</nb-dropdown>
 				`,
@@ -92,17 +92,36 @@ export class OrganizationMembersList extends AbstractDynamicList {
 
 	updateRoleCallback(e)
 	{
+		const userId = e.detail.userId;
 		const membershipId = e.detail.id;
 		const role = e.detail.value;
+		const roleValues = {
+			"ROLE_LEADER": 1000,
+			"ROLE_ADMIN": 100,
+			"ROLE_MEMBER": 10,
+			"ROLE_VISITOR": 1,
+		};
 
-		ApiClient.post("api_organization_members_role", { id: membershipId, role }).then(response => {
-			if (typeof response == "undefined") {
-				const memberListItem = e.detail.dropdown.closest("li").querySelector("member-list-item");
-				const currentRole = memberListItem.userRole;
-				e.detail.dropdown.slottedToggleElement.innerHTML = Translator.trans("roles." + currentRole);
-			} else if (typeof response.data.message != "undefined") {
-				window.Flash.show("success", response.data.message);
+		(new Promise(resolve => {
+			if (userId == CURRENT_USER_ID && roleValues[e.detail.originalRole] > roleValues[role]) {
+				return resolve(confirm(Translator.trans("organization.settings.members.list.downgrade_self_confirm")));
 			}
+
+			resolve(true);
+		})).then(canUpdateRole => {
+			if (!canUpdateRole) {
+				return;
+			}
+
+			ApiClient.post("api_organization_members_role", { id: membershipId, role }).then(response => {
+				if (typeof response == "undefined") {
+					const memberListItem = e.detail.dropdown.closest("li").querySelector("member-list-item");
+					const currentRole = memberListItem.userRole;
+					e.detail.dropdown.slottedToggleElement.innerHTML = Translator.trans("roles." + currentRole);
+				} else if (typeof response.data.message != "undefined") {
+					window.Flash.show("success", response.data.message);
+				}
+			});
 		});
 	}
 

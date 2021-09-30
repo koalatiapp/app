@@ -48,6 +48,10 @@
 			<script defer data-domain="app.koalati.com" src="https://plausible.io/js/plausible.js"></script>
 		{% endif %}
 
+		<script>
+			window.CURRENT_USER_ID = "{{ app.user.id|hashids_encode }}";
+		</script>
+
         {{ encore_entry_script_tags('app') }}
     </head>
     <body>
