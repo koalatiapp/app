@@ -4,7 +4,7 @@
 		{% for project in projects %}
 			<a href="{{ path('project_dashboard', {id: project.id|hashids_encode}) }}" class="clickable-thumbnail">
 				<div class="thumbnail">
-					<img src="{{ project|thumbnail }}">
+					<img src="{{ project|thumbnail }}" loading="lazy">
 				</div>
 				<div class="info">
 					<div class="name">{{ project.name }}</div>
@@ -20,7 +20,7 @@
 	<div class="project-list-simple">
 		{% for project in projects %}
 			<a href="{{ path('project_dashboard', {id: project.id|hashids_encode}) }}">
-				<img src="{{ project|favicon }}" class="favicon">
+				<img src="{{ project|favicon }}" class="favicon" loading="lazy">
 				<div class="name">{{ project.name }}</div>
 				<i class="far fa-angle-right"></i>
 			</a>

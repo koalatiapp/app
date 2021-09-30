@@ -58,7 +58,7 @@ export class ProjectList extends AbstractDynamicList {
 				key: "icon",
 				label: "",
 				render: (item) => html`
-					<img src="${item.faviconUrl}" width="25" height="25" class="favicon">
+					<img src="${item.faviconUrl}" loading="lazy" width="25" height="25" class="favicon">
 				`,
 				placeholder: html`
 					<div class="nb--list-item-column-placeholder" style="width: 25px; line-height: 25px;">&nbsp;</div>
