@@ -48,7 +48,7 @@ export class LinkPreviewCard extends LitElement {
 	{
 		return html`
 			<a href=${this.url} class="link-card" target="_blank">
-				<img src=${this.imageUrl || "https://via.placeholder.com/600x315.png?text=Loading..."} alt="">
+				<img src=${this.imageUrl || "https://via.placeholder.com/600x315.png?text=Loading..."} alt="" loading="lazy">
 				<div class="text">
 					<div class="site">${this.siteName || html`<div class="placeholder"></div>`}</div>
 					<div class="title">${this.title || html`<div class="placeholder"></div>`}</div>

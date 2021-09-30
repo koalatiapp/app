@@ -34,7 +34,7 @@ class DefaultNormalizer implements ContextAwareNormalizerInterface
 			return $data;
 		}
 
-		if (\is_array($data) || $data instanceof \Traversable) {
+		if (is_array($data) || $data instanceof \Traversable) {
 			if (($context[AbstractObjectNormalizer::PRESERVE_EMPTY_OBJECTS] ?? false) === true && $data instanceof \Countable && $data->count() === 0) {
 				return $data;
 			}
@@ -57,11 +57,11 @@ class DefaultNormalizer implements ContextAwareNormalizerInterface
 	/**
 	 * @param array<mixed,mixed>|string|int|float|bool|\ArrayObject<mixed,mixed>|null $data
 	 *
-	 * @return array<mixed,mixed>|string|int|float|bool|\ArrayObject<mixed,mixed>|null
+	 * @return array<mixed,mixed>|string|int|float|bool|null
 	 */
 	private function hashIdsInData($data)
 	{
-		if (is_array($data)) {
+		if (is_array($data) || $data instanceof \Traversable) {
 			$normalized = [];
 
 			foreach ($data as $key => $value) {
@@ -69,6 +69,8 @@ class DefaultNormalizer implements ContextAwareNormalizerInterface
 
 				if (preg_match('/.*[iI]d$/', $key) && is_numeric($value)) {
 					$normalized[$key] = $this->idHasher->encode($value);
+				} elseif (is_array($value) || $value instanceof \Traversable) {
+					$normalized[$key] = $this->hashIdsInData($value);
 				}
 			}
 

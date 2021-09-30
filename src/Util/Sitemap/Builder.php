@@ -77,13 +77,13 @@ class Builder
 		if ($this->shouldCrawlWebsite) {
 			try {
 				$this->crawlWebsite($websiteUrl);
-				// @TODO: Filter out pages based on their canonical URL, to avoid having multiple identical pages with different URLs (ex.: ?add_to_cart=1)
 			} catch (CrawlingException $exception) {
 				// Oh well, let's hope the sitemap was good enough...
 			}
 		}
 
 		$this->standardizeProtocols();
+		$this->fetchMissingTitles();
 
 		return $this;
 	}
@@ -192,6 +192,17 @@ class Builder
 			}
 
 			$this->locations = $newLocations;
+		}
+
+		return $this;
+	}
+
+	protected function fetchMissingTitles(): self
+	{
+		foreach ($this->locations as &$location) {
+			if (!$location->title) {
+				$location->fetchTitle();
+			}
 		}
 
 		return $this;

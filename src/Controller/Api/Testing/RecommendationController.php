@@ -8,6 +8,7 @@ use App\Message\TestingRequest;
 use App\Repository\Testing\RecommendationRepository;
 use App\Security\ProjectVoter;
 use App\Util\Testing\RecommendationGroup;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -63,6 +64,13 @@ class RecommendationController extends AbstractApiController
 		$recommendationGroups = $project->getActiveRecommendationGroups();
 		$recommendationGroup = $recommendationGroups[$recommendation->getUniqueName()];
 
+		// In some cases, the recommendation group doesn't exist anymore.
+		// Ex.: it's been marked as completed and there's been a race condition.
+		// If that's the case, build a new one with just this recommendation.
+		if (!$recommendationGroup) {
+			$recommendationGroup = new RecommendationGroup(new ArrayCollection([$recommendation]));
+		}
+
 		$this->setSuggestedMercureTopic($this->topicBuilder->getEntityTopic($recommendationGroup, TopicBuilder::SCOPE_SPECIFIC));
 
 		return $this->apiSuccess($recommendationGroup, ['recommendation_group', 'recommendation']);
@@ -90,6 +98,13 @@ class RecommendationController extends AbstractApiController
 		$em = $this->getDoctrine()->getManager();
 		$recommendationGroups = $project->getActiveRecommendationGroups();
 		$recommendationGroup = $recommendationGroups[$recommendation->getUniqueName()];
+
+		// In some cases, the recommendation group doesn't exist anymore.
+		// Ex.: it's been marked as completed and there's been a race condition.
+		// If that's the case, build a new one with just this recommendation.
+		if (!$recommendationGroup) {
+			return $this->apiSuccess(new RecommendationGroup(new ArrayCollection([$recommendation])));
+		}
 
 		foreach ($recommendationGroup->getRecommendations() as $recommendation) {
 			$recommendation->complete($this->getUser());
