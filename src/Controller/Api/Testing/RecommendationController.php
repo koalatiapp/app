@@ -99,6 +99,13 @@ class RecommendationController extends AbstractApiController
 		$recommendationGroups = $project->getActiveRecommendationGroups();
 		$recommendationGroup = $recommendationGroups[$recommendation->getUniqueName()];
 
+		// In some cases, the recommendation group doesn't exist anymore.
+		// Ex.: it's been marked as completed and there's been a race condition.
+		// If that's the case, build a new one with just this recommendation.
+		if (!$recommendationGroup) {
+			return $this->apiSuccess(new RecommendationGroup(new ArrayCollection([$recommendation])));
+		}
+
 		foreach ($recommendationGroup->getRecommendations() as $recommendation) {
 			$recommendation->complete($this->getUser());
 			$em->persist($recommendation);
