@@ -4,6 +4,7 @@ namespace App\Util\Sitemap;
 
 use App\Exception\CrawlingException;
 use Exception;
+use Symfony\Component\DomCrawler\Crawler as DomCrawler;
 use VDB\Spider\Discoverer\XPathExpressionDiscoverer;
 use VDB\Spider\Event\SpiderEvents;
 use VDB\Spider\EventListener\PolitenessPolicyListener;
@@ -64,16 +65,18 @@ class Crawler
 		$this->spider->crawl();
 
 		foreach ($this->spider->getDownloader()->getPersistenceHandler() as $resource) {
+			/** @var DomCrawler */
 			$crawler = $resource->getCrawler();
-			$url = $crawler->getUri();
-			$urlWithoutTrailingSlash = preg_replace('~^(.*)/$~', '$1', $url);
-
-			if (isset($pages[$urlWithoutTrailingSlash])) {
-				continue;
-			}
 
 			// Only add pages with an <html> tag to the list - others are likely files or images
 			if (!$crawler->filterXpath('//html')->count()) {
+				continue;
+			}
+
+			$url = $this->getStandardUrlFromCrawler($crawler);
+
+			// If this page has already been crawled successfully, skip it
+			if (($pages[$url] ?? null) !== null) {
 				continue;
 			}
 
@@ -87,6 +90,22 @@ class Crawler
 		}
 
 		return $pages;
+	}
+
+	/**
+	 * Returns the canonical URL if available, or the `$crawler->getUri()` otherwise.
+	 */
+	private function getStandardUrlFromCrawler(DomCrawler $crawler): string
+	{
+		// Check for canonical URL
+		$canonicalTag = $crawler->filterXPath('//link[@rel="canonical"]');
+		if ($canonicalTag->count()) {
+			$canonicalUrl = $canonicalTag->attr('href');
+
+			return $canonicalUrl;
+		}
+
+		return $crawler->getUri();
 	}
 
 	/**
