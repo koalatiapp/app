@@ -83,6 +83,7 @@ class Builder
 		}
 
 		$this->standardizeProtocols();
+		$this->fetchMissingTitles();
 
 		return $this;
 	}
@@ -191,6 +192,17 @@ class Builder
 			}
 
 			$this->locations = $newLocations;
+		}
+
+		return $this;
+	}
+
+	protected function fetchMissingTitles(): self
+	{
+		foreach ($this->locations as &$location) {
+			if (!$location->title) {
+				$location->fetchTitle();
+			}
 		}
 
 		return $this;
