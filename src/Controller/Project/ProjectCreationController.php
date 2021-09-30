@@ -64,7 +64,7 @@ class ProjectCreationController extends AbstractProjectController
 				$this->dispatchMessage(new SitemapRequest($project->getId()));
 				$this->addFlash('success', 'project_creation.flash.created_successfully', ['%name%' => $project->getName()]);
 
-				return $this->redirectToRoute('project_dashboard', ['id' => $project->getId()]);
+				return $this->redirectToRoute('project_dashboard', ['id' => $this->idHasher->encode($project->getId())]);
 			}
 		}
 
