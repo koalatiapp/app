@@ -26,11 +26,6 @@ class UserProfileType extends AbstractType
 				'attr' => ['class' => 'medium'],
 				'required' => false,
 			])
-			->add('jobTitle', TextType::class, [
-				'label' => 'user.job_title',
-				'attr' => ['class' => 'medium'],
-				'required' => false,
-			])
 			->add('save', SubmitType::class, [
 				'label' => 'user_settings.profile.form.submit_label',
 			])

@@ -64,12 +64,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	private ?string $lastName;
 
 	/**
-	 * @ORM\Column(type="string", length=255, nullable=true)
-	 * @Groups({"default"})
-	 */
-	private ?string $jobTitle;
-
-	/**
 	 * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
 	 */
 	private ?DateTimeInterface $dateCreated;
@@ -239,18 +233,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	public function getFullName(): string
 	{
 		return $this->getFirstName().' '.$this->getLastName();
-	}
-
-	public function getJobTitle(): ?string
-	{
-		return $this->jobTitle;
-	}
-
-	public function setJobTitle(?string $jobTitle): self
-	{
-		$this->jobTitle = strip_tags($jobTitle);
-
-		return $this;
 	}
 
 	public function getDateCreated(): DateTimeInterface
