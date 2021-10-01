@@ -1,0 +1,19 @@
+{% extends 'app_base.html.twig' %}
+
+{% block page_tabs %}
+	{% include 'app/user/_tabs.html.twig' %}
+{% endblock %}
+
+{% block title %}{% trans %}user_settings.subscription.title{% endtrans %}{% endblock %}
+
+{% block body %}
+	<div class="grid">
+		<div class="card">
+			<h2>{% trans %}user_settings.subscription.overview.title{% endtrans %}</h2>
+		</div>
+		<div class="card">
+			<h2>{% trans %}user_settings.subscription.usage.title{% endtrans %}</h2>
+			{{ activePageCount }}
+		</div>
+	</div>
+{% endblock %}

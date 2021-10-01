@@ -249,6 +249,12 @@ user_settings:
                 submit_label: Delete my account
             flash:
                 success: Your email address has been updated!
+    subscription:
+        title: Manage your subscription
+        overview:
+            title: Overview
+        usage:
+            title: Your usage
 
 dashboard:
     title: Dashboard
@@ -417,7 +423,7 @@ organization:
     create:
         title: Create a team
     delete:
-        warning_text: "Warning: once you delete a team, there is no turning back. The team and its projects will be deleted instantly, and all of their related data will be removed as well. This cannot be undone. The members' user accounts will still exist."
+        warning_text: "Warning: once you delete a team, there is no turning back. The team and its projects will be deleted instantly, and all of their related data will be removed as well. This cannot be undone. The members' user accounts will still exist, but will lose access to all of this team resources."
         confirmation_label: I am certain that I want to delete the team "%name%".
         button_label: Delete this team
         error_confirmation: You must check this box to proceed with the deletion of this project.
@@ -487,6 +493,7 @@ organization_invitation:
         error_already_a_member: You are already a member of this organization.
 
 roles:
+    ROLE_OWNER: Owner
     ROLE_ADMIN: Administrator
     ROLE_MEMBER: Member
     ROLE_VISITOR: Visitor

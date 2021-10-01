@@ -87,19 +87,8 @@ class MembersController extends AbstractApiController
 			return $this->accessDenied();
 		}
 
-		if ($membership->getHighestRole() == OrganizationMember::ROLE_ADMIN && $newRole != OrganizationMember::ROLE_ADMIN) {
-			$hasOtherAdmins = false;
-
-			foreach ($membership->getOrganization()->getMembers() as $otherMember) {
-				if ($membership != $otherMember && $otherMember->getHighestRole() == OrganizationMember::ROLE_ADMIN) {
-					$hasOtherAdmins = true;
-					break;
-				}
-			}
-
-			if (!$hasOtherAdmins) {
-				return $this->apiError($this->translator->trans('organization.flash.member_role_update_no_admins'));
-			}
+		if ($newRole == 'ROLE_OWNER' || $membership->getHighestRole() == 'ROLE_OWNER') {
+			return $this->badRequest();
 		}
 
 		$membership->setHighestRole($newRole);

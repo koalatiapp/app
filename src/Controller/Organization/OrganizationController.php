@@ -53,7 +53,7 @@ class OrganizationController extends AbstractController
 
 			if ($form->isValid()) {
 				$em = $this->getDoctrine()->getManager();
-				$membership = new OrganizationMember($organization, $this->getUser(), [OrganizationMember::ROLE_ADMIN]);
+				$membership = new OrganizationMember($organization, $this->getUser(), [OrganizationMember::ROLE_OWNER]);
 				$em->persist($organization);
 				$em->persist($membership);
 				$em->flush();

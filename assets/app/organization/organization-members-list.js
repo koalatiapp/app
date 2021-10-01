@@ -18,7 +18,8 @@ export class OrganizationMembersList extends AbstractDynamicList {
 	static get properties() {
 		return {
 			...super.properties,
-			organizationId: {type: String}
+			organizationId: {type: String},
+			userRole: {type: String}
 		};
 	}
 
@@ -39,13 +40,12 @@ export class OrganizationMembersList extends AbstractDynamicList {
 				key: "role",
 				label: "organization.settings.members.list.role",
 				render: (item, list) => html`
-					<nb-dropdown reveal-on-hover color="lighter" .options=${{
-						"ROLE_ADMIN": Translator.trans("roles.ROLE_ADMIN"),
-						"ROLE_MEMBER": Translator.trans("roles.ROLE_MEMBER"),
-						"ROLE_VISITOR": Translator.trans("roles.ROLE_VISITOR"),
-					}} .eventData=${{id: item.id, userId: item.user.id, originalRole: item.highestRole}} @select=${e => list.updateRoleCallback(e)}>
-						<span slot="toggle">${Translator.trans("roles." + item.highestRole)}</span>
-					</nb-dropdown>
+					${item.highestRole == "ROLE_OWNER" ? Translator.trans("roles.ROLE_OWNER") : html`
+						<nb-dropdown reveal-on-hover color="lighter" .options=${list.availableRoleOptions}
+							.eventData=${{id: item.id, userId: item.user.id, originalRole: item.highestRole}} @select=${e => list.updateRoleCallback(e)}>
+							<span slot="toggle">${Translator.trans("roles." + item.highestRole)}</span>
+						</nb-dropdown>
+					`}
 				`,
 				placeholder: html`
 					<div class="nb--list-item-column-placeholder" style="width: 100%;">&nbsp;</div>
@@ -70,6 +70,7 @@ export class OrganizationMembersList extends AbstractDynamicList {
 	{
 		super();
 		this.organizationId = null;
+		this.userRole = null;
 	}
 
 	connectedCallback()
@@ -96,11 +97,19 @@ export class OrganizationMembersList extends AbstractDynamicList {
 		const membershipId = e.detail.id;
 		const role = e.detail.value;
 		const roleValues = {
-			"ROLE_LEADER": 1000,
+			"ROLE_OWNER": 1000,
 			"ROLE_ADMIN": 100,
 			"ROLE_MEMBER": 10,
 			"ROLE_VISITOR": 1,
 		};
+		let membershipItem = null;
+
+		for (const item of this.items) {
+			if (item.id == membershipId) {
+				membershipItem = item;
+				continue;
+			}
+		}
 
 		(new Promise(resolve => {
 			if (userId == CURRENT_USER_ID && roleValues[e.detail.originalRole] > roleValues[role]) {
@@ -110,6 +119,7 @@ export class OrganizationMembersList extends AbstractDynamicList {
 			resolve(true);
 		})).then(canUpdateRole => {
 			if (!canUpdateRole) {
+				e.detail.dropdown.slottedToggleElement.innerHTML = Translator.trans("roles." + membershipItem.highestRole);
 				return;
 			}
 
@@ -135,6 +145,15 @@ export class OrganizationMembersList extends AbstractDynamicList {
 				}
 			});
 		}
+	}
+
+	get availableRoleOptions()
+	{
+		return {
+			"ROLE_ADMIN": Translator.trans("roles.ROLE_ADMIN"),
+			"ROLE_MEMBER": Translator.trans("roles.ROLE_MEMBER"),
+			"ROLE_VISITOR": Translator.trans("roles.ROLE_VISITOR"),
+		};
 	}
 }
 
