@@ -14,7 +14,7 @@ export class ChecklistItemList extends AbstractDynamicList {
 				.nb--list-item { grid-template-areas: "checkbox title"; grid-template-columns: 1.5rem 1fr; }
 
 				.nb--list-item-column[nb-column="checkbox"] { display: flex; }
-				nb-markdown { display: block; font-weight: 500; }
+				nb-markdown { display: block; font-size: 1.05em; font-weight: 500; }
 				.view-item-details { display: inline-bblock; font-size: .85em; font-weight: 500; text-align: left; color: var(--color-blue); text-decoration: none; cursor: pointer; transition: all .15s ease; }
 				.view-item-details:hover { color: var(--color-gray-darker);}
 
