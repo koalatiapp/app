@@ -21,6 +21,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="`user`")
  * @UniqueEntity(fields="email", message="user.error.unique_email")
+ * @SuppressWarnings("ExcessiveClassComplexity")
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -105,6 +106,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	 * @var \Doctrine\Common\Collections\Collection<int, IgnoreEntry>
 	 */
 	private $ignoreEntries;
+
+	/**
+	 * @ORM\Column(type="string", length=255, nullable=true)
+	 */
+	private ?string $subscriptionPlan;
 
 	public function __construct()
 	{
@@ -203,7 +209,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	public function eraseCredentials(): void
 	{
 		// If you store any temporary, sensitive data on the user, clear it here
-		// $this->plainPassword = null;
+				 // $this->plainPassword = null;
 	}
 
 	public function getFirstName(): ?string
@@ -396,5 +402,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 		$organizationLink = $this->getOrganizationLinks()->first() ?: null;
 
 		return $organizationLink?->getOrganization();
+	}
+
+	public function getOwnedOrganization(): ?Organization
+	{
+		foreach ($this->getOrganizationLinks() as $organizationLink) {
+			if ($organizationLink->getHighestRole() == OrganizationMember::ROLE_OWNER) {
+				return $organizationLink->getOrganization();
+			}
+		}
+
+		return null;
+	}
+
+	public function getSubscriptionPlan(): ?string
+	{
+		return $this->subscriptionPlan;
+	}
+
+	public function setSubscriptionPlan(?string $subscriptionPlan): self
+	{
+		$this->subscriptionPlan = $subscriptionPlan;
+
+		return $this;
 	}
 }

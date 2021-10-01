@@ -299,6 +299,17 @@ class Organization
 		return $this;
 	}
 
+	public function getOwner(): ?User
+	{
+		foreach ($this->getMembers() as $membership) {
+			if ($membership->getHighestRole() == OrganizationMember::ROLE_OWNER) {
+				return $membership->getUser();
+			}
+		}
+
+		return null;
+	}
+
 	public function __toString()
 	{
 		return $this->getName();
