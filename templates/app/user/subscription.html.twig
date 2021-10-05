@@ -10,10 +10,20 @@
 	<div class="grid">
 		<div class="card">
 			<h2>{% trans %}user_settings.subscription.overview.title{% endtrans %}</h2>
+			<ul>
+				<li>
+					<strong>{% trans %}user_settings.subscription.overview.current_plan{% endtrans %}:</strong>
+					{{ ("plan." ~ plan)|trans }}
+				</li>
+				<li>
+					<strong>{% trans %}user_settings.subscription.overview.next_renewal_date{% endtrans %}:</strong>
+					{{ "first day of next month"|date("F jS Y") }}
+				</li>
+			</ul>
 		</div>
 		<div class="card">
 			<h2>{% trans %}user_settings.subscription.usage.title{% endtrans %}</h2>
-			{{ activePageCount }}
+			{{ activeProjectCount }} / {{ constant("MAX_ACTIVE_PROJECTS", plan) }}
 		</div>
 	</div>
 {% endblock %}
