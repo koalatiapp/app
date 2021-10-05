@@ -60,4 +60,9 @@ abstract class AbstractPlan
 
 		return new $planClass();
 	}
+
+	public function __toString()
+	{
+		return static::UNIQUE_NAME;
+	}
 }
