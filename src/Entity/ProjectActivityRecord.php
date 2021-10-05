@@ -9,6 +9,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=ProjectActivityRecordRepository::class)
+ * @ORM\Table(name="project_activity_record", indexes={
+ *     @ORM\Index(name="project_activity_record_website_url", columns={"website_url"})
+ * })
  */
 class ProjectActivityRecord
 {
