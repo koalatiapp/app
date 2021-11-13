@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Util\Subscription;
+namespace App\Subscription\Plan;
 
-class BusinessPlan extends SmallTeamPlan
+class SmallTeamPlan extends SoloPlan
 {
 	/**
 	 * @var string UNIQUE_NAME Plan unique name
 	 */
-	public const UNIQUE_NAME = 'Business';
+	public const UNIQUE_NAME = 'SmallTeam';
 
 	/**
 	 * @var string PADDLE_ID ID of this plan in Paddle
 	 */
-	public const PADDLE_ID = '';
+	public const PADDLE_ID = '664975';
 
 	/**
 	 * @var int MAX_ACTIVE_PROJECTS Maximum number of active projects a user can have during a given month
 	 */
-	public const MAX_ACTIVE_PROJECTS = 100;
+	public const MAX_ACTIVE_PROJECTS = 30;
 }

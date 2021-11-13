@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "52416f1a4995d0465a6a264312eb1b9e",
+    "content-hash": "fe90f93b7b737428849f144dfc678965",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -4149,6 +4149,59 @@
                 "source": "https://github.com/ralouphie/getallheaders/tree/develop"
             },
             "time": "2019-03-08T08:55:37+00:00"
+        },
+        {
+            "name": "rayatomsk/paddle-api",
+            "version": "v0.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/RayAtomsk/paddle-api.git",
+                "reference": "a5fb175a573d7c8faa7b6a11b97a96f9072b8573"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/RayAtomsk/paddle-api/zipball/a5fb175a573d7c8faa7b6a11b97a96f9072b8573",
+                "reference": "a5fb175a573d7c8faa7b6a11b97a96f9072b8573",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "php": ">=5.5.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Paddle": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andrii Holubenko",
+                    "email": "rayatomsk@gmail.com",
+                    "homepage": "https://www.linkedin.com/in/andrii-holubenko-8a110264/",
+                    "role": "Full Stack Web Developer"
+                }
+            ],
+            "description": "Paddle.com API PHP library",
+            "homepage": "https://github.com/RayAtomsk/paddle-php",
+            "keywords": [
+                "api",
+                "paddle",
+                "php"
+            ],
+            "support": {
+                "issues": "https://github.com/RayAtomsk/paddle-api/issues",
+                "source": "https://github.com/RayAtomsk/paddle-api/tree/master"
+            },
+            "time": "2020-07-16T16:11:07+00:00"
         },
         {
             "name": "roukmoute/hashids-bundle",

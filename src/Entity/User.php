@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Entity\Checklist\ChecklistTemplate;
 use App\Entity\Testing\IgnoreEntry;
 use App\Entity\Trait\CollectionManagingEntity;
+use App\Entity\Trait\UserSubscriptionTrait;
 use App\Repository\UserRepository;
 use DateTime;
 use DateTimeInterface;
@@ -19,13 +20,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
- * @ORM\Table(name="`user`")
+ * @ORM\Table(name="`user`", indexes={
+ *     @ORM\Index(name="user_paddle_user_id", columns={"paddle_user_id"})
+ * })
  * @UniqueEntity(fields="email", message="user.error.unique_email")
- * @SuppressWarnings("ExcessiveClassComplexity")
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
 	use CollectionManagingEntity;
+	use UserSubscriptionTrait;
 
 	/**
 	 * @ORM\Id
@@ -33,84 +36,80 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	 * @ORM\Column(type="integer")
 	 * @Groups({"default"})
 	 */
-	private int $id;
+	protected int $id;
 
 	/**
 	 * @ORM\Column(type="string", length=180, unique=true)
+	 * @Groups({"self"})
 	 */
-	private ?string $email;
+	protected ?string $email;
 
 	/**
 	 * @var array<string>
 	 * @ORM\Column(type="json")
 	 */
-	private array $roles = [];
+	protected array $roles = [];
 
 	/**
 	 * @var string The hashed password
 	 * @ORM\Column(type="string")
 	 */
-	private string $password;
+	protected string $password;
 
 	/**
 	 * @ORM\Column(type="string", length=255)
 	 * @Groups({"default"})
 	 */
-	private ?string $firstName;
+	protected ?string $firstName;
 
 	/**
 	 * @ORM\Column(type="string", length=255, nullable=true)
 	 * @Groups({"default"})
 	 */
-	private ?string $lastName;
+	protected ?string $lastName;
 
 	/**
 	 * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
 	 */
-	private ?DateTimeInterface $dateCreated;
+	protected ?DateTimeInterface $dateCreated;
 
 	/**
 	 * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
 	 */
-	private ?DateTimeInterface $dateLastLoggedIn;
+	protected ?DateTimeInterface $dateLastLoggedIn;
 
 	/**
 	 * @var Collection<int, Project>
 	 * @ORM\OneToMany(targetEntity=Project::class, mappedBy="ownerUser")
 	 * @ORM\OrderBy({"dateCreated" = "DESC"})
 	 */
-	private Collection $personalProjects;
+	protected Collection $personalProjects;
 
 	/**
 	 * @var Collection<int, OrganizationMember>
 	 * @ORM\OneToMany(targetEntity=OrganizationMember::class, mappedBy="user", orphanRemoval=true)
 	 */
-	private Collection $organizationLinks;
+	protected Collection $organizationLinks;
 
 	/**
 	 * @var Collection<int, ProjectMember>
 	 * @ORM\OneToMany(targetEntity=ProjectMember::class, mappedBy="user")
 	 */
-	private Collection $projectLinks;
+	protected Collection $projectLinks;
 
 	/**
 	 * @ORM\OneToMany(targetEntity=ChecklistTemplate::class, mappedBy="ownerUser")
 	 *
 	 * @var \Doctrine\Common\Collections\Collection<int, ChecklistTemplate>
 	 */
-	private ?Collection $checklistTemplates;
+	protected ?Collection $checklistTemplates;
 
 	/**
 	 * @ORM\OneToMany(targetEntity=IgnoreEntry::class, mappedBy="targetUser")
 	 *
 	 * @var \Doctrine\Common\Collections\Collection<int, IgnoreEntry>
 	 */
-	private $ignoreEntries;
-
-	/**
-	 * @ORM\Column(type="string", length=255, nullable=true)
-	 */
-	private ?string $subscriptionPlan;
+	protected ?Collection $ignoreEntries;
 
 	public function __construct()
 	{
@@ -209,7 +208,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	public function eraseCredentials(): void
 	{
 		// If you store any temporary, sensitive data on the user, clear it here
-				 // $this->plainPassword = null;
+		// $this->plainPassword = null;
 	}
 
 	public function getFirstName(): ?string
@@ -413,17 +412,5 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 		}
 
 		return null;
-	}
-
-	public function getSubscriptionPlan(): ?string
-	{
-		return $this->subscriptionPlan;
-	}
-
-	public function setSubscriptionPlan(?string $subscriptionPlan): self
-	{
-		$this->subscriptionPlan = $subscriptionPlan;
-
-		return $this;
 	}
 }

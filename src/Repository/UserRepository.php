@@ -42,4 +42,14 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 			->getOneOrNullResult()
 		;
 	}
+
+	public function findOneByPaddleUserId(int $paddleUserId): ?User
+	{
+		return $this->createQueryBuilder('u')
+			->andWhere('u.paddleUserId = :paddleUserId')
+			->setParameter('paddleUserId', $paddleUserId)
+			->getQuery()
+			->getOneOrNullResult()
+		;
+	}
 }

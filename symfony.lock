@@ -285,6 +285,9 @@
     "ralouphie/getallheaders": {
         "version": "3.0.3"
     },
+    "rayatomsk/paddle-api": {
+        "version": "v0.5.0"
+    },
     "roukmoute/hashids-bundle": {
         "version": "1.4",
         "recipe": {

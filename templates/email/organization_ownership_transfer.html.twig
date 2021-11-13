@@ -1,0 +1,26 @@
+{% extends "email/_base.html.twig" %}
+
+{% block body %}
+	<spacer size="20"></spacer>
+
+	<row>
+		<columns>
+			{% trans with {
+				"%firstName%": user.firstName,
+				"%organization%": organization.name,
+				"%plan%": plan,
+				"%changeDate%": user.subscriptionChangeDate|date("F jS Y")
+			} %}email.organization_ownership_transfer.introduction{% endtrans %}
+		</columns>
+	</row>
+
+	<row>
+		<columns>
+			<center>
+				<button href="mailto:info@koalati.com" size="large">
+					{% trans with {"%organization%": organization.name} %}email.organization_ownership_transfer.button_label{% endtrans %}
+				</button>
+			</center>
+		</columns>
+	</row>
+{% endblock %}

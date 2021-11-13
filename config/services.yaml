@@ -9,6 +9,7 @@ imports:
 
 parameters:
     test_stub_dir: '%kernel.project_dir%/tests/stub'
+    paddle_public_key: '%env(PADDLE_PUBLIC_KEY)%'
 
 services:
     # default configuration for services in *this* file
@@ -17,6 +18,10 @@ services:
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         bind:
             Symfony\Component\Serializer\Serializer $simpleSerializer: '@SimpleSerializer'
+
+    _instanceof:
+        App\Subscription\Plan\PlanInterface:
+            tags: ['app.subscription_plan']
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -113,6 +118,16 @@ services:
 
     App\Util\Meta\MetaDriverInterface:
         alias: App\Util\Meta\Driver\OpenGraphIo
+
+    Paddle\API:
+        class: 'Paddle\API'
+        arguments:
+            - '%env(PADDLE_VENDOR_ID)%'
+            - '%env(PADDLE_AUTH_CODE)%'
+
+    App\Subscription\PlanManager:
+        arguments:
+            - !tagged_iterator app.subscription_plan
 
 
     ############################

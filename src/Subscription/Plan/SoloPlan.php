@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Util\Subscription;
+namespace App\Subscription\Plan;
 
 class SoloPlan extends FreePlan
 {
@@ -12,7 +12,7 @@ class SoloPlan extends FreePlan
 	/**
 	 * @var string PADDLE_ID ID of this plan in Paddle
 	 */
-	public const PADDLE_ID = '';
+	public const PADDLE_ID = '664974';
 
 	/**
 	 * @var int MAX_ACTIVE_PROJECTS Maximum number of active projects a user can have during a given month
