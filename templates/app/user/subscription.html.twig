@@ -29,6 +29,27 @@
 	{% endif %}
 
 	<div class="grid">
+		{% for plan in plans %}
+			<div class="card plan">
+				<h3 class="name">{{ ("plan." ~ plan ~ ".name")|trans }}</h3>
+				<div class="price">{{ ("plan." ~ plan ~ ".price")|trans }}</div>
+				<div class="price-suffix">{% trans %}user_settings.subscription.plans.price_suffix{% endtrans %}</div>
+				{{ ("plan." ~ plan ~ ".features")|trans|raw }}
+				<hr>
+				<div class="button-container">
+					{% if constant("PADDLE_ID", currentPlan) == constant("PADDLE_ID", plan) %}
+						<nb-button disabled>{% trans %}user_settings.subscription.plans.current_label{% endtrans %}</nb-button>
+					{% else %}
+						<paddle-subscription-button productId="{{ constant("PADDLE_ID", plan) }}">{% trans with {"%plan%": ("plan." ~ plan ~ ".name")|trans} %}user_settings.subscription.plans.select{% endtrans %}</paddle-subscription-button>
+					{% endif %}
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+
+	<hr class="large">
+
+	<div class="grid">
 		<div class="card">
 			<h2>{% trans %}user_settings.subscription.overview.title{% endtrans %}</h2>
 			<ul>
@@ -46,30 +67,8 @@
 		</div>
 		<div class="card">
 			<h2>{% trans %}user_settings.subscription.usage.title{% endtrans %}</h2>
-			<canvas id="usage-chart" width="400" height="150"></canvas>
+			<canvas id="usage-chart" width="400" height="100"></canvas>
 		</div>
-	</div>
-
-	<hr class="large">
-
-	<h2>Change your subscription plan</h2>
-	<div class="grid">
-		{% for plan in plans %}
-			<div class="card plan">
-				<h3 class="name">{{ ("plan." ~ plan ~ ".name")|trans }}</h3>
-				<div class="price">{{ ("plan." ~ plan ~ ".price")|trans }}</div>
-				<div class="price-suffix">{% trans %}user_settings.subscription.plans.price_suffix{% endtrans %}</div>
-				{{ ("plan." ~ plan ~ ".features")|trans|raw }}
-				<hr>
-				<div class="button-container">
-					{% if constant("PADDLE_ID", currentPlan) == constant("PADDLE_ID", plan) %}
-						<nb-button disabled>{% trans %}user_settings.subscription.plans.current_label{% endtrans %}</nb-button>
-					{% else %}
-						<paddle-subscription-button productId="{{ constant("PADDLE_ID", plan) }}">{% trans with {"%plan%": ("plan." ~ plan ~ ".name")|trans} %}user_settings.subscription.plans.select{% endtrans %}</paddle-subscription-button>
-					{% endif %}
-				</div>
-			</div>
-		{% endfor %}
 	</div>
 {% endblock %}
 
