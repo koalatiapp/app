@@ -36,7 +36,7 @@ abstract class AbstractAppTestCase extends WebTestCase
 
 	protected function reloadUser()
 	{
-		$userRepository = static::$container->get(UserRepository::class);
+		$userRepository = static::getContainer()->get(UserRepository::class);
 		$this->user = $userRepository->findOneByEmail('name@email.com');
 	}
 }
