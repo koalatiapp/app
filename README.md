@@ -7,11 +7,16 @@ This is the official repository for the Koalati web application, available at [a
 ---
 
 ## Documentation
+
+### Technical documentation
 - [Getting started](docs/getting-started.md)
 - [Setting up your environment variables](docs/environment-variables.md)
 - [Messenger](docs/messenger.md)
 - [Testing](docs/testing.md)
 - [Coding standards, linting and error detection](docs/coding-standards.md)
+
+### Features overview
+- [Subscriptions](docs/subscriptions.md)
 
 ---
 
