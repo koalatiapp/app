@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Trait;
+namespace App\Controller\Trait;
 
 use App\Entity\Project;
 use App\Security\ProjectVoter;
