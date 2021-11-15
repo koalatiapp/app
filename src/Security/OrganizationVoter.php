@@ -6,6 +6,7 @@ use App\Entity\Organization;
 use App\Entity\OrganizationMember;
 use App\Entity\User;
 use App\Repository\OrganizationRepository;
+use App\Subscription\PlanManager;
 use Exception;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -15,12 +16,14 @@ class OrganizationVoter extends Voter
 	public const VIEW = 'view';
 	public const PARTICIPATE = 'participate';
 	public const MANAGE = 'manage';
+	public const OWN_ORGANIZATION = 'own_organization';
 
 	/**
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	public function __construct(
-		private OrganizationRepository $organizationRepository
+		private OrganizationRepository $organizationRepository,
+		private PlanManager $planManager,
 	) {
 	}
 
@@ -29,7 +32,8 @@ class OrganizationVoter extends Voter
 	 */
 	protected function supports(string $attribute, mixed $subject): bool
 	{
-		return $subject instanceof Organization;
+		return $subject instanceof Organization
+			|| $attribute == self::OWN_ORGANIZATION;
 	}
 
 	/**
@@ -37,7 +41,7 @@ class OrganizationVoter extends Voter
 	 */
 	protected function voteOnAttribute(string $attribute, mixed $organization, TokenInterface $token): bool
 	{
-		if (!in_array($attribute, [self::VIEW, self::PARTICIPATE, self::MANAGE])) {
+		if (!in_array($attribute, [self::VIEW, self::PARTICIPATE, self::MANAGE, self::OWN_ORGANIZATION])) {
 			throw new Exception("Undefined organization voter attribute: $attribute");
 		}
 
@@ -46,6 +50,10 @@ class OrganizationVoter extends Voter
 		// User must be logged in to access any project
 		if (!$user instanceof User) {
 			return false;
+		}
+
+		if ($attribute == self::OWN_ORGANIZATION) {
+			return $this->canUserOwnOrganization($user);
 		}
 
 		$member = $organization->getMemberFromUser($user);
@@ -64,5 +72,12 @@ class OrganizationVoter extends Voter
 		};
 
 		return $roleValue >= $requiredRoleValue;
+	}
+
+	private function canUserOwnOrganization(User $user): bool
+	{
+		$subscriptionPlan = $this->planManager->getPlanFromEntity($user);
+
+		return $subscriptionPlan->getMaxTeamOwned() > 0;
 	}
 }

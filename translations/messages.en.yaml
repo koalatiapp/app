@@ -670,6 +670,9 @@ help:
             <p>If you would like to tell us what you think of the platform and what you think we should improve, you can reach out to us on social media, on Discord, or send us feedback by clicking on the button below.</p>
         button: I have some feedback for Koalati
 
+upgrade_suggestion:
+    create_team: Upgrade to a plan that offers Team Creation to get started with your own team!
+
 email:
     welcome:
         subject: Welcome to Koalati!

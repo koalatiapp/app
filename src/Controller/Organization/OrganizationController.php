@@ -3,6 +3,7 @@
 namespace App\Controller\Organization;
 
 use App\Controller\AbstractController;
+use App\Controller\Trait\SuggestUpgradeControllerTrait;
 use App\Entity\Organization;
 use App\Entity\OrganizationMember;
 use App\Form\Organization\DeletionOrganizationType;
@@ -22,6 +23,8 @@ use Symfony\Component\String\Slugger\SluggerInterface;
  */
 class OrganizationController extends AbstractController
 {
+	use SuggestUpgradeControllerTrait;
+
 	/**
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
@@ -43,6 +46,10 @@ class OrganizationController extends AbstractController
 	 */
 	public function create(Request $request): Response
 	{
+		if (!$this->isGranted(OrganizationVoter::OWN_ORGANIZATION)) {
+			return $this->suggestPlanUpgrade('upgrade_suggestion.create_team');
+		}
+
 		$organization = new Organization();
 		$form = $this->createForm(NewOrganizationType::class, $organization);
 		$form->handleRequest($request);
