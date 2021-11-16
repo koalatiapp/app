@@ -36,9 +36,7 @@ class IgnoreEntriesController extends AbstractApiController
 			$ignoreEntries->add($ownerIgnoreEntry);
 		}
 
-		if ($projectId) {
-			$this->setSuggestedMercureTopic($this->topicBuilder->getEntityGenericTopic(IgnoreEntry::class, TopicBuilder::SCOPE_PROJECT, $projectId));
-		}
+		$this->setSuggestedMercureTopic($this->topicBuilder->getEntityGenericTopic(IgnoreEntry::class, TopicBuilder::SCOPE_PROJECT, $projectId));
 
 		return $this->apiSuccess($ignoreEntries);
 	}

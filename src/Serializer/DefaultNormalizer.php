@@ -26,7 +26,7 @@ class DefaultNormalizer implements ContextAwareNormalizerInterface
 	}
 
 	/**
-	 * @return array<mixed,mixed>|string|int|float|bool|\ArrayObject<mixed,mixed>|null
+	 * @return array<mixed,mixed>|string|int|float|bool|\ArrayObject<int|string,mixed>|null
 	 */
 	public function normalize(mixed $data, string $format = null, array $context = [])
 	{
@@ -55,7 +55,7 @@ class DefaultNormalizer implements ContextAwareNormalizerInterface
 	}
 
 	/**
-	 * @param array<mixed,mixed>|string|int|float|bool|\ArrayObject<mixed,mixed>|null $data
+	 * @param array<mixed,mixed>|string|int|float|bool|\ArrayObject<int|string,mixed>|null $data
 	 *
 	 * @return array<mixed,mixed>|string|int|float|bool|null
 	 */

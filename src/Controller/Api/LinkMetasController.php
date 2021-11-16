@@ -28,7 +28,7 @@ class LinkMetasController extends AbstractApiController
 	public function getMetas(Request $request, MetaFetcher $metaFetcher): JsonResponse
 	{
 		$url = $request->query->get('url');
-		$allowCache = (bool) $request->query->get('cache', true);
+		$allowCache = (bool) $request->query->get('cache', '1');
 		$urlHash = md5($url);
 		$cache = new FilesystemAdapter();
 
