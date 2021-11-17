@@ -45,6 +45,7 @@ export class PaddleSubscriptionButton extends NbButton {
 
 	triggerPaddleCheckout(userEmail)
 	{
+		// eslint-disable-next-line no-undef
 		Paddle.Checkout.open({
 			allowQuantity: false,
 			disableLogout: true,
