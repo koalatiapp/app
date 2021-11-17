@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Organization;
+use App\Entity\OrganizationInvitation;
 use App\Entity\OrganizationMember;
 use App\Repository\UserRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -36,6 +37,13 @@ class OrganizationFixtures extends Fixture implements DependentFixtureInterface
 			$membership = new OrganizationMember($organization, $user, $role);
 			$organization->addMember($membership);
 			$manager->persist($membership);
+
+			if ($isFirstUser) {
+				// Create a invitation
+				$invitation = new OrganizationInvitation('Émile', 'emile@koalati.com', $organization, $user);
+				$manager->persist($invitation);
+			}
+
 			$isFirstUser = false;
 		}
 
