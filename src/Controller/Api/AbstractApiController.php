@@ -208,9 +208,15 @@ abstract class AbstractApiController extends AbstractController
 	/**
 	 * Returns a generic bad request error response.
 	 */
-	protected function badRequest(): JsonResponse
+	protected function badRequest(?string $explanation = ''): JsonResponse
 	{
-		return $this->apiError('Bad request.', 400);
+		$message = 'Bad request.';
+
+		if ($explanation) {
+			$message .= ' '.$explanation;
+		}
+
+		return $this->apiError($message, 400);
 	}
 
 	protected function enableResponseCache(int $duration = 3600): self

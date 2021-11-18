@@ -28,6 +28,11 @@ class LinkMetasController extends AbstractApiController
 	public function getMetas(Request $request, MetaFetcher $metaFetcher): JsonResponse
 	{
 		$url = $request->query->get('url');
+
+		if (!$url) {
+			return $this->badRequest('An URL from which to fetch metadata must be provided via the `url` parameter.');
+		}
+
 		$allowCache = (bool) $request->query->get('cache', '1');
 		$urlHash = md5($url);
 		$cache = new FilesystemAdapter();
