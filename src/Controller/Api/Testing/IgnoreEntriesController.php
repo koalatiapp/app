@@ -64,8 +64,13 @@ class IgnoreEntriesController extends AbstractApiController
 
 		$testResult = $recommendation->getParentResult();
 		$toolResponse = $testResult->getParentResponse();
-		$ignoreEntry = new IgnoreEntry($toolResponse->getTool(), $testResult->getUniqueName(), $recommendation->getUniqueName(), $recommendation->getTitle());
-		$ignoreEntry->setCreatedBy($this->getUser());
+		$ignoreEntry = new IgnoreEntry(
+			$toolResponse->getTool(),
+			$testResult->getUniqueName(),
+			$recommendation->getUniqueName(),
+			$recommendation->getTitle(),
+			$this->getUser()
+		);
 
 		switch ($scope) {
 			case 'organization':
