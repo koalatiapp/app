@@ -9,6 +9,7 @@ use App\Repository\UserRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
+use ReflectionProperty;
 
 class OrganizationFixtures extends Fixture implements DependentFixtureInterface
 {
@@ -40,7 +41,13 @@ class OrganizationFixtures extends Fixture implements DependentFixtureInterface
 
 			if ($isFirstUser) {
 				// Create a invitation
-				$invitation = new OrganizationInvitation('Émile', 'emile@koalati.com', $organization, $user);
+				$invitation = new OrganizationInvitation(
+					'Émile',
+					'emile@koalati.com',
+					$organization,
+					$user
+				);
+				$this->forceSetInvitationHash($invitation, 'ad01bca12faaf7113230959d40f8cc12');
 				$manager->persist($invitation);
 			}
 
@@ -48,6 +55,20 @@ class OrganizationFixtures extends Fixture implements DependentFixtureInterface
 		}
 
 		$manager->flush();
+	}
+
+	/**
+	 * This method forces the invitation to use the provided hash instead of the
+	 * randomly generated one. This is done to keep the hash static, which is
+	 * essential in order to make the fixtures' data predictable.
+	 */
+	private function forceSetInvitationHash(OrganizationInvitation $invitation, string $hash): OrganizationInvitation
+	{
+		$reflectedHashProperty = new ReflectionProperty(OrganizationInvitation::class, 'hash');
+		$reflectedHashProperty->setAccessible(true);
+		$reflectedHashProperty->setValue($invitation, $hash);
+
+		return $invitation;
 	}
 
 	public function getDependencies()
