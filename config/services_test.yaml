@@ -1,0 +1,4 @@
+services:
+    App\Util\Meta\MetaDriverInterface:
+        alias: App\Util\Meta\Driver\MockMetaDriver
+
