@@ -21,11 +21,9 @@ class AppAvailabilityTest extends AbstractAppTestCase
 	{
 		yield ['/'];
 		yield ['/projects'];
-		yield ['/inbox'];
-		yield ['/whats-new'];
 		yield ['/help'];
 		yield ['/team/create'];
-		yield ['/team/1'];
+		yield ['/team/ew8BEeB2PO'];
 		yield ['/team/ew8BEeB2PO/leave'];
 		yield ['/team/ew8BEeB2PO/settings'];
 		yield ['/team/invitation/ew8BEeB2PO/ad01bca12faaf7113230959d40f8cc12'];
