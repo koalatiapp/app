@@ -36,6 +36,7 @@ class TestingController extends AbstractApiController
 		$projectId = $this->idHasher->decode($projectId)[0];
 		$project = $this->getProject($projectId, ProjectVoter::PARTICIPATE);
 
+		$this->denyAccessUnlessGranted(ProjectVoter::TESTING, $project);
 		$this->dispatchMessage(new TestingRequest($project->getId()));
 
 		$quotaManager->notifyIfQuotaExceeded($project);
@@ -54,6 +55,9 @@ class TestingController extends AbstractApiController
 	public function projectStatus(string $id, StatusEndpoint $statusApi): JsonResponse
 	{
 		$project = $this->getProject($id);
+
+		$this->denyAccessUnlessGranted(ProjectVoter::TESTING, $project);
+
 		$status = $statusApi->project($project);
 
 		return $this->apiSuccess($status);

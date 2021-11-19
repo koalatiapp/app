@@ -675,6 +675,7 @@ subscription:
 
 upgrade_suggestion:
     create_team: Upgrade to a plan that offers Team Creation to get started with your own team!
+    testing: Upgrade to a plan that offers automated testing tools to start testing your projects!
 
 email:
     welcome:
