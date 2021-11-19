@@ -7,6 +7,7 @@ use App\Mercure\TopicBuilder;
 use App\Message\TestingRequest;
 use App\Repository\Testing\RecommendationRepository;
 use App\Security\ProjectVoter;
+use App\Subscription\QuotaManager;
 use App\Util\Testing\RecommendationGroup;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -81,7 +82,7 @@ class RecommendationController extends AbstractApiController
 	 *
 	 * @Route("/groups/{id}/complete", methods={"PUT"}, name="group_complete", options={"expose": true})
 	 */
-	public function completeGroup(int $id, RecommendationRepository $recommendationRepository): JsonResponse
+	public function completeGroup(int $id, RecommendationRepository $recommendationRepository, QuotaManager $quotaManager): JsonResponse
 	{
 		$recommendation = $recommendationRepository->find($id);
 
@@ -119,6 +120,7 @@ class RecommendationController extends AbstractApiController
 			$recommendationGroup->getSample()->getParentResult()->getParentResponse()->getTool()
 		);
 		$this->dispatchMessage($testingRequest);
+		$quotaManager->notifyIfQuotaExceeded($project);
 
 		return $this->apiSuccess($recommendationGroup);
 	}

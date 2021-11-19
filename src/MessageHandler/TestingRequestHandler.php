@@ -8,6 +8,7 @@ use App\Entity\Project;
 use App\Entity\ProjectActivityRecord;
 use App\Message\TestingRequest;
 use App\Repository\ProjectRepository;
+use App\Subscription\PlanManager;
 use App\Util\Testing\AvailableToolsFetcher;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,7 +23,8 @@ class TestingRequestHandler implements MessageHandlerInterface
 		private ProjectRepository $projectRepository,
 		private ToolsEndpoint $toolsEndpoint,
 		private AvailableToolsFetcher $availableToolsFetcher,
-		private EntityManagerInterface $entityManager
+		private EntityManagerInterface $entityManager,
+		private PlanManager $planManager,
 	) {
 	}
 
@@ -31,6 +33,13 @@ class TestingRequestHandler implements MessageHandlerInterface
 		$project = $this->projectRepository->find($message->getProjectId());
 
 		if (!$project) {
+			return;
+		}
+
+		// Check if the user's plan allow them to use automated testing
+		$plan = $this->planManager->getPlanFromEntity($project->getOwner());
+
+		if (!$plan->hasTestingAccess()) {
 			return;
 		}
 

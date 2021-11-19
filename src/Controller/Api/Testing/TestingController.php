@@ -6,6 +6,7 @@ use App\ApiClient\Endpoint\StatusEndpoint;
 use App\Controller\Api\AbstractApiController;
 use App\Message\TestingRequest;
 use App\Security\ProjectVoter;
+use App\Subscription\QuotaManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,7 +25,7 @@ class TestingController extends AbstractApiController
 	 *
 	 * @Route("/create", methods={"POST"}, name="create", options={"expose": true})
 	 */
-	public function create(Request $request): JsonResponse
+	public function create(Request $request, QuotaManager $quotaManager): JsonResponse
 	{
 		$projectId = $request->request->get('project_id');
 
@@ -36,6 +37,8 @@ class TestingController extends AbstractApiController
 		$project = $this->getProject($projectId, ProjectVoter::PARTICIPATE);
 
 		$this->dispatchMessage(new TestingRequest($project->getId()));
+
+		$quotaManager->notifyIfQuotaExceeded($project);
 
 		return $this->apiSuccess();
 	}
