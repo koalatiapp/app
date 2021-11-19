@@ -42,7 +42,7 @@
 		<script src="{{ path('fos_js_routing_js', {callback: 'fos.Router.setData'}) }}"></script>
 		<script src="{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}"></script>
 		<script src="{{ url('bazinga_jstranslation_js') }}?{{ asset_version }}"></script>
-        <link rel="stylesheet" href="{{ asset('css/dark-mode.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/dark-mode.css') }}"  media="(prefers-color-scheme: dark)">
 
 		{% if app.environment == "prod" %}
 			<script defer data-domain="app.koalati.com" src="https://plausible.io/js/plausible.js"></script>
