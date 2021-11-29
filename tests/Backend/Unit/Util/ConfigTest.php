@@ -12,7 +12,7 @@ class ConfigTest extends WebTestCase
 {
 	private Config $configHelper;
 
-	public function setup()
+	public function setup(): void
 	{
 		self::bootKernel();
 		$this->configHelper = self::$container->get('App\\Util\\Config');

@@ -19,7 +19,7 @@ abstract class AbstractAppTestCase extends WebTestCase
 
 	protected User $user;
 
-	public function setup()
+	public function setup(): void
 	{
 		$this->client = static::createClient();
 		$this->client->followRedirects();
