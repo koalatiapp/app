@@ -105,14 +105,14 @@ class Project
 	 * @ORM\JoinColumn(name="owner_user_id", referencedColumnName="id", onDelete="CASCADE")
 	 * @Groups({"default"})
 	 */
-	private ?User $ownerUser;
+	private ?User $ownerUser = null;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=Organization::class, inversedBy="projects")
 	 * @ORM\JoinColumn(name="owner_organization_id", referencedColumnName="id", onDelete="CASCADE")
 	 * @Groups({"default"})
 	 */
-	private ?Organization $ownerOrganization;
+	private ?Organization $ownerOrganization = null;
 
 	public function __construct()
 	{
