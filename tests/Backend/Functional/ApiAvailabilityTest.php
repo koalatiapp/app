@@ -7,6 +7,13 @@ namespace App\Tests\Backend\Functional;
  */
 class ApiAvailabilityTest extends AbstractAppTestCase
 {
+	public function setup(): void
+	{
+		parent::setup();
+
+		$this->loadUser(static::USER_TEST);
+	}
+
 	/**
 	 * @dataProvider urlProvider
 	 */

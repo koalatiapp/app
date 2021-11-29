@@ -4,6 +4,7 @@ namespace App\Tests\Backend\Functional;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -15,28 +16,40 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  */
 abstract class AbstractAppTestCase extends WebTestCase
 {
-	protected KernelBrowser $client;
+	protected const USER_TEST = 'user.test';
+	protected const USER_FREE_PLAN = 'user.plan.free';
+	protected const USER_SOLO_PLAN = 'user.plan.solo';
+	protected const USER_SMALL_TEAM_PLAN = 'user.plan.team';
+	protected const USER_BUSINESS_PLAN = 'user.plan.business';
 
-	protected User $user;
+	protected KernelBrowser $client;
+	protected ?User $user = null;
 
 	public function setup(): void
 	{
 		$this->client = static::createClient();
 		$this->client->followRedirects();
-
-		// Log user in
-		$this->loadUser();
-		$this->client->loginUser($this->user);
 	}
 
-	protected function loadUser()
-	{
-		$this->reloadUser();
-	}
-
-	protected function reloadUser()
+	protected function loadUser(string $key)
 	{
 		$userRepository = static::getContainer()->get(UserRepository::class);
-		$this->user = $userRepository->findOneByEmail('name@email.com');
+
+		$userEmail = match ($key) {
+			self::USER_TEST => 'name@email.com',
+			self::USER_FREE_PLAN => 'free@plan.com',
+			self::USER_SOLO_PLAN => 'solo@plan.com',
+			self::USER_SMALL_TEAM_PLAN => 'smallteam@plan.com',
+			self::USER_BUSINESS_PLAN => 'business@plan.com',
+		};
+
+		if (!$userEmail) {
+			throw new Exception('Invalid user key: no user is defined in AbstractAppTestCase for key '.$key);
+		}
+
+		$user = $userRepository->findOneByEmail($userEmail);
+
+		$this->user = $user;
+		$this->client->loginUser($user);
 	}
 }
