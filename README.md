@@ -8,15 +8,17 @@ This is the official repository for the Koalati web application, available at [a
 
 ## Documentation
 
-### Technical documentation
-- [Getting started](docs/getting-started.md)
-- [Setting up your environment variables](docs/environment-variables.md)
-- [Messenger](docs/messenger.md)
-- [Testing](docs/testing.md)
-- [Coding standards, linting and error detection](docs/coding-standards.md)
-
-### Features overview
-- [Subscriptions](docs/subscriptions.md)
+### Contributing
+  - [Getting started](docs/contributing/getting-started.md)
+  - [Setting up your environment variables](docs/contributing/environment-variables.md)
+  - [Testing](docs/contributing/testing.md)
+  - [Coding standards, linting and error detection](docs/contributing/coding-standards.md)
+### System
+  - [The Messenger (background tasks)](docs/system/messenger.md)
+  - [Subscriptions](docs/system/subscriptions.md)
+### Features
+  - Automated testing tools and recommendations _(to document)_
+  - Checklist _(to document)_
 
 ---
 

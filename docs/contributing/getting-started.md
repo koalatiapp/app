@@ -6,6 +6,6 @@
 
 Once your environment is running, you'll likely want to look at some other documentation articles, especially:
 
-- [Setting up your environment variables](docs/environment-variables.md)
-- [Testing](docs/testing.md)
-- [Coding standards, linting and error detection](docs/coding-standards.md)
+- [Setting up your environment variables](docs/contributing/environment-variables.md)
+- [Testing](docs/contributing/testing.md)
+- [Coding standards, linting and error detection](docs/contributing/coding-standards.md)
