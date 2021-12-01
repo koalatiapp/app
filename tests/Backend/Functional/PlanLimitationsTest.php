@@ -24,8 +24,11 @@ class PlanLimitationsTest extends AbstractAppTestCase
 
 	public function upgradeRequiredUrlProvider()
 	{
+		// @TODO: uncomment plan limitation tests when the subscription system is re-enabled
+		/*
 		yield [static::USER_FREE_PLAN, '/project/0YpbRqXLl2/testing', 'Upgrade to a plan that offers automated testing tools to start testing your projects!'];
 		yield [static::USER_FREE_PLAN, '/team/create', 'Upgrade to a plan that offers Team Creation to get started with your own team!'];
 		yield [static::USER_SOLO_PLAN, '/team/create', 'Upgrade to a plan that offers Team Creation to get started with your own team!'];
+		*/
 	}
 }
