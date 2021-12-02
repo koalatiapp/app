@@ -27,7 +27,7 @@
 					{% trans %}organization.settings.members.invite.button{% endtrans %}
 				</organization-invite-button>
 			</div>
-			<organization-members-list organizationId="{{ organization.id }}" userRole="{{ organization.getMemberFromUser(app.user).highestRole }}" light></organization-members-list>
+			<organization-members-list organizationId="{{ organization.id|hashids_encode }}" userRole="{{ organization.getMemberFromUser(app.user).highestRole }}" light></organization-members-list>
 		</div>
 
 		<div id="deletion">
