@@ -17,8 +17,8 @@ This is the official repository for the Koalati web application, available at [a
   - [The Messenger (background tasks)](docs/system/messenger.md)
   - [Subscriptions](docs/system/subscriptions.md)
 ### Features
-  - Automated testing tools and recommendations _(to document)_
-  - Checklist _(to document)_
+  - [Automated testing tools and recommendations](docs/features/testing/testing.md)
+  - [Checklist and QA wizard](docs/features/checklist/checklist.md)
 
 ---
 
