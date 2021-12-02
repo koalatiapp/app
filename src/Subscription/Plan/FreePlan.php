@@ -40,4 +40,9 @@ class FreePlan extends AbstractPlan
 	 * @var bool HAS_MONITORING_ACCESS Whether the user has access to the monitoring features
 	 */
 	public const HAS_MONITORING_ACCESS = true;
+
+	/**
+	 * @var int MAX_TEAM_OWNED Maximum numbers of team a user can own
+	 */
+	public const MAX_TEAM_OWNED = 1;
 }
