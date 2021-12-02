@@ -21,13 +21,13 @@
 		<div id="members">
 			<div class="container space-between">
 				<h2>{% trans %}organization.settings.tabs.members{% endtrans %}</h2>
-				<organization-invite-button size="small" organizationId="{{ organization.id }}">
+				<organization-invite-button size="small" organizationId="{{ organization.id|hashids_encode }}">
 					<i class="fas fa-user-plus"></i>
 					&nbsp;&nbsp;
 					{% trans %}organization.settings.members.invite.button{% endtrans %}
 				</organization-invite-button>
 			</div>
-			<organization-members-list organizationId="{{ organization.id }}" userRole="{{ organization.getMemberFromUser(app.user).highestRole }}" light></organization-members-list>
+			<organization-members-list organizationId="{{ organization.id|hashids_encode }}" userRole="{{ organization.getMemberFromUser(app.user).highestRole }}" light></organization-members-list>
 		</div>
 
 		<div id="deletion">

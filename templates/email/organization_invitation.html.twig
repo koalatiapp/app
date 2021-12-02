@@ -16,7 +16,7 @@
 	<row>
 		<columns>
 			<center>
-				<button href="{{ url("organization_invitation_accept", {id: invitation.id, hash: invitation.hash}) }}" size="large">
+				<button href="{{ url("organization_invitation_accept", {id: invitation.id|hashids_encode, hash: invitation.hash}) }}" size="large">
 					{% trans with {"%organization%": invitation.organization} %}email.organization_invitation.button_label{% endtrans %}
 				</button>
 			</center>

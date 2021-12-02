@@ -38,5 +38,5 @@
 	</div>
 	<hr class="spacer">
 	<h2>{% trans %}organization.dashboard.projects.title{% endtrans %}</h2>
-	<project-list organizationId="{{ organization.id }}" emptyState="{% trans with {"%teamName%": organization.name} %}organization.dashboard.projects.empty_state{% endtrans %}"></project-list>
+	<project-list organizationId="{{ organization.id|hashids_encode }}" emptyState="{% trans with {"%teamName%": organization.name} %}organization.dashboard.projects.empty_state{% endtrans %}"></project-list>
 {% endblock %}
