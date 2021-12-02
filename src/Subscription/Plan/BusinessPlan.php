@@ -18,4 +18,9 @@ class BusinessPlan extends SmallTeamPlan
 	 * @var int MAX_ACTIVE_PROJECTS Maximum number of active projects a user can have during a given month
 	 */
 	public const MAX_ACTIVE_PROJECTS = 100;
+
+	/**
+	 * @var int MAX_TEAM_OWNED Maximum numbers of team a user can own
+	 */
+	public const MAX_TEAM_OWNED = 100;
 }
