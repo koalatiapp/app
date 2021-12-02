@@ -1,0 +1,126 @@
+{% extends 'app_base.html.twig' %}
+
+{% block page_tabs %}
+	{% include 'app/user/_tabs.html.twig' %}
+{% endblock %}
+
+{% block title %}{% trans %}user_settings.subscription.title{% endtrans %}{% endblock %}
+
+{% block head %}
+	<style>
+		.plan { text-align: center; }
+		.plan .name { font-size: 1rem; line-height: 1.35; }
+		.plan .price { font-size: 1.5rem; font-weight: 700; line-height: 1.35; }
+		.plan .price-suffix { margin-bottom: 1.5rem; font-size: .75rem; color: var(--color-gray); }
+		.plan li { margin: .75em auto; }
+		.plan li i { margin-right: .5ch; text-indent: -1ch; }
+	</style>
+{% endblock %}
+
+{% block body %}
+
+	{% if upcomingPlan %}
+		<div class="notice">
+			{% trans with {
+				"%name%": ("plan." ~ upcomingPlan ~ ".name")|trans,
+				"%date%": upcomingPlanChangeDate|date("F jS Y")
+			} %}user_settings.subscription.overview.upcoming_plan_change_notice{% endtrans %}
+		</div>
+	{% endif %}
+
+	<div class="grid">
+		{% for plan in plans %}
+			<div class="card plan">
+				<h3 class="name">{{ ("plan." ~ plan ~ ".name")|trans }}</h3>
+				<div class="price">{{ ("plan." ~ plan ~ ".price")|trans }}</div>
+				<div class="price-suffix">{% trans %}user_settings.subscription.plans.price_suffix{% endtrans %}</div>
+				{{ ("plan." ~ plan ~ ".features")|trans|raw }}
+				<hr>
+				<div class="button-container">
+					{% if constant("PADDLE_ID", currentPlan) == constant("PADDLE_ID", plan) %}
+						<nb-button disabled>{% trans %}user_settings.subscription.plans.current_label{% endtrans %}</nb-button>
+					{% else %}
+						<paddle-subscription-button productId="{{ constant("PADDLE_ID", plan) }}">{% trans with {"%plan%": ("plan." ~ plan ~ ".name")|trans} %}user_settings.subscription.plans.select{% endtrans %}</paddle-subscription-button>
+					{% endif %}
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+
+	<hr class="large">
+
+	<div class="grid">
+		<div class="card">
+			<h2>{% trans %}user_settings.subscription.overview.title{% endtrans %}</h2>
+			<ul>
+				<li>
+					<strong>{% trans %}user_settings.subscription.overview.current_plan{% endtrans %}:</strong>
+					{{ ("plan." ~ currentPlan ~ ".name")|trans }}
+				</li>
+				{% if app.user.subscriptionRenewalDate %}
+					<li>
+						<strong>{% trans %}user_settings.subscription.overview.next_renewal_date{% endtrans %}:</strong>
+						{{ app.user.subscriptionRenewalDate|date("F jS Y") }}
+					</li>
+				{% endif %}
+			</ul>
+		</div>
+		<div class="card">
+			<h2>{% trans %}user_settings.subscription.usage.title{% endtrans %}</h2>
+			<canvas id="usage-chart" width="400" height="100"></canvas>
+		</div>
+	</div>
+{% endblock %}
+
+{% set paddle_vendor_id = app.request.server.get("PADDLE_VENDOR_ID") %}
+{% block javascripts %}
+	<script src="https://cdn.paddle.com/paddle/paddle.js"></script>
+	<script type="text/javascript" paddle-vendor-id="{{ paddle_vendor_id }}">
+		/* global Paddle */
+		(() => {
+			const paddleVendorId = parseInt(document.currentScript.getAttribute("paddle-vendor-id"));
+			Paddle.Setup({ vendor: paddleVendorId });
+		})();
+	</script>
+
+	{% include "app/_parts/chartjs.html.twig" %}
+	<script usage-history-data="{{ activeProjectCountHistory|json_encode }}" max-active-projects="{{ currentPlan.maxActiveProjects }}">
+		/* global Chart */
+		const maxActiveProjects = document.currentScript.getAttribute("max-active-projects");
+		const usageData = JSON.parse(document.currentScript.getAttribute("usage-history-data"));
+		const monthLabels = Object.keys(usageData);
+		const quotaLineData = Array(monthLabels.length + 2).fill(maxActiveProjects);
+		const chartContext = document.getElementById("usage-chart").getContext("2d");
+
+		new Chart(chartContext, {
+			type: "bar",
+			data: {
+				labels: ["", ...monthLabels, ""],
+				datasets: [{
+					type: "bar",
+					label: "Active projects",
+					data: usageData,
+				}, {
+					type: "line",
+					label: "Quota for your plan",
+					data: quotaLineData,
+					borderColor: "#c11919",
+					backgroundColor: "#c11919",
+					pointRadius: 0,
+				}],
+			},
+			options: {
+				animations: "",
+				scales: {
+					y: {
+						beginAtZero: true,
+						suggestedMax: Math.max(...[maxActiveProjects, ...Object.values(usageData)]) + 1,
+						ticks: {
+							precision: 0
+						}
+					}
+				},
+			}
+		});
+		</script>
+{% endblock %}

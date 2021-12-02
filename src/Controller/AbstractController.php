@@ -7,6 +7,9 @@ use Hashids\HashidsInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as DefaultAbstractController;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
+ */
 abstract class AbstractController extends DefaultAbstractController
 {
 	protected TranslatorInterface $translator;

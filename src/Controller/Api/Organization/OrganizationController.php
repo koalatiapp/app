@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/api/organization", name="api_organization_")
+ * @Route("/api/organization/", name="api_organization_")
  */
 class OrganizationController extends AbstractApiController
 {

@@ -5,34 +5,27 @@ namespace App\MessageHandler;
 use App\ApiClient\Endpoint\ToolsEndpoint;
 use App\Entity\Page;
 use App\Entity\Project;
+use App\Entity\ProjectActivityRecord;
 use App\Message\TestingRequest;
 use App\Repository\ProjectRepository;
+use App\Subscription\PlanManager;
 use App\Util\Testing\AvailableToolsFetcher;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 class TestingRequestHandler implements MessageHandlerInterface
 {
 	/**
-	 * @var ProjectRepository
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
-	private $projectRepository;
-
-	/**
-	 * @var ToolsEndpoint
-	 */
-	private $toolsEndpoint;
-
-	/**
-	 * @var AvailableToolsFetcher
-	 */
-	private $availableToolsFetcher;
-
-	public function __construct(ProjectRepository $projectRepository, ToolsEndpoint $toolsEndpoint, AvailableToolsFetcher $availableToolsFetcher)
-	{
-		$this->projectRepository = $projectRepository;
-		$this->toolsEndpoint = $toolsEndpoint;
-		$this->availableToolsFetcher = $availableToolsFetcher;
+	public function __construct(
+		private ProjectRepository $projectRepository,
+		private ToolsEndpoint $toolsEndpoint,
+		private AvailableToolsFetcher $availableToolsFetcher,
+		private EntityManagerInterface $entityManager,
+		private PlanManager $planManager,
+	) {
 	}
 
 	public function __invoke(TestingRequest $message): void
@@ -40,6 +33,13 @@ class TestingRequestHandler implements MessageHandlerInterface
 		$project = $this->projectRepository->find($message->getProjectId());
 
 		if (!$project) {
+			return;
+		}
+
+		// Check if the user's plan allow them to use automated testing
+		$plan = $this->planManager->getPlanFromEntity($project->getOwner());
+
+		if (!$plan->hasTestingAccess()) {
 			return;
 		}
 
@@ -53,8 +53,34 @@ class TestingRequestHandler implements MessageHandlerInterface
 			return;
 		}
 
+		// Keep a record of these testing requests for account quotas (and analytics)
+		$this->recordProjectActivity($project, $tools, $pageUrls);
+
 		// Submit the processing request to the Tools API
 		$this->toolsEndpoint->request($pageUrls, $tools, $priority);
+	}
+
+	/**
+	 * @param array<int,string> $tools
+	 * @param array<int,string> $pageUrls
+	 */
+	private function recordProjectActivity(Project $project, array $tools, array $pageUrls): void
+	{
+		$ownerUser = $project->getOwnerUser() ?: $project->getOwnerOrganization()->getOwner();
+
+		foreach ($tools as $tool) {
+			foreach ($pageUrls as $pageUrl) {
+				$record = (new ProjectActivityRecord())
+					->setProject($project)
+					->setUser($ownerUser)
+					->setWebsiteUrl($project->getUrl())
+					->setPageUrl($pageUrl)
+					->setTool($tool);
+				$this->entityManager->persist($record);
+			}
+		}
+
+		$this->entityManager->flush();
 	}
 
 	/**

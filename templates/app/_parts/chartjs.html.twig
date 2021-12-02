@@ -1,0 +1,9 @@
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js" integrity="sha256-7lWo7cjrrponRJcS6bc8isfsPDwSKoaYfGIHgSheQkk=" crossorigin="anonymous"></script>
+<script>
+	/* global Chart */
+	const bodyStyles = getComputedStyle(document.body);
+	Chart.defaults.color = bodyStyles.getPropertyValue("--color-black");
+	Chart.defaults.borderColor = bodyStyles.getPropertyValue("--color-gray-light");
+	Chart.defaults.backgroundColor = bodyStyles.getPropertyValue("--color-blue");
+	Chart.defaults.elements.bar.borderRadius = 8;
+</script>

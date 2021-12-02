@@ -118,6 +118,7 @@ export class RecommendationList extends AbstractDynamicList {
 		this.projectId = null;
 		this.sortBy = "type";
 		this.sortDirection = "DESC";
+		this.itemsPerPage = 10;
 	}
 
 	render()

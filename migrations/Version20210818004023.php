@@ -28,6 +28,6 @@ final class Version20210818004023 extends AbstractMigration
 	public function down(Schema $schema): void
 	{
 		// this down() migration is auto-generated, please modify it to your needs
-		$this->addSql('ALTER TABLE `user` CHANGE first_name first_name VARCHAR(255) CHARACTER SET utf8mb4 DEFAULT NULL COLLATE `utf8mb4_general_ci`, CHANGE last_name last_name VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL COLLATE `utf8mb4_general_ci`');
+		$this->addSql('ALTER TABLE `user` CHANGE first_name first_name VARCHAR(255) CHARACTER SET utf8mb4 DEFAULT NULL COLLATE `utf8mb4_0900_ai_ci`, CHANGE last_name last_name VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL COLLATE `utf8mb4_0900_ai_ci`');
 	}
 }

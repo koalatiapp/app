@@ -26,6 +26,6 @@ final class Version20210901151035 extends AbstractMigration
 	public function down(Schema $schema): void
 	{
 		// this down() migration is auto-generated, please modify it to your needs
-		$this->addSql('ALTER TABLE project ADD status VARCHAR(32) CHARACTER SET utf8mb4 NOT NULL COLLATE `utf8mb4_general_ci`');
+		$this->addSql('ALTER TABLE project ADD status VARCHAR(32) CHARACTER SET utf8mb4 NOT NULL COLLATE `utf8mb4_0900_ai_ci`');
 	}
 }

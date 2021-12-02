@@ -1,0 +1,106 @@
+<?php
+
+namespace App\Entity\Trait;
+
+use DateTime;
+use DateTimeInterface;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+
+/**
+ * Provides subscription-related properties and methods
+ * to the User entity class.
+ */
+trait UserSubscriptionTrait
+{
+	/**
+	 * @ORM\Column(type="integer", nullable=true)
+	 */
+	private ?int $paddleUserId = null;
+
+	/**
+	 * @ORM\Column(type="string", length=255, nullable=true)
+	 * @Groups({"self"})
+	 */
+	private ?string $subscriptionPlan = null;
+
+	/**
+	 * @ORM\Column(type="string", length=255, nullable=true)
+	 */
+	private ?string $upcomingSubscriptionPlan = null;
+
+	/**
+	 * @ORM\Column(type="datetime", nullable=true)
+	 */
+	private ?DateTimeInterface $subscriptionChangeDate = null;
+
+	/**
+	 * @ORM\Column(type="datetime", nullable=true)
+	 */
+	private ?DateTimeInterface $subscriptionRenewalDate = null;
+
+	public function getPaddleUserId(): ?int
+	{
+		return $this->paddleUserId;
+	}
+
+	public function setPaddleUserId(?int $paddleUserId): self
+	{
+		$this->paddleUserId = $paddleUserId;
+
+		return $this;
+	}
+
+	public function getSubscriptionPlan(): ?string
+	{
+		// If the subscription change date is past, the user is now on the upcoming plan.
+		if ($this->getsubscriptionChangeDate() && $this->getsubscriptionChangeDate() < new DateTime()) {
+			return $this->getUpcomingSubscriptionPlan();
+		}
+
+		return $this->subscriptionPlan;
+	}
+
+	public function setSubscriptionPlan(?string $subscriptionPlan): self
+	{
+		$this->subscriptionPlan = $subscriptionPlan;
+
+		return $this;
+	}
+
+	public function getUpcomingSubscriptionPlan(): ?string
+	{
+		return $this->upcomingSubscriptionPlan;
+	}
+
+	public function setUpcomingSubscriptionPlan(?string $upcomingSubscriptionPlan): self
+	{
+		$this->upcomingSubscriptionPlan = $upcomingSubscriptionPlan;
+
+		return $this;
+	}
+
+	public function getSubscriptionChangeDate(): ?DateTimeInterface
+	{
+		return $this->subscriptionChangeDate;
+	}
+
+	public function setSubscriptionChangeDate(?DateTimeInterface $subscriptionChangeDate): self
+	{
+		$this->subscriptionChangeDate = $subscriptionChangeDate;
+
+		return $this;
+	}
+
+	public function getSubscriptionRenewalDate(): ?DateTimeInterface
+	{
+		return $this->subscriptionRenewalDate;
+	}
+
+	public function setSubscriptionRenewalDate(?DateTimeInterface $subscriptionRenewalDate): self
+	{
+		$this->subscriptionRenewalDate = $subscriptionRenewalDate;
+
+		return $this;
+	}
+}

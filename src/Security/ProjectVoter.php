@@ -4,6 +4,7 @@ namespace App\Security;
 
 use App\Entity\Project;
 use App\Entity\User;
+use App\Subscription\PlanManager;
 use Exception;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -13,6 +14,15 @@ class ProjectVoter extends Voter
 	public const VIEW = 'view';
 	public const PARTICIPATE = 'participate';
 	public const MANAGE = 'manage';
+	public const TESTING = 'testing';
+
+	/**
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.security)
+	 */
+	public function __construct(
+		private PlanManager $planManager
+	) {
+	}
 
 	/**
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.attributes)
@@ -27,8 +37,14 @@ class ProjectVoter extends Voter
 	 */
 	protected function voteOnAttribute(string $attribute, mixed $project, TokenInterface $token): bool
 	{
-		if (!in_array($attribute, [self::VIEW, self::PARTICIPATE, self::MANAGE])) {
+		if (!in_array($attribute, [self::VIEW, self::PARTICIPATE, self::MANAGE, self::TESTING])) {
 			throw new Exception("Undefined project voter attribute: $attribute");
+		}
+
+		if ($attribute == self::TESTING) {
+			$plan = $this->planManager->getPlanFromEntity($project->getOwner());
+
+			return $plan->hasTestingAccess();
 		}
 
 		$user = $token->getUser();

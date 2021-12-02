@@ -5,14 +5,14 @@ services:
   php:
     build:
       args:
-        APP_ENV: dev
+        APP_ENV: ${APP_ENV:-dev}
     volumes:
       - ./:/srv/app:rw,cached
       - ./docker/php/conf.d/symfony.dev.ini:/usr/local/etc/php/conf.d/symfony.ini
       # If you develop on Linux, comment out the following volumes to just use bind-mounted project directory from host
       # - ./var:/srv/app/var:rw
     environment:
-      APP_ENV: dev
+      APP_ENV: ${APP_ENV:-dev}
     depends_on:
       - database
       - redis
@@ -20,7 +20,7 @@ services:
   caddy:
     build:
       args:
-        APP_ENV: dev
+        APP_ENV: ${APP_ENV:-dev}
     volumes:
       - ./docker/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
       - ./public:/srv/app/public:ro

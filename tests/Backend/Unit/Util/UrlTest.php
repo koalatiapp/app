@@ -17,7 +17,7 @@ class UrlTest extends WebTestCase
 	private Config $configHelper;
 	private string $stubsDir;
 
-	public function setup()
+	public function setup(): void
 	{
 		self::bootKernel();
 		$this->urlHelper = self::$container->get('App\\Util\\Url');

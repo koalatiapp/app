@@ -16,7 +16,7 @@ class StatusEndpointTest extends WebTestCase
 	 */
 	private $statusEndpoint;
 
-	public function setup()
+	public function setup(): void
 	{
 		self::bootKernel();
 		$mockApiClient = new MockClient();

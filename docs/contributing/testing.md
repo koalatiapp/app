@@ -25,3 +25,19 @@ Backend tests are located in `tests/Backend`, and are ran using [PHPUnit](https:
 ## End-to-end tests
 End-to-end tests are located in `tests/Full`, and are ran with [Playwright test runner](https://github.com/microsoft/playwright-test).
 Make sure you have the dependencies installed locally (by running `npm install` or `npm ci`), and run the following command:
+
+---
+
+## When and how to add tests
+Whenever a new page or feature is added, tests should also be added. 
+Here are some guidelines about adding tests when contributing.
+
+- All services and web components should be unit tested _(as close to 100% as reasonably possible)_.
+- Any new route should be added to the appropriate smoke tests (in `tests/Backend/Functional/`):
+  - Public routes are covered by the `PublicAvailabityTest`.
+  - Private app routes are covered by the `AppAvailabityTest`.
+  - API routes are covered by the `ApiAvailabityTest`.
+  - Routes that are restricted to certain plans are covered by `PlanLimitationsTest` (in addition to their regular test in `AppAvailabityTest` or `ApiAvailabityTest`).
+- Functional tests (either end-to-end or integration tests) should cover all of the main features and flows of the platform. _(as close to 100% of the most common scenarios as reasonably possible)_.
+- Whenever a bug is reported and fixed, a new test of the most appropriate type should be added to cover this case.
+- Any additional test that adds value to the project is welcome (ex.: E2E test covering edge cases).

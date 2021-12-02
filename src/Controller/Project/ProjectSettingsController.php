@@ -50,7 +50,7 @@ class ProjectSettingsController extends AbstractProjectController
 	/**
 	 * @Route("/project/{id}/settings", name="project_settings")
 	 */
-	public function projectSettings(Request $request, Url $urlHelper, int $id): Response
+	public function projectSettings(int $id, Request $request, Url $urlHelper): Response
 	{
 		$project = $this->getProject($id);
 		$originalProject = clone $project;

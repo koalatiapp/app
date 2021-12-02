@@ -12,10 +12,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 class OrganizationMember
 {
+	public const ROLE_OWNER = 'ROLE_OWNER';
 	public const ROLE_ADMIN = 'ROLE_ADMIN';
 	public const ROLE_MEMBER = 'ROLE_MEMBER';
 	public const ROLE_VISITOR = 'ROLE_VISITOR';
 	public const ROLE_VALUES = [
+		self::ROLE_OWNER => 1000,
 		self::ROLE_ADMIN => 100,
 		self::ROLE_MEMBER => 10,
 		self::ROLE_VISITOR => 1,
@@ -114,7 +116,7 @@ class OrganizationMember
 	public function setRoles(array $roles): self
 	{
 		$this->roles = array_filter($roles, function ($role) {
-			return in_array($role, [self::ROLE_ADMIN, self::ROLE_MEMBER, self::ROLE_VISITOR]);
+			return in_array($role, [self::ROLE_OWNER, self::ROLE_ADMIN, self::ROLE_MEMBER, self::ROLE_VISITOR]);
 		});
 
 		return $this;

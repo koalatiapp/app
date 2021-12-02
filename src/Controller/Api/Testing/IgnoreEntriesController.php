@@ -36,9 +36,7 @@ class IgnoreEntriesController extends AbstractApiController
 			$ignoreEntries->add($ownerIgnoreEntry);
 		}
 
-		if ($projectId) {
-			$this->setSuggestedMercureTopic($this->topicBuilder->getEntityGenericTopic(IgnoreEntry::class, TopicBuilder::SCOPE_PROJECT, $projectId));
-		}
+		$this->setSuggestedMercureTopic($this->topicBuilder->getEntityGenericTopic(IgnoreEntry::class, TopicBuilder::SCOPE_PROJECT, $projectId));
 
 		return $this->apiSuccess($ignoreEntries);
 	}
@@ -66,8 +64,13 @@ class IgnoreEntriesController extends AbstractApiController
 
 		$testResult = $recommendation->getParentResult();
 		$toolResponse = $testResult->getParentResponse();
-		$ignoreEntry = new IgnoreEntry($toolResponse->getTool(), $testResult->getUniqueName(), $recommendation->getUniqueName(), $recommendation->getTitle());
-		$ignoreEntry->setCreatedBy($this->getUser());
+		$ignoreEntry = new IgnoreEntry(
+			$toolResponse->getTool(),
+			$testResult->getUniqueName(),
+			$recommendation->getUniqueName(),
+			$recommendation->getTitle(),
+			$this->getUser()
+		);
 
 		switch ($scope) {
 			case 'organization':

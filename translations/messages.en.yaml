@@ -23,6 +23,126 @@ footer:
     privacy_policy: Privacy policy
     terms_of_service: Terms of service
 
+plan:
+    Free:
+        name: Free
+        price: $0
+        features: >
+            <ul class="features">
+                <li>
+                    <i class="far fa-check text-green"></i>
+                    pre-launch checklist
+                </li>
+                <li>
+                    <i class="far fa-check text-green"></i>
+                    educational resources
+                </li>
+                <li>
+                    <i class="far fa-times text-gray"></i>
+                    no automated tools
+                </li>
+                <li>
+                    <i class="far fa-times text-gray"></i>
+                    no project members
+                </li>
+                <li>
+                    <i class="far fa-times text-gray"></i>
+                    no team creation
+                </li>
+            </ul>
+    Solo:
+        name: Solo
+        price: $9
+        features: >
+            <ul class="features">
+                <li>
+                    <i class="far fa-check text-green"></i>
+                    up to <strong>3 active projects</strong>
+                </li>
+                <li>
+                    <i class="far fa-check text-green"></i>
+                    every automated tool
+                </li>
+                <li>
+                    <i class="far fa-check text-green"></i>
+                    pre-launch checklist
+                </li>
+                <li>
+                    <i class="far fa-check text-green"></i>
+                    educational resources
+                </li>
+                <li>
+                    <i class="far fa-check text-green"></i>
+                    unlimited project members
+                </li>
+                <li>
+                    <i class="far fa-times text-gray"></i>
+                    no team creation
+                </li>
+            </ul>
+
+    SmallTeam:
+        name: Small team
+        price: $75
+        features: >
+            <ul class="features">
+                <li>
+                    <i class="far fa-check text-green"></i>
+                    up to <strong>30 active projects</strong>
+                </li>
+                <li>
+                    <i class="far fa-check text-green"></i>
+                    every automated tool
+                </li>
+                <li>
+                    <i class="far fa-check text-green"></i>
+                    pre-launch checklist
+                </li>
+                <li>
+                    <i class="far fa-check text-green"></i>
+                    educational resources
+                </li>
+                <li>
+                    <i class="far fa-check text-green"></i>
+                    unlimited project members
+                </li>
+                <li>
+                    <i class="far fa-check text-green"></i>
+                    team creation
+                </li>
+            </ul>
+
+    Business:
+        name: Business
+        price: $200
+        features: >
+            <ul class="features">
+                <li>
+                    <i class="far fa-check text-green"></i>
+                    up to <strong>100 active projects</strong>
+                </li>
+                <li>
+                    <i class="far fa-check text-green"></i>
+                    every automated tool
+                </li>
+                <li>
+                    <i class="far fa-check text-green"></i>
+                    pre-launch checklist
+                </li>
+                <li>
+                    <i class="far fa-check text-green"></i>
+                    educational resources
+                </li>
+                <li>
+                    <i class="far fa-check text-green"></i>
+                    unlimited project members
+                </li>
+                <li>
+                    <i class="far fa-check text-green"></i>
+                    team creation
+                </li>
+            </ul>
+
 login:
     page_title: Sign in
     form:
@@ -249,6 +369,19 @@ user_settings:
                 submit_label: Delete my account
             flash:
                 success: Your email address has been updated!
+    subscription:
+        title: Manage your subscription
+        overview:
+            title: Overview
+            current_plan: Your current plan
+            upcoming_plan_change_notice: Your plan will change to <strong>%name%</strong> on %date%.
+            next_renewal_date: Next renewal date
+        usage:
+            title: Your usage
+        plans:
+            select: Switch to %plan%
+            current_label: This is your current plan
+            price_suffix: per month
 
 dashboard:
     title: Dashboard
@@ -417,7 +550,7 @@ organization:
     create:
         title: Create a team
     delete:
-        warning_text: "Warning: once you delete a team, there is no turning back. The team and its projects will be deleted instantly, and all of their related data will be removed as well. This cannot be undone. The members' user accounts will still exist."
+        warning_text: "Warning: once you delete a team, there is no turning back. The team and its projects will be deleted instantly, and all of their related data will be removed as well. This cannot be undone. The members' user accounts will still exist, but will lose access to all of this team resources."
         confirmation_label: I am certain that I want to delete the team "%name%".
         button_label: Delete this team
         error_confirmation: You must check this box to proceed with the deletion of this project.
@@ -487,6 +620,7 @@ organization_invitation:
         error_already_a_member: You are already a member of this organization.
 
 roles:
+    ROLE_OWNER: Owner
     ROLE_ADMIN: Administrator
     ROLE_MEMBER: Member
     ROLE_VISITOR: Visitor
@@ -536,6 +670,13 @@ help:
             <p>If you would like to tell us what you think of the platform and what you think we should improve, you can reach out to us on social media, on Discord, or send us feedback by clicking on the button below.</p>
         button: I have some feedback for Koalati
 
+subscription:
+    active_project_quota_already_reached: You have exceeded your plan's quota for the amount of active projects! We won't limit you now, but if you plan on exceeding your quota again, you should upgrade your plan.
+
+upgrade_suggestion:
+    create_team: Upgrade to a plan that offers Team Creation to get started with your own team!
+    testing: Upgrade to a plan that offers automated testing tools to start testing your projects!
+
 email:
     welcome:
         subject: Welcome to Koalati!
@@ -566,3 +707,13 @@ email:
         footer: >
             <p class="text-gray text-small">Please note that this invitation will expire on %expirationDate%.</p>
             <p class="text-gray text-small">If you don't know who %inviter% is, or if this invitation is unwanted, you can either ignore this message or <a href="%spamReportUrl%">report it as spam</a>.</p>
+
+    organization_ownership_transfer:
+        subject: "Your team will be disabled!"
+        introduction: >
+            <h1>Hey %firstName%!</h1>
+            <p>You have recently downgraded your account to the %plan% plan.</p>
+            <p>This new plan does not allow you to create or own a team. This means that when your old plan expires <strong>on %changeDate%, your team (%organization%) will be disabled</strong>.</p>
+            <p>If other members of %organization% still need to have access to the team's projects and resources on Koalati, please send us an email at <a href=mailto:info@koalati.com">info@koalati.com</a> to tell us which member of the team should be made the new owner.</p>
+            <p>If you and the other members don't need this team anymore, you don't have to do anything.</p>
+        button_label: I want to transfer ownership of %organization%

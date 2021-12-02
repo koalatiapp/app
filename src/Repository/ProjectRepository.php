@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\OrganizationMember;
 use App\Entity\Project;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -34,16 +35,27 @@ class ProjectRepository extends ServiceEntityRepository
 	 *
 	 * @return array<Project>
 	 */
-	public function findBySearchQuery(array $queryParts, User $requestingUser)
+	public function findBySearchQuery(array $queryParts, ?User $requestingUser = null)
 	{
 		if (!$queryParts) {
 			return [];
 		}
 
 		$queryBuilder = $this->createQueryBuilder('p')
-			->andWhere('p.ownerUser = :user')
-			->setParameter('user', $requestingUser)
 			->orderBy('p.dateCreated', 'DESC');
+
+		if ($requestingUser) {
+			// Add project accessibility check (looks for direct ownership or shared team project)
+			$accessibleOrganizations = $requestingUser->getOrganizationLinks()->map(fn (OrganizationMember $link) => $link->getOrganization());
+
+			$userMatchExpression = $queryBuilder->expr()->orX();
+			$userMatchExpression->add($queryBuilder->expr()->eq('p.ownerUser', ':user'));
+			$userMatchExpression->add($queryBuilder->expr()->in('p.ownerOrganization', ':organizations'));
+
+			$queryBuilder->andWhere($userMatchExpression)
+				->setParameter('user', $requestingUser)
+				->setParameter('organizations', $accessibleOrganizations);
+		}
 
 		foreach ($queryParts as $index => $part) {
 			$queryBuilder->andWhere('p.name LIKE :namePart'.$index)

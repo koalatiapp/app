@@ -2,6 +2,7 @@
 
 namespace App\Controller\Project;
 
+use Hashids\HashidsInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -15,7 +16,7 @@ class ProjectOverviewController extends AbstractProjectController
 	 *
 	 * @Route("/project/current", name="project_shortcut")
 	 */
-	public function projectShortcut(Request $request): Response
+	public function projectShortcut(Request $request, HashidsInterface $idHasher): Response
 	{
 		if ($currentProjectId = $request->getSession()->get(static::getCurrentProjectSessionKey())) {
 			try {
@@ -25,7 +26,7 @@ class ProjectOverviewController extends AbstractProjectController
 			}
 
 			if ($project) {
-				return $this->redirectToRoute('project_dashboard', ['id' => $project->getId()]);
+				return $this->redirectToRoute('project_dashboard', ['id' => $idHasher->encode($project->getId())]);
 			}
 		}
 

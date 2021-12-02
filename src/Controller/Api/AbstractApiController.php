@@ -205,6 +205,20 @@ abstract class AbstractApiController extends AbstractController
 		return $this->apiError('You do not have access to this resource.', 403);
 	}
 
+	/**
+	 * Returns a generic bad request error response.
+	 */
+	protected function badRequest(?string $explanation = ''): JsonResponse
+	{
+		$message = 'Bad request.';
+
+		if ($explanation) {
+			$message .= ' '.$explanation;
+		}
+
+		return $this->apiError($message, 400);
+	}
+
 	protected function enableResponseCache(int $duration = 3600): self
 	{
 		$this->cacheDuration = $duration;

@@ -16,7 +16,7 @@ class ToolsEndpointTest extends WebTestCase
 	 */
 	private $toolsEndpoint;
 
-	public function setup()
+	public function setup(): void
 	{
 		self::bootKernel();
 		$mockApiClient = new MockClient();

@@ -58,7 +58,7 @@ jobs:
             - name: Pull images
               run: docker-compose pull
             - name: Start services
-              run: docker-compose up --build -d
+              run: docker-compose --env-file .env.test up --build -d
             - name: Wait for services
               run: |
                   UNHEALTHY_ALLOWANCE_LEFT=20
