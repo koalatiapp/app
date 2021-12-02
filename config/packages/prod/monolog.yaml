@@ -2,7 +2,7 @@ monolog:
     handlers:
         sentry:
             type: sentry
-            level: !php/const Monolog\Logger::ERROR
+            level: !php/const Monolog\Logger::WARNING
             hub_id: Sentry\State\HubInterface
         main:
             type: fingers_crossed
