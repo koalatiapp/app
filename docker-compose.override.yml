@@ -31,6 +31,7 @@ services:
 
   database:
     image: mysql:${MYSQL_VERSION:-8.0}
+    platform: linux/x86_64
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE:-app}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD:-ChangeMe}
