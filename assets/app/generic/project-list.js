@@ -29,10 +29,12 @@ export class ProjectList extends AbstractDynamicList {
 				[nb-column="status"] [data-status="COMPLETED"] { color: var(--color-gray-dark); }
 
 				/* Hide owner */
-				:host([show-owners]) .nb--list-header,
-				:host([show-owners]) .nb--list-item { grid-template-areas: "icon title status owner createdDate actions"; grid-template-columns: 25px 1fr 12ch 14ch 1fr 2ch; }
-				:host([show-owners]) [nb-column="owner"] { display: block; }
-				:host([show-owners]) .nb--list-item-column[nb-column="owner"] { white-space: nowrap; text-overflow: ellipsis; color: var(--color-gray-dark); overflow: hidden; }
+				@media (min-width: 768px) {
+					:host([show-owners]) .nb--list-header,
+					:host([show-owners]) .nb--list-item { grid-template-areas: "icon title status owner createdDate actions"; grid-template-columns: 25px 1fr 12ch 14ch 1fr 2ch; }
+					:host([show-owners]) [nb-column="owner"] { display: block; }
+					:host([show-owners]) .nb--list-item-column[nb-column="owner"] { white-space: nowrap; text-overflow: ellipsis; color: var(--color-gray-dark); overflow: hidden; }
+				}
 
 				@media (max-width: 767px) {
 					.nb--list-item { grid-template-areas: "icon title actions"; grid-template-columns: 25px 1fr 2ch; }
