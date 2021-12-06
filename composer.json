@@ -1,7 +1,7 @@
 {
   "type": "project",
   "license": "proprietary",
-  "minimum-stability": "dev",
+  "minimum-stability": "stable",
   "prefer-stable": true,
   "require": {
     "php": ">=7.2.5",
@@ -20,7 +20,7 @@
     "phpdocumentor/reflection-docblock": "^5.2",
     "pyrrah/gravatar-bundle": "^1.1",
     "rayatomsk/paddle-api": "^0.5.0",
-    "roukmoute/hashids-bundle": "v3.x-dev",
+    "roukmoute/hashids-bundle": "^3.0",
     "sentry/sentry-symfony": "^4.2",
     "symfony/asset": "5.3.*",
     "symfony/config": "5.3.*",
