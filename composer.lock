@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fe90f93b7b737428849f144dfc678965",
+    "content-hash": "1c53d38703e4091053db57c301aa2189",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -4229,16 +4229,16 @@
         },
         {
             "name": "roukmoute/hashids-bundle",
-            "version": "v3.x-dev",
+            "version": "v3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/roukmoute/hashids-bundle.git",
-                "reference": "bd798605c3d8ba024e6ecec4d79b8e3dc152f96c"
+                "reference": "3a0b190c99fe48db0a042230a1b50d88b38ebe4c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/roukmoute/hashids-bundle/zipball/bd798605c3d8ba024e6ecec4d79b8e3dc152f96c",
-                "reference": "bd798605c3d8ba024e6ecec4d79b8e3dc152f96c",
+                "url": "https://api.github.com/repos/roukmoute/hashids-bundle/zipball/3a0b190c99fe48db0a042230a1b50d88b38ebe4c",
+                "reference": "3a0b190c99fe48db0a042230a1b50d88b38ebe4c",
                 "shasum": ""
             },
             "require": {
@@ -4280,9 +4280,9 @@
             "description": "Integrates hashids/hashids in a Symfony project",
             "support": {
                 "issues": "https://github.com/roukmoute/hashids-bundle/issues",
-                "source": "https://github.com/roukmoute/hashids-bundle/tree/v3"
+                "source": "https://github.com/roukmoute/hashids-bundle/tree/v3.0.0"
             },
-            "time": "2021-11-12T11:02:51+00:00"
+            "time": "2021-12-05T23:11:41+00:00"
         },
         {
             "name": "sensio/framework-extra-bundle",
@@ -12607,10 +12607,8 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "dev",
-    "stability-flags": {
-        "roukmoute/hashids-bundle": 20
-    },
+    "minimum-stability": "stable",
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
