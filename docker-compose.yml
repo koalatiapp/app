@@ -4,6 +4,7 @@ services:
   php:
     build:
       context: .
+      dockerfile: DockerfileCompose
       target: symfony_php
       args:
         SYMFONY_VERSION: ${SYMFONY_VERSION:-}
@@ -26,6 +27,7 @@ services:
   caddy:
     build:
       context: .
+      dockerfile: DockerfileCompose
       target: symfony_caddy
     depends_on:
       - php
