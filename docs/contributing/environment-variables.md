@@ -22,7 +22,7 @@ Here is a detailed list of all the environment variables, why they are needed, a
 | REDIS_PASSWORD            | PHP sessions                        | Redis password                                                                                  |
 | REDIS_PORT                | PHP sessions                        | Redis port                                                                                      |
 | KOALATI_RELEASE_VERSION   | Release tracking & asset versioning | Enter the current release version of the app (or a random string for local development)         |
-| MERCURE_PUBLISH_URL       | Real-time client-server updates     | https://symfony.com/doc/current/mercure.html#configuration (corresponds to `MERCURE_URL`)       |
+| MERCURE_URL               | Real-time client-server updates     | https://symfony.com/doc/current/mercure.html#configuration (corresponds to `MERCURE_URL`)       |
 | MERCURE_JWT_TOKEN         | Real-time client-server updates     | https://symfony.com/doc/current/mercure.html#configuration (corresponds to `MERCURE_JWT_SECRET`)|
 | MERCURE_PUBLISHER_JWT     | Real-time client-server updates     | https://mercure.rocks/docs/hub/config#environment-variables                                     |
 | MERCURE_SUBSCRIBER_JWT    | Real-time client-server updates     | https://mercure.rocks/docs/hub/config#environment-variables                                     |
