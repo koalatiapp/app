@@ -4,7 +4,7 @@ import { login } from "../utilities";
 test.describe("login flow", () => {
 	test("redirects to login page when no session is active", async ({ page }) => {
 		await page.goto("https://localhost/");
-		expect(await page.evaluate(() => window.location.pathname)).toBe("/login")
+		expect(await page.evaluate(() => window.location.pathname)).toBe("/login")
 	});
 
 	test("prevents login from inexistant account", async ({ page }) => {
@@ -23,6 +23,6 @@ test.describe("login flow", () => {
 		await page.waitForSelector("a[href='/logout']", { state: "attached" });
 		await page.hover("#profile-toggle");
 		await Promise.all([page.waitForNavigation(), page.click("a[href='/logout']")]);
-		expect(await page.evaluate(() => window.location.pathname)).toBe("/login")
+		expect(await page.evaluate(() => window.location.pathname)).toBe("/login")
 	});
 });

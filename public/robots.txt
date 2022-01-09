@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /login
+Allow: /sign-up
+Allow: /reset-password
+Disallow: /
