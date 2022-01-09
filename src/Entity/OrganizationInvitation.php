@@ -65,7 +65,7 @@ class OrganizationInvitation
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=User::class)
-	 * @ORM\JoinColumn(nullable=false)
+	 * @ORM\JoinColumn(name="inviter_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
 	 */
 	private User $inviter;
 
