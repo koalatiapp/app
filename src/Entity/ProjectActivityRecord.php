@@ -24,12 +24,13 @@ class ProjectActivityRecord
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=Project::class)
+	 * @ORM\JoinColumn(name="project_id", referencedColumnName="id", onDelete="SET NULL")
 	 */
 	private ?Project $project;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=User::class)
-	 * @ORM\JoinColumn(nullable=false)
+	 * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
 	 */
 	private ?User $user;
 
