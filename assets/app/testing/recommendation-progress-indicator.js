@@ -107,7 +107,7 @@ export class RecommendationProgressIndicator extends LitElement {
 	 * Fetches the testing status from the API
 	 * and updates the indicator accordingly.
 	 */
-	fetchStatus()
+	fetchStatus(expectPendingRequests = false)
 	{
 		this._loading = true;
 
@@ -125,6 +125,10 @@ export class RecommendationProgressIndicator extends LitElement {
 
 				if (this.hasRequestsPending) {
 					this._scheduleNextRefresh();
+				} else if (expectPendingRequests) {
+					this._loading = true;
+					this._loaded = false;
+					this._scheduleNextRefresh(10000);
 				}
 			})
 			.catch((error) => {
