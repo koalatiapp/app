@@ -118,6 +118,11 @@ class SecuritySettingsController extends AbstractController
 
 		if ($deletionForm->isSubmitted() && $deletionForm->isValid()) {
 			$em = $this->getDoctrine()->getManager();
+
+			if ($user->getOwnedOrganization()) {
+				$em->remove($user->getOwnedOrganization());
+			}
+
 			$em->remove($user);
 			$em->flush();
 

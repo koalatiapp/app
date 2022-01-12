@@ -1,3 +1,5 @@
 user:
     error:
         unique_email: This email address is already used by another account.
+
+This value should not be blank.: This field is required.

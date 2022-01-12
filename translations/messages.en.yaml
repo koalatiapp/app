@@ -366,6 +366,7 @@ user_settings:
             form:
                 current_password: Current password
                 confirmation_label: I am certain that I want to delete my Koalati account, and understand that all of my account's data will be irrecoverable afterwards.
+                team_deletion_confirmation_label: I understand that deleting my account will also delete my team (%teamName%) and all of its projects and information.
                 submit_label: Delete my account
             flash:
                 success: Your email address has been updated!
