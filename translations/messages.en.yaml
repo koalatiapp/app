@@ -375,6 +375,7 @@ user_settings:
             title: Overview
             current_plan: Your current plan
             upcoming_plan_change_notice: Your plan will change to <strong>%name%</strong> on %date%.
+            upcoming_trial_end_notice: You are currently on a free trial of the <strong>Small Team</strong> plan.<br> When your trial ends on %date%, you will be moved to the <strong>Free</strong> plan.
             next_renewal_date: Next renewal date
         usage:
             title: Your usage
