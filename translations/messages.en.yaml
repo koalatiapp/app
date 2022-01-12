@@ -668,7 +668,7 @@ help:
         title: Tell us what you think
         content: >
             <p>We're working hard to make Koalati the best quality control platform for you.</p>
-            <p>If you would like to tell us what you think of the platform and what you think we should improve, you can reach out to us on social media, on Discord, or send us feedback by clicking on the button below.</p>
+            <p>If you would like to tell us what you think of the platform and what you think we should improve, you can reach out to us on social media or send us feedback by clicking on the button below.</p>
         button: I have some feedback for Koalati
 
 subscription:
@@ -696,7 +696,7 @@ email:
                 <li>Submit and track bug reports within your projects and teams <i>(coming soon!)</i>.</li>
             </ul>
         socials: >
-            <p>To follow the development and upcoming features, you can follow Koalati on <a href="https://twitter.com/koalatiweb">Twitter</a> or on <a href="https://facebook.com/koalatiweb">Facebook</a>. You can also join the Discord server <a href="https://discord.gg/Cvytp32cYc">Discord</a>.</p>
+            <p>To follow the development and upcoming features, you can follow Koalati on <a href="https://twitter.com/koalatiweb">Twitter</a> or on <a href="https://facebook.com/koalatiweb">Facebook</a>.</p>
 
     organization_invitation:
         subject: "%inviter% wants you to join %organization% on Koalati"
