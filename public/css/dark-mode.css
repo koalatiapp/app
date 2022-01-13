@@ -81,6 +81,10 @@ a.text-link { color: var(--color-blue-light); }
 .text-blue-faded { color: #6481e6; }
 .text-blue-gray { color: #9ca8d6; }
 
+/* Notices */
+.notice { color: var(--color-blue-darker); }
+.notice.warning { color: #fdecd4; background-color: var(--color-orange-lighter); }
+
 /* Component: Thumbnail */
 .clickable-thumbnail .thumbnail::after { background-color: black; }
 .clickable-thumbnail .thumbnail img { filter: brightness(.75); }

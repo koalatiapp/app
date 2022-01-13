@@ -45,7 +45,7 @@ export class RequestTestingButton extends NbButton {
 					progressIndicator._loaded = false;
 					progressIndicator._loading = true;
 
-					setTimeout(() => progressIndicator.fetchStatus(), 10000);
+					setTimeout(() => progressIndicator.fetchStatus(true), 10000);
 				}
 			})
 			.catch((error) => {

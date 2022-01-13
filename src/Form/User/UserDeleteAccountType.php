@@ -9,10 +9,21 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class UserDeleteAccountType extends AbstractType
 {
+	private User $user;
+
+	public function __construct(TokenStorageInterface $tokenStorage)
+	{
+		/** @var User */
+		$currentUser = $tokenStorage->getToken()->getUser();
+		$this->user = $currentUser;
+	}
+
 	/**
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.options)
 	 */
@@ -32,11 +43,22 @@ class UserDeleteAccountType extends AbstractType
 			->add('deleteConfirmation', CheckboxType::class, [
 				'label' => 'user_settings.security.delete_account.form.confirmation_label',
 				'mapped' => false,
-			])
-			->add('delete', SubmitType::class, [
-				'label' => 'user_settings.security.delete_account.form.submit_label',
-				'attr' => ['color' => 'danger'],
+				'constraints' => [new NotBlank()],
 			]);
+
+		if ($this->user->getOwnedOrganization()) {
+			$builder->add('deleteTeamConfirmation', CheckboxType::class, [
+				'label' => 'user_settings.security.delete_account.form.team_deletion_confirmation_label',
+				'label_translation_parameters' => ['%teamName%' => $this->user->getOwnedOrganization()],
+				'mapped' => false,
+				'constraints' => [new NotBlank()],
+			]);
+		}
+
+		$builder->add('delete', SubmitType::class, [
+			'label' => 'user_settings.security.delete_account.form.submit_label',
+			'attr' => ['color' => 'danger'],
+		]);
 	}
 
 	public function configureOptions(OptionsResolver $resolver): void

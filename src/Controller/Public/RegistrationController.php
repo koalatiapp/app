@@ -6,6 +6,9 @@ use App\Controller\AbstractController;
 use App\Entity\User;
 use App\Form\UserRegistrationType;
 use App\Security\LoginFormAuthenticator;
+use App\Subscription\Plan\FreePlan;
+use App\Subscription\Plan\TrialPlan;
+use DateTime;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,6 +43,11 @@ class RegistrationController extends AbstractController
 			$plainPassword = $form->get('password')->getData();
 			$hashedPassword = $this->passwordHasher->hashPassword($user, $plainPassword);
 			$user->setPassword($hashedPassword);
+
+			// Start users on a 14 day trial
+			$user->setSubscriptionPlan(TrialPlan::UNIQUE_NAME)
+				->setSubscriptionChangeDate(new DateTime('+14 days'))
+				->setUpcomingSubscriptionPlan(FreePlan::UNIQUE_NAME);
 
 			$em = $this->getDoctrine()->getManager();
 			$em->persist($user);

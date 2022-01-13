@@ -21,10 +21,16 @@
 
 	{% if upcomingPlan %}
 		<div class="notice">
-			{% trans with {
-				"%name%": ("plan." ~ upcomingPlan ~ ".name")|trans,
-				"%date%": upcomingPlanChangeDate|date("F jS Y")
-			} %}user_settings.subscription.overview.upcoming_plan_change_notice{% endtrans %}
+			{% if constant("UNIQUE_NAME", currentPlan) == "Trial" %}
+				{% trans with {
+					"%date%": upcomingPlanChangeDate|date("F jS Y")
+				} %}user_settings.subscription.overview.upcoming_trial_end_notice{% endtrans %}
+			{% else %}
+				{% trans with {
+					"%name%": ("plan." ~ upcomingPlan ~ ".name")|trans,
+					"%date%": upcomingPlanChangeDate|date("F jS Y")
+				} %}user_settings.subscription.overview.upcoming_plan_change_notice{% endtrans %}
+			{% endif %}
 		</div>
 	{% endif %}
 
