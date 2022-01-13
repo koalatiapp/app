@@ -167,7 +167,7 @@ export class RecommendationProgressIndicator extends LitElement {
 		this._startTimerInterval();
 
 		if (!delay) {
-			delay = this.timeLeftInMs / Math.max(1, this.pendingRequestCount);
+			delay = Math.max(3000, this.timeLeftInMs * 0.1);
 		}
 
 		delay = Math.max(delay, 1000);
