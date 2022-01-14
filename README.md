@@ -2,7 +2,7 @@
 
 ![CI](https://github.com/koalatiapp/app/workflows/CI/badge.svg)
 
-This is the official repository for the Koalati web application, available at [app.koalati.com](https://app.koalati.com).
+This is the official repository for the Koalati web application, which is available at [app.koalati.com](https://app.koalati.com).
 
 ---
 
