@@ -34,6 +34,10 @@ class AnalyticsExtension extends AbstractExtension
 		$route = $currentRequest->get('_route');
 		$params = $currentRequest->get('_route_params') ?: [];
 		$redactedParams = [];
+		
+		if (!$route) {
+			return $requestStack->getMasterRequest()->getUri();
+		}
 
 		foreach ($params as $key => $value) {
 			if ($key == 'id' || preg_match('~.+_?[iI]d$~', $key)) {
