@@ -32,7 +32,7 @@ class AnalyticsExtension extends AbstractExtension
 	{
 		$currentRequest = $this->requestStack->getCurrentRequest();
 		$route = $currentRequest->get('_route');
-		$params = $currentRequest->get('_route_params');
+		$params = $currentRequest->get('_route_params') ?: [];
 		$redactedParams = [];
 
 		foreach ($params as $key => $value) {
