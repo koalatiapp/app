@@ -36,7 +36,7 @@ class AnalyticsExtension extends AbstractExtension
 		$redactedParams = [];
 		
 		if (!$route) {
-			return $requestStack->getMasterRequest()->getUri();
+			return $this->requestStack->getMasterRequest()->getUri();
 		}
 
 		foreach ($params as $key => $value) {
