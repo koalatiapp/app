@@ -34,7 +34,7 @@ class AnalyticsExtension extends AbstractExtension
 		$route = $currentRequest->get('_route');
 		$params = $currentRequest->get('_route_params') ?: [];
 		$redactedParams = [];
-		
+
 		if (!$route) {
 			return $this->requestStack->getMasterRequest()->getUri();
 		}
