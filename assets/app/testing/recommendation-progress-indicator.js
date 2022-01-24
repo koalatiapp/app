@@ -199,7 +199,6 @@ export class RecommendationProgressIndicator extends LitElement {
 		ApiClient.subscribe(topic, status => {
 			if (status.pending) {
 				this._loaded = false;
-				this._loading = true;
 			}
 		});
 	}
