@@ -6,13 +6,17 @@ use App\ApiClient\Endpoint\ToolsEndpoint;
 use App\Entity\Page;
 use App\Entity\Project;
 use App\Entity\ProjectActivityRecord;
+use App\Mercure\UpdateDispatcher;
 use App\Message\TestingRequest;
 use App\Repository\ProjectRepository;
 use App\Subscription\PlanManager;
 use App\Util\Testing\AvailableToolsFetcher;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
+use Hashids\HashidsInterface;
+use Symfony\Component\Mercure\Update;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 class TestingRequestHandler implements MessageHandlerInterface
 {
@@ -25,6 +29,9 @@ class TestingRequestHandler implements MessageHandlerInterface
 		private AvailableToolsFetcher $availableToolsFetcher,
 		private EntityManagerInterface $entityManager,
 		private PlanManager $planManager,
+		private UpdateDispatcher $updateDispatcher,
+		private HashidsInterface $idHasher,
+		private MessageBusInterface $bus,
 	) {
 	}
 
@@ -58,6 +65,12 @@ class TestingRequestHandler implements MessageHandlerInterface
 
 		// Submit the processing request to the Tools API
 		$this->toolsEndpoint->request($pageUrls, $tools, $priority);
+
+		// Send an update to the client(s) to indicate that testing is in progress
+		$hashedProjectId = $this->idHasher->encode($project->getId());
+		$mercureTopic = 'http://koalati/project/'.$hashedProjectId.'/testing/status';
+		$mercureUpdate = new Update($mercureTopic, json_encode(['pending' => true]));
+		$this->bus->dispatch($mercureUpdate);
 	}
 
 	/**

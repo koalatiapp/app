@@ -44,8 +44,6 @@ export class RequestTestingButton extends NbButton {
 				for (const progressIndicator of querySelectorAllAnywhere("recommendation-progress-indicator")) {
 					progressIndicator._loaded = false;
 					progressIndicator._loading = true;
-
-					setTimeout(() => progressIndicator.fetchStatus(true), 10000);
 				}
 			})
 			.catch((error) => {

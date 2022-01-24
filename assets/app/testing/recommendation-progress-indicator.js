@@ -45,6 +45,7 @@ export class RecommendationProgressIndicator extends LitElement {
 	{
 		super.firstUpdated();
 		this.fetchStatus();
+		this._initStatusUpdateListener();
 	}
 
 	render()
@@ -107,7 +108,7 @@ export class RecommendationProgressIndicator extends LitElement {
 	 * Fetches the testing status from the API
 	 * and updates the indicator accordingly.
 	 */
-	fetchStatus(expectPendingRequests = false)
+	fetchStatus()
 	{
 		this._loading = true;
 
@@ -125,10 +126,6 @@ export class RecommendationProgressIndicator extends LitElement {
 
 				if (this.hasRequestsPending) {
 					this._scheduleNextRefresh();
-				} else if (expectPendingRequests) {
-					this._loading = true;
-					this._loaded = false;
-					this._scheduleNextRefresh(10000);
 				}
 			})
 			.catch((error) => {
@@ -194,6 +191,17 @@ export class RecommendationProgressIndicator extends LitElement {
 		this._timerInterval = setInterval(() => {
 			this.timeLeftInMs = Math.max(0, this.timeLeftInMs - 1000);
 		}, 1000);
+	}
+
+	_initStatusUpdateListener()
+	{
+		const topic = `http://koalati/project/${this.projectId}/testing/status`;
+		ApiClient.subscribe(topic, status => {
+			if (status.pending) {
+				this._loaded = false;
+				this._loading = true;
+			}
+		});
 	}
 }
 
