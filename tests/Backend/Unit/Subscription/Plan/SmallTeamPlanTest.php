@@ -17,24 +17,24 @@ class SmallTeamPlanTest extends TestCase
 	/**
 	 * @covers \SmallTeamPlan::isUpgradeComparedTo
 	 */
-	public function testIsUpgradeComparedTo()
+	public function testIsUpgradeComparedTo(): void
 	{
-		$this->assertTrue((new SmallTeamPlan())->isUpgradeComparedTo(new FreePlan()));
-		$this->assertTrue((new SmallTeamPlan())->isUpgradeComparedTo(new TrialPlan()));
-		$this->assertTrue((new SmallTeamPlan())->isUpgradeComparedTo(new SoloPlan()));
-		$this->assertFalse((new SmallTeamPlan())->isUpgradeComparedTo(new SmallTeamPlan()));
-		$this->assertFalse((new SmallTeamPlan())->isUpgradeComparedTo(new BusinessPlan()));
+		$this->assertTrue((new SmallTeamPlan())->isUpgradeComparedTo(new FreePlan()), 'SmallTeamPlan isUpgradeComparedTo FreePlan');
+		$this->assertTrue((new SmallTeamPlan())->isUpgradeComparedTo(new TrialPlan()), 'SmallTeamPlan isUpgradeComparedTo TrialPlan');
+		$this->assertTrue((new SmallTeamPlan())->isUpgradeComparedTo(new SoloPlan()), 'SmallTeamPlan isUpgradeComparedTo SoloPlan');
+		$this->assertFalse((new SmallTeamPlan())->isUpgradeComparedTo(new SmallTeamPlan()), 'SmallTeamPlan isUpgradeComparedTo SmallTeamPlan');
+		$this->assertFalse((new SmallTeamPlan())->isUpgradeComparedTo(new BusinessPlan()), 'SmallTeamPlan isUpgradeComparedTo BusinessPlan');
 	}
 
 	/**
 	 * @covers \SmallTeamPlan::isDowngradeComparedTo
 	 */
-	public function testIsDowngradeComparedTo()
+	public function testIsDowngradeComparedTo(): void
 	{
-		$this->assertFalse((new SmallTeamPlan())->isDowngradeComparedTo(new FreePlan()));
-		$this->assertFalse((new SmallTeamPlan())->isDowngradeComparedTo(new TrialPlan()));
-		$this->assertFalse((new SmallTeamPlan())->isDowngradeComparedTo(new SoloPlan()));
-		$this->assertFalse((new SmallTeamPlan())->isDowngradeComparedTo(new SmallTeamPlan()));
-		$this->assertTrue((new SmallTeamPlan())->isDowngradeComparedTo(new BusinessPlan()));
+		$this->assertFalse((new SmallTeamPlan())->isDowngradeComparedTo(new FreePlan()), 'SmallTeamPlan isDowngradeComparedTo FreePlan');
+		$this->assertFalse((new SmallTeamPlan())->isDowngradeComparedTo(new TrialPlan()), 'SmallTeamPlan isDowngradeComparedTo TrialPlan');
+		$this->assertFalse((new SmallTeamPlan())->isDowngradeComparedTo(new SoloPlan()), 'SmallTeamPlan isDowngradeComparedTo SoloPlan');
+		$this->assertFalse((new SmallTeamPlan())->isDowngradeComparedTo(new SmallTeamPlan()), 'SmallTeamPlan isDowngradeComparedTo SmallTeamPlan');
+		$this->assertTrue((new SmallTeamPlan())->isDowngradeComparedTo(new BusinessPlan()), 'SmallTeamPlan isDowngradeComparedTo BusinessPlan');
 	}
 }

@@ -17,24 +17,24 @@ class BusinessPlanTest extends TestCase
 	/**
 	 * @covers \BusinessPlan::isUpgradeComparedTo
 	 */
-	public function testIsUpgradeComparedTo()
+	public function testIsUpgradeComparedTo(): void
 	{
-		$this->assertTrue((new BusinessPlan())->isUpgradeComparedTo(new FreePlan()));
-		$this->assertTrue((new BusinessPlan())->isUpgradeComparedTo(new TrialPlan()));
-		$this->assertTrue((new BusinessPlan())->isUpgradeComparedTo(new SoloPlan()));
-		$this->assertTrue((new BusinessPlan())->isUpgradeComparedTo(new SmallTeamPlan()));
-		$this->assertFalse((new BusinessPlan())->isUpgradeComparedTo(new BusinessPlan()));
+		$this->assertTrue((new BusinessPlan())->isUpgradeComparedTo(new FreePlan()), 'BusinessPlan isUpgradeComparedTo FreePlan');
+		$this->assertTrue((new BusinessPlan())->isUpgradeComparedTo(new TrialPlan()), 'BusinessPlan isUpgradeComparedTo TrialPlan');
+		$this->assertTrue((new BusinessPlan())->isUpgradeComparedTo(new SoloPlan()), 'BusinessPlan isUpgradeComparedTo SoloPlan');
+		$this->assertTrue((new BusinessPlan())->isUpgradeComparedTo(new SmallTeamPlan()), 'BusinessPlan isUpgradeComparedTo SmallTeamPlan');
+		$this->assertFalse((new BusinessPlan())->isUpgradeComparedTo(new BusinessPlan()), 'BusinessPlan isUpgradeComparedTo BusinessPlan');
 	}
 
 	/**
 	 * @covers \BusinessPlan::isDowngradeComparedTo
 	 */
-	public function testIsDowngradeComparedTo()
+	public function testIsDowngradeComparedTo(): void
 	{
-		$this->assertFalse((new BusinessPlan())->isDowngradeComparedTo(new FreePlan()));
-		$this->assertFalse((new BusinessPlan())->isDowngradeComparedTo(new TrialPlan()));
-		$this->assertFalse((new BusinessPlan())->isDowngradeComparedTo(new SoloPlan()));
-		$this->assertFalse((new BusinessPlan())->isDowngradeComparedTo(new SmallTeamPlan()));
-		$this->assertFalse((new BusinessPlan())->isDowngradeComparedTo(new BusinessPlan()));
+		$this->assertFalse((new BusinessPlan())->isDowngradeComparedTo(new FreePlan()), 'BusinessPlan isDowngradeComparedTo FreePlan');
+		$this->assertFalse((new BusinessPlan())->isDowngradeComparedTo(new TrialPlan()), 'BusinessPlan isDowngradeComparedTo TrialPlan');
+		$this->assertFalse((new BusinessPlan())->isDowngradeComparedTo(new SoloPlan()), 'BusinessPlan isDowngradeComparedTo SoloPlan');
+		$this->assertFalse((new BusinessPlan())->isDowngradeComparedTo(new SmallTeamPlan()), 'BusinessPlan isDowngradeComparedTo SmallTeamPlan');
+		$this->assertFalse((new BusinessPlan())->isDowngradeComparedTo(new BusinessPlan()), 'BusinessPlan isDowngradeComparedTo BusinessPlan');
 	}
 }
