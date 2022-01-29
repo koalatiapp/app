@@ -85,7 +85,16 @@
 		/* global Paddle */
 		(() => {
 			const paddleVendorId = parseInt(document.currentScript.getAttribute("paddle-vendor-id"));
-			Paddle.Setup({ vendor: paddleVendorId });
+			Paddle.Setup({
+				vendor: paddleVendorId,
+				eventCallback: function(data) {
+					if (data.event === "Checkout.Complete") {
+						window.Flash.show("success", "user_settings.subscription.flash.subscription_change_success");
+
+						setTimeout(() => { window.location.reload(); }, 5000);
+					}
+				}
+			});
 		})();
 	</script>
 
