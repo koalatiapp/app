@@ -24,6 +24,9 @@ footer:
     terms_of_service: Terms of service
 
 plan:
+    Trial:
+        name: Free Trial
+        price: $0
     Free:
         name: Free
         price: $0
