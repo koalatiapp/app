@@ -70,11 +70,27 @@ abstract class AbstractPlan implements PlanInterface
 
 	public function isUpgradeComparedTo(PlanInterface $comparativePlan): bool
 	{
+		if ($this instanceof TrialPlan) {
+			return $comparativePlan instanceof FreePlan;
+		}
+
+		if ($comparativePlan instanceof TrialPlan) {
+			return get_class($this) != FreePlan::class;
+		}
+
 		return is_subclass_of($this, $comparativePlan::class);
 	}
 
 	public function isDowngradeComparedTo(PlanInterface $comparativePlan): bool
 	{
+		if ($this instanceof TrialPlan) {
+			return !($comparativePlan instanceof FreePlan);
+		}
+
+		if ($comparativePlan instanceof TrialPlan) {
+			return get_class($this) == FreePlan::class;
+		}
+
 		return is_subclass_of($comparativePlan, $this::class);
 	}
 
