@@ -24,6 +24,9 @@ footer:
     terms_of_service: Terms of service
 
 plan:
+    Trial:
+        name: Free Trial
+        price: $0
     Free:
         name: Free
         price: $0
@@ -384,6 +387,8 @@ user_settings:
             select: Switch to %plan%
             current_label: This is your current plan
             price_suffix: per month
+        flash:
+            subscription_change_success: Your subscription is being updated! Please hold on, this page will reload in just a moment...
 
 dashboard:
     title: Dashboard
