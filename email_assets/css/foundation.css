@@ -443,11 +443,11 @@ h6 { color: inherit; word-wrap: normal; font-family: Helvetica,
 Arial,
 sans-serif; font-weight: normal; margin-bottom: 10px; Margin-bottom: 10px; }
 h1 { font-size: 34px; }
-h2 { font-size: 30px; }
-h3 { font-size: 28px; }
-h4 { font-size: 24px; }
-h5 { font-size: 19px; }
-h6 { font-size: 18px; }
+h2 { font-size: 24px; }
+h3 { font-size: 20px; }
+h4 { font-size: 18px; }
+h5 { font-size: 16px; }
+h6 { font-size: 14px; }
 body,
 table.body,
 p,

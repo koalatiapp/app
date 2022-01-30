@@ -3,6 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\User;
+use App\Subscription\Plan\FreePlan;
+use App\Subscription\Plan\TrialPlan;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -50,6 +53,31 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 			->setParameter('paddleUserId', $paddleUserId)
 			->getQuery()
 			->getOneOrNullResult()
+		;
+	}
+
+	/**
+	 * @param string $soonDateModifier Datetime modifier string (ex.: `"+2 days"`) representing
+	 *                                 the time from today from which a trial ending  is
+	 *                                 considered "soon".
+	 *
+	 * @return array<int,User>
+	 */
+	public function findAllTrialsExpiringSoon(string $soonDateModifier): array
+	{
+		$expireBeforeDate = new DateTime($soonDateModifier);
+
+		return $this->createQueryBuilder('u')
+			->andWhere('u.subscriptionPlan = :trialPlan')
+			->andWhere('u.upcomingSubscriptionPlan = :freePlan')
+			->andWhere('u.subscriptionChangeDate > :now')
+			->andWhere('u.subscriptionChangeDate <= :expireBeforeDate')
+			->setParameter('trialPlan', TrialPlan::UNIQUE_NAME)
+			->setParameter('freePlan', FreePlan::UNIQUE_NAME)
+			->setParameter('now', new DateTime())
+			->setParameter('expireBeforeDate', $expireBeforeDate)
+			->getQuery()
+			->getResult()
 		;
 	}
 }

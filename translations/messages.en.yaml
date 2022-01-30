@@ -704,6 +704,28 @@ email:
         socials: >
             <p>To follow the development and upcoming features, you can follow Koalati on <a href="https://twitter.com/koalatiweb">Twitter</a> or on <a href="https://facebook.com/koalatiweb">Facebook</a>.</p>
 
+    trial_ending_soon:
+        subject: Your free trial is about to end!
+        main_content: >
+            <h1>Hey %firstName%,</h1>
+            <p>Thanks again for checking out Koalati!</p>
+            <p>As you may know, <strong>your free trial is ending on %expirationDate%</strong>.</p>
+            <p>If you would like to keep using our premium features after that, you can <a href="%subscriptionLink%">upgrade to a paid plan</a>.</p>
+            <p>If the free features are all that you need for now, then you don't need to do anything. Don't worry, you won't be getting any surprise credit card charges from us. </p>
+            <p>Either way, enjoy the platform!</p>
+        feedback_heading: We'd love to hear from you
+        feedback_content: >
+            <p>If you have a minute, we would appreciate if you could <a href="https://form.typeform.com/to/upF60b3N">fill our 1-minute feedback survey</a>.</p>
+            <p>Tell us what we're doing right and what we're doing... not so right. This will help us improve our platform, which will in turn help others like you.</p>
+            <p>You can also email me, the founder of Koalati, directly at <a href="mailto:emile@koalati.com">emile@koalati.com</a> if you have any feedback or questions.</p>
+        farewell:
+            <p>Cheers!</p>
+        footer: >
+            <p class="text-gray text-small">P.S.</p>
+            <p class="text-gray text-small">We respect your time and your inbox, so you can expect nothing but important updates from us.</p>
+            <p class="text-gray text-small">If you want, you can <a href="https://www.koalati.com/mailing-list">join our mailing list</a> to get more frequent updates about Koalati and the things we think you should know about.</p>
+
+
     organization_invitation:
         subject: "%inviter% wants you to join %organization% on Koalati"
         introduction: >

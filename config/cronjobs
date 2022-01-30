@@ -1,0 +1,6 @@
+# @TODO: Find a better way to run the messenger (giving it its own container would likely be the way to go)
+# Messenger: consume asynchronous messages
+* * * * * /srv/app/bin/console messenger:consume --time-limit=55 async > /dev/null 2>&1
+
+# Send trial ending soon notices via email
+0 * * * *	/srv/app/bin/console app:email:trial-ending-notices > /dev/null 2>&1

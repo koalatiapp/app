@@ -1,0 +1,34 @@
+{% extends "email/_base.html.twig" %}
+
+{% block body %}
+	<spacer size="20"></spacer>
+
+	<row>
+		<columns>
+			{% trans with {
+				"%firstName%": user.firstName,
+				"%expirationDate%": user.subscriptionChangeDate|date("F jS, Y"),
+				"%subscriptionLink%": url('manage_subscription'),
+			} %}email.trial_ending_soon.main_content{% endtrans %}
+		</columns>
+	</row>
+
+	<hr>
+
+	<row>
+		<columns>
+			<h2>{% trans %}email.trial_ending_soon.feedback_heading{% endtrans %}</h2>
+			{% trans %}email.trial_ending_soon.feedback_content{% endtrans %}
+
+			{% trans %}email.trial_ending_soon.farewell{% endtrans %}
+		</columns>
+	</row>
+
+	<hr>
+
+	<row>
+		<columns>
+			{% trans %}email.trial_ending_soon.footer{% endtrans %}
+		</columns>
+	</row>
+{% endblock %}

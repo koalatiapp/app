@@ -25,6 +25,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     @ORM\Index(name="user_paddle_user_id", columns={"paddle_user_id"})
  * })
  * @UniqueEntity(fields="email", message="user.error.unique_email")
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -115,6 +116,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	 */
 	protected ?Collection $ignoreEntries;
 
+	/**
+	 * @ORM\OneToMany(targetEntity=UserMetadata::class, mappedBy="user", orphanRemoval=true, cascade={"persist"})
+	 *
+	 * @var \Doctrine\Common\Collections\Collection<int, UserMetadata>
+	 */
+	protected Collection $metadata;
+
 	public function __construct()
 	{
 		$this->dateCreated = new DateTime();
@@ -124,6 +132,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 		$this->projectLinks = new ArrayCollection();
 		$this->ignoreEntries = new ArrayCollection();
 		$this->checklistTemplates = new ArrayCollection();
+		$this->metadata = new ArrayCollection();
 	}
 
 	public function getId(): ?int
@@ -416,5 +425,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 		}
 
 		return null;
+	}
+
+	public function getMetadata(string $key): ?UserMetadata
+	{
+		foreach ($this->metadata as $metadata) {
+			if ($metadata->getName() == $key) {
+				return $metadata;
+			}
+		}
+
+		return null;
+	}
+
+	public function getMetadataValue(string $key): string
+	{
+		return $this->getMetadata($key)?->getValue() ?: '';
+	}
+
+	public function setMetadata(string $key, string $value): self
+	{
+		$metadata = $this->getMetadata($key);
+
+		if (!$metadata) {
+			$metadata = new UserMetadata($this, $key, $value);
+			$this->metadata->add($metadata);
+		}
+
+		$metadata->setValue($value);
+
+		return $this;
 	}
 }
