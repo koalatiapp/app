@@ -18,6 +18,14 @@ class GoogleFavicon implements FaviconDriverInterface
 		$domain = $this->urlHelper::domain($url);
 		$imageUrl = 'https://www.google.com/s2/favicons?sz=64&domain_url='.$domain;
 
-		return file_get_contents($imageUrl);
+		return file_get_contents(
+			$imageUrl,
+			false,
+			stream_context_create([
+				'http' => [
+					'ignore_errors' => true,
+				],
+			])
+		);
 	}
 }
