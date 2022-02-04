@@ -119,6 +119,13 @@ services:
     App\Util\Meta\MetaDriverInterface:
         alias: App\Util\Meta\Driver\OpenGraphIo
 
+    App\Util\Favicon\FaviconFetcherInterface:
+        alias: App\Util\Favicon\FaviconFetcher
+
+    App\Util\Favicon\FaviconFetcher:
+        arguments:
+            - ['@App\Util\Favicon\Driver\FaviconKit', '@App\Util\Favicon\Driver\GoogleFavicon']
+
     Paddle\API:
         class: 'Paddle\API'
         arguments:
