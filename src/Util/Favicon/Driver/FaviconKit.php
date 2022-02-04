@@ -4,7 +4,7 @@ namespace App\Util\Favicon\Driver;
 
 use App\Util\Url;
 
-class GoogleFavicon implements FaviconDriverInterface
+class FaviconKit implements FaviconDriverInterface
 {
 	private Url $urlHelper;
 
@@ -16,7 +16,7 @@ class GoogleFavicon implements FaviconDriverInterface
 	public function fetch(string $url): string
 	{
 		$domain = $this->urlHelper::domain($url);
-		$imageUrl = 'https://www.google.com/s2/favicons?sz=32&domain_url='.$domain;
+		$imageUrl = "https://api.faviconkit.com/$domain/32";
 
 		return file_get_contents($imageUrl);
 	}
