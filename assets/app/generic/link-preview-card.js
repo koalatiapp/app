@@ -61,7 +61,6 @@ export class LinkPreviewCard extends LitElement {
 
 	fetchMetadata()
 	{
-		console.log(this, this.url);
 		ApiClient.get("api_link_metas", { url: this.url }).then(response => {
 			this.url = response.data.url;
 			this.siteName = response.data.siteName == response.data.title ? "" : response.data.siteName;
