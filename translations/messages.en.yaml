@@ -514,6 +514,7 @@ project_settings:
         title: Project settings
         tabs:
             basic_information: Basic information
+            pages: Pages
             delete: Deletion
         form:
             title: Website information
@@ -637,6 +638,12 @@ tools:
         tool: Tool
         enabled: Enabled
         disabled: Disabled
+
+pages:
+    listing:
+        page: Page
+        enabled: Active
+        disabled: Ignored
 
 project:
     name: Title

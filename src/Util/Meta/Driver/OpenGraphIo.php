@@ -30,7 +30,7 @@ class OpenGraphIo implements MetaDriverInterface
 		$rawMetas = $results['hybridGraph'] ?? [];
 
 		return new Metadata(
-			$rawMetas['url'] ?? $url,
+			$url,
 			$rawMetas['site_name'] ?? null,
 			$rawMetas['title'] ?? null,
 			$rawMetas['description'] ?? null,

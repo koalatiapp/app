@@ -24,6 +24,11 @@
 				{{ submit_button|raw }}
 			</div>
 
+			<div id="pages">
+				<h2>{% trans %}project_settings.project.tabs.pages{% endtrans %}</h2>
+				<project-pages-list projectId="{{ project.id|hashids_encode }}" light></project-pages-list>
+			</div>
+
 			<div id="delete">
 				<h2>{% trans %}project_settings.project.tabs.delete{% endtrans %}</h2>
 				<p>{% trans %}project_settings.project.delete.warning_text{% endtrans %}</p>

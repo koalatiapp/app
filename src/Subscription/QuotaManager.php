@@ -9,6 +9,7 @@ use App\Repository\ProjectActivityRecordRepository;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class QuotaManager
 {
@@ -21,6 +22,7 @@ class QuotaManager
 		private ProjectActivityRecordRepository $projectActivityRepository,
 		private FlashBagInterface $flashBag,
 		private PlanManager $planManager,
+		private TranslatorInterface $translator,
 		RequestStack $requestStack
 	) {
 		$this->session = $requestStack->getSession();
@@ -64,7 +66,7 @@ class QuotaManager
 				return;
 			}
 
-			$this->flashBag->add('warning', 'subscription.active_project_quota_already_reached');
+			$this->flashBag->add('warning', $this->translator->trans('subscription.active_project_quota_already_reached'));
 			$this->session->set($sessionKey, $activeProjectCount);
 		}
 	}
