@@ -52,7 +52,8 @@ class MembersController extends AbstractApiController
 			$hasOtherAdmins = false;
 
 			foreach ($membership->getOrganization()->getMembers() as $otherMember) {
-				if ($membership != $otherMember && $otherMember->getHighestRole() == OrganizationMember::ROLE_ADMIN) {
+				if ($membership != $otherMember
+					&& in_array($otherMember->getHighestRole(), [OrganizationMember::ROLE_ADMIN, OrganizationMember::ROLE_OWNER])) {
 					$hasOtherAdmins = true;
 					break;
 				}
