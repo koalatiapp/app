@@ -14,13 +14,13 @@
 
 {% block body %}
 	<tabbed-container>
-		<div id="ignored">
-			<h2>{% trans %}project_settings.automated_testing.tabs.ignored_recommendations{% endtrans %}</h2>
-			<recommendation-ignore-list projectId="{{ project.id|hashids_encode }}" light></recommendation-ignore-list>
-		</div>
 		<div id="tools">
 			<h2>{% trans %}project_settings.automated_testing.tabs.tools{% endtrans %}</h2>
 			<testing-tool-list projectId="{{ project.id|hashids_encode }}" light></testing-tool-list>
+		</div>
+		<div id="ignored">
+			<h2>{% trans %}project_settings.automated_testing.tabs.ignored_recommendations{% endtrans %}</h2>
+			<recommendation-ignore-list projectId="{{ project.id|hashids_encode }}" light></recommendation-ignore-list>
 		</div>
 	</tabbed-container>
 {% endblock %}
