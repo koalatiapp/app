@@ -56,7 +56,7 @@ export class RecommendationProgressIndicator extends LitElement {
 				<div>${Translator.trans("automated_testing.progress.scanning_status_indicator")}</div>
 				<div class="timer">
 					<span class="label">${Translator.trans("automated_testing.progress.time_left")}:</span>
-					${this.timeLeftInMs >= 1000 ? this.getFormattedTimeLeft() : html`<span class="unknown-time-estimate">🤷</span>`}
+					${this.timeLeftInMs >= 0 ? this.getFormattedTimeLeft() : html`<span class="unknown-time-estimate">🤷</span>`}
 				</div>
 			`;
 		}
