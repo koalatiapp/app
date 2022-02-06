@@ -87,12 +87,12 @@ class Page
 
 	public function __construct(Project $project, string $url, ?string $title = null)
 	{
-		$this->url = $url;
-		$this->title = $title;
+		$this->setUrl($url);
+		$this->setTitle($title);
+		$this->setProject($project);
 		$this->dateCreated = new DateTime();
 		$this->dateUpdated = new DateTime();
 		$this->recommendations = new ArrayCollection();
-		$this->setProject($project);
 		$this->ignoreEntries = new ArrayCollection();
 	}
 
@@ -108,7 +108,7 @@ class Page
 
 	public function setTitle(?string $title): self
 	{
-		$this->title = $title;
+		$this->title = mb_substr($title ?: '', 0, 255);
 
 		return $this;
 	}
