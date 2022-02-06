@@ -24,21 +24,14 @@ export class RecommendationProgressIndicator extends LitElement {
 			hasRequestsPending: { type: Boolean },
 			pendingRequestCount: { type: Number },
 			timeLeftInMs: { type: Number },
-			_loaded: { state: true },
+			_hasReceivedFirstResponse: { state: true },
 		};
 	}
 
 	constructor()
 	{
 		super();
-		this.hasRequestsPending = false;
-		this.pendingRequestCount = 0;
-		this.timeLeftInMs = 0;
-		this._loading = false;
-		this._loaded = false;
-		this._timerInterval = null;
-		this._nextRefreshTimeout = null;
-		this._nextRefreshTimestamp = null;
+		this.reset();
 	}
 
 	firstUpdated()
@@ -50,7 +43,7 @@ export class RecommendationProgressIndicator extends LitElement {
 
 	render()
 	{
-		if (!this._loaded) {
+		if (!this._hasReceivedFirstResponse) {
 			return html`
 				<nb-loading-spinner></nb-loading-spinner>
 				<div>${Translator.trans("automated_testing.progress.loading_first_results")}</div>
@@ -110,72 +103,66 @@ export class RecommendationProgressIndicator extends LitElement {
 	 */
 	fetchStatus()
 	{
-		this._loading = true;
+		// If we're already waiting for a response from the server,
+		// let's avoid sending another request.
+		if (this._isWaitingForServerResponse) {
+			return;
+		}
+
+		this._isWaitingForServerResponse = true;
 
 		ApiClient.get("api_testing_request_project_status", { id: this.projectId }, null)
 			.then(response => {
-				this._loading = false;
-				this._loaded = true;
-				this.hasRequestsPending = response.data.pending;
-				this.pendingRequestCount = response.data.requestCount;
-				this.timeLeftInMs = response.data.timeEstimate;
-
-				for (const refreshButton of querySelectorAllAnywhere("request-testing-button")) {
-					refreshButton.loading = this.hasRequestsPending;
-				}
-
-				if (this.hasRequestsPending) {
-					this._scheduleNextRefresh();
-				}
+				this._handleStatusUpdate(response.data);
 			})
 			.catch((error) => {
 				console.error(error);
-
-				setTimeout(() => this.fetchStatus(), 10000);
+			})
+			.finally(() => {
+				this._isWaitingForServerResponse = false;
 			});
 	}
 
 	/**
-	 * Signals to the progress indicator that the status
-	 * has likely changed, and that it should soon look
-	 * into re-fetching the status from the server.
+	 * Resets the progress indicator to its initial state.
 	 */
-	requestStatusUpdate()
+	reset()
 	{
-		const delay = 5000;
-		const timestampAfterDelay = (new Date()).getTime() + delay;
-
-		if (this._nextRefreshTimestamp && timestampAfterDelay > this._nextRefreshTimestamp) {
-			return;
-		}
-
-		this._scheduleNextRefresh(delay);
+		this._clearTimerInterval();
+		this.hasRequestsPending = false;
+		this.pendingRequestCount = 0;
+		this.timeLeftInMs = 0;
+		this._isWaitingForServerResponse = false;
+		this._hasReceivedFirstResponse = false;
+		this._timerInterval = null;
 	}
 
-	/**
-	 * Initializes a countdown for the timer and queues
-	 * a `fetchStatus()` call in a specified (or not)
-	 * amount of time.
-	 *
-	 * @param {Number|null} delay
-	 */
-	_scheduleNextRefresh(delay = null)
+	_handleStatusUpdate(status)
 	{
+		this._hasReceivedFirstResponse = true;
+		this.hasRequestsPending = status.pending;
+		this.pendingRequestCount = status.requestCount;
+		this.timeLeftInMs = status.timeEstimate;
 		this._startTimerInterval();
 
-		if (!delay) {
-			delay = Math.max(3000, this.timeLeftInMs * 0.1);
+		for (const refreshButton of querySelectorAllAnywhere("request-testing-button")) {
+			refreshButton.loading = this.hasRequestsPending;
 		}
-
-		delay = Math.max(delay, 1000);
-
-		setTimeout(() => {
-			this._nextRefreshTimestamp = null;
-			this.fetchStatus();
-		}, delay);
-
-		this._nextRefreshTimestamp = (new Date()).getTime() + delay;
 	}
+
+	_initStatusUpdateListener()
+	{
+		const topic = `http://koalati/project/${this.projectId}/testing/status`;
+		ApiClient.subscribe(topic, status => {
+			if (typeof status.requestCount != "undefined") {
+				this._handleStatusUpdate(status);
+			} else if (status.pending && !this._hasReceivedFirstResponse) {
+				this.fetchStatus();
+			}
+		});
+	}
+
+	// Timer related methods
 
 	_clearTimerInterval()
 	{
@@ -191,16 +178,6 @@ export class RecommendationProgressIndicator extends LitElement {
 		this._timerInterval = setInterval(() => {
 			this.timeLeftInMs = Math.max(0, this.timeLeftInMs - 1000);
 		}, 1000);
-	}
-
-	_initStatusUpdateListener()
-	{
-		const topic = `http://koalati/project/${this.projectId}/testing/status`;
-		ApiClient.subscribe(topic, status => {
-			if (status.pending) {
-				this._loaded = false;
-			}
-		});
 	}
 }
 

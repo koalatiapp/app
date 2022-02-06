@@ -70,7 +70,6 @@ class SitemapRequestHandler implements MessageHandlerInterface
 		$websiteUrl = $this->urlHelper->standardize($project->getUrl(), false);
 		$locations = $this->sitemapBuilder->buildFromWebsiteUrl($websiteUrl)->getLocations();
 		$pagesByUrl = [];
-		$allPages = [];
 
 		foreach ($project->getPages() as $page) {
 			$pagesByUrl[$page->getUrl()] = $page;
@@ -86,14 +85,12 @@ class SitemapRequestHandler implements MessageHandlerInterface
 					$page->setTitle($location->title);
 					$this->em->persist($page);
 				}
-
-				$allPages[] = $page;
 			}
 			// Otherwise, create the new page
 			else {
 				$page = new Page($project, $location->url, $location->title);
+				$pagesByUrl[$location->url] = $page;
 				$this->em->persist($page);
-				$allPages[] = $page;
 			}
 		}
 

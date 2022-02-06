@@ -9,14 +9,18 @@ use App\Entity\Testing\TestResult;
 use App\Entity\Testing\ToolResponse;
 use App\Exception\WebhookException;
 use App\Mercure\UpdateDispatcher;
+use App\Message\TestingStatusRequest;
 use App\Repository\PageRepository;
+use App\Repository\ProjectRepository;
 use App\Repository\Testing\RecommendationRepository;
 use App\Util\ClientMessageSerializer;
 use App\Util\Testing\RecommendationGroup;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -41,9 +45,12 @@ class TestResultController extends AbstractController
 	 */
 	public function __construct(
 		private RecommendationRepository $recommendationRepository,
+		private ProjectRepository $projectRepository,
 		private PageRepository $pageRepository,
 		private UpdateDispatcher $updateDispatcher,
 		private ClientMessageSerializer $serializer,
+		private LoggerInterface $logger,
+		private MessageBusInterface $bus,
 	) {
 	}
 
@@ -53,6 +60,14 @@ class TestResultController extends AbstractController
 	public function testResult(Request $request): Response
 	{
 		$payload = $this->getPayload($request);
+
+		// Handle payload errors
+		if ($this->requestIsErrorNotice($payload)) {
+			$this->dispatchProjectStatusUpdates($payload);
+
+			return new Response('The webhook request was handled successfully.');
+		}
+
 		// @TODO: add handling of tool responses where `$payload["success"]` is false
 		// @TODO: add a security check to webhook to ensure it comes from a legit source. This should probably be done via the firewall.
 		$this->processToolResponse($payload);
@@ -60,7 +75,26 @@ class TestResultController extends AbstractController
 		// Communicate the new data to subscribed clients
 		$this->dispatchClientUpdates();
 
+		// Send project status update
+		$this->dispatchProjectStatusUpdates($payload);
+
 		return new Response('The webhook request was handled successfully.');
+	}
+
+	/**
+	 * Trigger a project status update request for each project
+	 * that has been affected by the test result that was just processed.
+	 *
+	 * @param array<string,mixed> $payload
+	 */
+	private function dispatchProjectStatusUpdates(array $payload): void
+	{
+		$pageUrl = $payload['request']['url'];
+		$projects = $this->projectRepository->findByPageUrl($pageUrl);
+
+		foreach ($projects as $project) {
+			$this->bus->dispatch(new TestingStatusRequest($project->getId()));
+		}
 	}
 
 	private function dispatchClientUpdates(): void
@@ -243,8 +277,6 @@ class TestResultController extends AbstractController
 	/**
 	 * Extracts, deserializes and validates the payload from the request.
 	 *
-	 * @throws WebhookException
-	 *
 	 * @return array<string,mixed>
 	 */
 	private function getPayload(Request $request): array
@@ -261,50 +293,60 @@ class TestResultController extends AbstractController
 	}
 
 	/**
-	 * Detects errors in the request's payload and throws appropriate exceptions.
+	 * Detects errors in the request's payload and handles logging.
 	 *
 	 * @param array<string,mixed> $payload
-	 *
-	 * @throws WebhookException
 	 */
 	private function handlePayloadErrors(array $payload): void
 	{
 		switch ($payload['type']) {
 			case 'developerError':
-				$this->throwDeveloperError($payload);
+				$this->logDeveloperError($payload);
 
 			// no break
 			case 'toolError':
-				$this->throwToolError($payload);
+				$this->logToolError($payload);
 		}
 	}
 
 	/**
-	 * Throws an error for the Koalati developers to handle.
-	 *
-	 * @param array<mixed> $payload
-	 *
-	 * @throws WebhookException
+	 * @param array<string,mixed> $payload
 	 */
-	private function throwDeveloperError(array $payload): void
+	private function requestIsErrorNotice(array $payload): bool
 	{
-		throw new WebhookException(sprintf("An error (developerError) occured on the Tools API: %s.\n
-				 Request: %s\n
-				 Error details: %s", $payload['message'] ?? 'no error message', json_encode($payload['request'], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT), json_encode($payload['error'], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)));
+		return in_array($payload['type'], ['developerError', 'toolError']);
 	}
 
 	/**
-	 * Throws an error for the tool developers to handle.
+	 * Logs an error for the Koalati developers to handle.
 	 *
 	 * @param array<mixed> $payload
-	 *
-	 * @throws WebhookException
 	 */
-	private function throwToolError(array $payload): void
+	private function logDeveloperError(array $payload): void
+	{
+		$this->logger->error(
+			new WebhookException(
+				sprintf("An error (developerError) occured on the Tools API: %s.\n
+				Request: %s\n
+				Error details: %s", $payload['message'] ?? 'no error message', json_encode($payload['request'], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT), json_encode($payload['error'], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT))
+			)
+		);
+	}
+
+	/**
+	 * Logs an error for the tool developers to handle.
+	 *
+	 * @param array<mixed> $payload
+	 */
+	private function logToolError(array $payload): void
 	{
 		// @TODO: Handle toolError in tools result webhook (submit bug to tool developer)
-		throw new WebhookException(sprintf("An error (toolError) occured on the Tools API for tool %s.\n
-				 Request: %s\n
-				 Error details: %s", $payload['request']['tool'], json_encode($payload['request'], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT), json_encode($payload['error'], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)));
+		$this->logger->error(
+			new WebhookException(
+				sprintf("An error (toolError) occured on the Tools API for tool %s.\n
+				Request: %s\n
+				Error details: %s", $payload['request']['tool'], json_encode($payload['request'], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT), json_encode($payload['error'], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT))
+			)
+		);
 	}
 }

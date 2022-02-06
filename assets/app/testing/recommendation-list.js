@@ -3,7 +3,6 @@ import { AbstractDynamicList } from "../abstract-dynamic-list";
 import Modal from "../../utils/modal";
 import fontawesomeImport from "../../utils/fontawesome-import";
 import { ApiClient } from "../../utils/api";
-import querySelectorAllAnywhere from "../../utils/query-selector-all-anywhere.js";
 
 export class RecommendationList extends AbstractDynamicList {
 	static get styles()
@@ -119,7 +118,6 @@ export class RecommendationList extends AbstractDynamicList {
 		this.sortBy = "type";
 		this.sortDirection = "DESC";
 		this.itemsPerPage = 10;
-		this._initProgressIndicatorUpdates();
 	}
 
 	render()
@@ -163,15 +161,6 @@ export class RecommendationList extends AbstractDynamicList {
 			content: html`
 				<recommendation-ignore-form .recommendation=${item}></recommendation-ignore-form>
 			`
-		});
-	}
-
-	_initProgressIndicatorUpdates()
-	{
-		this.addEventListener("items-updated", () => {
-			for (const progressIndicator of querySelectorAllAnywhere("recommendation-progress-indicator")) {
-				progressIndicator.requestStatusUpdate();
-			}
 		});
 	}
 }
