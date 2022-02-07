@@ -17,7 +17,6 @@ use App\Util\ClientMessageSerializer;
 use App\Util\Testing\RecommendationGroup;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -49,7 +48,6 @@ class TestResultController extends AbstractController
 		private PageRepository $pageRepository,
 		private UpdateDispatcher $updateDispatcher,
 		private ClientMessageSerializer $serializer,
-		private LoggerInterface $logger,
 		private MessageBusInterface $bus,
 	) {
 	}

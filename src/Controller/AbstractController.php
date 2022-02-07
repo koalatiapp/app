@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use Hashids\HashidsInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as DefaultAbstractController;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -13,6 +14,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 abstract class AbstractController extends DefaultAbstractController
 {
 	protected TranslatorInterface $translator;
+	protected LoggerInterface $logger;
 	protected HashidsInterface $idHasher;
 
 	/**
@@ -21,6 +23,14 @@ abstract class AbstractController extends DefaultAbstractController
 	public function setTranslator(TranslatorInterface $translator): void
 	{
 		$this->translator = $translator;
+	}
+
+	/**
+	 * @required
+	 */
+	public function setLogger(LoggerInterface $logger): void
+	{
+		$this->logger = $logger;
 	}
 
 	/**
