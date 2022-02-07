@@ -10,9 +10,11 @@ use App\Subscription\Plan\FreePlan;
 use App\Subscription\Plan\TrialPlan;
 use DateTime;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -49,10 +51,6 @@ class RegistrationController extends AbstractController
 				->setSubscriptionChangeDate(new DateTime('+14 days'))
 				->setUpcomingSubscriptionPlan(FreePlan::UNIQUE_NAME);
 
-			$em = $this->getDoctrine()->getManager();
-			$em->persist($user);
-			$em->flush();
-
 			$email = (new TemplatedEmail())
 				->to(new Address($user->getEmail(), $user->getFirstName()))
 				->subject($this->translator->trans('email.welcome.subject'))
@@ -60,9 +58,24 @@ class RegistrationController extends AbstractController
 				->context([
 					'user' => $user,
 				]);
-			$mailer->send($email);
 
-			return $authenticator->authenticateUser($user, $loginFormAuthenticator, $request);
+			$mailSent = false;
+
+			try {
+				$mailer->send($email);
+				$mailSent = true;
+			} catch (HandlerFailedException $e) {
+				$form->get('email')->addError(new FormError($this->translator->trans('registration.form.error.email_failed')));
+				$this->logger->error($e);
+			}
+
+			if ($mailSent) {
+				$em = $this->getDoctrine()->getManager();
+				$em->persist($user);
+				$em->flush();
+
+				return $authenticator->authenticateUser($user, $loginFormAuthenticator, $request);
+			}
 		}
 
 		return $this->render('public/registration.html.twig', ['form' => $form->createView()]);
