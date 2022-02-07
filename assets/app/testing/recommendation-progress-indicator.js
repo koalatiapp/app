@@ -178,7 +178,7 @@ export class RecommendationProgressIndicator extends LitElement {
 		this._timerInterval = setInterval(() => {
 			this.timeLeftInMs = Math.max(0, this.timeLeftInMs - 1000);
 
-			if (this.timeLeftInMs == 0) {
+			if (this.timeLeftInMs == 0 && this.hasRequestsPending) {
 				this.fetchStatus();
 			}
 		}, 1000);
