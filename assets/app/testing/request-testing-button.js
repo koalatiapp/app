@@ -33,6 +33,10 @@ export class RequestTestingButton extends NbButton {
 
 	_submitTestingRequest()
 	{
+		if (this.loading) {
+			return;
+		}
+
 		for (const refreshButton of querySelectorAllAnywhere("request-testing-button")) {
 			refreshButton.loading = true;
 		}
@@ -42,8 +46,7 @@ export class RequestTestingButton extends NbButton {
 				window.Flash.show("success", Translator.trans("automated_testing.testing_request_created"));
 
 				for (const progressIndicator of querySelectorAllAnywhere("recommendation-progress-indicator")) {
-					progressIndicator._loaded = false;
-					progressIndicator._loading = true;
+					progressIndicator.reset();
 				}
 			})
 			.catch((error) => {

@@ -7,7 +7,7 @@
     "core-js": "^3.10.2",
     "element-internals-polyfill": "0.1.46",
     "escape-html": "^1.0.3",
-    "lit": "^2.0.0-rc.1",
+    "lit": "^2.1.2",
     "timeago.js": "^4.0.2",
     "zero-md": "^2.1.1"
   },

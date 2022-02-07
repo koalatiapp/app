@@ -68,7 +68,7 @@ class ProjectRepository extends ServiceEntityRepository
 	/**
 	 * Finds projects corresponding to a provided URL.
 	 *
-	 * @return Project[]
+	 * @return array<int,Project>
 	 */
 	public function findByUrl(string $url): array
 	{
@@ -77,5 +77,44 @@ class ProjectRepository extends ServiceEntityRepository
 			->setParameter('url', $url)
 			->getQuery()
 			->getResult();
+	}
+
+	/**
+	 * Finds projects corresponding to a provided page URL.
+	 *
+	 * @return array<int,Project>
+	 */
+	public function findByPageUrl(string $pageUrl): array
+	{
+		$em = $this->getEntityManager();
+
+		/*
+		 * Protocols, www subdomain and trailing slashes are not taken into account
+		 * when comparing website URLs to give the users some leeway in case they
+		 * mistakenly set up the wrong URL in the project, to prevent negative
+		 * feedback if they secure their website, etc.
+		  */
+		$query = $em->createQuery("
+				SELECT p
+				FROM App\Entity\Project p
+				WHERE TRIM(TRAILING '/' FROM
+					TRIM(LEADING 'www.' FROM
+						TRIM(LEADING 'http://' FROM
+							TRIM(LEADING 'https://' FROM :pageUrl)
+						)
+					)
+				) LIKE CONCAT(
+					TRIM(TRAILING '/' FROM
+						TRIM(LEADING 'www.' FROM
+							TRIM(LEADING 'http://' FROM
+								TRIM(LEADING 'https://' FROM p.url)
+							)
+						)
+					),
+					'%'
+				)
+		")->setParameter('pageUrl', $pageUrl);
+
+		return $query->getResult();
 	}
 }

@@ -8,6 +8,7 @@ use App\Entity\Project;
 use App\Entity\ProjectActivityRecord;
 use App\Mercure\UpdateDispatcher;
 use App\Message\TestingRequest;
+use App\Message\TestingStatusRequest;
 use App\Repository\ProjectRepository;
 use App\Subscription\PlanManager;
 use App\Util\Testing\AvailableToolsFetcher;
@@ -67,10 +68,7 @@ class TestingRequestHandler implements MessageHandlerInterface
 		$this->toolsEndpoint->request($pageUrls, $tools, $priority);
 
 		// Send an update to the client(s) to indicate that testing is in progress
-		$hashedProjectId = $this->idHasher->encode($project->getId());
-		$mercureTopic = 'http://koalati/project/'.$hashedProjectId.'/testing/status';
-		$mercureUpdate = new Update($mercureTopic, json_encode(['pending' => true]));
-		$this->bus->dispatch($mercureUpdate);
+		$this->bus->dispatch(new TestingStatusRequest($project->getId()));
 	}
 
 	/**

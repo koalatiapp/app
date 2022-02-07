@@ -13,5 +13,6 @@ framework:
             # Route your messages to the transports
             'App\Message\SitemapRequest': async
             'App\Message\TestingRequest': async
+            'App\Message\TestingStatusRequest': async
             'App\Message\ScreenshotRequest': async
             'App\Message\FaviconRequest': async
