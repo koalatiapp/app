@@ -61,7 +61,9 @@ hr,
 *:focus-visible::before { box-shadow: 0 0 1rem 0 rgba(var(--shadow-rgb), .2); }
 
 /* Navigation */
-#sidebar nav > ul > li.active { background-color: var(--color-gray-light); }
+#sidebar nav > ul > li.active { background-color: var(--color-gray-lighter); }
+#sidebar nav > ul > li > a:hover { color: var(--color-blue-darker); }
+#sidebar nav > ul > li > ul > li:not(.active) a:hover { color: var(--color-blue-darker); }
 
 /* Forms */
 fieldset label { color: var(--color-gray); }
