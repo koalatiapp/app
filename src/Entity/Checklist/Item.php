@@ -2,9 +2,12 @@
 
 namespace App\Entity\Checklist;
 
+use App\Entity\Comment;
 use App\Entity\MercureEntityInterface;
 use App\Mercure\TopicBuilder;
 use App\Repository\Checklist\ItemRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -58,6 +61,20 @@ class Item implements MercureEntityInterface
 	 * @Groups({"default"})
 	 */
 	private ?bool $isCompleted = false;
+
+	/**
+	 * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="checklistItem", orphanRemoval=true)
+	 * @ORM\OrderBy({"dateCreated" = "ASC"})
+	 * @Groups({"default"})
+	 *
+	 * @var Collection<int,Comment>
+	 */
+	private Collection $comments;
+
+	public function __construct()
+	{
+		$this->comments = new ArrayCollection();
+	}
 
 	public function getId(): ?int
 	{
@@ -149,16 +166,48 @@ class Item implements MercureEntityInterface
 	public static function getMercureTopics(): array
 	{
 		return [
-			TopicBuilder::SCOPE_SPECIFIC => 'http://koalati/checklist-item/{id}',
-			TopicBuilder::SCOPE_PROJECT => 'http://koalati/{scope}/checklist-item/{id}',
-		];
+									   TopicBuilder::SCOPE_SPECIFIC => 'http://koalati/checklist-item/{id}',
+									   TopicBuilder::SCOPE_PROJECT => 'http://koalati/{scope}/checklist-item/{id}',
+								   ];
 	}
 
 	public function getMercureScope(string $scope): object | array | null
 	{
 		return match ($scope) {
 			TopicBuilder::SCOPE_PROJECT => $this->getChecklist()->getProject(),
-			default => null
+									   default => null
 		};
+	}
+
+	/**
+	 * @return Collection<int,Comment>
+	 */
+	public function getComments(): Collection
+	{
+		return $this->comments->filter(function (Comment $comment) {
+			return !$comment->getThread();
+		});
+	}
+
+	public function addComment(Comment $comment): self
+	{
+		if (!$this->comments->contains($comment)) {
+			$this->comments[] = $comment;
+			$comment->setChecklistItem($this);
+		}
+
+		return $this;
+	}
+
+	public function removeComment(Comment $comment): self
+	{
+		if ($this->comments->removeElement($comment)) {
+			// set the owning side to null (unless already changed)
+			if ($comment->getChecklistItem() === $this) {
+				$comment->setChecklistItem(null);
+			}
+		}
+
+		return $this;
 	}
 }
