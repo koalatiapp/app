@@ -35,6 +35,16 @@ export class AbstractDynamicList extends NbList {
 		this.fetchListData();
 	}
 
+	updated()
+	{
+		// In some cases, attributes may be set after the initial render,
+		// which causes a list that is "stuck" in the loading state.
+		// By checking on subsequent updates, we can avoid this.
+		if (this.isLoading) {
+			this.fetchListData();
+		}
+	}
+
 	/**
 	 * Returns the list of dynamic actions that are supported by this list.
 	 * Available actions:
