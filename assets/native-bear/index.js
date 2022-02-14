@@ -14,4 +14,5 @@ export {NbSwitch} from "./switch/switch";
 export {NbAccordion} from "./accordion/accordion";
 export {NbMarkdown} from "./markdown/markdown";
 export {NbLoadingSpinner} from "./loading-spinner/loading-spinner";
+export {NbSidePanel} from "./sidepanel/sidepanel";
 export {TabbedContainer} from "./tabbed-container/tabbed-container";
