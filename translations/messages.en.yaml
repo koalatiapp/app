@@ -264,6 +264,7 @@ quick_actions:
     create_project: Create a project
 
 search:
+    button_label: Open the search bar
     label: Quick search
     placeholder: Search throughout Koalati
     empty_state: No results were found.

@@ -1,6 +1,6 @@
 <div id="global-actions">
     <a href="#" id="search-toggle">
-        <i class="far fa-magnifying-glass"></i>
+        <i class="far fa-magnifying-glass" aria-label="{% trans %}search.button_label{% endtrans %}"></i>
     </a>
     <feedback-form-toggle>
         <i class="far fa-comment-dots" aria-label="{% trans %}feedback.cta{% endtrans %}"></i>
@@ -10,7 +10,7 @@
         <i class="far fa-bell"></i>
     </a>
 	#}
-    <div href="#" id="profile-toggle">
+    <div id="profile-toggle">
         <img src="{{ gravatar(app.user.email) }}" loading="lazy">
 		<ul class="floating-dropdown reveal-on-hover text-center">
 			<li><a href="{{ path('edit_profile') }}">{% trans %}global_actions.profile{% endtrans %}</a></li>
