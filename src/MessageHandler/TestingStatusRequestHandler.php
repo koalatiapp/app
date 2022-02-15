@@ -95,7 +95,7 @@ class TestingStatusRequestHandler implements MessageHandlerInterface
 				// it becomes important to request status updates from the API
 				$previousStatus['requestCount']--;
 				$previousStatusCache->set($previousStatus);
-				$this->cache->save($previousStatus);
+				$this->cache->save($previousStatusCache);
 
 				// Allow a request every now and then, just to keep the estimates updated
 				if (random_int(0, 100) >= 90) {
