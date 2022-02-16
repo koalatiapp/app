@@ -56,7 +56,7 @@ export class RecommendationProgressIndicator extends LitElement {
 				<div>${Translator.trans("automated_testing.progress.scanning_status_indicator")}</div>
 				<div class="timer">
 					<span class="label">${Translator.trans("automated_testing.progress.time_left")}:</span>
-					${this.timeLeftInMs >= 0 ? this.getFormattedTimeLeft() : html`<span class="unknown-time-estimate">🤷</span>`}
+					${this.timeLeftInMs > 0 ? this.getFormattedTimeLeft() : html`<span class="unknown-time-estimate">🤷</span>`}
 				</div>
 			`;
 		}
@@ -110,6 +110,7 @@ export class RecommendationProgressIndicator extends LitElement {
 		}
 
 		this._isWaitingForServerResponse = true;
+		this._lastFetchTimestamp = Date.now();
 
 		ApiClient.get("api_testing_request_project_status", { id: this.projectId }, null)
 			.then(response => {
@@ -135,6 +136,7 @@ export class RecommendationProgressIndicator extends LitElement {
 		this._isWaitingForServerResponse = false;
 		this._hasReceivedFirstResponse = false;
 		this._timerInterval = null;
+		this._lastFetchTimestamp = null;
 	}
 
 	_handleStatusUpdate(status)
@@ -176,9 +178,10 @@ export class RecommendationProgressIndicator extends LitElement {
 	{
 		this._clearTimerInterval();
 		this._timerInterval = setInterval(() => {
+			const timeSinceLastFetch = Date.now() - this._lastFetchTimestamp;
 			this.timeLeftInMs = Math.max(0, this.timeLeftInMs - 1000);
 
-			if (this.timeLeftInMs == 0 && this.hasRequestsPending) {
+			if (this.timeLeftInMs == 0 && this.hasRequestsPending && timeSinceLastFetch > 10000) {
 				this.fetchStatus();
 			}
 		}, 1000);
