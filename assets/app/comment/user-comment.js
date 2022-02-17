@@ -36,6 +36,7 @@ export class UserComment extends LitElement {
 			authorName: {type: String},
 			content: {type: String},
 			isResolved: {type: Boolean},
+			thread: {type: Array},
 			replies: {type: Array},
 			_loaded: {state: true},
 		};
@@ -51,6 +52,7 @@ export class UserComment extends LitElement {
 		this.authorName = "";
 		this.content = "";
 		this.isResolved = false;
+		this.thread = null;
 		this.replies = [];
 		this._loaded = false;
 	}
@@ -77,11 +79,15 @@ export class UserComment extends LitElement {
 				</div>
 				<div class="actions">
 					<nb-button size="tiny" color="gray">
-						Reply
+						${Translator.trans("comment.reply")}
 					</nb-button>
-					<nb-button size="tiny">
-						Resolve
-					</nb-button>
+					${!this.thread ?
+						html`
+							<nb-button size="tiny">
+								${Translator.trans("comment.resolve")}
+							</nb-button>
+						` : ""
+					}
 				</div>
 			</div>
 
@@ -111,6 +117,7 @@ export class UserComment extends LitElement {
 	_loadData(data)
 	{
 		this.commentId = data.id;
+		this.thread = data.thread;
 		this.dateCreated = new Date(data.dateCreated);
 		this.authorAvatarUrl = data.author?.avatarUrl ?? this.placeholderUrl;
 		this.authorName = data.authorName;

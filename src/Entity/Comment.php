@@ -50,6 +50,7 @@ class Comment implements MercureEntityInterface
 	/**
 	 * @ORM\ManyToOne(targetEntity=Comment::class, inversedBy="replies")
 	 * @ORM\JoinColumn(onDelete="CASCADE")
+	 * @Groups({"default"})
 	 */
 	private ?Comment $thread = null;
 

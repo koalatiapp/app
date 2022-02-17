@@ -475,8 +475,8 @@ class Project
 	 */
 	public function getUnresolvedCommentCount(): int
 	{
-		return $this->comments->filter(
-			fn (Comment $comment) => !$comment->isResolved()
-		)->count();
+		return $this->comments->filter(function (Comment $comment) {
+			return !$comment->isResolved() && !$comment->getThread();
+		})->count();
 	}
 }

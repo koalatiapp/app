@@ -503,6 +503,8 @@ project_checklist:
         title: Checklist - step-by-step
     item:
         view_more: Learn more
+        comments_count: "{0}0 comments|{1}1 comment|]1,Inf[%count% comments"
+        unresolved_comments_count: "{0}0 unresolved comments|{1}1 unresolved comment|]1,Inf[%count% unresolved comments"
         resources: "Here are some Koalati-curated resources to help:"
 
 project_settings:
@@ -693,6 +695,10 @@ subscription:
 upgrade_suggestion:
     create_team: Upgrade to a plan that offers Team Creation to get started with your own team!
     testing: Upgrade to a plan that offers automated testing tools to start testing your projects!
+
+comment:
+    reply: Reply
+    resolve: Resolve
 
 email:
     welcome:
