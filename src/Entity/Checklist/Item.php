@@ -65,7 +65,7 @@ class Item implements MercureEntityInterface
 	/**
 	 * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="checklistItem", orphanRemoval=true)
 	 * @ORM\OrderBy({"dateCreated" = "ASC"})
-	 * @Groups({"default"})
+	 * @Groups({"comments"})
 	 *
 	 * @var Collection<int,Comment>
 	 */
@@ -159,26 +159,6 @@ class Item implements MercureEntityInterface
 		return $this;
 	}
 
-	/*
-	 * Mercure implementation (MercureEntityInterface)
-	 */
-
-	public static function getMercureTopics(): array
-	{
-		return [
-									   TopicBuilder::SCOPE_SPECIFIC => 'http://koalati/checklist-item/{id}',
-									   TopicBuilder::SCOPE_PROJECT => 'http://koalati/{scope}/checklist-item/{id}',
-								   ];
-	}
-
-	public function getMercureScope(string $scope): object | array | null
-	{
-		return match ($scope) {
-			TopicBuilder::SCOPE_PROJECT => $this->getChecklist()->getProject(),
-									   default => null
-		};
-	}
-
 	/**
 	 * @return Collection<int,Comment>
 	 */
@@ -209,5 +189,43 @@ class Item implements MercureEntityInterface
 		}
 
 		return $this;
+	}
+
+	/**
+	 * @Groups({"default"})
+	 */
+	public function getCommentCount(): int
+	{
+		return $this->comments->count();
+	}
+
+	/**
+	 * @Groups({"default"})
+	 */
+	public function getUnresolvedCommentCount(): int
+	{
+		return $this->comments->filter(
+			fn (Comment $comment) => !$comment->isResolved()
+		)->count();
+	}
+
+	/*
+	 * Mercure implementation (MercureEntityInterface)
+	 */
+
+	public static function getMercureTopics(): array
+	{
+		return [
+			TopicBuilder::SCOPE_SPECIFIC => 'http://koalati/checklist-item/{id}',
+			TopicBuilder::SCOPE_PROJECT => 'http://koalati/{scope}/checklist-item/{id}',
+		];
+	}
+
+	public function getMercureScope(string $scope): object | array | null
+	{
+		return match ($scope) {
+			TopicBuilder::SCOPE_PROJECT => $this->getChecklist()->getProject(),
+			default => null
+		};
 	}
 }

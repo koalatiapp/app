@@ -13,6 +13,7 @@ export class NbButton extends LitElement {
 				.button { display: flex; justify-content: center; align-items: center; padding: 16px 30px; font-family: inherit; font-size: .85rem; font-weight: 600; line-height: 1.3; text-decoration: none; text-align: center; color: var(--button-text-color, #fff); background-color: var(--button-bg-color, #2751e6); border: none; border-radius: 13px; box-shadow: 0 2px 10px 0 rgba(var(--shadow-rgb, "0, 0, 0"), .15); cursor: pointer; transition: background .25s ease, box-shadow .25s ease; }
 				.button:hover { color: var(--button-text-color-hover, white); background-color: var(--button-bg-color-hover, #5074f2); box-shadow: 0 3px 15px 0 rgba(var(--shadow-rgb, "0, 0, 0"), .25); }
 				.button.small { padding: 10px 20px; font-weight: 500; }
+				.button.tiny { padding: 6px 12px; font-size: .8rem; font-weight: 500; border-radius: .5rem; }
 				.button.danger { --button-bg-color: var(--color-red); --button-bg-color-hover: var(--color-red-light); }
 				.button.warning { --button-bg-color: var(--color-orange); --button-bg-color-hover: var(--color-orange-light); }
 				.button.white { --button-bg-color: #fff; --button-bg-color-hover: var(--color-blue-light); --button-text-color: var(--color-blue); }

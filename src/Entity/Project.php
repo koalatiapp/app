@@ -113,6 +113,13 @@ class Project
 	 * @Groups({"default"})
 	 */
 	private ?Organization $ownerOrganization = null;
+	/**
+	 * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="project")
+	 * @Groups({"comments"})
+	 *
+	 * @var Collection<int,Comment>
+	 */
+	private Collection $comments;
 
 	public function __construct()
 	{
@@ -120,6 +127,7 @@ class Project
 		$this->pages = new ArrayCollection();
 		$this->teamMembers = new ArrayCollection();
 		$this->ignoreEntries = new ArrayCollection();
+		$this->comments = new ArrayCollection();
 	}
 
 	public function getId(): ?int
@@ -442,5 +450,33 @@ class Project
 		}
 
 		return self::STATUS_IN_PROGRESS;
+	}
+
+	/**
+	 * @return Collection<int,Comment>
+	 */
+	public function getComments(): Collection
+	{
+		return $this->comments->filter(function (Comment $comment) {
+			return !$comment->getThread();
+		});
+	}
+
+	/**
+	 * @Groups({"default"})
+	 */
+	public function getCommentCount(): int
+	{
+		return $this->comments->count();
+	}
+
+	/**
+	 * @Groups({"default"})
+	 */
+	public function getUnresolvedCommentCount(): int
+	{
+		return $this->comments->filter(
+			fn (Comment $comment) => !$comment->isResolved()
+		)->count();
 	}
 }

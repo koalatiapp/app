@@ -16,6 +16,7 @@ class TopicBuilder
 	public const SCOPE_PROJECT = 'project';
 	public const SCOPE_USER = 'user';
 	public const SCOPE_ORGANIZATION = 'organization';
+	public const SCOPE_CHECKLIST_ITEM = 'checklist_item';
 
 	protected HashidsInterface $idHasher;
 

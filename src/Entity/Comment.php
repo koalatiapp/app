@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Checklist\Item;
+use App\Mercure\TopicBuilder;
 use App\Repository\CommentRepository;
 use DateTime;
 use DateTimeInterface;
@@ -15,7 +16,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 /**
  * @ORM\Entity(repositoryClass=CommentRepository::class)
  */
-class Comment
+class Comment implements MercureEntityInterface
 {
 	/**
 	 * @ORM\Id
@@ -33,7 +34,7 @@ class Comment
 	private ?User $author = null;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity=Project::class)
+	 * @ORM\ManyToOne(targetEntity=Project::class, inversedBy="comments")
 	 * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
 	 * @Groups({"default"})
 	 * @MaxDepth(1)
@@ -238,5 +239,27 @@ class Comment
 		$this->isDeleted = $isDeleted;
 
 		return $this;
+	}
+
+	/*
+	 * Mercure implementation (MercureEntityInterface)
+	 */
+
+	public static function getMercureTopics(): array
+	{
+		return [
+			TopicBuilder::SCOPE_SPECIFIC => 'http://koalati/comment/{id}',
+			TopicBuilder::SCOPE_PROJECT => 'http://koalati/{scope}/comment/{id}',
+			TopicBuilder::SCOPE_CHECKLIST_ITEM => 'http://koalati/{scope}/comment/{id}',
+		];
+	}
+
+	public function getMercureScope(string $scope): object | array | null
+	{
+		return match ($scope) {
+			TopicBuilder::SCOPE_PROJECT => $this->getProject(),
+			TopicBuilder::SCOPE_CHECKLIST_ITEM => $this->getChecklistItem(),
+			default => null
+		};
 	}
 }
