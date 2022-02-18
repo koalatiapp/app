@@ -57,7 +57,7 @@ export class CommentList extends LitElement {
 				${repeat(
 					this.threads,
 					thread => thread.id,
-					thread => html`<li><user-comment .data=${thread}></user-comment></li>`
+					thread => html`<li><user-comment .data=${thread} ?autoShowReplies=${!thread.isResolved}></user-comment></li>`
 				)}
 			</ol>
 	  	`;

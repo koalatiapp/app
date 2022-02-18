@@ -19,6 +19,7 @@ export class UserComment extends LitElement {
 				.author { font-size: 1.05em; font-weight: 700; text-overflow: ellipsis; }
 				.date { font-size: .8em; color: var(--color-gray-dark); }
 				.actions { flex-shrink: 0; text-align: right; }
+				.resolved { display: inline-block; padding: 0.5em 0.75em; font-size: 0.8rem; font-weight: 500; color: #269900; background-color: var(--color-green-10); border-radius: 0.5em; cursor: default; }
 
 				.body { margin-top: 1.5em; font-size: 1em; }
 
@@ -29,7 +30,7 @@ export class UserComment extends LitElement {
 				.replies li { padding-left: 2rem; margin-top: 1rem; background-image: url("/ext/fontawesome/svgs/regular/arrow-turn-down-right.svg"); background-size: 1rem; background-position: .5rem .5rem; background-repeat: no-repeat; }
 
 				@media (prefers-color-scheme: dark) {
-
+					.resolved { color: #d7ffcd; background-color: var(--color-green-50); }
 				}
 			`
 		];
@@ -63,7 +64,7 @@ export class UserComment extends LitElement {
 		this.thread = null;
 		this.replies = [];
 		this.showReplies = true;
-		this.autoShowReplies = true;
+		this.autoShowReplies = false;
 		this._loaded = false;
 	}
 
@@ -78,6 +79,7 @@ export class UserComment extends LitElement {
 			return html`<nb-loading-spinner></nb-loading-spinner>`;
 		}
 
+		console.log(this.autoShowReplies, !!this.autoShowReplies);
 		return html`
 			${fontAwesomeImport}
 
@@ -88,14 +90,27 @@ export class UserComment extends LitElement {
 					<div class="date">${timeago.format(this.dateCreated)}</div>
 				</div>
 				<div class="actions">
-					<nb-button size="tiny" color="gray">
-						${Translator.trans("comment.reply")}
-					</nb-button>
-					${!this.thread ?
+					${!this.isResolved ? html`
+						<nb-button size="tiny" color="gray">
+							${Translator.trans("comment.reply")}
+						</nb-button>
+					` : ""}
+
+					${!this.thread && !this.isResolved ?
 						html`
-							<nb-button size="tiny">
+							<nb-button size="tiny" class="resolve" @click=${() => this.#resolve()}>
 								${Translator.trans("comment.resolve")}
 							</nb-button>
+						` : ""
+					}
+
+					${!this.thread && this.isResolved ?
+						html`
+							<span class="resolved">
+								<i class="fas fa-check-circle"></i>
+								&nbsp;
+								${Translator.trans("comment.resolved")}
+							</span>
 						` : ""
 					}
 				</div>
@@ -105,8 +120,8 @@ export class UserComment extends LitElement {
 				${this.content}
 			</div>
 
-			${this.showReplies && this.replies.length ? html`
-				<details ?open=${this.autoShowReplies}>
+			${!!this.showReplies && this.replies.length ? html`
+				<details ?open=${!!this.autoShowReplies}>
 					<summary>${Translator.transChoice("comment.view_replies", this.replies.length, { "%count%": this.replies.length })}</summary>
 					<ol class="replies" slot="replies">
 						${repeat(
@@ -147,6 +162,18 @@ export class UserComment extends LitElement {
 		this.isResolved = data.isResolved;
 		this.replies = Object.values(data.replies);
 		this._loaded = true;
+	}
+
+	#resolve()
+	{
+		const resolveButton = this.shadowRoot.querySelector("nb-button.resolve");
+		resolveButton.loading = true;
+
+		ApiClient.patch("api_comments_resolve", { id: this.commentId }).then(response => {
+			this.isResolved = response.data.isResolved;
+		}).finally(() => {
+			resolveButton.loading = false;
+		});
 	}
 
 	get placeholderUrl()

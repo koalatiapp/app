@@ -7,6 +7,7 @@ use App\Mercure\TopicBuilder;
 use App\Repository\Checklist\ItemRepository;
 use App\Repository\CommentRepository;
 use App\Security\ProjectVoter;
+use Doctrine\ORM\EntityManagerInterface;
 use Hashids\HashidsInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -65,6 +66,29 @@ class CommentController extends AbstractApiController
 		}
 
 		$this->setSuggestedMercureTopic($this->topicBuilder->getEntityTopic($comment, TopicBuilder::SCOPE_SPECIFIC));
+
+		return $this->apiSuccess($comment);
+	}
+
+	/**
+	 * @Route("/{id}/resolve", methods={"PATCH"}, name="resolve", options={"expose": true})
+	 */
+	public function resolve(int $id, CommentRepository $commentRepository, EntityManagerInterface $entityManager): JsonResponse
+	{
+		/** @var Comment|null */
+		$comment = $commentRepository->find($id);
+
+		if (!$comment) {
+			return $this->notFound();
+		}
+
+		if (!$this->isGranted(ProjectVoter::VIEW, $comment->getProject())) {
+			return $this->accessDenied();
+		}
+
+		$comment->setIsResolved(true);
+		$entityManager->persist($comment);
+		$entityManager->flush();
 
 		return $this->apiSuccess($comment);
 	}

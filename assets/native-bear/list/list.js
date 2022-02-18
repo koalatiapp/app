@@ -22,6 +22,7 @@ export class NbList extends LitElement {
 				.nb--list { display: flex; flex-direction: column; gap: 15px; padding: 0; margin: 0; list-style: none; }
 				.nb--list-header { display: grid; gap: 20px; padding: 15px; font-size: .85rem; font-weight: 400; color: rgba(0, 0, 0, .57); }
 				.nb--list-item { display: grid; gap: 20px; align-items: center; padding: 10px 15px; background-color: var(--color-white); border-radius: 12px; box-shadow: 0 2px 10px rgba(var(--shadow-rgb), 0.05); transition: box-shadow 0.25s ease 0s; }
+				.nb--list-item.outlined { outline: 3px solid var(--color-blue-50); }
 				.nb--list-item-column { min-width: 0; }
 				.nb--list-item-column[nb-column="actions"]:last-child { text-align: right; }
 				.nb--list-item-column-placeholder { margin: .15em 0; font-size: .75rem; background-color: #f5f5f5; border-radius: 4px; }
@@ -49,6 +50,7 @@ export class NbList extends LitElement {
 			sortBy: {type: String},
 			sortDirection: {type: String},
 			emptyState: {type: String},
+			_itemSelectionCallback: {state: true},
 			_loading: {state: true},
 		};
 	}
@@ -95,6 +97,7 @@ export class NbList extends LitElement {
 		this.sortBy = null;
 		this.sortDirection = "asc";
 		this._searchQuery = null;
+		this._itemSelectionCallback = null;
 		this.emptyState = Translator.trans("generic.list.empty_state");
 	}
 
@@ -135,6 +138,30 @@ export class NbList extends LitElement {
 		this.applySearchQuery(null);
 
 		return this;
+	}
+
+	/**
+	 * Outlines elements in the list based on a filter-like callback.
+	 *
+	 * This is useful when opening sidepanels to emphasize the item
+	 * to which the sidepanel is related.
+	 *
+	 * @param {function} itemSelectionCallback Function that receives an item and returns a boolean
+	 * 											indicating whether the item should be outlined or not.
+	 */
+	outlineItems(itemSelectionCallback)
+	{
+		this._itemSelectionCallback = itemSelectionCallback;
+		this.requestUpdate("items");
+	}
+
+	/**
+	 * Remove all outlines from items.
+	 */
+	clearOutlines()
+	{
+		this._itemSelectionCallback = null;
+		this.requestUpdate("items");
 	}
 
 	get isLoading()
@@ -182,7 +209,7 @@ export class NbList extends LitElement {
 		const instance = this;
 
 		return html`
-			<li class="nb--list-item">
+			<li class=${"nb--list-item " + (this._itemSelectionCallback?.(item) ? "outlined" : "")}>
 				${this.constructor._columns.map(column => html`<div class="nb--list-item-column" nb-column=${column.key}>${column.render(item, instance)}</div>`)}
 			</li>
 		`;

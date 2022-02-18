@@ -89,7 +89,6 @@ class Comment implements MercureEntityInterface
 
 	/**
 	 * @ORM\Column(type="boolean")
-	 * @Groups({"default"})
 	 */
 	private bool $isDeleted = false;
 
@@ -219,6 +218,15 @@ class Comment implements MercureEntityInterface
 	}
 
 	public function isResolved(): ?bool
+	{
+		return $this->isResolved;
+	}
+
+	/**
+	 * Alias for `isResolved` that allows Symfony's serializer
+	 * to properly handle boolean values with the "is" prefix.
+	 */
+	public function getIsResolved(): ?bool
 	{
 		return $this->isResolved;
 	}
