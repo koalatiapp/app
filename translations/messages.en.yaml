@@ -699,6 +699,7 @@ upgrade_suggestion:
 comment:
     reply: Reply
     resolve: Resolve
+    view_replies: "{1}View 1 reply|]0,Inf[View %count% comments"
 
 email:
     welcome:

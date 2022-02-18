@@ -1,5 +1,6 @@
 import * as timeago from "timeago.js";
 import { LitElement, html, css } from "lit";
+import { repeat } from "lit/directives/repeat.js";
 import { ApiClient } from "../../utils/api/index.js";
 import stylesReset from "../../native-bear/styles-reset.js";
 import fontAwesomeImport from "../../utils/fontawesome-import.js";
@@ -10,7 +11,7 @@ export class UserComment extends LitElement {
 		return [
 			stylesReset,
 			css`
-				:host { display: block; padding: 1rem; border: 1px solid var(--color-gray-light); border-radius: .5rem; box-shadow: 0 0 0.5em rgba(var(--shadow-rgb), 0.05); }
+				:host { display: block; padding: 1rem; background-color: var(--color-white); border: 1px solid var(--color-gray-light); border-radius: .5rem; box-shadow: 0 0 0.5em rgba(var(--shadow-rgb), 0.05); }
 
 				.header { display: flex; justify-content: space-between; gap: 1em; }
 				.avatar { flex-shrink: 0; width: 2.5em; height: 2.5em; object-fit: cover; border-radius: 50%; }
@@ -21,6 +22,11 @@ export class UserComment extends LitElement {
 
 				.body { margin-top: 1.5em; font-size: 1em; }
 
+				details { margin-top: 1.5em; }
+				summary { color: var(--color-blue); cursor: pointer; }
+				summary:hover { color: var(--color-black); }
+				.replies { display: flex; flex-direction: column; padding-left: 0; margin: 0; list-style: none; }
+				.replies li { padding-left: 2rem; margin-top: 1rem; background-image: url("/ext/fontawesome/svgs/regular/arrow-turn-down-right.svg"); background-size: 1rem; background-position: .5rem .5rem; background-repeat: no-repeat; }
 
 				@media (prefers-color-scheme: dark) {
 
@@ -38,6 +44,8 @@ export class UserComment extends LitElement {
 			isResolved: {type: Boolean},
 			thread: {type: Array},
 			replies: {type: Array},
+			showReplies: {type: Boolean},
+			autoShowReplies: {type: Boolean},
 			_loaded: {state: true},
 		};
 	}
@@ -54,6 +62,8 @@ export class UserComment extends LitElement {
 		this.isResolved = false;
 		this.thread = null;
 		this.replies = [];
+		this.showReplies = true;
+		this.autoShowReplies = true;
 		this._loaded = false;
 	}
 
@@ -95,6 +105,18 @@ export class UserComment extends LitElement {
 				${this.content}
 			</div>
 
+			${this.showReplies && this.replies.length ? html`
+				<details ?open=${this.autoShowReplies}>
+					<summary>${Translator.transChoice("comment.view_replies", this.replies.length, { "%count%": this.replies.length })}</summary>
+					<ol class="replies" slot="replies">
+						${repeat(
+							this.replies,
+							reply => reply.id,
+							reply => html`<li><user-comment .data=${reply}></user-comment></li>`
+						)}
+					</ol>
+				</details>
+			` : ""}
 	  	`;
 	}
 
@@ -123,7 +145,7 @@ export class UserComment extends LitElement {
 		this.authorName = data.authorName;
 		this.content = data.content;
 		this.isResolved = data.isResolved;
-		this.replies = [];
+		this.replies = Object.values(data.replies);
 		this._loaded = true;
 	}
 
