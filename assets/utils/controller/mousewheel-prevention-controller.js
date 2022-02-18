@@ -39,7 +39,6 @@ export class MousewheelPreventionController {
 			hostPos.left + hostPos.width >= mousePos.x;
 
 		if (cursorIsInsideElement) {
-			console.log(e.deltaY, (e.deltaY < 0 && scrollContainer.scrollTop <= 0), (e.deltaY > 0 && scrollContainer.scrollTop + scrollContainer.offsetHeight >= scrollContainer.scrollHeight));
 			if ((e.deltaY < 0 && scrollContainer.scrollTop <= 0) ||
 				(e.deltaY > 0 && scrollContainer.scrollTop + scrollContainer.offsetHeight >= scrollContainer.scrollHeight)) {
 				e.preventDefault();
