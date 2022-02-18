@@ -1,5 +1,8 @@
 /* stylelint-disable block-opening-brace-newline-after, block-closing-brace-newline-before, declaration-block-semicolon-newline-after */
 :root {
+	/* FontAwesome */
+	--fa-style-family: "Font Awesome 6 Pro";
+
 	/* Layout */
 	--sidebar-width: 270px;
 
