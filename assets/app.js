@@ -13,6 +13,7 @@ import "./app/generic/link-preview-card.js";
 import "./app/generic/paddle-subscription-button.js";
 import "./app/comment/user-comment.js";
 import "./app/comment/comment-thread.js";
+import "./app/comment/comment-list.js";
 import "zero-md";
 
 // App-wide utilities

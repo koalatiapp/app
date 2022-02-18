@@ -7,6 +7,7 @@ use App\Mercure\TopicBuilder;
 use App\Repository\Checklist\ItemRepository;
 use App\Repository\CommentRepository;
 use App\Security\ProjectVoter;
+use Hashids\HashidsInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,7 +20,7 @@ class CommentController extends AbstractApiController
 	/**
 	 * @Route("", methods={"GET","HEAD"}, name="list", options={"expose": true})
 	 */
-	public function list(Request $request, ItemRepository $itemRepository): JsonResponse
+	public function list(Request $request, ItemRepository $itemRepository, HashidsInterface $idHasher): JsonResponse
 	{
 		$projectId = $request->query->get('project_id');
 		$itemId = $request->query->get('checklist_item_id');
@@ -27,6 +28,10 @@ class CommentController extends AbstractApiController
 		if (!$projectId && !$itemId) {
 			return $this->apiError('You must provide a valid value for `project_id` or `checklist_item_id`.');
 		}
+
+		// Decode IDs
+		$projectId = $projectId ? $idHasher->decode($projectId)[0] : $projectId;
+		$itemId = $itemId ? $idHasher->decode($itemId)[0] : $itemId;
 
 		if (!$projectId) {
 			$item = $itemRepository->find($itemId);
