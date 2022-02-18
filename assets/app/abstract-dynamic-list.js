@@ -22,6 +22,12 @@ import fontawesomeImport from "../utils/fontawesome-import";
  * ```
  */
 export class AbstractDynamicList extends NbList {
+	constructor()
+	{
+		super();
+		this._isWaitingForServerResponse = false;
+	}
+
 	render()
 	{
 		return [
@@ -40,7 +46,7 @@ export class AbstractDynamicList extends NbList {
 		// In some cases, attributes may be set after the initial render,
 		// which causes a list that is "stuck" in the loading state.
 		// By checking on subsequent updates, we can avoid this.
-		if (this.isLoading) {
+		if (this.isLoading && !this._isWaitingForServerResponse) {
 			this.fetchListData();
 		}
 	}
@@ -81,7 +87,10 @@ export class AbstractDynamicList extends NbList {
 	 */
 	fetchListData(endpoint, body = {})
 	{
+		this._isWaitingForServerResponse = true;
+
 		ApiClient.get(endpoint, body).then(response => {
+			this._isWaitingForServerResponse = false;
 			this.items = Array.isArray(response.data) ? response.data : Object.values(response.data);
 
 			this.dispatchEvent(new CustomEvent("items-initialized"));
