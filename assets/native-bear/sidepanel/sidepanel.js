@@ -1,8 +1,11 @@
 import { LitElement, html, css } from "lit";
 import stylesReset from "../styles-reset.js";
 import fontAwesomeImport from "../../utils/fontawesome-import.js";
+import { MousewheelPreventionController } from "../../utils/controller/mousewheel-prevention-controller.js";
 
 export class NbSidePanel extends LitElement {
+	#isClosing = false;
+
 	static get styles()
 	{
 		return css`
@@ -35,20 +38,21 @@ export class NbSidePanel extends LitElement {
 		super();
 		this.title = "";
 		this.context = "";
-		this.setAttribute("role", "complementary");
-		this.setAttribute("aria-labelledby", "sidepanel-title");
+		new MousewheelPreventionController(this, () => this.shadowRoot.querySelector(".content"));
 	}
 
 	connectedCallback()
 	{
 		super.connectedCallback();
 
-		this.animateAppearance();
-
-		window.addEventListener("click", (e) => {
-			if (!this.contains(e.target)) {
-				this.close();
-			}
+		this.setAttribute("role", "complementary");
+		this.setAttribute("aria-labelledby", "sidepanel-title");
+		this.animateAppearance().then(() => {
+			window.addEventListener("click", (e) => {
+				if (!this.contains(e.target)) {
+					this.close();
+				}
+			});
 		});
 	}
 
@@ -58,7 +62,11 @@ export class NbSidePanel extends LitElement {
 			${fontAwesomeImport}
 			<header>
 				<div class="heading">
-					<h2 id="sidepanel-title">${this.title}</h2>
+					<h2 id="sidepanel-title">
+						<nb-markdown barebones>
+							<script type="text/markdown">${this.title}</script>
+						</nb-markdown>
+					</h2>
 					<div class="context">${this.context}</div>
 				</div>
 				<div class="actions">
@@ -75,8 +83,18 @@ export class NbSidePanel extends LitElement {
 
 	close()
 	{
+		if (this.#isClosing) {
+			return;
+		}
+
+		this.#isClosing = true;
+		this.dispatchEvent(new CustomEvent("close"));
 		this.setAttribute("aria-hidden", true);
-		this.animateDisappearance().then(() => this.remove());
+		this.animateDisappearance().then(() => {
+			this.remove();
+			this.dispatchEvent(new CustomEvent("closed"));
+		});
+
 	}
 
 	animateAppearance()
