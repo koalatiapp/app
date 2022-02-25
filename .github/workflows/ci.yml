@@ -70,7 +70,7 @@ jobs:
                           echo "System boot timed out - 10 mins elapsed."
                           docker logs --since="10m" "$(docker-compose ps -q php)"
                           exit 1
-                        fi;;
+                        fi
                         UNHEALTHY_ALLOWANCE_LEFT=20
                         sleep 1;;
                       healthy)
