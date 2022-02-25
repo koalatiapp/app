@@ -60,6 +60,10 @@ export class CommentList extends LitElement {
 					thread => html`<li><user-comment .data=${thread} ?autoShowReplies=${!thread.isResolved}></user-comment></li>`
 				)}
 			</ol>
+
+			<br>
+
+			<comment-editor projectId=${this.projectId} checklistItemId=${this.checklistItemId}></comment-editor>
 	  	`;
 	}
 

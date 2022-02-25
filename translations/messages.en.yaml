@@ -697,6 +697,7 @@ upgrade_suggestion:
     testing: Upgrade to a plan that offers automated testing tools to start testing your projects!
 
 comment:
+    editor_label: Add a comment
     reply: Reply
     resolve: Resolve
     resolved: Resolved

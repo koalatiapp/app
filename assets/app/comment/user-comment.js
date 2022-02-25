@@ -79,7 +79,6 @@ export class UserComment extends LitElement {
 			return html`<nb-loading-spinner></nb-loading-spinner>`;
 		}
 
-		console.log(this.autoShowReplies, !!this.autoShowReplies);
 		return html`
 			${fontAwesomeImport}
 
