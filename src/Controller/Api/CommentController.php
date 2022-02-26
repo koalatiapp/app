@@ -50,6 +50,63 @@ class CommentController extends AbstractApiController
 	}
 
 	/**
+	 * @Route("", methods={"POST","PUT"}, name="submit", options={"expose": true})
+	 */
+	public function submit(Request $request, CommentRepository $commentRepository, ItemRepository $itemRepository, EntityManagerInterface $entityManager): JsonResponse
+	{
+		$projectId = $request->request->get('project_id');
+
+		if (!$projectId) {
+			return $this->badRequest('You must provide a valid value for `project_id`.');
+		}
+
+		$itemId = $request->request->get('checklist_item_id');
+		$threadId = $request->request->get('thread_id');
+		$content = $request->request->get('content');
+		$project = $this->getProject($this->idHasher->decode($projectId)[0], ProjectVoter::PARTICIPATE);
+
+		$comment = (new Comment())
+			->setAuthor($this->getUser())
+			->setProject($project)
+			->setContent($content) // @TODO: Sanitize content before saving to database
+		;
+
+		if ($itemId) {
+			$item = $itemRepository->find($this->idHasher->decode($itemId)[0]);
+
+			if (!$item) {
+				return $this->notFound('Checklist item (`checklist_item_id`) not found.');
+			}
+
+			if ($item->getChecklist()->getProject() != $project) {
+				return $this->badRequest('Checklist item (`checklist_item_id`) is not a part of project (`project_id`).');
+			}
+
+			$comment->setChecklistItem($item);
+		}
+
+		if ($threadId) {
+			dump($threadId);
+			$thread = $commentRepository->find($this->idHasher->decode($threadId)[0]);
+
+			if (!$thread) {
+				return $this->notFound('Thread (`thread_id`) not found.');
+			}
+
+			if ($thread->getProject() != $project) {
+				return $this->badRequest('Thread (`thread_id`) is not a part of project (`project_id`).');
+			}
+
+			$comment->setThread($thread);
+		}
+
+		$entityManager->persist($comment);
+		$entityManager->flush();
+
+		return $this->apiSuccess($comment);
+	}
+
+	/**
 	 * @Route("/{id}", methods={"GET","HEAD"}, name="details", options={"expose": true})
 	 */
 	public function details(int $id, CommentRepository $commentRepository): JsonResponse

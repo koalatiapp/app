@@ -1,5 +1,6 @@
 import * as timeago from "timeago.js";
 import { LitElement, html, css } from "lit";
+import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { repeat } from "lit/directives/repeat.js";
 import { ApiClient } from "../../utils/api/index.js";
 import stylesReset from "../../native-bear/styles-reset.js";
@@ -116,7 +117,7 @@ export class UserComment extends LitElement {
 			</div>
 
 			<div class="body">
-				${this.content}
+				${unsafeHTML(this.content)}
 			</div>
 
 			${!!this.showReplies && this.replies.length ? html`

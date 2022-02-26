@@ -111,6 +111,7 @@ class Comment implements MercureEntityInterface
 	public function setAuthor(?User $author): self
 	{
 		$this->author = $author;
+		$this->setAuthorName($author->getFullName());
 
 		return $this;
 	}

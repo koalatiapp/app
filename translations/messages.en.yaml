@@ -698,10 +698,13 @@ upgrade_suggestion:
 
 comment:
     editor_label: Add a comment
+    editor_submit: Add comment
     reply: Reply
     resolve: Resolve
     resolved: Resolved
     view_replies: "{1}View 1 reply|]0,Inf[View %count% comments"
+    flash:
+        submitted: Your comment has been sent!
 
 email:
     welcome:

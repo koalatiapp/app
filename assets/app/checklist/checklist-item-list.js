@@ -147,7 +147,7 @@ export class ChecklistItemList extends AbstractDynamicList {
 
 			<h3>Comments</h3>
 			<br>
-			<comment-list checklistItemId=${item.id}></comment-list>
+			<comment-list projectId=${this.projectId} checklistItemId=${item.id}></comment-list>
 		`, sidepanel);
 		document.body.append(sidepanel);
 
