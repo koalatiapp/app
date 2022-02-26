@@ -79,7 +79,7 @@ class OrganizationController extends AbstractController
 	}
 
 	/**
-	 * @Route("/{id}", name="dashboard")
+	 * @Route("/{id}", name="dashboard", defaults={"id"=null})
 	 */
 	public function dashboard(int $id = null, OrganizationRepository $organizationRepository): Response
 	{
