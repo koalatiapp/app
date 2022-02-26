@@ -35,7 +35,7 @@ verbose()
 }
 
 # Run PHP-CS-Fixer with automatic fixes
-vendor/bin/php-cs-fixer fix --config=.php_cs.dist -q
+vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php -q
 
 # If there were any added files, re-add them after the automatic fixes
 if [ -n "$addedFiles" ]

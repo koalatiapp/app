@@ -39,6 +39,10 @@ services:
         resource: '../src/Controller/'
         tags: ['controller.service_arguments']
 
+    # @TODO: Find a way to implement the normalizer/serializers without requiring the container (currently causes a circular reference with DefaultNormalizer)
+    Symfony\Component\DependencyInjection\ContainerInterface:
+        '@service_container'
+
     # Configure the serializer for entities by default
     SimpleSerializer:
         class: Symfony\Component\Serializer\Serializer

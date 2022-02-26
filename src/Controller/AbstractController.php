@@ -52,7 +52,10 @@ abstract class AbstractController extends DefaultAbstractController
 	 */
 	protected function getUser()
 	{
-		return parent::getUser();
+		/** @var User|null */
+		$user = parent::getUser();
+
+		return $user;
 	}
 
 	/**
