@@ -61,17 +61,23 @@ jobs:
               run: docker-compose --env-file .env.test up --build -d
             - name: Wait for services
               run: |
+                  APP_BOOT_TIMEOUT=`expr $(date +%s) + 600`
                   UNHEALTHY_ALLOWANCE_LEFT=20
                   while status="$(docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" "$(docker-compose ps -q php)")"; do
                     case $status in
                       starting)
+                        if [ $APP_BOOT_TIMEOUT -lt $(date +%s) ]; then
+                          echo "System boot timed out - 10 mins elapsed."
+                          docker logs --since="10m" "$(docker-compose ps -q php)"
+                          exit 1
+                        fi
                         UNHEALTHY_ALLOWANCE_LEFT=20
                         sleep 1;;
                       healthy)
                         exit 0;;
                       unhealthy)
                         if [ $UNHEALTHY_ALLOWANCE_LEFT -eq 0 ]; then
-                          docker logs --since="5m" "$(docker-compose ps -q php)"
+                          docker logs --since="10m" "$(docker-compose ps -q php)"
                           exit 1
                         else
                           UNHEALTHY_ALLOWANCE_LEFT=$((UNHEALTHY_ALLOWANCE_LEFT - 1))

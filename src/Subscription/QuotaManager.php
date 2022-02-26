@@ -8,24 +8,29 @@ use App\Entity\User;
 use App\Repository\ProjectActivityRecordRepository;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class QuotaManager
 {
 	private SessionInterface $session;
+	private FlashBagInterface $flashBag;
 
 	/**
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	public function __construct(
 		private ProjectActivityRecordRepository $projectActivityRepository,
-		private FlashBagInterface $flashBag,
 		private PlanManager $planManager,
 		private TranslatorInterface $translator,
 		RequestStack $requestStack
 	) {
-		$this->session = $requestStack->getSession();
+		/** @var Session */
+		$session = $requestStack->getSession();
+
+		$this->session = $session;
+		$this->flashBag = $this->session->getFlashBag();
 	}
 
 	public function isUserProjectQuotaExceeded(User $user): bool

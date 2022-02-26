@@ -82,7 +82,13 @@ export class ProjectPagesList extends AbstractDynamicList {
 			page_id: pageId,
 			enabled: state ? 1 : 0
 		}, null).then(response => {
-			this.shadowRoot.querySelector(`nb-switch[page-id="${pageId}"]`).checked = response.data.enabled;
+			for (const item of this.items) {
+				if (item.id == pageId) {
+					item.isIgnored = !response.data.enabled;
+				}
+			}
+
+			this.requestUpdate("items");
 		});
 	}
 }

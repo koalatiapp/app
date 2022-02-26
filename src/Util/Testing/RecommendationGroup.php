@@ -192,7 +192,10 @@ class RecommendationGroup implements Countable, MercureEntityInterface
 				return $priorities[$groupA->getType()] > $priorities[$groupB->getType()] ? 1 : -1;
 			}
 
-			return $groupA->count() < $groupB->count();
+			$countA = $groupA->count();
+			$countB = $groupB->count();
+
+			return $countA < $countB ? 1 : ($countA == $countB ? 0 : -1);
 		});
 
 		return $groups;
