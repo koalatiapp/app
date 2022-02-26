@@ -16,6 +16,10 @@ generic:
             minutes: "%minutes%m"
             seconds: "%seconds%s"
 
+api:
+    flash:
+        server_error: Something went wrong on our side - please try again later.
+
 branding:
     name: Koalati
 
@@ -699,6 +703,8 @@ upgrade_suggestion:
 comment:
     editor_label: Add a comment
     editor_submit: Add comment
+    editor_reply_label: Reply to this thread
+    editor_reply_submit: Submit reply
     reply: Reply
     resolve: Resolve
     resolved: Resolved

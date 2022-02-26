@@ -30,6 +30,8 @@ export class UserComment extends LitElement {
 				.replies { display: flex; flex-direction: column; padding-left: 0; margin: 0; list-style: none; }
 				.replies li { padding-left: 2rem; margin-top: 1rem; background-image: url("/ext/fontawesome/svgs/regular/arrow-turn-down-right.svg"); background-size: 1rem; background-position: .5rem .5rem; background-repeat: no-repeat; }
 
+				comment-editor { margin-top: 1.5em; margin-left: 2em; }
+
 				@media (prefers-color-scheme: dark) {
 					.resolved { color: #d7ffcd; background-color: var(--color-green-50); }
 				}
@@ -48,6 +50,7 @@ export class UserComment extends LitElement {
 			replies: {type: Array},
 			showReplies: {type: Boolean},
 			autoShowReplies: {type: Boolean},
+			showReplyEditor: {type: Boolean},
 			_loaded: {state: true},
 		};
 	}
@@ -66,6 +69,7 @@ export class UserComment extends LitElement {
 		this.replies = [];
 		this.showReplies = true;
 		this.autoShowReplies = false;
+		this.showReplyEditor = false;
 		this._loaded = false;
 	}
 
@@ -91,7 +95,7 @@ export class UserComment extends LitElement {
 				</div>
 				<div class="actions">
 					${!this.isResolved ? html`
-						<nb-button size="tiny" color="gray">
+						<nb-button size="tiny" color="gray" @click=${() => this.toggleReplyEditor(true)}>
 							${Translator.trans("comment.reply")}
 						</nb-button>
 					` : ""}
@@ -131,6 +135,14 @@ export class UserComment extends LitElement {
 						)}
 					</ol>
 				</details>
+			` : ""}
+
+			${this.showReplyEditor ? html`
+				<br>
+				<comment-editor projectId=${this.data.project.id}
+					checklistItemId=${this.data?.checklistItem?.id || ""}
+					threadId=${this.data.id}>
+				</comment-editor>
 			` : ""}
 	  	`;
 	}
@@ -174,6 +186,25 @@ export class UserComment extends LitElement {
 		}).finally(() => {
 			resolveButton.loading = false;
 		});
+	}
+
+	toggleReplyEditor(showEditor)
+	{
+		let commentElement = this;
+
+		if (this.thread) {
+			commentElement = this.getRootNode().host;
+		}
+
+		commentElement.showReplyEditor = showEditor;
+
+		if (showEditor) {
+			commentElement.updateComplete.then(() => {
+				const editor = commentElement.shadowRoot.querySelector("comment-editor");
+				editor.scrollIntoViewIfNeeded();
+				editor.focus();
+			});
+		}
 	}
 
 	get placeholderUrl()

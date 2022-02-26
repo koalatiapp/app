@@ -86,7 +86,6 @@ class CommentController extends AbstractApiController
 		}
 
 		if ($threadId) {
-			dump($threadId);
 			$thread = $commentRepository->find($this->idHasher->decode($threadId)[0]);
 
 			if (!$thread) {

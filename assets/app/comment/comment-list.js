@@ -14,6 +14,8 @@ export class CommentList extends LitElement {
 
 				.threads { display: flex; flex-direction: column; gap: 1rem; padding-left: 0; margin: 0; list-style: none; }
 
+				comment-editor { margin-bottom: 220px; }
+
 				@media (prefers-color-scheme: dark) {
 
 				}
