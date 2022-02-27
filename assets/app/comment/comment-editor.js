@@ -14,7 +14,8 @@ export class CommentEditor extends LitElement {
 
 				label { font-size: 1rem; font-weight: 500; color: var(--color-gray-darker); }
 				article[contenteditable] { display: block; width: 100%; max-width: 100%; min-height: 6em; padding: 1.5em 2em; margin: 6px 0; font-family: inherit; font-size: .95rem; font-weight: 400; line-height: 1.5rem; color: var(--color-gray-darker); background-color: var(--color-white); border: 2px solid var(--color-gray-light); border-radius: 8px; outline: none; box-shadow: 0 2px 10px 0 rgba(var(--shadow-rgb), .025); box-sizing: border-box; -webkit-font-smoothing: antialiased; transition: border-color .25s ease, box-shadow .25s ease; box-sizing: border-box; }
-				article[contenteditable] * { line-height: 1.35; }
+				article[contenteditable] * { max-width: 100%; line-height: 1.35; }
+
 				.stylo-container > *:after { display: none; }
 
 				.button-container { text-align: right; }

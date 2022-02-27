@@ -23,6 +23,7 @@ export class UserComment extends LitElement {
 				.resolved { display: inline-block; padding: 0.5em 0.75em; font-size: 0.8rem; font-weight: 500; color: #269900; background-color: var(--color-green-10); border-radius: 0.5em; cursor: default; }
 
 				.body { margin-top: 1.5em; font-size: 1em; }
+				.body * { max-width: 100%; }
 
 				details { margin-top: 1.5em; }
 				summary { color: var(--color-blue); cursor: pointer; }

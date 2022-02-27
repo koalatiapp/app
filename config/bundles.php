@@ -22,4 +22,5 @@ return [
 	Sentry\SentryBundle\SentryBundle::class => ['prod' => true],
 	Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle::class => ['all' => true],
 	Roukmoute\HashidsBundle\RoukmouteHashidsBundle::class => ['all' => true],
+	HtmlSanitizer\Bundle\HtmlSanitizerBundle::class => ['all' => true],
 ];
