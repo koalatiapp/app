@@ -2,6 +2,9 @@ import ApiError from "./api-error";
 
 // @TODO: Add CSRF and/or session checks to API calls
 
+const existingEventSources = {};
+const callbacksByTopic = {};
+
 /**
   * The `ApiClient` class handles all requests made to the internal Koalati API.
   *
@@ -199,17 +202,33 @@ class ApiClient {
 	 */
 	subscribe(topic, updateCallback = () => {})
 	{
-		const baseUrl = Routing.getScheme() + "://" + Routing.getHost();
-		const sourceUrl = baseUrl + "/.well-known/mercure?topic=" + encodeURIComponent(topic);
-		const eventSource = new EventSource(sourceUrl, {
-			withCredentials: true
-		});
+		if (typeof existingEventSources[topic] == "undefined") {
+			const baseUrl = Routing.getScheme() + "://" + Routing.getHost();
+			const sourceUrl = baseUrl + "/.well-known/mercure?topic=" + encodeURIComponent(topic);
+			const eventSource = new EventSource(sourceUrl, {
+				withCredentials: true
+			});
 
-		eventSource.onmessage = event => {
-			updateCallback(JSON.parse(event.data));
-		};
+			// Only set up one connection per topic, and reuse it for further subscription requests
+			existingEventSources[topic] = eventSource;
+			callbacksByTopic[topic] = [updateCallback];
 
-		return eventSource;
+			eventSource.onmessage = event => {
+				const eventData = JSON.parse(event.data);
+
+				for (const callback of callbacksByTopic[topic]) {
+					callback(eventData);
+				}
+			};
+
+			return eventSource;
+		}
+
+		// Event source already set up for this topic.
+		// Just add the callback to the list for the topic.
+		callbacksByTopic[topic].push(updateCallback);
+
+		return existingEventSources[topic];
 	}
 }
 
