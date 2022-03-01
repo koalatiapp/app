@@ -2,8 +2,7 @@
 
 namespace App\Entity\Checklist;
 
-use App\Entity\MercureEntityInterface;
-use App\Mercure\TopicBuilder;
+use App\Mercure\MercureEntityInterface;
 use App\Repository\Checklist\ItemRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -19,7 +18,7 @@ class Item implements MercureEntityInterface
 	 * @Groups({"default"})
 	 * @ORM\Column(type="integer")
 	 */
-	private ?int $id;
+	private ?int $id = null;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=Checklist::class, inversedBy="items")
@@ -140,25 +139,5 @@ class Item implements MercureEntityInterface
 		$this->isCompleted = $isCompleted;
 
 		return $this;
-	}
-
-	/*
-	 * Mercure implementation (MercureEntityInterface)
-	 */
-
-	public static function getMercureTopics(): array
-	{
-		return [
-			TopicBuilder::SCOPE_SPECIFIC => 'http://koalati/checklist-item/{id}',
-			TopicBuilder::SCOPE_PROJECT => 'http://koalati/{scope}/checklist-item/{id}',
-		];
-	}
-
-	public function getMercureScope(string $scope): object | array | null
-	{
-		return match ($scope) {
-			TopicBuilder::SCOPE_PROJECT => $this->getChecklist()->getProject(),
-			default => null
-		};
 	}
 }

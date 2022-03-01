@@ -9,11 +9,11 @@ use App\Entity\Testing\TestResult;
 use App\Entity\Testing\ToolResponse;
 use App\Exception\WebhookException;
 use App\Mercure\UpdateDispatcher;
+use App\Mercure\UpdateType;
 use App\Message\TestingStatusRequest;
 use App\Repository\PageRepository;
 use App\Repository\ProjectRepository;
 use App\Repository\Testing\RecommendationRepository;
-use App\Util\ClientMessageSerializer;
 use App\Util\Testing\RecommendationGroup;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -47,7 +47,6 @@ class TestResultController extends AbstractController
 		private ProjectRepository $projectRepository,
 		private PageRepository $pageRepository,
 		private UpdateDispatcher $updateDispatcher,
-		private ClientMessageSerializer $serializer,
 		private MessageBusInterface $bus,
 	) {
 	}
@@ -109,14 +108,14 @@ class TestResultController extends AbstractController
 					continue;
 				}
 
-				$this->updateDispatcher->prepare($group, ['id' => $group->getId(), 'data' => $this->serializer->serialize($group)]);
+				$this->updateDispatcher->prepare($group, UpdateType::UPDATE);
 				unset($completedRecommendations[$group->getUniqueName()]);
 			}
 
 			// Process completions
 			foreach ($completedRecommendations as $completedRecommendation) {
 				$group = new RecommendationGroup(new ArrayCollection([$completedRecommendation]));
-				$this->updateDispatcher->prepare($group, ['id' => $group->getId()]);
+				$this->updateDispatcher->prepare($group, UpdateType::UPDATE);
 			}
 		}
 
@@ -149,7 +148,7 @@ class TestResultController extends AbstractController
 
 			$rawRecommendations = (array) ($rawResult['recommendations'] ?? []);
 
-			foreach ($rawRecommendations ?? [] as $rawRecommendation) {
+			foreach ($rawRecommendations as $rawRecommendation) {
 				$rawRecommendation = $this->standardizeRawRecommendation($rawRecommendation);
 
 				foreach ($matchingPages as $page) {

@@ -2,12 +2,11 @@
 
 namespace App\Entity\Testing;
 
-use App\Entity\MercureEntityInterface;
+use App\Mercure\MercureEntityInterface;
 use App\Entity\Organization;
 use App\Entity\Page;
 use App\Entity\Project;
 use App\Entity\User;
-use App\Mercure\TopicBuilder;
 use App\Repository\Testing\IgnoreEntryRepository;
 use DateTime;
 use DateTimeInterface;
@@ -25,7 +24,7 @@ class IgnoreEntry implements MercureEntityInterface
 	 * @ORM\Column(type="integer")
 	 * @Groups({"default"})
 	 */
-	private ?int $id;
+	private ?int $id = null;
 
 	/**
 	 * @ORM\Column(type="datetime")
@@ -264,46 +263,5 @@ class IgnoreEntry implements MercureEntityInterface
 		$this->recommendationTitle = $recommendationTitle;
 
 		return $this;
-	}
-
-	/*
-	 * Mercure implementation (MercureEntityInterface)
-	 */
-
-	public static function getMercureTopics(): array
-	{
-		return [
-			TopicBuilder::SCOPE_SPECIFIC => 'http://koalati/ignore-entry/{id}',
-			TopicBuilder::SCOPE_PROJECT => 'http://koalati/{scope}/ignore-entry/{id}',
-			TopicBuilder::SCOPE_USER => 'http://koalati/{scope}/ignore-entry/{id}',
-			TopicBuilder::SCOPE_ORGANIZATION => 'http://koalati/{scope}/ignore-entry/{id}',
-		];
-	}
-
-	public function getMercureScope(string $scope): object | array | null
-	{
-		$entryScopeType = $this->getScopeType();
-
-		return match ($scope) {
-			TopicBuilder::SCOPE_PROJECT => match ($entryScopeType) {
-				'user' => $this->getTargetUser()->getPersonalProjects(),
-				'project' => $this->getTargetProject(),
-				'page' => $this->getTargetPage()->getProject(),
-				default => null,
-			},
-			TopicBuilder::SCOPE_USER => match ($entryScopeType) {
-				'user' => $this->getTargetUser(),
-				'project' => $this->getTargetProject()->getOwnerUser(),
-				'page' => $this->getTargetPage()->getProject()->getOwnerUser(),
-				default => null,
-			},
-			TopicBuilder::SCOPE_ORGANIZATION => match ($entryScopeType) {
-				'organization' => $this->getTargetOrganization(),
-				'project' => $this->getTargetProject()->getOwnerOrganization(),
-				'page' => $this->getTargetPage()->getProject()->getOwnerOrganization(),
-				default => null,
-			},
-			default => null
-		};
 	}
 }

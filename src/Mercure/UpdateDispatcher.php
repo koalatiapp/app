@@ -2,9 +2,10 @@
 
 namespace App\Mercure;
 
-use App\Entity\MercureEntityInterface;
+use App\Mercure\EntityHandlerInterface;
+use App\Mercure\MercureEntityInterface;
+use App\Util\ClientMessageSerializer;
 use Hashids\HashidsInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Mercure\Update;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -20,17 +21,25 @@ class UpdateDispatcher
 	private array $pendingUpdates = [];
 
 	/**
+	 * @var array<string,EntityHandlerInterface>
+	 */
+	private array $entityHandlers = [];
+
+	/**
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.bus)
-	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.topicBuilder)
-	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.logger)
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.entityHandlers)
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.idHasher)
+	 * @param iterable<mixed,EntityHandlerInterface> $entityHandlers
 	 */
 	public function __construct(
-		private TopicBuilder $topicBuilder,
+		iterable $entityHandlers,
+		private ClientMessageSerializer $serializer,
 		private MessageBusInterface $bus,
-		private LoggerInterface $logger,
 		private HashidsInterface $idHasher
 	) {
+		foreach ($entityHandlers as $entityHandler) {
+			$this->entityHandlers[$entityHandler->getSupportedEntity()] = $entityHandler;
+		}
 	}
 
 	/**
@@ -43,13 +52,10 @@ class UpdateDispatcher
 	 * is being deleted. Seeing as the update generation needs to access the entity
 	 * prior to deletion, updates must be prepared before the deletion is flushed,
 	 * and sent only afterwards.
-	 *
-	 * @param array<mixed,mixed> $data
-	 * @param string|null        $specificScope Specific scope for which to dispatch the update. Uses all scopes when `null`.
 	 */
-	public function prepare(MercureEntityInterface $entity, array $data, ?string $specificScope = null): void
+	public function prepare(MercureEntityInterface $entity, UpdateType $type): void
 	{
-		foreach ($this->generateUpdates($entity, $data, $specificScope) as $update) {
+		foreach ($this->generateUpdates($entity, $type) as $update) {
 			$this->pendingUpdates[] = $update;
 		}
 	}
@@ -73,18 +79,15 @@ class UpdateDispatcher
 	}
 
 	/**
-	 * Generates and sends Mercure updates to every configured topic of an entity.
-	 *
-	 * @param array<mixed,mixed> $data
-	 * @param string|null        $specificScope Specific scope for which to dispatch the update. Uses all scopes when `null`.
+	 * Generates and sends Mercure updates for an entity.
 	 *
 	 * @return array<int,\Symfony\Component\Messenger\Envelope>
 	 */
-	public function dispatch(MercureEntityInterface $entity, array $data, ?string $specificScope = null): array
+	public function dispatch(MercureEntityInterface $entity, UpdateType $type): array
 	{
 		$envelopes = [];
 
-		foreach ($this->generateUpdates($entity, $data, $specificScope) as $update) {
+		foreach ($this->generateUpdates($entity, $type) as $update) {
 			$envelopes[] = $this->bus->dispatch($update);
 		}
 
@@ -92,38 +95,42 @@ class UpdateDispatcher
 	}
 
 	/**
-	 * Generates an array of `Symfony\Component\Mercure\Update` for the entity's changes.
-	 *
-	 * @param array<mixed,mixed> $data
-	 * @param string|null        $specificScope Specific scope for which to dispatch the update. Uses all scopes when `null`.
+	 * Generates an array of `Symfony\Component\Mercure\Update` for the entity.
 	 *
 	 * @return array<int,\Symfony\Component\Mercure\Update>
 	 */
-	private function generateUpdates(MercureEntityInterface $entity, array $data, ?string $specificScope = null): array
+	private function generateUpdates(MercureEntityInterface $entity, UpdateType $type): array
 	{
+		$handler = $this->entityHandlers[$entity::class];
+		$entityId = $entity->getId();
 		$updates = [];
 
-		if (isset($data['id']) && is_numeric($data['id'])) {
-			$data['id'] = $this->idHasher->encode($data['id']);
-		}
+		$data = [
+			"event" => $this->getTypeString($type),
+			"timestamp" => time(),
+			"type" => $handler->getType(),
+			"data" => $this->serializer->serialize($entity),
+			"id" => is_numeric($entityId) ? $this->idHasher->encode($entityId) : $entityId,
+		];
+		$jsonData = json_encode($data);
 
-		foreach (array_keys($entity::getMercureTopics()) as $scope) {
-			if ($specificScope && $specificScope != $scope) {
-				continue;
-			}
+		$affectedUsers = $handler->getAffectedUsers($entity);
 
-			$topic = $this->topicBuilder->getEntityTopic($entity, $scope);
-
-			if (!$topic) {
-				continue;
-			}
-
-			$topics = (array) $topic;
-			foreach ($topics as $topic) {
-				$updates[] = new Update($topic, json_encode($data));
-			}
+		foreach ($affectedUsers as $user) {
+			$userId = $this->idHasher->encode($user->getId());
+			$topic = "http://koalati/$userId/";
+			$updates[] = new Update($topic, $jsonData);
 		}
 
 		return $updates;
+	}
+
+	private function getTypeString(UpdateType $type): string
+	{
+		return match ($type) {
+			UpdateType::CREATE => "create",
+			UpdateType::UPDATE => "update",
+			UpdateType::DELETE => "delete",
+		};
 	}
 }

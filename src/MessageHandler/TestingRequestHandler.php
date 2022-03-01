@@ -6,7 +6,6 @@ use App\ApiClient\Endpoint\ToolsEndpoint;
 use App\Entity\Page;
 use App\Entity\Project;
 use App\Entity\ProjectActivityRecord;
-use App\Mercure\UpdateDispatcher;
 use App\Message\TestingRequest;
 use App\Message\TestingStatusRequest;
 use App\Repository\ProjectRepository;
@@ -14,8 +13,6 @@ use App\Subscription\PlanManager;
 use App\Util\Testing\AvailableToolsFetcher;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
-use Hashids\HashidsInterface;
-use Symfony\Component\Mercure\Update;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -30,8 +27,6 @@ class TestingRequestHandler implements MessageHandlerInterface
 		private AvailableToolsFetcher $availableToolsFetcher,
 		private EntityManagerInterface $entityManager,
 		private PlanManager $planManager,
-		private UpdateDispatcher $updateDispatcher,
-		private HashidsInterface $idHasher,
 		private MessageBusInterface $bus,
 	) {
 	}

@@ -2,10 +2,9 @@
 
 namespace App\Util\Testing;
 
-use App\Entity\MercureEntityInterface;
+use App\Mercure\MercureEntityInterface;
 use App\Entity\Testing\Recommendation;
 use App\Entity\User;
-use App\Mercure\TopicBuilder;
 use Countable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -199,33 +198,6 @@ class RecommendationGroup implements Countable, MercureEntityInterface
 		});
 
 		return $groups;
-	}
-
-	/*
-	 * Mercure implementation (MercureEntityInterface)
-	 */
-
-	public static function getMercureTopics(): array
-	{
-		return [
-			TopicBuilder::SCOPE_SPECIFIC => 'http://koalati/recommendation-group/{id}',
-			TopicBuilder::SCOPE_PROJECT => 'http://koalati/{scope}/recommendation-group/{id}',
-			TopicBuilder::SCOPE_USER => 'http://koalati/{scope}/recommendation-group/{id}',
-			TopicBuilder::SCOPE_ORGANIZATION => 'http://koalati/{scope}/recommendation-group/{id}',
-		];
-	}
-
-	public function getMercureScope(string $scope): object | array | null
-	{
-		$sample = $this->getSample();
-		$project = $sample?->getProject();
-
-		return match ($scope) {
-			TopicBuilder::SCOPE_PROJECT => $project,
-			TopicBuilder::SCOPE_USER => $project?->getOwnerUser(),
-			TopicBuilder::SCOPE_ORGANIZATION => $project?->getOwnerOrganization(),
-			default => null
-		};
 	}
 
 	/**

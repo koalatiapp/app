@@ -22,6 +22,8 @@ services:
     _instanceof:
         App\Subscription\Plan\PlanInterface:
             tags: ['app.subscription_plan']
+        App\Mercure\EntityHandlerInterface:
+            tags: ['app.mercure_entity_handler']
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -139,6 +141,10 @@ services:
     App\Subscription\PlanManager:
         arguments:
             - !tagged_iterator app.subscription_plan
+
+    App\Mercure\UpdateDispatcher:
+        arguments:
+            - !tagged_iterator app.mercure_entity_handler
 
 
     ############################
