@@ -73,6 +73,11 @@ export class ChecklistItemList extends AbstractDynamicList {
 		return ["update"];
 	}
 
+	supportedEntityType()
+	{
+		return "ChecklistItem";
+	}
+
 	constructor()
 	{
 		super();

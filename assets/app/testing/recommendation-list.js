@@ -120,6 +120,11 @@ export class RecommendationList extends AbstractDynamicList {
 		this.itemsPerPage = 10;
 	}
 
+	supportedEntityType()
+	{
+		return "RecommendationGroup";
+	}
+
 	render()
 	{
 		return [

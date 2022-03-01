@@ -21,35 +21,12 @@ class TestingStatusHandler implements EntityHandlerInterface
 	}
 
 	/**
-	 * @param Project $project
+	 * @param TestingStatus $testingStatus
 	 */
-	public function getAffectedUsers(MercureEntityInterface $project): array
+	public function getAffectedUsers(MercureEntityInterface $testingStatus): array
 	{
-		static $cache = [];
+		$project = $testingStatus->getProject();
 
-		if (isset($cache[$project->getId()])) {
-			return $cache[$project->getId()];
-		}
-
-		$teamMembers = $project->getTeamMembers();
-		$ownerUser = $project->getOwnerUser();
-		$ownerOrganization = $project->getOwnerOrganization();
-		$users = [
-			...$teamMembers->map(fn (ProjectMember $member) => $member->getUser()),
-		];
-
-		if ($ownerUser) {
-			$users[] = $ownerUser;
-		}
-
-		if ($ownerOrganization) {
-			$orgUsers = (new OrganizationHandler())->getAffectedUsers($ownerOrganization);
-			array_push($users, ...$orgUsers);
-		}
-
-		$users = array_unique($users);
-		$cache[$project->getId()] = $users;
-
-		return $users;
+		return (new ProjectHandler())->getAffectedUsers($project);
 	}
 }

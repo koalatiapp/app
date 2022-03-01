@@ -11,17 +11,17 @@ class TestingStatus implements MercureEntityInterface
 	/**
 	 * @Groups({"default"})
 	 */
-	public bool $pending;
+	private bool $pending;
 
 	/**
 	 * @Groups({"default"})
 	 */
-	public int $requestCount;
+	private ?int $requestCount;
 
 	/**
 	 * @Groups({"default"})
 	 */
-	public int $timeEstimate;
+	private ?int $timeEstimate;
 
 	/**
 	 * @param array<string,mixed> $data
@@ -39,4 +39,25 @@ class TestingStatus implements MercureEntityInterface
 	{
 		return $this->project->getId();
 	}
+
+	public function getProject(): Project
+	{
+		return $this->project;
+	}
+
+	public function getPending(): bool
+	{
+		return $this->pending;
+	}
+
+	public function getRequestCount(): ?int
+	{
+		return $this->requestCount;
+	}
+
+	public function getTimeEstimate(): ?int
+	{
+		return $this->timeEstimate;
+	}
+
 }

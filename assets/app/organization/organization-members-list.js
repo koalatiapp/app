@@ -73,6 +73,11 @@ export class OrganizationMembersList extends AbstractDynamicList {
 		this.userRole = null;
 	}
 
+	supportedEntityType()
+	{
+		return "OrganizationMember";
+	}
+
 	connectedCallback()
 	{
 		super.connectedCallback();
