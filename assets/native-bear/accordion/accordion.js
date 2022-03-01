@@ -1,25 +1,31 @@
 import { LitElement, html, css } from "lit";
+import stylesReset from "../styles-reset.js";
 
 export class NbAccordion extends LitElement {
 	static get styles()
 	{
-		return css`
-			:host { display: block; margin-top: 1rem; }
-			details { font-size: .85rem; background-color: var(--color-gray-lighter); box-shadow: 0 2px 5px rgb(var(--shadow-rgb), .1); border-radius: 4px; overflow: hidden; }
-			summary { display: grid; grid-template-columns: 1fr 3rem; padding: .5rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; background-color: var(--color-gray-lighter); cursor: pointer; transition: background-color .25s ease; }
-			summary::-webkit-details-marker { display:none; }
-			summary svg { width: .85rem; height: 100%; margin-right: .5rem; margin-left: auto; color: var(--color-gray); transform: rotate(0deg); transition: transform .25s ease}
-			summary:hover { background-color: var(--color-gray-light); }
-			::slotted([slot="summary"]) { min-width: 0; max-width: 100%; text-overflow: ellipsis; overflow: hidden; }
+		return [
+			stylesReset,
+			css`
+				:host { display: block; margin-top: 1rem; }
+				details { font-size: .85rem; background-color: var(--color-gray-lighter); box-shadow: 0 2px 5px rgb(var(--shadow-rgb), .1); border-radius: 4px; }
+				summary { display: grid; grid-template-columns: 1fr 3rem; padding: .5rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; background-color: var(--color-gray-lighter); cursor: pointer; transition: background-color .25s ease; }
+				summary::-webkit-details-marker { display:none; }
+				summary svg { width: .85rem; height: 100%; margin-right: .5rem; margin-left: auto; color: var(--color-gray); transform: rotate(0deg); transition: transform .25s ease}
+				summary:hover { background-color: var(--color-gray-light); }
+				::slotted([slot="summary"]) { min-width: 0; max-width: 100%; text-overflow: ellipsis; overflow: hidden; }
 
-			details[open] summary { border-bottom: 1px solid var(--color-gray-light); }
-			details[open] summary svg { transform: rotate(-180deg); }
-			details[open] .nb--accordion-content { padding: 1rem; }
+				.nb-accordion-content { overflow: hidden; }
 
-			@media (prefers-color-scheme: dark) {
+				details[open] summary { border-bottom: 1px solid var(--color-gray-light); }
+				details[open] summary svg { transform: rotate(-180deg); }
+				details[open] .nb--accordion-content { padding: 1rem; }
 
-			}
-		`;
+				@media (prefers-color-scheme: dark) {
+
+				}
+			`
+		];
 	}
 
 	static get properties() {

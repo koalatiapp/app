@@ -1,10 +1,12 @@
 import { LitElement, html, css } from "lit";
 import stylesReset from "../styles-reset.js";
 import fontAwesomeImport from "../../utils/fontawesome-import.js";
+import getActiveElement from "../../utils/get-active-element.js";
 import { MousewheelPreventionController } from "../../utils/controller/mousewheel-prevention-controller.js";
 
 export class NbSidePanel extends LitElement {
 	#isClosing = false;
+	#originalFocusElement = null;
 
 	static get styles()
 	{
@@ -56,10 +58,17 @@ export class NbSidePanel extends LitElement {
 		});
 	}
 
+	firstUpdated()
+	{
+		this.#originalFocusElement = getActiveElement();
+		this.shadowRoot.querySelector("#sidepanel").focus();
+	}
+
 	render()
 	{
 		return html`
 			${fontAwesomeImport}
+			<div id="sidepanel" tabindex="-1"></div>
 			<header>
 				<div class="heading">
 					<h2 id="sidepanel-title">
@@ -95,6 +104,7 @@ export class NbSidePanel extends LitElement {
 			this.dispatchEvent(new CustomEvent("closed"));
 		});
 
+		this.#originalFocusElement?.focus?.();
 	}
 
 	animateAppearance()
