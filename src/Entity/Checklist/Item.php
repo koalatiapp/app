@@ -64,7 +64,7 @@ class Item implements MercureEntityInterface
 
 	/**
 	 * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="checklistItem", orphanRemoval=true)
-	 * @ORM\OrderBy({"dateCreated" = "ASC"})
+	 * @ORM\OrderBy({"isResolved" = "ASC"}, {"dateCreated" = "ASC"})
 	 * @Groups({"comments"})
 	 *
 	 * @var Collection<int,Comment>

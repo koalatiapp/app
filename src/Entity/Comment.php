@@ -24,7 +24,7 @@ class Comment implements MercureEntityInterface
 	 * @Groups({"default"})
 	 * @ORM\Column(type="integer")
 	 */
-	private ?int $id;
+	private ?int $id = null;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=User::class)
@@ -56,6 +56,7 @@ class Comment implements MercureEntityInterface
 
 	/**
 	 * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="thread")
+	 * @ORM\OrderBy({"isResolved" = "ASC"}, {"dateCreated" = "ASC"})
 	 * @Groups({"default"})
 	 *
 	 * @var Collection<int,self>
@@ -259,8 +260,8 @@ class Comment implements MercureEntityInterface
 	{
 		return [
 			TopicBuilder::SCOPE_SPECIFIC => 'http://koalati/comment/{id}',
-			TopicBuilder::SCOPE_PROJECT => 'http://koalati/{scope}/comment/{id}',
-			TopicBuilder::SCOPE_CHECKLIST_ITEM => 'http://koalati/{scope}/comment/{id}',
+			TopicBuilder::SCOPE_PROJECT => 'http://koalati/{scope}/comment',
+			TopicBuilder::SCOPE_CHECKLIST_ITEM => 'http://koalati/{scope}/comment',
 		];
 	}
 

@@ -115,6 +115,7 @@ class Project
 	private ?Organization $ownerOrganization = null;
 	/**
 	 * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="project")
+	 * @ORM\OrderBy({"isResolved" = "ASC"}, {"dateCreated" = "ASC"})
 	 * @Groups({"comments"})
 	 *
 	 * @var Collection<int,Comment>
