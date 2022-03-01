@@ -5,6 +5,7 @@ namespace App\Mercure;
 use App\Mercure\EntityHandlerInterface;
 use App\Mercure\MercureEntityInterface;
 use App\Util\ClientMessageSerializer;
+use Exception;
 use Hashids\HashidsInterface;
 use Symfony\Component\Mercure\Update;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -52,8 +53,10 @@ class UpdateDispatcher
 	 * is being deleted. Seeing as the update generation needs to access the entity
 	 * prior to deletion, updates must be prepared before the deletion is flushed,
 	 * and sent only afterwards.
+	 *
+	 * @param string $type One of the `App\Mercure\UpdateType::` constants
 	 */
-	public function prepare(MercureEntityInterface $entity, UpdateType $type): void
+	public function prepare(MercureEntityInterface $entity, string $type): void
 	{
 		foreach ($this->generateUpdates($entity, $type) as $update) {
 			$this->pendingUpdates[] = $update;
@@ -81,9 +84,11 @@ class UpdateDispatcher
 	/**
 	 * Generates and sends Mercure updates for an entity.
 	 *
+	 * @param string $type One of the `App\Mercure\UpdateType::` constants
+	 *
 	 * @return array<int,\Symfony\Component\Messenger\Envelope>
 	 */
-	public function dispatch(MercureEntityInterface $entity, UpdateType $type): array
+	public function dispatch(MercureEntityInterface $entity, string $type): array
 	{
 		$envelopes = [];
 
@@ -97,9 +102,11 @@ class UpdateDispatcher
 	/**
 	 * Generates an array of `Symfony\Component\Mercure\Update` for the entity.
 	 *
+	 * @param string $type One of the `App\Mercure\UpdateType::` constants
+	 *
 	 * @return array<int,\Symfony\Component\Mercure\Update>
 	 */
-	private function generateUpdates(MercureEntityInterface $entity, UpdateType $type): array
+	private function generateUpdates(MercureEntityInterface $entity, string $type): array
 	{
 		$handler = $this->entityHandlers[$entity::class];
 		$entityId = $entity->getId();
@@ -125,12 +132,16 @@ class UpdateDispatcher
 		return $updates;
 	}
 
-	private function getTypeString(UpdateType $type): string
+	/**
+	 * @param string $type One of the `App\Mercure\UpdateType::` constants
+	 */
+	private function getTypeString(string $type): string
 	{
 		return match ($type) {
 			UpdateType::CREATE => "create",
 			UpdateType::UPDATE => "update",
 			UpdateType::DELETE => "delete",
+			default => throw new Exception("Invalid update type"),
 		};
 	}
 }
