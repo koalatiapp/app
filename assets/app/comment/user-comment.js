@@ -166,6 +166,7 @@ export class UserComment extends LitElement {
 
 	_loadData(data)
 	{
+		this.data = data;
 		this.commentId = data.id;
 		this.thread = data.thread;
 		this.dateCreated = new Date(data.dateCreated);

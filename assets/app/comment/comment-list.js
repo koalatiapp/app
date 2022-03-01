@@ -92,6 +92,51 @@ export class CommentList extends LitElement {
 
 		ApiClient.get("api_comments_list", params).then(response => {
 			this._loadData(response.data);
+
+			const mercureTopic = response._response.headers.get("suggested-mercure-topic");
+
+			if (mercureTopic) {
+				ApiClient.subscribe(mercureTopic, (eventData) => {
+					const data = eventData.data;
+
+					if (Array.isArray(data)) {
+						this._loadData(data);
+					} else if (typeof data.id != "undefined") {
+						let updatedComment = false;
+
+						const updatedThreads = this.threads.map(thread => {
+							if (updatedComment) {
+								return thread;
+							}
+
+							if (thread.id == data.id) {
+								updatedComment = true;
+								return data;
+							}
+
+							for (const replyIndex in thread.replies ?? []) {
+								if (thread.replies[replyIndex].id == data.id) {
+									thread.replies[replyIndex] = data;
+									updatedComment = true;
+								}
+							}
+
+							if (!updatedComment && thread.id == data.thread?.id) {
+								thread.replies.push(data);
+								updatedComment = true;
+							}
+
+							return thread;
+						});
+
+						if (!updatedComment) {
+							updatedThreads.push(data);
+						}
+
+						this.threads = updatedThreads;
+					}
+				});
+			}
 		});
 	}
 

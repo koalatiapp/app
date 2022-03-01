@@ -26,6 +26,7 @@ class CommentController extends AbstractApiController
 	{
 		$projectId = $request->query->get('project_id');
 		$itemId = $request->query->get('checklist_item_id');
+		$mercureUpdateScope = TopicBuilder::SCOPE_PROJECT;
 
 		if (!$projectId && !$itemId) {
 			return $this->apiError('You must provide a valid value for `project_id` or `checklist_item_id`.');
@@ -34,18 +35,23 @@ class CommentController extends AbstractApiController
 		// Decode IDs
 		$projectId = $projectId ? $idHasher->decode($projectId)[0] : $projectId;
 		$itemId = $itemId ? $idHasher->decode($itemId)[0] : $itemId;
+		$item = $itemId ? $itemRepository->find($itemId) : null;
 
 		if (!$projectId) {
-			$item = $itemRepository->find($itemId);
 			$projectId = $item->getParentGroup()->getChecklist()->getProject()->getId();
 		}
 
 		$project = $this->getProject($projectId);
-		$comments = $project->getComments();
+		$comments = $item ? $item->getComments() : $project->getComments();
 
-		if ($itemId) {
-			$comments = $comments->filter(fn (Comment $comment) => $comment->getChecklistItem()->getId() == $itemId);
+		if ($item) {
+			$mercureUpdateScope = TopicBuilder::SCOPE_CHECKLIST_ITEM;
 		}
+
+		$topicBuilderComment = (new Comment())
+			->setProject($project)
+			->setChecklistItem($item);
+		$this->setSuggestedMercureTopic($this->topicBuilder->getEntityTopic($topicBuilderComment, $mercureUpdateScope));
 
 		return $this->apiSuccess($comments);
 	}
@@ -104,6 +110,8 @@ class CommentController extends AbstractApiController
 		$entityManager->persist($comment);
 		$entityManager->flush();
 
+		$this->updateDispatcher->dispatch($comment, ['id' => $comment->getId(), 'data' => $this->serializer->serialize($comment)]);
+
 		return $this->apiSuccess($comment);
 	}
 
@@ -147,6 +155,8 @@ class CommentController extends AbstractApiController
 		$comment->setIsResolved(true);
 		$entityManager->persist($comment);
 		$entityManager->flush();
+
+		$this->updateDispatcher->dispatch($comment, ['id' => $comment->getId(), 'data' => $this->serializer->serialize($comment)]);
 
 		return $this->apiSuccess($comment);
 	}
