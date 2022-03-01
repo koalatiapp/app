@@ -1,6 +1,6 @@
 // @TODO: Add CSRF and/or session checks to API calls
 
-let mainEventSource = null;
+let onmessageInitialized = false;
 const callbacksByType = {};
 
 /**
@@ -39,39 +39,24 @@ class MercureClient {
 	 */
 	subscribe(entityType, updateCallback)
 	{
-		const topic = `http://koalati/${window.CURRENT_USER_ID}/`;
-
-		if (!mainEventSource) {
-			const baseUrl = Routing.getScheme() + "://" + Routing.getHost();
-			const sourceUrl = baseUrl + "/.well-known/mercure?topic=" + encodeURIComponent(topic);
-			const eventSource = new EventSource(sourceUrl, {
-				withCredentials: true
-			});
-
-			// A single connection is set up - all events are aggregated in a single topic for the current user.
-			mainEventSource = eventSource;
-			callbacksByType[entityType] = [updateCallback];
-
-			eventSource.onmessage = event => {
+		if (!onmessageInitialized) {
+			window.mercureEventSource.onmessage = event => {
 				const eventData = JSON.parse(event.data);
 
 				for (const callback of callbacksByType[eventData.type] ?? []) {
 					callback(eventData);
 				}
 			};
-
-			return eventSource;
+			onmessageInitialized = true;
 		}
 
-		// Event source already set up.
-		// Just add the callback to the list for the type.
 		if (typeof callbacksByType[entityType] == "undefined") {
 			callbacksByType[entityType] = [];
 		}
 
 		callbacksByType[entityType].push(updateCallback);
 
-		return mainEventSource;
+		return window.mercureEventSource;
 	}
 
 	/**

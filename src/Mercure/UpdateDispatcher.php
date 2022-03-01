@@ -36,7 +36,8 @@ class UpdateDispatcher
 		iterable $entityHandlers,
 		private ClientMessageSerializer $serializer,
 		private MessageBusInterface $bus,
-		private HashidsInterface $idHasher
+		private HashidsInterface $idHasher,
+		private UserTopicBuilder $topicBuilder,
 	) {
 		foreach ($entityHandlers as $entityHandler) {
 			$this->entityHandlers[$entityHandler->getSupportedEntity()] = $entityHandler;
@@ -124,9 +125,8 @@ class UpdateDispatcher
 		$affectedUsers = $handler->getAffectedUsers($entity);
 
 		foreach ($affectedUsers as $user) {
-			$userId = $this->idHasher->encode($user->getId());
-			$topic = "http://koalati/$userId/";
-			$updates[] = new Update($topic, $jsonData);
+			$topic = $this->topicBuilder->getTopic($user);
+			$updates[] = new Update($topic, $jsonData, true);
 		}
 
 		return $updates;
