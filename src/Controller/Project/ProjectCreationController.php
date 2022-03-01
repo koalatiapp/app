@@ -40,13 +40,15 @@ class ProjectCreationController extends AbstractProjectController
 
 		if ($form->isSubmitted() && $form->isValid()) {
 			$websiteUrl = $urlHelper->standardize($project->getUrl(), false);
+			$formIsValid = true;
 
 			// Check if the provided website URL exists
 			if (!$urlHelper->exists($websiteUrl)) {
 				$form->get('url')->addError(new FormError('This URL is invalid or unreachable.'));
+				$formIsValid = false;
 			}
 
-			if ($form->isValid()) {
+			if ($formIsValid) {
 				$project->setUrl($websiteUrl);
 
 				// Set ownership

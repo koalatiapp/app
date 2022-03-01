@@ -20,7 +20,6 @@ class DefaultNormalizer implements ContextAwareNormalizerInterface
 	public function __construct(
 		private ContainerInterface $container,
 		private Serializer $simpleSerializer,
-		private ProjectNormalizer $projectNormalizer,
 		private HashidsInterface $idHasher
 	) {
 	}

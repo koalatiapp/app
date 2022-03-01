@@ -180,11 +180,9 @@ class OrganizationController extends AbstractController
 			$em->remove($organization);
 			$em->flush();
 
-			if ($deletionForm->isValid()) {
-				$this->addFlash('success', 'organization.flash.deleted_successfully', ['%name%' => $organization->getName()]);
+			$this->addFlash('success', 'organization.flash.deleted_successfully', ['%name%' => $organization->getName()]);
 
-				return null;
-			}
+			return null;
 		}
 
 		return $deletionForm;

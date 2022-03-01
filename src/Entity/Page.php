@@ -23,7 +23,7 @@ class Page
 	 * @ORM\Column(type="integer")
 	 * @Groups({"default"})
 	 */
-	private int $id;
+	private ?int $id = null;
 
 	/**
 	 * @ORM\Column(type="string", length=255, nullable=true)

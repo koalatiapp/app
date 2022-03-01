@@ -20,7 +20,7 @@ class TestResult
 	 * @ORM\Column(type="integer")
 	 * @Groups({"default"})
 	 */
-	private int $id;
+	private ?int $id = null;
 
 	/**
 	 * @ORM\Column(type="string", length=255)
@@ -64,7 +64,7 @@ class TestResult
 	 * @ORM\Column(type="array", nullable=true)
 	 * @Groups({"default"})
 	 *
-	 * @var array<int,array>
+	 * @var array<int,array<mixed,mixed>>
 	 */
 	private ?array $dataTable = [];
 
@@ -171,7 +171,7 @@ class TestResult
 	}
 
 	/**
-	 * @return array<int,array>|null
+	 * @return array<int,array<mixed,mixed>>|null
 	 */
 	public function getDataTable(): ?array
 	{

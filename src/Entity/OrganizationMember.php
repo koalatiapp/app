@@ -29,7 +29,7 @@ class OrganizationMember
 	 * @ORM\Column(type="integer")
 	 * @Groups({"default"})
 	 */
-	private ?int $id;
+	private ?int $id = null;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=Organization::class, inversedBy="members")

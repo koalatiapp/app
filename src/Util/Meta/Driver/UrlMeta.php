@@ -15,7 +15,7 @@ class UrlMeta implements MetaDriverInterface
 
 	public function __construct(string $accountEmail, string $apiKey)
 	{
-		$this->httpClient = HttpClient::createForBaseUri(static::API_URI, [
+		$this->httpClient = HttpClient::createForBaseUri(self::API_URI, [
 			'auth_basic' => $this->generateAuthorization($accountEmail, $apiKey),
 		]);
 	}
