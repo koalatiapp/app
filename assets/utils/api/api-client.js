@@ -2,9 +2,6 @@ import ApiError from "./api-error";
 
 // @TODO: Add CSRF and/or session checks to API calls
 
-const existingEventSources = {};
-const callbacksByTopic = {};
-
 /**
   * The `ApiClient` class handles all requests made to the internal Koalati API.
   *
@@ -190,45 +187,6 @@ class ApiClient {
 	delete(endpoint, body = {}, errorCallback = ApiClient.ERROR_FLASH, abortController = null)
 	{
 		return this._request("DELETE", endpoint, body, errorCallback, abortController);
-	}
-
-	/**
-	 * Subscribes to a Mercure topic and executes the provided callback wehenever an update is received.
-	 *
-	 * @param {string} endpoint The route name of the API endpoint.
-	 * @param {object} body The body of the request. Raw objects and FormData are accepted.
-	 * @param {function} updateCallback The callback that will run when an update is received.
-	 * @returns {EventSource} The EventSource that handles the subscription
-	 */
-	subscribe(topic, updateCallback = () => {})
-	{
-		if (typeof existingEventSources[topic] == "undefined") {
-			const baseUrl = Routing.getScheme() + "://" + Routing.getHost();
-			const sourceUrl = baseUrl + "/.well-known/mercure?topic=" + encodeURIComponent(topic);
-			const eventSource = new EventSource(sourceUrl, {
-				withCredentials: true
-			});
-
-			// Only set up one connection per topic, and reuse it for further subscription requests
-			existingEventSources[topic] = eventSource;
-			callbacksByTopic[topic] = [updateCallback];
-
-			eventSource.onmessage = event => {
-				const eventData = JSON.parse(event.data);
-
-				for (const callback of callbacksByTopic[topic]) {
-					callback(eventData);
-				}
-			};
-
-			return eventSource;
-		}
-
-		// Event source already set up for this topic.
-		// Just add the callback to the list for the topic.
-		callbacksByTopic[topic].push(updateCallback);
-
-		return existingEventSources[topic];
 	}
 }
 

@@ -52,6 +52,9 @@
 
 		<script>
 			window.CURRENT_USER_ID = "{{ app.user.id|hashids_encode }}";
+			window.mercureEventSource = new EventSource("{{ mercure('http://koalati/' ~ app.user.id|hashids_encode ~ '/', {subscribe: 'http://koalati/' ~ app.user.id|hashids_encode ~ '/'})|escape('js') }}", {
+				withCredentials: true
+			});
 		</script>
 
         {{ encore_entry_script_tags('app') }}

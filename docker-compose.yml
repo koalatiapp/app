@@ -17,10 +17,9 @@ services:
       retries: 3
       start_period: 30s
     environment:
-      # Run "composer require symfony/orm-pack" to install and configure Doctrine ORM
-      #DATABASE_URL: mysql://${MYSQL_USER:-symfony}:${MYSQL_PASSWORD:-ChangeMe}@${MYSQL_HOST:-database}:${MYSQL_PORT:-3306)/${MYSQL_DATABASE:-app}?serverVersion=${MYSQL_VERSION:-8.0}
-      # Run "composer require symfony/mercure-bundle" to install and configure the Mercure integration
-      MERCURE_PUBLISH_URL: ${MERCURE_URL:-http://caddy/.well-known/mercure}
+      MERCURE_URL: ${MERCURE_URL:-http://caddy/.well-known/mercure}
+      MERCURE_PUBLIC_URL: ${MERCURE_PUBLIC_URL:-https://localhost/.well-known/mercure}
+      MERCURE_JWT_SECRET: ${MERCURE_JWT_SECRET}
       SYMFONY_VERSION:
 
   caddy:
@@ -31,8 +30,8 @@ services:
       - php
     environment:
       SERVER_NAME: ${SERVER_NAME:-localhost, caddy:80}
-      MERCURE_PUBLISHER_JWT: ${MERCURE_PUBLISHER_JWT:-!ChangeMe!}
-      MERCURE_SUBSCRIBER_JWT: ${MERCURE_SUBSCRIBER_JWT:-!ChangeMe!}
+      MERCURE_PUBLISHER_JWT: ${MERCURE_JWT_SECRET:-!ChangeMe!}
+      MERCURE_SUBSCRIBER_JWT: ${MERCURE_JWT_SECRET:-!ChangeMe!}
     restart: unless-stopped
     volumes:
       - php_socket:/var/run/php

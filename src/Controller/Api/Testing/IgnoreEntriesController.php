@@ -4,7 +4,7 @@ namespace App\Controller\Api\Testing;
 
 use App\Controller\Api\AbstractApiController;
 use App\Entity\Testing\IgnoreEntry;
-use App\Mercure\TopicBuilder;
+use App\Mercure\UpdateType;
 use App\Repository\Testing\IgnoreEntryRepository;
 use App\Repository\Testing\RecommendationRepository;
 use App\Security\IgnoreEntryVoter;
@@ -35,8 +35,6 @@ class IgnoreEntriesController extends AbstractApiController
 		foreach ($project->getOwner()->getIgnoreEntries() as $ownerIgnoreEntry) {
 			$ignoreEntries->add($ownerIgnoreEntry);
 		}
-
-		$this->setSuggestedMercureTopic($this->topicBuilder->getEntityGenericTopic(IgnoreEntry::class, TopicBuilder::SCOPE_PROJECT, $projectId));
 
 		return $this->apiSuccess($ignoreEntries);
 	}
@@ -90,7 +88,7 @@ class IgnoreEntriesController extends AbstractApiController
 		$em->persist($ignoreEntry);
 		$em->flush();
 
-		$this->updateDispatcher->dispatch($ignoreEntry, ['id' => $ignoreEntry->getId(), 'data' => $this->serializer->serialize($ignoreEntry)]);
+		$this->updateDispatcher->dispatch($ignoreEntry, UpdateType::CREATE);
 
 		return $this->apiSuccess($ignoreEntry);
 	}
@@ -106,8 +104,6 @@ class IgnoreEntriesController extends AbstractApiController
 			return $this->accessDenied();
 		}
 
-		$this->setSuggestedMercureTopic($this->topicBuilder->getEntityTopic($entry, TopicBuilder::SCOPE_SPECIFIC));
-
 		return $this->apiSuccess($entry);
 	}
 
@@ -122,7 +118,7 @@ class IgnoreEntriesController extends AbstractApiController
 			return $this->accessDenied();
 		}
 
-		$this->updateDispatcher->prepare($entry, ['id' => $id]);
+		$this->updateDispatcher->prepare($entry, UpdateType::DELETE);
 
 		$em = $this->getDoctrine()->getManager();
 		$em->remove($entry);

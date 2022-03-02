@@ -3,9 +3,8 @@
 namespace App\Controller\Api\Checklist;
 
 use App\Controller\Api\AbstractApiController;
-use App\Entity\Checklist\Item;
 use App\Entity\Checklist\ItemGroup;
-use App\Mercure\TopicBuilder;
+use App\Mercure\UpdateType;
 use App\Repository\Checklist\ItemRepository;
 use App\Security\ProjectVoter;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -37,8 +36,6 @@ class ItemController extends AbstractApiController
 
 		$project = $this->getProject($projectId);
 		$checklist = $project->getChecklist();
-
-		$this->setSuggestedMercureTopic($this->topicBuilder->getEntityGenericTopic(Item::class, TopicBuilder::SCOPE_PROJECT, $projectId));
 
 		if ($groupId) {
 			if (!is_numeric($groupId)) {
@@ -80,7 +77,7 @@ class ItemController extends AbstractApiController
 		$em->persist($item);
 		$em->flush();
 
-		$this->updateDispatcher->dispatch($item, ['id' => $item->getId(), 'data' => $this->serializer->serialize($item)]);
+		$this->updateDispatcher->dispatch($item, UpdateType::UPDATE);
 
 		return $this->apiSuccess($item);
 	}

@@ -65,6 +65,11 @@ export class TestingToolList extends AbstractDynamicList {
 		this.itemsPerPage = 10;
 	}
 
+	supportedEntityType()
+	{
+		return "TestingTool";
+	}
+
 	fetchListData()
 	{
 		super.fetchListData("api_project_automated_testing_settings_tools_list", { project_id: this.projectId });

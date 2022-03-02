@@ -3,8 +3,7 @@
 namespace App\Entity\Checklist;
 
 use App\Entity\Comment;
-use App\Entity\MercureEntityInterface;
-use App\Mercure\TopicBuilder;
+use App\Mercure\MercureEntityInterface;
 use App\Repository\Checklist\ItemRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -22,7 +21,7 @@ class Item implements MercureEntityInterface
 	 * @Groups({"default"})
 	 * @ORM\Column(type="integer")
 	 */
-	private ?int $id;
+	private ?int $id = null;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=Checklist::class, inversedBy="items")
@@ -207,25 +206,5 @@ class Item implements MercureEntityInterface
 		return $this->comments->filter(function (Comment $comment) {
 			return !$comment->isResolved() && !$comment->getThread();
 		})->count();
-	}
-
-	/*
-	 * Mercure implementation (MercureEntityInterface)
-	 */
-
-	public static function getMercureTopics(): array
-	{
-		return [
-			TopicBuilder::SCOPE_SPECIFIC => 'http://koalati/checklist-item/{id}',
-			TopicBuilder::SCOPE_PROJECT => 'http://koalati/{scope}/checklist-item/{id}',
-		];
-	}
-
-	public function getMercureScope(string $scope): object | array | null
-	{
-		return match ($scope) {
-			TopicBuilder::SCOPE_PROJECT => $this->getChecklist()->getProject(),
-			default => null
-		};
 	}
 }

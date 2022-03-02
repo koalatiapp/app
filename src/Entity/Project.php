@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Entity\Checklist\Checklist;
 use App\Entity\Testing\IgnoreEntry;
 use App\Entity\Testing\Recommendation;
+use App\Mercure\MercureEntityInterface;
 use App\Repository\ProjectRepository;
 use App\Util\Testing\RecommendationGroup;
 use DateTime;
@@ -20,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass=ProjectRepository::class)
  * @SuppressWarnings("ExcessiveClassComplexity")
  */
-class Project
+class Project implements MercureEntityInterface
 {
 	public const STATUS_NEW = 'NEW';
 	public const STATUS_IN_PROGRESS = 'IN_PROGRESS';
@@ -38,7 +39,7 @@ class Project
 	 * @ORM\Column(type="integer")
 	 * @Groups({"default"})
 	 */
-	private $id;
+	private $id = null;
 
 	/**
 	 * @var string

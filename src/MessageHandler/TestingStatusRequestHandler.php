@@ -5,15 +5,14 @@ namespace App\MessageHandler;
 use App\ApiClient\Endpoint\StatusEndpoint;
 use App\Entity\Project;
 use App\Mercure\UpdateDispatcher;
+use App\Mercure\UpdateType;
 use App\Message\TestingStatusRequest;
 use App\Repository\ProjectRepository;
 use App\Subscription\PlanManager;
-use Hashids\HashidsInterface;
+use App\Util\Testing\TestingStatus;
 use Symfony\Component\Cache\Adapter\ApcuAdapter;
 use Symfony\Component\Cache\CacheItem;
-use Symfony\Component\Mercure\Update;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
-use Symfony\Component\Messenger\MessageBusInterface;
 
 class TestingStatusRequestHandler implements MessageHandlerInterface
 {
@@ -26,8 +25,6 @@ class TestingStatusRequestHandler implements MessageHandlerInterface
 		private ProjectRepository $projectRepository,
 		private PlanManager $planManager,
 		private UpdateDispatcher $updateDispatcher,
-		private HashidsInterface $idHasher,
-		private MessageBusInterface $bus,
 		private StatusEndpoint $statusApi,
 	) {
 		$this->cache = new ApcuAdapter('project_status', 30);
@@ -58,15 +55,12 @@ class TestingStatusRequestHandler implements MessageHandlerInterface
 		}
 
 		// Get project status from the tools API
-		$status = $this->statusApi->project($project);
-		$this->cacheProjectStatus($project, $status);
+		$statusData = $this->statusApi->project($project);
+		$this->cacheProjectStatus($project, $statusData);
 
 		// Build & dispatch the Mercure update
-		$hashedProjectId = $this->idHasher->encode($project->getId());
-		$mercureTopic = 'http://koalati/project/'.$hashedProjectId.'/testing/status';
-		$mercureUpdate = new Update($mercureTopic, json_encode($status));
-
-		$this->bus->dispatch($mercureUpdate);
+		$status = new TestingStatus($project, $statusData);
+		$this->updateDispatcher->dispatch($status, UpdateType::CREATE);
 	}
 
 	/**

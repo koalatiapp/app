@@ -16,11 +16,6 @@ use Symfony\Component\Messenger\MessageBusInterface;
 class SitemapRequestHandler implements MessageHandlerInterface
 {
 	/**
-	 * @var PageRepository
-	 */
-	private $pageRepository;
-
-	/**
 	 * @var ProjectRepository
 	 */
 	private $projectRepository;
@@ -45,9 +40,8 @@ class SitemapRequestHandler implements MessageHandlerInterface
 	 */
 	private $bus;
 
-	public function __construct(PageRepository $pageRepository, ProjectRepository $projectRepository, Builder $sitemapBuilder, Url $urlHelper, EntityManagerInterface $em, MessageBusInterface $bus)
+	public function __construct(ProjectRepository $projectRepository, Builder $sitemapBuilder, Url $urlHelper, EntityManagerInterface $em, MessageBusInterface $bus)
 	{
-		$this->pageRepository = $pageRepository;
 		$this->projectRepository = $projectRepository;
 		$this->sitemapBuilder = $sitemapBuilder;
 		$this->urlHelper = $urlHelper;

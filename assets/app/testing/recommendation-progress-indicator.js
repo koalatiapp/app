@@ -1,9 +1,12 @@
 import { ApiClient } from "../../utils/api";
+import MercureClient from "../../utils/mercure-client";
 import { LitElement, html, css } from "lit";
 import faImport from "../../utils/fontawesome-import.js";
 import querySelectorAllAnywhere from "../../utils/query-selector-all-anywhere.js";
 
 export class RecommendationProgressIndicator extends LitElement {
+	#mercureUpdateCallback = null;
+
 	static get styles()
 	{
 		return css`
@@ -32,6 +35,15 @@ export class RecommendationProgressIndicator extends LitElement {
 	{
 		super();
 		this.reset();
+	}
+
+	disconnectedCallback()
+	{
+		if (this.#mercureUpdateCallback) {
+			MercureClient.unsubscribe(this.supportedEntityType(), this.#mercureUpdateCallback);
+		}
+
+		super.disconnectedCallback();
 	}
 
 	firstUpdated()
@@ -154,14 +166,16 @@ export class RecommendationProgressIndicator extends LitElement {
 
 	_initStatusUpdateListener()
 	{
-		const topic = `http://koalati/project/${this.projectId}/testing/status`;
-		ApiClient.subscribe(topic, status => {
+		this.#mercureUpdateCallback = (update) => {
+			const status = update.data;
+
 			if (typeof status.requestCount != "undefined") {
 				this._handleStatusUpdate(status);
 			} else if (status.pending && !this._hasReceivedFirstResponse) {
 				this.fetchStatus();
 			}
-		});
+		};
+		MercureClient.subscribe("TestingStatus", this.#mercureUpdateCallback);
 	}
 
 	// Timer related methods

@@ -17,7 +17,7 @@ class ItemGroup
 	 * @ORM\GeneratedValue
 	 * @ORM\Column(type="integer")
 	 */
-	private ?int $id;
+	private ?int $id = null;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=Checklist::class, inversedBy="itemGroups")

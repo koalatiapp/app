@@ -5,7 +5,6 @@ namespace App\Security;
 use App\Entity\Organization;
 use App\Entity\OrganizationMember;
 use App\Entity\User;
-use App\Repository\OrganizationRepository;
 use App\Subscription\PlanManager;
 use Exception;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -22,7 +21,6 @@ class OrganizationVoter extends Voter
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	public function __construct(
-		private OrganizationRepository $organizationRepository,
 		private PlanManager $planManager,
 	) {
 	}
