@@ -167,6 +167,10 @@ export class RecommendationProgressIndicator extends LitElement {
 	_initStatusUpdateListener()
 	{
 		this.#mercureUpdateCallback = (update) => {
+			if (update.id != this.projectId) {
+				return;
+			}
+
 			const status = update.data;
 
 			if (typeof status.requestCount != "undefined") {

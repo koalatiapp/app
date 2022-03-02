@@ -125,6 +125,11 @@ export class RecommendationList extends AbstractDynamicList {
 		return "RecommendationGroup";
 	}
 
+	supportedUpdateFilter(update)
+	{
+		return update.data.project?.id == this.projectId;
+	}
+
 	render()
 	{
 		return [

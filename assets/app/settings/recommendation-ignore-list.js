@@ -89,6 +89,15 @@ export class RecommendationIgnoreList extends AbstractDynamicList {
 		return "IgnoreEntry";
 	}
 
+	supportedUpdateFilter(update)
+	{
+		if (this.projectId && update.data.scopeType == "project" && update.data.targetProject?.id != this.projectId) {
+			return false;
+		}
+
+		return true;
+	}
+
 	fetchListData()
 	{
 		super.fetchListData("api_testing_ignore_entry_list", { project_id: this.projectId });
