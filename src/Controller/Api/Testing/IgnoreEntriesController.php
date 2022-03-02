@@ -46,7 +46,8 @@ class IgnoreEntriesController extends AbstractApiController
 	{
 		$em = $this->getDoctrine()->getManager();
 		$scope = $request->request->get('scope');
-		$recommendationId = $request->request->get('recommendation_id');
+		$encodedRecommendationId = $request->request->get('recommendation_id');
+		$recommendationId = $this->idHasher->decode($encodedRecommendationId)[0];
 		$recommendation = $recommendationRepository->find($recommendationId);
 
 		if (!$recommendation) {
@@ -67,6 +68,7 @@ class IgnoreEntriesController extends AbstractApiController
 			$testResult->getUniqueName(),
 			$recommendation->getUniqueName(),
 			$recommendation->getTitle(),
+			null,
 			$this->getUser()
 		);
 

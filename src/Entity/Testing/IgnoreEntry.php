@@ -2,11 +2,11 @@
 
 namespace App\Entity\Testing;
 
-use App\Mercure\MercureEntityInterface;
 use App\Entity\Organization;
 use App\Entity\Page;
 use App\Entity\Project;
 use App\Entity\User;
+use App\Mercure\MercureEntityInterface;
 use App\Repository\Testing\IgnoreEntryRepository;
 use DateTime;
 use DateTimeInterface;
@@ -53,18 +53,21 @@ class IgnoreEntry implements MercureEntityInterface
 	/**
 	 * @ORM\ManyToOne(targetEntity=Organization::class, inversedBy="ignoreEntries")
 	 * @ORM\JoinColumn(name="target_organization_id", referencedColumnName="id", onDelete="CASCADE")
+	 * @Groups({"default"})
 	 */
 	private ?Organization $targetOrganization = null;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=User::class, inversedBy="ignoreEntries")
 	 * @ORM\JoinColumn(name="target_user_id", referencedColumnName="id", onDelete="CASCADE")
+	 * @Groups({"default"})
 	 */
 	private ?User $targetUser = null;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=Project::class, inversedBy="ignoreEntries")
 	 * @ORM\JoinColumn(name="target_project_id", referencedColumnName="id", onDelete="CASCADE")
+	 * @Groups({"default"})
 	 */
 	private ?Project $targetProject = null;
 
@@ -78,6 +81,7 @@ class IgnoreEntry implements MercureEntityInterface
 	/**
 	 * @ORM\ManyToOne(targetEntity=Page::class, inversedBy="ignoreEntries")
 	 * @ORM\JoinColumn(name="page_id", referencedColumnName="id", onDelete="CASCADE")
+	 * @Groups({"default"})
 	 */
 	private ?Page $targetPage = null;
 

@@ -2,9 +2,10 @@
 
 namespace App\Util\Testing;
 
-use App\Mercure\MercureEntityInterface;
+use App\Entity\Project;
 use App\Entity\Testing\Recommendation;
 use App\Entity\User;
+use App\Mercure\MercureEntityInterface;
 use Countable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -73,9 +74,17 @@ class RecommendationGroup implements Countable, MercureEntityInterface
 	/**
 	 * @Groups({"default"})
 	 */
+	public function getProject(): ?Project
+	{
+		return $this->getSample()?->getProject();
+	}
+
+	/**
+	 * @Groups({"default"})
+	 */
 	public function getType(): ?string
 	{
-		return $this->getSample()?->gettype();
+		return $this->getSample()?->getType();
 	}
 
 	/**
