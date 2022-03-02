@@ -135,6 +135,11 @@ export class ProjectList extends AbstractDynamicList {
 		this.sortDirection = "desc";
 	}
 
+	supportedEntityType()
+	{
+		return "Project";
+	}
+
 	connectedCallback()
 	{
 		super.connectedCallback();

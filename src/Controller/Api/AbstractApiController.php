@@ -5,14 +5,11 @@ namespace App\Controller\Api;
 use App\Controller\AbstractController;
 use App\Entity\Organization;
 use App\Entity\Project;
-use App\Mercure\TopicBuilder;
 use App\Mercure\UpdateDispatcher;
 use App\Security\OrganizationVoter;
 use App\Security\ProjectVoter;
 use App\Util\ClientMessageSerializer;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\EventListener\AbstractSessionListener;
 /*
 use Symfony\Component\Mercure\Authorization;
@@ -26,14 +23,6 @@ abstract class AbstractApiController extends AbstractController
 	public const STATUS_OKAY = 'ok';
 
 	/**
-	 * A Mercure topic that the client may want to subscribe to in order
-	 * to receive live updates to the data returned by the current request.
-	 *
-	 * This topic will be sent in the response via the `suggested-mercure-topic` HTTP header.
-	 */
-	private ?string $suggestedMercureTopic = null;
-
-	/**
 	 * The duration for which the current request's response will be cached.
 	 * This can be defined with `enableResponseCache()`.
 	 */
@@ -43,11 +32,9 @@ abstract class AbstractApiController extends AbstractController
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.serializer)
 	 */
 	public function __construct(
-		protected TopicBuilder $topicBuilder,
 		protected UpdateDispatcher $updateDispatcher,
 		protected ClientMessageSerializer $serializer,
 		protected TranslatorInterface $translator,
-		private RequestStack $requestStack,
 		/*
 		private Discovery $discovery,
 		private Authorization $authorization,
@@ -123,29 +110,6 @@ abstract class AbstractApiController extends AbstractController
 		return $organization;
 	}
 
-	protected function setSuggestedMercureTopic(string $topic): static
-	{
-		$this->suggestedMercureTopic = $topic;
-
-		return $this;
-	}
-
-	private function addSuggestedMercureTopicToResponse(Response $response): static
-	{
-		if ($this->suggestedMercureTopic) {
-			$response->headers->set('suggested-mercure-topic', $this->suggestedMercureTopic);
-
-			// @TODO: Add Mercure authorization cookie to API responses
-			/*
-			$response->headers->setCookie(
-				$this->authorization->createCookie($this->requestStack->getCurrentRequest(),  ["http://example.com/books/1"])
-			);
-			*/
-		}
-
-		return $this;
-	}
-
 	/**
 	 * Generates a JsonResponse for an API request that has encountered an error.
 	 */
@@ -156,8 +120,6 @@ abstract class AbstractApiController extends AbstractController
 			'code' => $code,
 			'message' => $message,
 		]);
-
-		$this->addSuggestedMercureTopicToResponse($response);
 
 		return $response;
 	}
@@ -177,8 +139,6 @@ abstract class AbstractApiController extends AbstractController
 			'code' => $code,
 			'data' => $this->serializer->serialize($data, $groups),
 		]);
-
-		$this->addSuggestedMercureTopicToResponse($response);
 
 		if ($this->cacheDuration > 0) {
 			$response->headers->set(AbstractSessionListener::NO_AUTO_CACHE_CONTROL_HEADER, 'true');

@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Entity\Checklist\ChecklistTemplate;
 use App\Entity\Testing\IgnoreEntry;
+use App\Mercure\MercureEntityInterface;
 use App\Repository\OrganizationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -14,7 +15,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 /**
  * @ORM\Entity(repositoryClass=OrganizationRepository::class)
  */
-class Organization
+class Organization implements MercureEntityInterface
 {
 	/**
 	 * @ORM\Id
@@ -22,7 +23,7 @@ class Organization
 	 * @ORM\Column(type="integer")
 	 * @Groups({"default"})
 	 */
-	private ?int $id;
+	private ?int $id = null;
 
 	/**
 	 * @ORM\Column(type="string", length=255)

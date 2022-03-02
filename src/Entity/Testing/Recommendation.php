@@ -34,7 +34,7 @@ class Recommendation
 	 * @ORM\Column(type="integer")
 	 * @Groups({"default"})
 	 */
-	private int $id;
+	private ?int $id = null;
 
 	/**
 	 * @ORM\Column(type="text")

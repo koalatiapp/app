@@ -70,6 +70,11 @@ export class ProjectPagesList extends AbstractDynamicList {
 		this.sortDirection = "ASC";
 	}
 
+	supportedEntityType()
+	{
+		return "Page";
+	}
+
 	fetchListData()
 	{
 		super.fetchListData("api_project_pages_list", { project_id: this.projectId });

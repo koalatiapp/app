@@ -20,7 +20,7 @@ class Checklist
 	 * @ORM\GeneratedValue
 	 * @ORM\Column(type="integer")
 	 */
-	private ?int $id;
+	private ?int $id = null;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=ChecklistTemplate::class, inversedBy="childChecklists")

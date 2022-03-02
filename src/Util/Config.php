@@ -68,11 +68,11 @@ class Config
 	 */
 	public function get(string $filename, ?string $key = null)
 	{
-		if (!isset(static::$loadedConfigurations[$filename])) {
-			static::$loadedConfigurations[$filename] = $this->loadDataFromFile($filename);
+		if (!isset(self::$loadedConfigurations[$filename])) {
+			self::$loadedConfigurations[$filename] = $this->loadDataFromFile($filename);
 		}
 
-		$data = static::$loadedConfigurations[$filename];
+		$data = self::$loadedConfigurations[$filename];
 
 		if ($key) {
 			$subkeys = explode('.', $key);

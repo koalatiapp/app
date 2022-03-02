@@ -1,13 +1,15 @@
 import { NbList } from "../native-bear";
 import { ApiClient } from "../utils/api";
+import MercureClient from "../utils/mercure-client.js";
 import fontawesomeImport from "../utils/fontawesome-import";
 
 /**
  * Implements the basics for dynamic <nb-list> elemements that
  * fetch their content from the internal API.
  *
- * Has built-in support for live-updates with Mercure with the
- * custom `suggested-mercure-topic` header returned by the API.
+ * Has built-in support for live-updates with Mercure. You must define
+ * the `supportedEntityType()` method (and optionally redefine the
+ * `supportedDynamicActions()` method) to enable live-updates.
  *
  * When extending this class, you must redefine the `fetchListData`
  * method and call `super.fetchListData()` with the desired endpoint
@@ -22,6 +24,8 @@ import fontawesomeImport from "../utils/fontawesome-import";
  * ```
  */
 export class AbstractDynamicList extends NbList {
+	#mercureUpdateCallback = null;
+
 	constructor()
 	{
 		super();
@@ -51,6 +55,15 @@ export class AbstractDynamicList extends NbList {
 		}
 	}
 
+	disconnectedCallback()
+	{
+		if (this.#mercureUpdateCallback) {
+			MercureClient.unsubscribe(this.supportedEntityType(), this.#mercureUpdateCallback);
+		}
+
+		super.disconnectedCallback();
+	}
+
 	/**
 	 * Returns the list of dynamic actions that are supported by this list.
 	 * Available actions:
@@ -63,6 +76,16 @@ export class AbstractDynamicList extends NbList {
 	supportedDynamicActions()
 	{
 		return ["update", "add", "delete"];
+	}
+
+	/**
+	 * Returns the type of entity this list supports.
+	 *
+	 * @returns {string|null}
+	*/
+	supportedEntityType()
+	{
+		return null;
 	}
 
 	/**
@@ -95,45 +118,47 @@ export class AbstractDynamicList extends NbList {
 
 			this.dispatchEvent(new CustomEvent("items-initialized"));
 
-			// Subscribe to live updates
-			const mercureTopic = response._response.headers.get("suggested-mercure-topic");
-			if (mercureTopic) {
-				ApiClient.subscribe(mercureTopic, update => {
-					let itemsHaveChanged = false;
-
-					if (update.data) {
-						for (const index in this.items) {
-							if (this.items[index].id == update.id) {
-								if (this.supportsDynamicAction("update")) {
-									const updatedList = [...this.items];
-									updatedList[index] = update.data;
-									this.items = updatedList;
-									itemsHaveChanged = true;
-								}
-								break;
-							}
-						}
-
-						if (!itemsHaveChanged) {
-							// If we got here, it means the item wasn't found - add it to the list.
-							if (this.supportsDynamicAction("add")) {
-								this.items = this.items.concat([update.data]);
-							}
-						}
-					} else if (this.supportsDynamicAction("delete")) {
-						const originalLength = this.items.length;
-						this.items = this.items.filter(item => item.id != update.id);
-
-						if (this.items.length != originalLength) {
-							itemsHaveChanged = true;
-						}
-					}
-
-					if (itemsHaveChanged) {
-						this.dispatchEvent(new CustomEvent("items-updated"));
-					}
-				});
+			if (this.supportedEntityType()) {
+				this.#mercureUpdateCallback = (update) => this.#processMercureUpdate(update);
+				MercureClient.subscribe(this.supportedEntityType(), this.#mercureUpdateCallback);
 			}
 		});
+	}
+
+	#processMercureUpdate(update)
+	{
+		let itemsHaveChanged = false;
+
+		if (update.data) {
+			for (const index in this.items) {
+				if (this.items[index].id == update.id) {
+					if (this.supportsDynamicAction("update")) {
+						const updatedList = [...this.items];
+						updatedList[index] = update.data;
+						this.items = updatedList;
+						itemsHaveChanged = true;
+					}
+					break;
+				}
+			}
+
+			if (!itemsHaveChanged) {
+				// If we got here, it means the item wasn't found - add it to the list.
+				if (this.supportsDynamicAction("add")) {
+					this.items = this.items.concat([update.data]);
+				}
+			}
+		} else if (this.supportsDynamicAction("delete")) {
+			const originalLength = this.items.length;
+			this.items = this.items.filter(item => item.id != update.id);
+
+			if (this.items.length != originalLength) {
+				itemsHaveChanged = true;
+			}
+		}
+
+		if (itemsHaveChanged) {
+			this.dispatchEvent(new CustomEvent("items-updated"));
+		}
 	}
 }

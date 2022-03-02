@@ -3,7 +3,6 @@
 namespace App\Controller\Api\Testing;
 
 use App\Controller\Api\AbstractApiController;
-use App\Mercure\TopicBuilder;
 use App\Message\TestingRequest;
 use App\Repository\Testing\RecommendationRepository;
 use App\Security\ProjectVoter;
@@ -38,8 +37,6 @@ class RecommendationController extends AbstractApiController
 		$project = $this->getProject($projectId);
 		$recommendationGroups = $project->getActiveRecommendationGroups();
 
-		$this->setSuggestedMercureTopic($this->topicBuilder->getEntityGenericTopic(RecommendationGroup::class, TopicBuilder::SCOPE_PROJECT, $projectId));
-
 		return $this->apiSuccess($recommendationGroups);
 	}
 
@@ -71,8 +68,6 @@ class RecommendationController extends AbstractApiController
 		if (!$recommendationGroup) {
 			$recommendationGroup = new RecommendationGroup(new ArrayCollection([$recommendation]));
 		}
-
-		$this->setSuggestedMercureTopic($this->topicBuilder->getEntityTopic($recommendationGroup, TopicBuilder::SCOPE_SPECIFIC));
 
 		return $this->apiSuccess($recommendationGroup, ['recommendation_group', 'recommendation']);
 	}

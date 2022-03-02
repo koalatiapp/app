@@ -84,6 +84,11 @@ export class RecommendationIgnoreList extends AbstractDynamicList {
 		this.projectId = null;
 	}
 
+	supportedEntityType()
+	{
+		return "IgnoreEntry";
+	}
+
 	fetchListData()
 	{
 		super.fetchListData("api_testing_ignore_entry_list", { project_id: this.projectId });

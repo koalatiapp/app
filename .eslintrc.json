@@ -1,7 +1,7 @@
 {
     "env": {
         "browser": true,
-        "es2021": true,
+        "es2022": true,
 		"mocha": true
 	},
 	"globals": {
@@ -15,7 +15,7 @@
         "plugin:vue/essential"
     ],
     "parserOptions": {
-        "ecmaVersion": 12,
+        "ecmaVersion": 13,
         "sourceType": "module"
     },
     "plugins": [

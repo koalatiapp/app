@@ -41,12 +41,12 @@ class ApiClient {
 	 * @param {object} body The body of the request. Raw objects and FormData are accepted.
 	 * @param {ApiClient.ERROR_FLASH|function|null} errorCallback Specifies what to do when a user-friendly
 	 * 	error message is returned by the API. Available options:
-	 * 	- `ApiClient.ERROR_FLASH`: automatically displays the error in a temporary Flash message.
-	 * 	- function: calls the provided callback with the error message as a parameter
-	 *  - null: throws an `ApiError`
+	 * 	- `ApiClient.ERROR_FLASH`: automatically displays the error in a temporary Flash message, and then throws an `ApiError`. (default)
+	 * 	- function: calls the provided callback with the error message as a parameter.
+	 *  - null: throws an `ApiError` without providing any user feedback.
 	 * @param {AbortController|null} abortController The abort controller to use for the request (optional)
 	 * @returns {object|undefined} The response data object, or undefined if an error is returned from the API.
-	 * @throws {ApiError} Only thrown when the `errorCallback` is null or an unknown option.
+	 * @throws {ApiError} Thrown when the API reutnrs an error and the `errorCallback` is not a function.
 	 */
 	async _request(method, endpoint, body = {}, errorCallback = ApiClient.ERROR_FLASH, abortController = null)
 	{
@@ -76,18 +76,26 @@ class ApiClient {
 		}
 
 		const response = await fetch(url, fetchOptions);
-		const responseData = await response.json();
+		let responseData;
+
+		try {
+			responseData = await response.json();
+		} catch (error) {
+			window.Flash.show("danger", "api.flash.server_error");
+			throw error;
+		}
 
 		if (responseData.status != "ok") {
-			if (errorCallback == ApiClient.ERROR_FLASH) {
-				window.Flash.show("danger", responseData.message);
-				return;
-			} else if (typeof errorCallback == "function") {
+			if (typeof errorCallback == "function") {
 				errorCallback(responseData.message);
 				return;
-			} else {
-				throw new ApiError(responseData.message);
 			}
+
+			if (errorCallback == ApiClient.ERROR_FLASH) {
+				window.Flash.show("danger", responseData.message);
+			}
+
+			throw new ApiError(responseData.message);
 		}
 
 		// Add the complete Response object
@@ -101,11 +109,12 @@ class ApiClient {
 	 * @param {object} body The body of the request. Raw objects and FormData are accepted.
 	 * @param {ApiClient.ERROR_FLASH|function|null} errorCallback Specifies what to do when a user-friendly
 	 * 	error message is returned by the API. Available options:
-	 * 	- `ApiClient.ERROR_FLASH`: automatically displays the error in a temporary Flash message.
-	 * 	- function: calls the provided callback with the error message as a parameter
-	 *  - null: throws an `ApiError`
-	 * @returns {Promise<object|undefined>} The response object, or undefined if an error is returned from the API.
-	 * @throws {ApiError} Only thrown when the `errorCallback` is null or an unknown option.
+	 * 	- `ApiClient.ERROR_FLASH`: automatically displays the error in a temporary Flash message, and then throws an `ApiError`. (default)
+	 * 	- function: calls the provided callback with the error message as a parameter.
+	 *  - null: throws an `ApiError` without providing any user feedback.
+	 * @param {AbortController|null} abortController The abort controller to use for the request (optional)
+	 * @returns {object|undefined} The response data object, or undefined if an error is returned from the API.
+	 * @throws {ApiError} Thrown when the API reutnrs an error and the `errorCallback` is not a function.
 	 */
 	get(endpoint, body = {}, errorCallback = ApiClient.ERROR_FLASH, abortController = null)
 	{
@@ -117,12 +126,12 @@ class ApiClient {
 	 * @param {object} body The body of the request. Raw objects and FormData are accepted.
 	 * @param {ApiClient.ERROR_FLASH|function|null} errorCallback Specifies what to do when a user-friendly
 	 * 	error message is returned by the API. Available options:
-	 * 	- `ApiClient.ERROR_FLASH`: automatically displays the error in a temporary Flash message.
-	 * 	- function: calls the provided callback with the error message as a parameter
-	 *  - null: throws an `ApiError`
+	 * 	- `ApiClient.ERROR_FLASH`: automatically displays the error in a temporary Flash message, and then throws an `ApiError`. (default)
+	 * 	- function: calls the provided callback with the error message as a parameter.
+	 *  - null: throws an `ApiError` without providing any user feedback.
 	 * @param {AbortController|null} abortController The abort controller to use for the request (optional)
-	 * @returns {Promise<object|undefined>} The response object, or undefined if an error is returned from the API.
-	 * @throws {ApiError} Only thrown when the `errorCallback` is null or an unknown option.
+	 * @returns {object|undefined} The response data object, or undefined if an error is returned from the API.
+	 * @throws {ApiError} Thrown when the API reutnrs an error and the `errorCallback` is not a function.
 	 */
 	post(endpoint, body = {}, errorCallback = ApiClient.ERROR_FLASH, abortController = null)
 	{
@@ -134,12 +143,12 @@ class ApiClient {
 	 * @param {object} body The body of the request. Raw objects and FormData are accepted.
 	 * @param {ApiClient.ERROR_FLASH|function|null} errorCallback Specifies what to do when a user-friendly
 	 * 	error message is returned by the API. Available options:
-	 * 	- `ApiClient.ERROR_FLASH`: automatically displays the error in a temporary Flash message.
-	 * 	- function: calls the provided callback with the error message as a parameter
-	 *  - null: throws an `ApiError`
+	 * 	- `ApiClient.ERROR_FLASH`: automatically displays the error in a temporary Flash message, and then throws an `ApiError`. (default)
+	 * 	- function: calls the provided callback with the error message as a parameter.
+	 *  - null: throws an `ApiError` without providing any user feedback.
 	 * @param {AbortController|null} abortController The abort controller to use for the request (optional)
-	 * @returns {Promise<object|undefined>} The response object, or undefined if an error is returned from the API.
-	 * @throws {ApiError} Only thrown when the `errorCallback` is null or an unknown option.
+	 * @returns {object|undefined} The response data object, or undefined if an error is returned from the API.
+	 * @throws {ApiError} Thrown when the API reutnrs an error and the `errorCallback` is not a function.
 	 */
 	put(endpoint, body = {}, errorCallback = ApiClient.ERROR_FLASH, abortController = null)
 	{
@@ -151,12 +160,12 @@ class ApiClient {
 	 * @param {object} body The body of the request. Raw objects and FormData are accepted.
 	 * @param {ApiClient.ERROR_FLASH|function|null} errorCallback Specifies what to do when a user-friendly
 	 * 	error message is returned by the API. Available options:
-	 * 	- `ApiClient.ERROR_FLASH`: automatically displays the error in a temporary Flash message.
-	 * 	- function: calls the provided callback with the error message as a parameter
-	 *  - null: throws an `ApiError`
+	 * 	- `ApiClient.ERROR_FLASH`: automatically displays the error in a temporary Flash message, and then throws an `ApiError`. (default)
+	 * 	- function: calls the provided callback with the error message as a parameter.
+	 *  - null: throws an `ApiError` without providing any user feedback.
 	 * @param {AbortController|null} abortController The abort controller to use for the request (optional)
-	 * @returns {Promise<object|undefined>} The response object, or undefined if an error is returned from the API.
-	 * @throws {ApiError} Only thrown when the `errorCallback` is null or an unknown option.
+	 * @returns {object|undefined} The response data object, or undefined if an error is returned from the API.
+	 * @throws {ApiError} Thrown when the API reutnrs an error and the `errorCallback` is not a function.
 	 */
 	patch(endpoint, body = {}, errorCallback = ApiClient.ERROR_FLASH, abortController = null)
 	{
@@ -168,40 +177,16 @@ class ApiClient {
 	 * @param {object} body The body of the request. Raw objects and FormData are accepted.
 	 * @param {ApiClient.ERROR_FLASH|function|null} errorCallback Specifies what to do when a user-friendly
 	 * 	error message is returned by the API. Available options:
-	 * 	- `ApiClient.ERROR_FLASH`: automatically displays the error in a temporary Flash message.
-	 * 	- function: calls the provided callback with the error message as a parameter
-	 *  - null: throws an `ApiError`
+	 * 	- `ApiClient.ERROR_FLASH`: automatically displays the error in a temporary Flash message, and then throws an `ApiError`. (default)
+	 * 	- function: calls the provided callback with the error message as a parameter.
+	 *  - null: throws an `ApiError` without providing any user feedback.
 	 * @param {AbortController|null} abortController The abort controller to use for the request (optional)
-	 * @returns {Promise<object|undefined>} The response object, or undefined if an error is returned from the API.
-	 * @throws {ApiError} Only thrown when the `errorCallback` is null or an unknown option.
+	 * @returns {object|undefined} The response data object, or undefined if an error is returned from the API.
+	 * @throws {ApiError} Thrown when the API reutnrs an error and the `errorCallback` is not a function.
 	 */
 	delete(endpoint, body = {}, errorCallback = ApiClient.ERROR_FLASH, abortController = null)
 	{
 		return this._request("DELETE", endpoint, body, errorCallback, abortController);
-	}
-
-	/**
-	 * Subscribes to a Mercure topic and executes the provided callback wehenever an update is received.
-	 *
-	 * @param {string} endpoint The route name of the API endpoint.
-	 * @param {object} body The body of the request. Raw objects and FormData are accepted.
-	 * @param {function} updateCallback The callback that will run when an update is received.
-	 * @returns {EventSource} The EventSource that handles the subscription
-	 * @throws {ApiError} Only thrown when the `errorCallback` is null or an unknown option.
-	 */
-	subscribe(topic, updateCallback = () => {})
-	{
-		const baseUrl = Routing.getScheme() + "://" + Routing.getHost();
-		const sourceUrl = baseUrl + "/.well-known/mercure?topic=" + encodeURIComponent(topic);
-		const eventSource = new EventSource(sourceUrl, {
-			withCredentials: true
-		});
-
-		eventSource.onmessage = event => {
-			updateCallback(JSON.parse(event.data));
-		};
-
-		return eventSource;
 	}
 }
 
