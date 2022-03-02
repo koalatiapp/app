@@ -3,7 +3,7 @@
 namespace App\Controller\Api;
 
 use App\Entity\Comment;
-use App\Mercure\TopicBuilder;
+use App\Mercure\UpdateType;
 use App\Repository\Checklist\ItemRepository;
 use App\Repository\CommentRepository;
 use App\Security\ProjectVoter;
@@ -26,7 +26,6 @@ class CommentController extends AbstractApiController
 	{
 		$projectId = $request->query->get('project_id');
 		$itemId = $request->query->get('checklist_item_id');
-		$mercureUpdateScope = TopicBuilder::SCOPE_PROJECT;
 
 		if (!$projectId && !$itemId) {
 			return $this->apiError('You must provide a valid value for `project_id` or `checklist_item_id`.');
@@ -43,15 +42,6 @@ class CommentController extends AbstractApiController
 
 		$project = $this->getProject($projectId);
 		$comments = $item ? $item->getComments() : $project->getComments();
-
-		if ($item) {
-			$mercureUpdateScope = TopicBuilder::SCOPE_CHECKLIST_ITEM;
-		}
-
-		$topicBuilderComment = (new Comment())
-			->setProject($project)
-			->setChecklistItem($item);
-		$this->setSuggestedMercureTopic($this->topicBuilder->getEntityTopic($topicBuilderComment, $mercureUpdateScope));
 
 		return $this->apiSuccess($comments);
 	}
@@ -110,7 +100,7 @@ class CommentController extends AbstractApiController
 		$entityManager->persist($comment);
 		$entityManager->flush();
 
-		$this->updateDispatcher->dispatch($comment, ['id' => $comment->getId(), 'data' => $this->serializer->serialize($comment)]);
+		$this->updateDispatcher->dispatch($comment, UpdateType::CREATE);
 
 		return $this->apiSuccess($comment);
 	}
@@ -130,8 +120,6 @@ class CommentController extends AbstractApiController
 		if (!$this->isGranted(ProjectVoter::VIEW, $comment->getProject())) {
 			return $this->accessDenied();
 		}
-
-		$this->setSuggestedMercureTopic($this->topicBuilder->getEntityTopic($comment, TopicBuilder::SCOPE_SPECIFIC));
 
 		return $this->apiSuccess($comment);
 	}
@@ -156,7 +144,7 @@ class CommentController extends AbstractApiController
 		$entityManager->persist($comment);
 		$entityManager->flush();
 
-		$this->updateDispatcher->dispatch($comment, ['id' => $comment->getId(), 'data' => $this->serializer->serialize($comment)]);
+		$this->updateDispatcher->dispatch($comment, UpdateType::UPDATE);
 
 		return $this->apiSuccess($comment);
 	}

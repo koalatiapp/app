@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Checklist\Item;
-use App\Mercure\TopicBuilder;
+use App\Mercure\MercureEntityInterface;
 use App\Repository\CommentRepository;
 use DateTime;
 use DateTimeInterface;
@@ -250,27 +250,5 @@ class Comment implements MercureEntityInterface
 		$this->isDeleted = $isDeleted;
 
 		return $this;
-	}
-
-	/*
-	 * Mercure implementation (MercureEntityInterface)
-	 */
-
-	public static function getMercureTopics(): array
-	{
-		return [
-			TopicBuilder::SCOPE_SPECIFIC => 'http://koalati/comment/{id}',
-			TopicBuilder::SCOPE_PROJECT => 'http://koalati/{scope}/comment',
-			TopicBuilder::SCOPE_CHECKLIST_ITEM => 'http://koalati/{scope}/comment',
-		];
-	}
-
-	public function getMercureScope(string $scope): object | array | null
-	{
-		return match ($scope) {
-			TopicBuilder::SCOPE_PROJECT => $this->getProject(),
-			TopicBuilder::SCOPE_CHECKLIST_ITEM => $this->getChecklistItem(),
-			default => null
-		};
 	}
 }
