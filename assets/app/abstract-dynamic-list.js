@@ -160,12 +160,6 @@ export class AbstractDynamicList extends NbList {
 			}
 			break;
 
-		case "create":
-			if (this.supportsDynamicAction("add")) {
-				this.items = this.items.concat([update.data]);
-			}
-			break;
-
 		case "update":
 			if (this.supportsDynamicAction("update")) {
 				for (const index in this.items) {
@@ -177,6 +171,19 @@ export class AbstractDynamicList extends NbList {
 						break;
 					}
 				}
+			}
+
+			// If we couldn't find the item to update, create it.
+			if (!itemsHaveChanged && this.supportsDynamicAction("add")) {
+				this.items = this.items.concat([update.data]);
+				itemsHaveChanged = true;
+			}
+			break;
+
+		case "create":
+			if (this.supportsDynamicAction("add")) {
+				this.items = this.items.concat([update.data]);
+				itemsHaveChanged = true;
 			}
 			break;
 		}
