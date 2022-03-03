@@ -1,10 +1,13 @@
 import { LitElement, html, css } from "lit";
 import { repeat } from "lit/directives/repeat.js";
 import { ApiClient } from "../../utils/api/index.js";
+import MercureClient from "../../utils/mercure-client.js";
 import stylesReset from "../../native-bear/styles-reset.js";
 import fontAwesomeImport from "../../utils/fontawesome-import.js";
 
 export class CommentList extends LitElement {
+	#mercureUpdateCallback = null;
+
 	static get styles()
 	{
 		return [
@@ -44,6 +47,16 @@ export class CommentList extends LitElement {
 	firstUpdated()
 	{
 		this.load();
+		this.#initLiveUpdateListener();
+	}
+
+	disconnectedCallback()
+	{
+		if (this.#mercureUpdateCallback) {
+			MercureClient.unsubscribe("Comment", this.#mercureUpdateCallback);
+		}
+
+		super.disconnectedCallback();
 	}
 
 	render()
@@ -92,51 +105,6 @@ export class CommentList extends LitElement {
 
 		ApiClient.get("api_comments_list", params).then(response => {
 			this._loadData(response.data);
-
-			const mercureTopic = response._response.headers.get("suggested-mercure-topic");
-
-			if (mercureTopic) {
-				ApiClient.subscribe(mercureTopic, (eventData) => {
-					const data = eventData.data;
-
-					if (Array.isArray(data)) {
-						this._loadData(data);
-					} else if (typeof data.id != "undefined") {
-						let updatedComment = false;
-
-						const updatedThreads = this.threads.map(thread => {
-							if (updatedComment) {
-								return thread;
-							}
-
-							if (thread.id == data.id) {
-								updatedComment = true;
-								return data;
-							}
-
-							for (const replyIndex in thread.replies ?? []) {
-								if (thread.replies[replyIndex].id == data.id) {
-									thread.replies[replyIndex] = data;
-									updatedComment = true;
-								}
-							}
-
-							if (!updatedComment && thread.id == data.thread?.id) {
-								thread.replies.push(data);
-								updatedComment = true;
-							}
-
-							return thread;
-						});
-
-						if (!updatedComment) {
-							updatedThreads.push(data);
-						}
-
-						this.threads = updatedThreads;
-					}
-				});
-			}
 		});
 	}
 
@@ -144,6 +112,36 @@ export class CommentList extends LitElement {
 	{
 		this.threads = Object.values(data);
 		this._loaded = true;
+	}
+
+	#initLiveUpdateListener()
+	{
+		this.#mercureUpdateCallback = (update) => {
+			if (this.projectId != update.data.project.id) {
+				return;
+			}
+
+			if (this.checklistItemId && this.checklistItemId != update.data.checklistItem?.id) {
+				return;
+			}
+
+			// Reply updates and deletions are handled in the user-comment component
+			if (update.data.thread !== null) {
+				return;
+			}
+
+			switch (update.event) {
+			case "delete":
+				this.threads = this.threads.filter(thread => thread.id == update.data.id);
+				break;
+
+			case "create":
+				this.threads.push(update.data);
+				this.requestUpdate("threads");
+				break;
+			}
+		};
+		MercureClient.subscribe("Comment", this.#mercureUpdateCallback);
 	}
 }
 

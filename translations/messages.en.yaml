@@ -701,6 +701,7 @@ upgrade_suggestion:
     testing: Upgrade to a plan that offers automated testing tools to start testing your projects!
 
 comment:
+    section_heading: Comments
     editor_label: Add a comment
     editor_submit: Add comment
     editor_reply_label: Reply to this thread

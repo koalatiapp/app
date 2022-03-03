@@ -150,7 +150,7 @@ export class ChecklistItemList extends AbstractDynamicList {
 
 			<hr>
 
-			<h3>Comments</h3>
+			<h3>${Translator.trans("comment.section_heading")}</h3>
 			<br>
 			<comment-list projectId=${this.projectId} checklistItemId=${item.id}></comment-list>
 		`, sidepanel);

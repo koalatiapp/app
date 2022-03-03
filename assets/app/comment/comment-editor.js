@@ -95,6 +95,8 @@ export class CommentEditor extends LitElement {
 		}).then(() => {
 			this.contentElement.innerHTML = "";
 			window.Flash.show("success", Translator.trans("comment.flash.submitted"));
+
+			this.dispatchEvent(new CustomEvent("submitted-comment"));
 		});
 	}
 

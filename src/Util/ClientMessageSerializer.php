@@ -2,6 +2,7 @@
 
 namespace App\Util;
 
+use Hashids\HashidsInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -13,6 +14,7 @@ class ClientMessageSerializer
 	 */
 	public function __construct(
 		private SerializerInterface $serializer,
+		private HashidsInterface $idHasher,
 	) {
 	}
 
@@ -25,9 +27,11 @@ class ClientMessageSerializer
 	 */
 	public function serialize(mixed $data, array $groups = []): mixed
 	{
+		$idHasher = $this->idHasher;
+
 		return json_decode($this->serializer->serialize($data, 'json', [
-			AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object) {
-				return $object->getId();
+			AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object) use ($idHasher) {
+				return $idHasher->encode($object->getId());
 			},
 			AbstractNormalizer::GROUPS => array_merge(['default'], $groups),
 			AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true,

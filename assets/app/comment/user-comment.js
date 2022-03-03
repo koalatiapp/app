@@ -3,10 +3,15 @@ import { LitElement, html, css } from "lit";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { repeat } from "lit/directives/repeat.js";
 import { ApiClient } from "../../utils/api/index.js";
+import MercureClient from "../../utils/mercure-client.js";
 import stylesReset from "../../native-bear/styles-reset.js";
 import fontAwesomeImport from "../../utils/fontawesome-import.js";
 
+const cachedComments = {};
+
 export class UserComment extends LitElement {
+	#mercureUpdateCallback = null;
+
 	static get styles()
 	{
 		return [
@@ -77,6 +82,16 @@ export class UserComment extends LitElement {
 	firstUpdated()
 	{
 		this.load();
+		this.#initLiveUpdateListener();
+	}
+
+	disconnectedCallback()
+	{
+		if (this.#mercureUpdateCallback) {
+			MercureClient.unsubscribe("Comment", this.#mercureUpdateCallback);
+		}
+
+		super.disconnectedCallback();
 	}
 
 	render()
@@ -95,7 +110,7 @@ export class UserComment extends LitElement {
 					<div class="date">${timeago.format(this.dateCreated)}</div>
 				</div>
 				<div class="actions">
-					${!this.isResolved ? html`
+					${!this.isResolved && !this.thread?.isResolved ? html`
 						<nb-button size="tiny" color="gray" @click=${() => this.toggleReplyEditor(true)}>
 							${Translator.trans("comment.reply")}
 						</nb-button>
@@ -142,7 +157,8 @@ export class UserComment extends LitElement {
 				<br>
 				<comment-editor projectId=${this.data.project.id}
 					checklistItemId=${this.data?.checklistItem?.id || ""}
-					threadId=${this.data.id}>
+					threadId=${this.commentId}
+					@submitted-comment=${() => this.showReplyEditor = false}>
 				</comment-editor>
 			` : ""}
 	  	`;
@@ -166,9 +182,15 @@ export class UserComment extends LitElement {
 
 	_loadData(data)
 	{
+		let thread = data.thread;
+
+		if (typeof thread == "string" && thread in cachedComments) {
+			thread = cachedComments[thread];
+		}
+
 		this.data = data;
 		this.commentId = data.id;
-		this.thread = data.thread;
+		this.thread = thread;
 		this.dateCreated = new Date(data.dateCreated);
 		this.authorAvatarUrl = data.author?.avatarUrl ?? this.placeholderUrl;
 		this.authorName = data.authorName;
@@ -176,6 +198,8 @@ export class UserComment extends LitElement {
 		this.isResolved = data.isResolved;
 		this.replies = Object.values(data.replies);
 		this._loaded = true;
+
+		cachedComments[this.commentId] = data;
 	}
 
 	#resolve()
@@ -207,6 +231,41 @@ export class UserComment extends LitElement {
 				editor.focus();
 			});
 		}
+	}
+
+	#initLiveUpdateListener()
+	{
+		this.#mercureUpdateCallback = (update) => {
+			if (update.data.id != this.commentId &&
+				update.data.thread?.id != this.commentId) {
+				return;
+			}
+
+			if (update.data.id == this.commentId && update.event == "update") {
+				this._loadData(update.data);
+				return;
+			}
+
+			// This update is about a reply to this thread
+			if (update.data.thread?.id == this.commentId) {
+				switch (update.event) {
+				case "delete":
+					this.replies = this.replies.filter(reply => reply.id == update.data.id);
+					break;
+
+				case "create":
+					this.replies.push(update.data);
+					this.requestUpdate("replies");
+					break;
+
+				case "update":
+					this.replies = this.replies.map(reply => reply.id == update.data.id ? update.data : reply);
+					this.requestUpdate("replies");
+					break;
+				}
+			}
+		};
+		MercureClient.subscribe("Comment", this.#mercureUpdateCallback);
 	}
 
 	get placeholderUrl()

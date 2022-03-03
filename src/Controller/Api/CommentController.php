@@ -102,6 +102,10 @@ class CommentController extends AbstractApiController
 
 		$this->updateDispatcher->dispatch($comment, UpdateType::CREATE);
 
+		if ($comment->getChecklistItem()) {
+			$this->updateDispatcher->dispatch($comment->getChecklistItem(), UpdateType::UPDATE);
+		}
+
 		return $this->apiSuccess($comment);
 	}
 
@@ -145,6 +149,10 @@ class CommentController extends AbstractApiController
 		$entityManager->flush();
 
 		$this->updateDispatcher->dispatch($comment, UpdateType::UPDATE);
+
+		if ($comment->getChecklistItem()) {
+			$this->updateDispatcher->dispatch($comment->getChecklistItem(), UpdateType::UPDATE);
+		}
 
 		return $this->apiSuccess($comment);
 	}
