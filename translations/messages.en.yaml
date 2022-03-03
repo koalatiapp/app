@@ -18,7 +18,7 @@ generic:
 
 api:
     flash:
-        server_error: Something went wrong on our side - please try again later.
+        server_error: Something went wrong. Please make sure you're still logged in, and try again.
 
 branding:
     name: Koalati
