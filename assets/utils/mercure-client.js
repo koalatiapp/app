@@ -48,6 +48,10 @@ class MercureClient {
 				}
 			};
 			onmessageInitialized = true;
+
+			window.addEventListener("beforeunload", () => {
+				window.mercureEventSource.close();
+			});
 		}
 
 		if (typeof callbacksByType[entityType] == "undefined") {
