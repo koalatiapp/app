@@ -474,9 +474,11 @@ project_dashboard:
                 count: "%count% possible improvements"
                 not_scanned: website not scanned yet
                 completed: no recommendations left!
-            bug_reports:
+            comments:
                 title: Bug reports
-                not_available: not available yet
+                none: no comments yet
+                resolved: every comment has been resolved!
+                unresolved_count: "%count% unresolved comments"
     links:
         checklist: Checklist
         recommendations: Recommendations
