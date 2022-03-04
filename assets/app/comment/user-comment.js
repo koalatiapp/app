@@ -30,6 +30,8 @@ export class UserComment extends LitElement {
 				.body { margin-top: 1.5em; font-size: 1em; }
 				.body * { max-width: 100%; }
 
+				.body code { display: block; padding: .5em .65em; margin: .5em 0; font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace; font-size: .85em; background-color: rgba(27,31,35,.05); border-radius: 3px; }
+
 				details { margin-top: 1.5em; }
 				summary { color: var(--color-blue); cursor: pointer; }
 				summary:hover { color: var(--color-black); }
@@ -40,6 +42,8 @@ export class UserComment extends LitElement {
 
 				@media (prefers-color-scheme: dark) {
 					.resolved { color: #d7ffcd; background-color: var(--color-green-50); }
+
+					.body code { background-color: rgb(146 170 255 / 10%); }
 				}
 			`
 		];
