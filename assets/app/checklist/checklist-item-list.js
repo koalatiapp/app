@@ -20,7 +20,7 @@ export class ChecklistItemList extends AbstractDynamicList {
 				.view-item-details:hover { color: var(--color-black); }
 
 				@media (prefers-color-scheme: dark) {
-					.view-item-details { color: var(--color-blue-dark); }
+					.view-item-details:not(.comments.unresolved) { color: var(--color-blue-dark); }
 					.view-item-details:hover { color: var(--color-gray); }
 				}
 			`
