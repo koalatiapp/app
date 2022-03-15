@@ -26,7 +26,7 @@
 		<div class="card">
 			<h2>{% trans %}project_dashboard.up_next.title{% endtrans %}</h2>
 
-			{% if not project.checklist or project.checklist.completedItems|length == 0 %}
+			{% if (not project.checklist or project.checklist.completedItems|length == 0) and project.commentCount == 0 %}
 				{% trans with {"%projectName%": project.name} %}project_dashboard.up_next.not_started.explanation{% endtrans %}
 				<hr>
 				<div class="button-container margin-top">
@@ -62,7 +62,7 @@
 				<li>
 					<strong>{% trans %}project_dashboard.summary.step.checklist.title{% endtrans %}:</strong>
 
-					{% if not project.checklist or project.checklist.completedItems|length == 0 %}
+					{% if (not project.checklist or project.checklist.completedItems|length == 0) and project.commentCount == 0 %}
 						<span class="text-highlight red">{% trans %}project_dashboard.summary.step.checklist.not_started{% endtrans %}</span>
 					{% elseif project.checklist.completed %}
 						<span class="text-highlight green">{% trans %}project_dashboard.summary.step.checklist.completed{% endtrans %}</span>
