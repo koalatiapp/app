@@ -78,6 +78,11 @@ class ApiClient {
 		const response = await fetch(url, fetchOptions);
 		let responseData;
 
+		// If the request was redirect to a login page... redirect to a login page.
+		if (response.redirected && response.url.includes("login")) {
+			window.location.href = response.url;
+		}
+
 		try {
 			responseData = await response.json();
 		} catch (error) {
