@@ -321,13 +321,7 @@ class TestResultController extends AbstractController
 	 */
 	private function logDeveloperError(array $payload): void
 	{
-		$this->logger->error(
-			new WebhookException(
-				sprintf("An error (developerError) occured on the Tools API: %s.\n
-				Request: %s\n
-				Error details: %s", $payload['message'] ?? 'no error message', json_encode($payload['request'], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT), json_encode($payload['error'], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT))
-			)
-		);
+		// @TODO: Handle developerError in tools result webhook (submit bug to Koalati developers)
 	}
 
 	/**
@@ -338,12 +332,5 @@ class TestResultController extends AbstractController
 	private function logToolError(array $payload): void
 	{
 		// @TODO: Handle toolError in tools result webhook (submit bug to tool developer)
-		$this->logger->error(
-			new WebhookException(
-				sprintf("An error (toolError) occured on the Tools API for tool %s.\n
-				Request: %s\n
-				Error details: %s", $payload['request']['tool'], json_encode($payload['request'], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT), json_encode($payload['error'], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT))
-			)
-		);
 	}
 }
