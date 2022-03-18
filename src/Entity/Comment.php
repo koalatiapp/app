@@ -48,6 +48,11 @@ class Comment implements MercureEntityInterface
 	private string $content;
 
 	/**
+	 * @ORM\Column(type="text")
+	 */
+	private string $textContent;
+
+	/**
 	 * @ORM\ManyToOne(targetEntity=Comment::class, inversedBy="replies")
 	 * @ORM\JoinColumn(onDelete="CASCADE")
 	 * @Groups({"default"})
@@ -138,7 +143,17 @@ class Comment implements MercureEntityInterface
 	{
 		$this->content = $content;
 
+		// Create a text-only version of the content for prevewing and indexing purposes
+		$textContent = htmlspecialchars_decode(strip_tags($content));
+		$textContent = str_replace("​", " ", $textContent);
+		$this->textContent = $textContent;
+
 		return $this;
+	}
+
+	public function getTextContent(): ?string
+	{
+		return $this->textContent;
 	}
 
 	public function getThread(): ?self

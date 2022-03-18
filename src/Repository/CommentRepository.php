@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Comment;
+use App\Entity\OrganizationMember;
 use App\Entity\Project;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -38,5 +40,46 @@ class CommentRepository extends ServiceEntityRepository
 			->getQuery()
 			->getResult()
 		;
+	}
+
+	/**
+	 * Finds comments from a user's search query.
+	 *
+	 * @param array<string> $queryParts
+	 *
+	 * @return array<Comment>
+	 */
+	public function findBySearchQuery(array $queryParts, ?User $requestingUser = null)
+	{
+		if (!$queryParts) {
+			return [];
+		}
+
+		$queryBuilder = $this->createQueryBuilder('c')
+			->join('c.project', 'p')
+			->andWhere('c.textContent NOT LIKE :emptyString')
+			->setParameter("emptyString", "")
+			->addOrderBy('c.isResolved', 'DESC')
+			->addOrderBy('c.dateCreated', 'DESC');
+
+		if ($requestingUser) {
+			// Add project accessibility check (looks for direct ownership or shared team project)
+			$accessibleOrganizations = $requestingUser->getOrganizationLinks()->map(fn (OrganizationMember $link) => $link->getOrganization());
+
+			$userMatchExpression = $queryBuilder->expr()->orX();
+			$userMatchExpression->add($queryBuilder->expr()->eq('p.ownerUser', ':user'));
+			$userMatchExpression->add($queryBuilder->expr()->in('p.ownerOrganization', ':organizations'));
+
+			$queryBuilder->andWhere($userMatchExpression)
+				->setParameter('user', $requestingUser)
+				->setParameter('organizations', $accessibleOrganizations);
+		}
+
+		foreach ($queryParts as $index => $part) {
+			$queryBuilder->andWhere('c.textContent LIKE :queryPart'.$index)
+				->setParameter('queryPart'.$index, '%'.addcslashes($part, '%_').'%');
+		}
+
+		return $queryBuilder->getQuery()->getResult();
 	}
 }

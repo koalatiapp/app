@@ -95,6 +95,66 @@ export class ChecklistItemList extends AbstractDynamicList {
 		this.itemsPerPage = 25;
 	}
 
+	connectedCallback()
+	{
+		super.connectedCallback();
+
+		// On page load, if an item ID is provided in the hash, open that item's details
+		this.addEventListener("items-initialized", () => {
+			const urlParams = new URLSearchParams(window.location.hash.substring(1));
+			const targetItemId = urlParams.get("item");
+
+			if (!targetItemId) {
+				return;
+			}
+
+			const targetItem = this.items.find(item => item.id == targetItemId);
+
+			if (!targetItem) {
+				return;
+			}
+
+			const sidepanel = this._expandChecklistItem(targetItem, false);
+			const targetCommentId = urlParams.get("comment");
+			const targetThreadId = urlParams.get("thread");
+
+			// If a comment ID is specified, find and show that comment
+			if (targetCommentId) {
+				const commentList = sidepanel.querySelector("comment-list");
+
+				commentList.addEventListener("comments-initialized", async () => {
+					for (const thread of commentList.shadowRoot.querySelectorAll("user-comment")) {
+						// If target comment is this thread...
+						if (thread.commentId == targetCommentId) {
+							thread.classList.add("simulate-focus");
+							thread.scrollIntoView({ block: "center" });
+							break;
+						}
+						// If target comment is a reply to this thread...
+						if (thread.commentId == targetThreadId) {
+							// Ensure the replies are visible
+							thread.autoShowReplies = true;
+
+							// Ensure the thread element is rendered
+							await thread.updateComplete;
+
+							// Find the comment and scroll to it
+							for (const comment of thread.shadowRoot.querySelectorAll("user-comment")) {
+								if (comment.commentId == targetCommentId) {
+									comment.classList.add("simulate-focus");
+									comment.scrollIntoView({ block: "center" });
+									return;
+								}
+							}
+
+							break;
+						}
+					}
+				}, { once: true });
+			}
+		}, { once: true });
+	}
+
 	render()
 	{
 		return [
@@ -158,6 +218,8 @@ export class ChecklistItemList extends AbstractDynamicList {
 
 		this.outlineItems((listItem) => listItem.id == item.id);
 		sidepanel.addEventListener("close", () => this.clearOutlines());
+
+		return sidepanel;
 	}
 }
 

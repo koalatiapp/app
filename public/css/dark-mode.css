@@ -59,7 +59,8 @@ hr,
 .spacer { background-color: var(--color-gray-light); }
 
 /* Focus */
-*:where(:focus-visible) { box-shadow: 0 0 1rem 0 rgba(var(--shadow-rgb), .5); }
+*:where(:focus-visible),
+*:where(.simulate-focus) { box-shadow: 0 0 1rem 0 rgba(var(--shadow-rgb), .5); }
 
 /* Navigation */
 #sidebar nav > ul > li.active { background-color: var(--color-gray-lighter); }

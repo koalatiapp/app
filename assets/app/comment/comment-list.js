@@ -112,6 +112,10 @@ export class CommentList extends LitElement {
 	{
 		this.threads = Object.values(data);
 		this._loaded = true;
+
+		this.updateComplete.then(() => {
+			this.dispatchEvent(new CustomEvent("comments-initialized"));
+		});
 	}
 
 	#initLiveUpdateListener()
