@@ -318,6 +318,8 @@ class TestResultController extends AbstractController
 	 * Logs an error for the Koalati developers to handle.
 	 *
 	 * @param array<mixed> $payload
+	 * 
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	private function logDeveloperError(array $payload): void
 	{
@@ -328,6 +330,8 @@ class TestResultController extends AbstractController
 	 * Logs an error for the tool developers to handle.
 	 *
 	 * @param array<mixed> $payload
+	 * 
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	private function logToolError(array $payload): void
 	{
