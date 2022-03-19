@@ -61,9 +61,10 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 			$this->entityManager->persist($user);
 			$this->entityManager->flush();
 		}
-
 		if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
-			return new RedirectResponse($targetPath);
+			if (!str_contains($targetPath, "/api/")) {
+				return new RedirectResponse($targetPath);
+			}
 		}
 
 		return new RedirectResponse($this->urlGenerator->generate('dashboard'));
