@@ -36,7 +36,7 @@ const createProject = async (page: Page, name: string = "Sample website", url: s
 /**
  * Deletes the project with the provided ID.
  */
-const deleteProject = async (page: Page, projectId) => {
+const deleteProject = async (page: Page, projectId: string) => {
 	// Go to the project's settings in the deletion tab
 	await page.goto(`https://localhost/project/${projectId}/settings#delete`);
 	await page.waitForSelector("text=I am certain that I want to delete the project");
