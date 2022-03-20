@@ -30,20 +30,17 @@ test.describe("checklist", () => {
 		await commentEditor.type("Here's something we should fix:", { delay: 20 });
 		await commentEditor.press("Enter");
 		await commentEditor.type("The homepage won't load!!!", { delay: 20 });
-		await commentEditor.press('Meta+Shift+ArrowLeft');
-		await commentEditor.press('Meta+b');
 		await sidepanel.locator("text=Add comment").click({ timeout: 2000 });
 
 		// Wait for the success message to appear
-		await page.waitForSelector("text=Your comment has been sent!");
+		await page.waitForSelector("text=Your comment has been sent!", { timeout: 5000 });
 
 		// Wait for the new comment to appear
-		await page.waitForSelector("user-comment >> text=Here's something we should fix");
+		await page.waitForSelector("user-comment >> text=Here's something we should fix", { timeout: 5000 });
 
 		// Check that the comment has been created
 		const comment = sidepanel.locator("user-comment");
-		const boldedLine = comment.locator("strong >> text=The homepage won't load!!!");
-		await expect(boldedLine, "Comment contains bolded text").toBeVisible();
+		await expect(comment, "New comment is visible").toBeVisible();
 
 		// Check that the item's comment indicator has been updated
 		await expect(checklistItem, "Checklist item comment link is updated upon comment creation").toContainText("1 unresolved comment");
@@ -55,17 +52,17 @@ test.describe("checklist", () => {
 		await comment.locator("text=Submit reply").click({ timeout: 2000 });
 
 		// Wait for the success message to appear
-		await page.waitForSelector("text=Your comment has been sent!");
+		await page.waitForSelector("text=Your comment has been sent!", { timeout: 5000 });
 
 		// Wait for the new comment to appear
-		await page.waitForSelector("user-comment >> text=I fixed it!");
+		await page.waitForSelector("user-comment >> text=I fixed it!", { timeout: 5000 });
 
 		// Check that the item's comment indicator still says 1 comment (replies don't count as unresolved comments)
 		await expect(checklistItem, "Checklist item comment link is not updated upon reply").toContainText("1 unresolved comment");
 
 		// Resolve the thread
 		await comment.locator("nb-button >> text=Resolve").click({ timeout: 2000 });
-		await page.waitForSelector("user-comment >> text=Resolved");
+		await page.waitForSelector("user-comment >> text=Resolved", { timeout: 5000 });
 
 		// Check that the item's comment indicator still says 1 comment (replies don't count as unresolved comments)
 		await expect(checklistItem, "Checklist item comment link is updated upon comment resolution").toContainText("2 comments");
