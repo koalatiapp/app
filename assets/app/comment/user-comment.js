@@ -231,7 +231,7 @@ export class UserComment extends LitElement {
 		if (showEditor) {
 			commentElement.updateComplete.then(() => {
 				const editor = commentElement.shadowRoot.querySelector("comment-editor");
-				editor.scrollIntoViewIfNeeded();
+				editor.scrollIntoView();
 				editor.focus();
 			});
 		}
