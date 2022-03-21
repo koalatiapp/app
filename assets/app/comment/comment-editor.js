@@ -5,6 +5,8 @@ import "@papyrs/stylo";
 
 
 export class CommentEditor extends LitElement {
+	#editorId = Math.floor(Math.random() * 1000000);
+
 	static get styles()
 	{
 		return [
@@ -52,10 +54,10 @@ export class CommentEditor extends LitElement {
 	render()
 	{
 		return html`
-			<label for="comment-editor">
+			<label for="comment-editor-${this.#editorId}">
 				${Translator.trans(this.threadId ? "comment.editor_reply_label" : "comment.editor_label")}
 			</label>
-			<article contenteditable="true" id="comment-editor"></article>
+			<article contenteditable="true" class="comment-editor" id="comment-editor-${this.#editorId}"></article>
 			<stylo-editor></stylo-editor>
 
 			<div class="button-container">
