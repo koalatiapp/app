@@ -26,7 +26,7 @@ test.describe("checklist", () => {
 		await expect(sidepanel, "Sidepanel contains item title").toContainText(itemTitle);
 
 		// Add a comment
-		const commentEditor = page.locator("#comment-editor");
+		const commentEditor = page.locator(".comment-editor");
 		await commentEditor.type("Here's something we should fix:", { delay: 20 });
 		await commentEditor.press("Enter");
 		await commentEditor.type("The homepage won't load!!!", { delay: 20 });
@@ -47,7 +47,7 @@ test.describe("checklist", () => {
 
 		// Reply to the first comment
 		await comment.locator("nb-button >> text=Reply").click({ timeout: 1000 });
-		const replyEditor = comment.locator("#comment-editor");
+		const replyEditor = comment.locator(".comment-editor");
 		await replyEditor.type("I fixed it!", { delay: 20 });
 		await comment.locator("text=Submit reply").click({ timeout: 2000 });
 
