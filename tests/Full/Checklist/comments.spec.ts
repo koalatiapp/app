@@ -36,7 +36,7 @@ test.describe("checklist", () => {
 		await page.waitForSelector("text=Your comment has been sent!", { timeout: 5000 });
 
 		// Wait for the new comment to appear
-		await page.waitForSelector("user-comment >> text=Here's something we should fix", { timeout: 5000 });
+		await page.waitForSelector("user-comment", { timeout: 5000 });
 
 		// Check that the comment has been created
 		const comment = sidepanel.locator("user-comment");
@@ -48,7 +48,10 @@ test.describe("checklist", () => {
 		// Reply to the first comment
 		await comment.locator("nb-button >> text=Reply").click({ timeout: 1000 });
 		const replyEditor = comment.locator(".comment-editor");
-		await replyEditor.type("I fixed it!", { delay: 20 });
+		// Using `evaluate()` instead of `type()` here because of a bug with Playwright and Firefox
+		replyEditor.evaluate(replyEditor => {
+			replyEditor.innerHTML = "<div>I fixed it!</div>";
+		});
 		await comment.locator("text=Submit reply").click({ timeout: 2000 });
 
 		// Wait for the success message to appear
