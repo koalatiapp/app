@@ -19,7 +19,7 @@ return [
 	Symfony\WebpackEncoreBundle\WebpackEncoreBundle::class => ['all' => true],
 	SymfonyCasts\Bundle\ResetPassword\SymfonyCastsResetPasswordBundle::class => ['all' => true],
 	Symfony\Bundle\MonologBundle\MonologBundle::class => ['all' => true],
-	Sentry\SentryBundle\SentryBundle::class => ['prod' => true],
+	Sentry\SentryBundle\SentryBundle::class => ['test' => true, 'prod' => true],
 	Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle::class => ['all' => true],
 	Roukmoute\HashidsBundle\RoukmouteHashidsBundle::class => ['all' => true],
 	HtmlSanitizer\Bundle\HtmlSanitizerBundle::class => ['all' => true],
