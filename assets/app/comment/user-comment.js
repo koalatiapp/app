@@ -31,6 +31,7 @@ export class UserComment extends LitElement {
 				.body * { max-width: 100%; }
 
 				.body code { display: block; padding: .5em .65em; margin: .5em 0; font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace; font-size: .85em; background-color: rgba(27,31,35,.05); border-radius: 3px; }
+				.body blockquote { padding: 0.25em 1em; margin: 0.5em 0; color: var(--color-gray-dark); border-left: 4px solid var(--color-gray); }
 
 				details { margin-top: 1.5em; }
 				summary { color: var(--color-blue); cursor: pointer; }
@@ -232,7 +233,7 @@ export class UserComment extends LitElement {
 			commentElement.updateComplete.then(() => {
 				const editor = commentElement.shadowRoot.querySelector("comment-editor");
 				editor.scrollIntoView();
-				editor.focus();
+				editor.focusEditor();
 			});
 		}
 	}

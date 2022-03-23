@@ -1,16 +1,17 @@
 import { LitElement, html, css } from "lit";
 import { ApiClient } from "../../utils/api/index.js";
+import initQuillEditor from "../../utils/quill/quill-init.js";
+import quillStyles from "../../utils/quill/quill-css-theme.js";
 import stylesReset from "../../native-bear/styles-reset.js";
-import "@papyrs/stylo";
-
-
 export class CommentEditor extends LitElement {
 	#editorId = Math.floor(Math.random() * 1000000);
+	#editor = null;
 
 	static get styles()
 	{
 		return [
 			stylesReset,
+			quillStyles,
 			css`
 				:host { display: block; position: relative; }
 
@@ -19,8 +20,6 @@ export class CommentEditor extends LitElement {
 				article[contenteditable] * { max-width: 100%; line-height: 1.35; }
 
 				article[contenteditable] code { display: block; padding: .5em .65em; margin: .5em 0; font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace; font-size: .85em; background-color: rgba(27,31,35,.05); border-radius: 3px; }
-
-				.stylo-container > *:after { display: none; }
 
 				.button-container { text-align: right; }
 
@@ -46,19 +45,24 @@ export class CommentEditor extends LitElement {
 		this.commentId = null;
 	}
 
+	connectedCallback()
+	{
+		super.connectedCallback();
+	}
+
 	firstUpdated()
 	{
-		this.styloEditor.containerRef = this.contentElement;
+		this.#editor = initQuillEditor(this.contentElement);
 	}
 
 	render()
 	{
 		return html`
+			<link rel="stylesheet" href="https://cdn.quilljs.com/latest/quill.snow.css">
 			<label for="comment-editor-${this.#editorId}">
 				${Translator.trans(this.threadId ? "comment.editor_reply_label" : "comment.editor_label")}
 			</label>
-			<article contenteditable="true" class="comment-editor" id="comment-editor-${this.#editorId}"></article>
-			<stylo-editor></stylo-editor>
+			<article class="comment-editor" id="comment-editor-${this.#editorId}"></article>
 
 			<div class="button-container">
 				<nb-button size="small" @click=${() => this.#submit()}>
@@ -70,17 +74,33 @@ export class CommentEditor extends LitElement {
 
 	get contentElement()
 	{
-		return this.shadowRoot.querySelector("article[contenteditable]");
-	}
-
-	get styloEditor()
-	{
-		return this.shadowRoot.querySelector("stylo-editor");
+		return this.shadowRoot.querySelector(`#comment-editor-${this.#editorId}`);
 	}
 
 	get value()
 	{
-		return this.contentElement.innerHTML.trim();
+		const textContent = this.#editor.root.textContent.trim();
+		let htmlContent = this.#editor.root.innerHTML.trim();
+
+		if (/^\s*$/.test(textContent)
+			&& htmlContent.indexOf("<img") == -1
+			&& htmlContent.indexOf("<video") == -1) {
+			return "";
+		}
+
+		htmlContent = htmlContent.replace(/<p><br><\/p>/g, "");
+
+		return htmlContent;
+	}
+
+	focusEditor()
+	{
+		this.#editor.focus();
+	}
+
+	#clear()
+	{
+		this.#editor.setContents([]);
 	}
 
 	#submit()
@@ -97,7 +117,7 @@ export class CommentEditor extends LitElement {
 			thread_id: this.threadId ?? "",
 			content: content,
 		}).then(() => {
-			this.contentElement.innerHTML = "";
+			this.#clear();
 			window.Flash.show("success", Translator.trans("comment.flash.submitted"));
 
 			this.dispatchEvent(new CustomEvent("submitted-comment"));
