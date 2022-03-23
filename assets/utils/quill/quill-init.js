@@ -25,7 +25,6 @@ export default function initQuillEditor(container, options = null) {
 	return editor;
 }
 
-
 /**
  * Fixes Quill selection handling when inside the shadow DOM.
  * Source: https://stackoverflow.com/questions/67914657/quill-editor-inside-shadow-dom
@@ -69,7 +68,7 @@ function monkeyPatchShadowQuill(editor) {
 	// Hack Quill and replace document.getSelection with shadow.getSelection
 	editor.selection.getNativeRange = () => {
 		const dom = editor.root.getRootNode();
-		const selection = (dom.getSelection ?? window.getSelection)();
+		const selection = typeof dom.getSelection != "undefined" ? dom.getSelection() : window.getSelection();
 		const range = normalizeNative(selection);
 
 		return range;
