@@ -26,7 +26,7 @@ test.describe("checklist", () => {
 		await expect(sidepanel, "Sidepanel contains item title").toContainText(itemTitle);
 
 		// Add a comment
-		const commentEditor = page.locator("tinymce-editor.ready iframe");
+		const commentEditor = page.frameLocator("tinymce-editor.ready iframe").locator("[contenteditable]");
 		await commentEditor.type("Here's something we should fix:", { delay: 20 });
 		await commentEditor.press("Enter");
 		await commentEditor.type("The homepage won't load!!!", { delay: 20 });
@@ -51,7 +51,8 @@ test.describe("checklist", () => {
 
 		// Reply to the first comment
 		await comment.locator("nb-button >> text=Reply").click({ timeout: 1000 });
-		const replyEditor = comment.locator("tinymce-editor.ready iframe");
+		const replyEditor = comment.frameLocator("tinymce-editor.ready iframe").locator("[contenteditable]");
+		await replyEditor.click();
 		await replyEditor.type("All good 👍");
 		await comment.locator("text=Submit reply").click({ timeout: 2000 });
 
