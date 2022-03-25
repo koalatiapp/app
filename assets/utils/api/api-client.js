@@ -1,4 +1,3 @@
-import { env } from "process";
 import ApiError from "./api-error";
 
 // @TODO: Add CSRF and/or session checks to API calls
