@@ -1,3 +1,4 @@
+import { env } from "process";
 import ApiError from "./api-error";
 
 // @TODO: Add CSRF and/or session checks to API calls
@@ -86,6 +87,10 @@ class ApiClient {
 		try {
 			responseData = await response.json();
 		} catch (error) {
+			if (env.APP_MODE == "test") {
+				window.Flash.show("danger", JSON.stringify({ message: error.message, stack: error.stack }, null, 4));
+			}
+
 			window.Flash.show("danger", "api.flash.server_error");
 			throw error;
 		}
