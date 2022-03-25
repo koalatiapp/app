@@ -26,17 +26,20 @@ test.describe("checklist", () => {
 		await expect(sidepanel, "Sidepanel contains item title").toContainText(itemTitle);
 
 		// Add a comment
-		const commentEditor = page.locator(".comment-editor .ql-editor");
+		const commentEditor = page.locator("tinymce-editor.ready iframe");
 		await commentEditor.type("Here's something we should fix:", { delay: 20 });
 		await commentEditor.press("Enter");
 		await commentEditor.type("The homepage won't load!!!", { delay: 20 });
 		await sidepanel.locator("text=Add comment").click({ timeout: 2000 });
 
 		// Wait for the success message to appear
-		await page.waitForSelector("text=Your comment has been sent!", { timeout: 5000 });
+		const successMessage = page.locator("text=Your comment has been sent!");
+		await expect(successMessage, "Success message is shown").toBeVisible();
+
+		// Hide the success message
+		await successMessage.click();
 
 		// Wait for the new comment to appear
-		await page.waitForSelector("user-comment", { timeout: 5000 });
 		await page.waitForSelector("user-comment", { timeout: 5000 });
 
 		// Check that the comment has been created
@@ -48,16 +51,15 @@ test.describe("checklist", () => {
 
 		// Reply to the first comment
 		await comment.locator("nb-button >> text=Reply").click({ timeout: 1000 });
-		const replyEditor = comment.locator(".comment-editor .ql-editor");
-		page.focus("body"); // Focus bug fix for Playwright and Firefox
-		await replyEditor.type("👍");
+		const replyEditor = comment.locator("tinymce-editor.ready iframe");
+		await replyEditor.type("All good 👍");
 		await comment.locator("text=Submit reply").click({ timeout: 2000 });
 
 		// Wait for the success message to appear
 		await page.waitForSelector("text=Your comment has been sent!", { timeout: 5000 });
 
 		// Wait for the new comment to appear
-		await page.waitForSelector("user-comment >> text=👍", { timeout: 5000 });
+		await page.waitForSelector("user-comment >> text=All good 👍", { timeout: 5000 });
 
 		// Check that the item's comment indicator still says 1 comment (replies don't count as unresolved comments)
 		await expect(checklistItem, "Checklist item comment link is not updated upon reply").toContainText("1 unresolved comment");
