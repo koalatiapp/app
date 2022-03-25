@@ -95,7 +95,7 @@ jobs:
             - name: Install JS testing dependencies
               run: npm ci
             - name: Build JS assets with Webpack Encore
-              run: npm run encore prod
+              run: NODE_ENV=test npm run encore prod
             - name: Install Playwright browsers
               run: npx playwright install
             - name: Run tests
