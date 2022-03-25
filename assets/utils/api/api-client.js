@@ -86,7 +86,7 @@ class ApiClient {
 		try {
 			responseData = await response.json();
 		} catch (error) {
-			if (env.APP_MODE == "test") {
+			if (env.APP_ENV == "test") {
 				window.Flash.show("danger", JSON.stringify({ message: error.message, stack: error.stack }, null, 4));
 			}
 
