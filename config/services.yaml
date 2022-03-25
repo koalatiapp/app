@@ -90,14 +90,31 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
+    League\Flysystem\FilesystemOperator:
+        class: League\Flysystem\Filesystem
+        arguments:
+            - '@League\Flysystem\FilesystemAdapter'
+
+    League\Flysystem\FilesystemAdapter:
+        class: League\Flysystem\AwsS3V3\AwsS3V3Adapter
+        arguments:
+            - '@Aws\S3\S3ClientInterface'
+            - '%env(STORAGE_BUCKET)%'
+
+    Aws\S3\S3ClientInterface:
+        class: Aws\S3\S3Client
+        arguments:
+            $args:
+                credentials:
+                    key: '%env(STORAGE_AUTH_KEY)%'
+                    secret: '%env(STORAGE_AUTH_SECRET)%'
+                region: '%env(STORAGE_REGION)%'
+                version: '%env(STORAGE_VERSION)%'
+                endpoint: '%env(STORAGE_ENDPOINT)%'
+
     App\Storage\AbstractStorage:
         arguments:
-            - '%env(STORAGE_REGION)%'
-            - '%env(STORAGE_VERSION)%'
-            - '%env(STORAGE_ENDPOINT)%'
-            - '%env(STORAGE_AUTH_KEY)%'
-            - '%env(STORAGE_AUTH_SECRET)%'
-            - '%env(STORAGE_BUCKET)%'
+            - '@League\Flysystem\FilesystemOperator'
             - '%env(STORAGE_CDN_URL)%'
 
     App\Storage\ProjectStorage:
