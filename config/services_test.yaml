@@ -2,3 +2,7 @@ services:
     App\Util\Meta\MetaDriverInterface:
         alias: App\Util\Meta\Driver\MockMetaDriver
 
+    League\Flysystem\FilesystemAdapter:
+        class: League\Flysystem\Local\LocalFilesystemAdapter
+        arguments:
+            - '%kernel.project_dir%/var/storage/'
