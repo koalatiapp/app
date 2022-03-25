@@ -2,7 +2,8 @@
 
 namespace App\Controller\Api\Project;
 
-use App\Controller\Api\AbstractApiController;
+use App\Controller\AbstractController;
+use App\Controller\Trait\ApiControllerTrait;
 use App\Util\Testing\AvailableToolsFetcher;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,8 +12,10 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/api/project/automated-testing-settings", name="api_project_automated_testing_settings_")
  */
-class AutomatedTestingSettingsController extends AbstractApiController
+class AutomatedTestingSettingsController extends AbstractController
 {
+	use ApiControllerTrait;
+
 	/**
 	 * @Route("/tools", methods={"GET","HEAD"}, name="tools_list", options={"expose": true})
 	 */

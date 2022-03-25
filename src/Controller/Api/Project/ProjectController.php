@@ -2,7 +2,8 @@
 
 namespace App\Controller\Api\Project;
 
-use App\Controller\Api\AbstractApiController;
+use App\Controller\AbstractController;
+use App\Controller\Trait\ApiControllerTrait;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -10,8 +11,10 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/api/projects", name="api_projects_")
  */
-class ProjectController extends AbstractApiController
+class ProjectController extends AbstractController
 {
+	use ApiControllerTrait;
+
 	/**
 	 * @Route("", methods={"GET","HEAD"}, name="list", options={"expose": true})
 	 */

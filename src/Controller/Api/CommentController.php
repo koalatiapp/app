@@ -2,6 +2,8 @@
 
 namespace App\Controller\Api;
 
+use App\Controller\AbstractController;
+use App\Controller\Trait\ApiControllerTrait;
 use App\Entity\Comment;
 use App\Mercure\UpdateType;
 use App\Repository\Checklist\ItemRepository;
@@ -17,8 +19,10 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/api/comments", name="api_comments_")
  */
-class CommentController extends AbstractApiController
+class CommentController extends AbstractController
 {
+	use ApiControllerTrait;
+
 	/**
 	 * @Route("", methods={"GET","HEAD"}, name="list", options={"expose": true})
 	 */

@@ -3,7 +3,8 @@
 namespace App\Controller\Api\Testing;
 
 use App\ApiClient\Endpoint\StatusEndpoint;
-use App\Controller\Api\AbstractApiController;
+use App\Controller\AbstractController;
+use App\Controller\Trait\ApiControllerTrait;
 use App\Message\TestingRequest;
 use App\Security\ProjectVoter;
 use App\Subscription\QuotaManager;
@@ -14,8 +15,10 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/api/testing/request", name="api_testing_request_")
  */
-class TestingController extends AbstractApiController
+class TestingController extends AbstractController
 {
+	use ApiControllerTrait;
+
 	/**
 	 * Submits an automated testing request for the project.
 	 * Testing will be requested for every page and for every tool.

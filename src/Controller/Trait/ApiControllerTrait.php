@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Controller\Api;
+namespace App\Controller\Trait;
 
-use App\Controller\AbstractController;
 use App\Entity\Organization;
 use App\Entity\Project;
 use App\Mercure\UpdateDispatcher;
@@ -10,17 +9,16 @@ use App\Security\OrganizationVoter;
 use App\Security\ProjectVoter;
 use App\Util\ClientMessageSerializer;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\EventListener\AbstractSessionListener;
-/*
-use Symfony\Component\Mercure\Authorization;
-use Symfony\Component\Mercure\Discovery;
-*/
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-abstract class AbstractApiController extends AbstractController
+trait ApiControllerTrait
 {
-	public const STATUS_ERROR = 'error';
-	public const STATUS_OKAY = 'ok';
+	protected UpdateDispatcher $updateDispatcher;
+	protected ClientMessageSerializer $serializer;
+	protected TranslatorInterface $translator;
+	protected RequestStack $requestStack;
 
 	/**
 	 * The duration for which the current request's response will be cached.
@@ -28,18 +26,19 @@ abstract class AbstractApiController extends AbstractController
 	 */
 	private int $cacheDuration = 0;
 
-	/**
-	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.serializer)
-	 */
-	public function __construct(
-		protected UpdateDispatcher $updateDispatcher,
-		protected ClientMessageSerializer $serializer,
-		protected TranslatorInterface $translator,
-		/*
-		private Discovery $discovery,
-		private Authorization $authorization,
-		*/
-	) {
+
+	/** @required */
+	public function setDependencies(
+		UpdateDispatcher $updateDispatcher,
+		ClientMessageSerializer $serializer,
+		TranslatorInterface $translator,
+		RequestStack $requestStack,
+	): void
+	{
+		$this->updateDispatcher = $updateDispatcher;
+		$this->serializer = $serializer;
+		$this->translator = $translator;
+		$this->requestStack = $requestStack;
 	}
 
 	/**
@@ -72,7 +71,7 @@ abstract class AbstractApiController extends AbstractController
 		}
 
 		// Save the project to session as the "current project". This is used in the projectShortcut() method.
-		$session = $this->get('request_stack')->getSession();
+		$session = $this->requestStack->getSession();
 		$session->set('koalati_current_project_id', $project->getId());
 
 		return $project;
@@ -116,7 +115,7 @@ abstract class AbstractApiController extends AbstractController
 	protected function apiError(string $message, int $code = 400): JsonResponse
 	{
 		$response = new JsonResponse([
-			'status' => self::STATUS_ERROR,
+			'status' => "error",
 			'code' => $code,
 			'message' => $message,
 		]);
@@ -135,7 +134,7 @@ abstract class AbstractApiController extends AbstractController
 	protected function apiSuccess(mixed $data = null, array $groups = [], int $code = 200): JsonResponse
 	{
 		$response = new JsonResponse([
-			'status' => self::STATUS_OKAY,
+			'status' => "ok",
 			'code' => $code,
 			'data' => $this->serializer->serialize($data, $groups),
 		]);

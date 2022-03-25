@@ -2,6 +2,8 @@
 
 namespace App\Controller\Api;
 
+use App\Controller\AbstractController;
+use App\Controller\Trait\ApiControllerTrait;
 use App\Storage\UserUploadStorage;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -9,8 +11,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class TinyMceUploadController extends AbstractApiController
+class TinyMceUploadController extends AbstractController
 {
+	use ApiControllerTrait;
+
 	const MAX_FILESIZE = 20000000; // 20 MB
 
 	/**
@@ -39,7 +43,7 @@ class TinyMceUploadController extends AbstractApiController
 		}
 
 		if ($file->getSize() > self::MAX_FILESIZE) {
-			return $this->badRequest("Your file is too big. Maximum size: " . (self::MAX_FILESIZE / 1000000) . "MB");
+			return $this->badRequest("Your file is too big. Maximum size: ".(self::MAX_FILESIZE / 1000000)."MB");
 		}
 
 		if (!str_starts_with($file->getMimeType(), "image/")) {
@@ -59,4 +63,3 @@ class TinyMceUploadController extends AbstractApiController
 		);
 	}
 }
-
