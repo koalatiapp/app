@@ -50,13 +50,8 @@ export class NbSidePanel extends LitElement {
 
 		this.setAttribute("role", "complementary");
 		this.setAttribute("aria-labelledby", "sidepanel-title");
-		this.animateAppearance().then(() => {
-			window.addEventListener("click", (e) => {
-				if (e.isTrusted && !elementContains(this, e.target)) {
-					this.close();
-				}
-			});
-		});
+		this.animateAppearance()
+			.then(() => this.#initCloseOnClickOutside());
 	}
 
 	firstUpdated()
@@ -146,6 +141,23 @@ export class NbSidePanel extends LitElement {
 
 			animation.onfinish = () => resolve();
 		});
+	}
+
+	#initCloseOnClickOutside()
+	{
+		window.addEventListener("click", checkForOutsideClick);
+
+		const checkForOutsideClick = (e) => {
+			const exceptedSelector = ".flash-message";
+
+			// Also allow children of all excepted selectors
+			const expandedExceptedSelector = exceptedSelector.split(", ").map(selector => `${selector}, ${selector} *`).join(", ");
+
+			if (e.isTrusted && !e.target.matches(expandedExceptedSelector) && !elementContains(this, e.target)) {
+				window.removeEventListener("click", checkForOutsideClick);
+				this.close();
+			}
+		};
 	}
 }
 

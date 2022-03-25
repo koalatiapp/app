@@ -77,9 +77,8 @@ export class CommentEditor extends LitElement {
 
 	focusEditor()
 	{
-		// @FIXME: Accessing the `_status` internal of the TinyMCE component isn't ideal. Registering event listeners would be better.
 		// If the editor isn't initialized yet, focus won't work.
-		if (this.#editor._status == 1) {
+		if (!this.#editor.classList.contains("ready")) {
 			setTimeout(() => this.focusEditor(), 20);
 			return;
 		}
