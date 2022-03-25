@@ -21,6 +21,7 @@
 	--color-green-10: #0d180e;
 	--color-green-light: #316d1d;
 	--color-green-lighter: #173814;
+	--color-green-darker: #186000;
 	--color-red: #c11919;
 	--color-red-light: #822;
 	--color-red-lighter: #4a1c1c;
@@ -58,7 +59,8 @@ hr,
 .spacer { background-color: var(--color-gray-light); }
 
 /* Focus */
-*:focus-visible::before { box-shadow: 0 0 1rem 0 rgba(var(--shadow-rgb), .2); }
+*:where(:focus-visible),
+*:where(.simulate-focus) { box-shadow: 0 0 1rem 0 rgba(var(--shadow-rgb), .5); }
 
 /* Navigation */
 #sidebar nav > ul > li.active { background-color: var(--color-gray-lighter); }
@@ -98,3 +100,9 @@ a.text-link { color: var(--color-blue-light); }
 #search-inner .search-label,
 #search-inner .search-results .empty-state,
 #search-inner .search-results a.selected { color: var(--color-gray); }
+
+/* Text hightlight */
+.text-highlight { color: #b7c7ff; background-color: var(--color-blue-50); }
+.text-highlight.red { color: #ffdbdb; background-color: var(--color-red-light); }
+.text-highlight.green { color: #b2ff99; background-color: var(--color-green-50); }
+.text-highlight.orange { color: #ffd28c; }

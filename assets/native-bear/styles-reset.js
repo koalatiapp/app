@@ -21,10 +21,11 @@ export default css`
 	.spacer { height: 0; }
 	.spacer.small { margin: .8rem auto; }
 
-	*:where(:focus-visible) { position: relative; outline: none; }
-	*:focus-visible::before { content: ' '; position: absolute; top: -7px; left: -7px; width: 100%; height: 100%; padding: 4px; border: 3px solid var(--color-blue-80); border-radius: .5rem; box-shadow: 0 0 1rem 0 rgba(var(--shadow-rgb), .2); }
+	*:where(:focus-visible),
+	*:where(.simulate-focus) { outline: 3px solid var(--color-blue-50); border-radius: .5rem; box-shadow: 0 0 1rem 0 rgba(var(--shadow-rgb), .2); }
 
 	@media (prefers-color-scheme: dark) {
-		*:focus-visible::before { box-shadow: 0 0 1rem 0 rgba(var(--shadow-rgb), .5); }
+		*:where(:focus-visible),
+		*:where(.simulate-focus) { box-shadow: 0 0 1rem 0 rgba(var(--shadow-rgb), .5); }
 	}
 `;

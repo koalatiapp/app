@@ -12,6 +12,7 @@ class SearchEngine
 	public function __construct(
 		private ProjectSearch $projectSearch,
 		private OrganizationSearch $organizationSearch,
+		private CommentSearch $commentSearch,
 	) {
 	}
 
@@ -28,16 +29,15 @@ class SearchEngine
 	{
 		$queryParts = $this->splitQueryIntoParts($query);
 
-		$projectResults = $this->projectSearch->search($queryParts, $user);
-		$organizationResults = $this->organizationSearch->search($queryParts, $user);
 		$results = [
-			...$projectResults,
-			...$organizationResults,
+			...$this->projectSearch->search($queryParts, $user),
+			...$this->organizationSearch->search($queryParts, $user),
+			...$this->commentSearch->search($queryParts, $user),
 		];
 
 		$sortedResults = $this->sortResults($results, $query);
 
-		return $sortedResults;
+		return array_slice($sortedResults, 0, 25);
 	}
 
 	/**

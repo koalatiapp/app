@@ -26,7 +26,7 @@
 		<div class="card">
 			<h2>{% trans %}project_dashboard.up_next.title{% endtrans %}</h2>
 
-			{% if not project.checklist or project.checklist.completedItems|length == 0 %}
+			{% if (not project.checklist or project.checklist.completedItems|length == 0) and project.commentCount == 0 %}
 				{% trans with {"%projectName%": project.name} %}project_dashboard.up_next.not_started.explanation{% endtrans %}
 				<hr>
 				<div class="button-container margin-top">
@@ -62,30 +62,39 @@
 				<li>
 					<strong>{% trans %}project_dashboard.summary.step.checklist.title{% endtrans %}:</strong>
 
-					{% if not project.checklist or project.checklist.completedItems|length == 0 %}
-						<span class="text-red">{% trans %}project_dashboard.summary.step.checklist.not_started{% endtrans %}</span>
+					{% if (not project.checklist or project.checklist.completedItems|length == 0) and project.commentCount == 0 %}
+						<span class="text-highlight red">{% trans %}project_dashboard.summary.step.checklist.not_started{% endtrans %}</span>
 					{% elseif project.checklist.completed %}
-						<span class="text-green">{% trans %}project_dashboard.summary.step.checklist.completed{% endtrans %}</span>
+						<span class="text-highlight green">{% trans %}project_dashboard.summary.step.checklist.completed{% endtrans %}</span>
 					{% else %}
-						<span class="text-orange">{% trans %}project_dashboard.summary.step.checklist.in_progress{% endtrans %}</span>
+						<span class="text-highlight orange">{% trans %}project_dashboard.summary.step.checklist.in_progress{% endtrans %}</span>
 					{% endif %}
 				</li>
 				<li>
 					<strong>{% trans %}project_dashboard.summary.step.recommendations.title{% endtrans %}:</strong>
 
 					{% if project.activeRecommendationGroups|length %}
-						<span class="text-orange">{% trans with {"%count%": project.activeRecommendationGroups|length} %}project_dashboard.summary.step.recommendations.count{% endtrans %}</span>
+						<span class="text-highlight orange">{% trans with {"%count%": project.activeRecommendationGroups|length} %}project_dashboard.summary.step.recommendations.count{% endtrans %}</span>
 					{% else %}
 						{% if project.recommendations|length %}
-							<span class="text-green">{% trans %}project_dashboard.summary.step.recommendations.completed{% endtrans %}</span>
+							<span class="text-highlight green">{% trans %}project_dashboard.summary.step.recommendations.completed{% endtrans %}</span>
 						{% else %}
-							<span class="text-red">{% trans %}project_dashboard.summary.step.recommendations.not_scanned{% endtrans %}</span>
+							<span class="text-highlight red">{% trans %}project_dashboard.summary.step.recommendations.not_scanned{% endtrans %}</span>
 						{% endif %}
 					{% endif %}
 				</li>
 				<li>
-					<strong>{% trans %}project_dashboard.summary.step.bug_reports.title{% endtrans %}:</strong>
-					<span class="text-gray">{% trans %}project_dashboard.summary.step.bug_reports.not_available{% endtrans %}</span>
+					<strong>{% trans %}project_dashboard.summary.step.comments.title{% endtrans %}:</strong>
+
+					{% if project.commentCount == 0 %}
+						<span class="text-gray">{% trans %}project_dashboard.summary.step.comments.none{% endtrans %}</span>
+					{% else %}
+						{% if project.unresolvedCommentCount == 0 %}
+							<span class="text-highlight green">{% trans %}project_dashboard.summary.step.comments.resolved{% endtrans %}</span>
+						{% else %}
+							<span class="text-highlight red">{% trans with {"%count%": project.unresolvedCommentCount} %}project_dashboard.summary.step.comments.unresolved_count{% endtrans %}</span>
+						{% endif %}
+					{% endif %}
 				</li>
 			</ul>
 		</div>

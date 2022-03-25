@@ -3,13 +3,13 @@
     <ul>
         <li class="{{ current_route in ['dashboard', 'projects', 'inbox', 'koalati_news'] ? 'active' : '' }}">
             <a href="{{ path('dashboard') }}">
-                <i class="far fa-gauge-simple"></i>
+                <i class="far fa-grid-2" aria-hidden="true"></i>
                 <span>{% trans %}navigation.dashboard.label{% endtrans %}</span>
             </a>
         </li>
         <li class="{{ current_route starts with "project_" ? 'active' : '' }}">
             <a href="{{ project is defined and project.id ? path('project_dashboard', {id: project.id|hashids_encode}) : path('project_shortcut') }}">
-                <i class="far fa-laptop-mobile"></i>
+                <i class="far fa-laptop-mobile" aria-hidden="true"></i>
                 <span>{% trans %}navigation.project.label{% endtrans %}</span>
             </a>
 			<ul>
@@ -44,7 +44,7 @@
         {#
 		<li class="{{ current_route in ['resources'] ? 'active' : '' }}">
             <a href="#">
-                <i class="far fa-toolbox"></i>
+                <i class="far fa-toolbox" aria-hidden="true"></i>
                 <span>{% trans %}navigation.resources.label{% endtrans %}</span>
             </a>
             <ul>
@@ -54,12 +54,12 @@
         <li class="{{ current_route in ['organization_dashboard', 'organization_create', 'organization_settings', 'organization_leave'] ? 'active' : '' }}">
 			{% if organization is defined %}
 				<a href="{{ path('organization_dashboard', {id: organization.id|hashids_encode}) }}">
-					<i class="far fa-users"></i>
+					<i class="far fa-users" aria-hidden="true"></i>
 					<span>{% trans %}navigation.team.label{% endtrans %}</span>
 				</a>
 			{% else %}
 				<a href="{{ path('organization_dashboard') }}">
-					<i class="far fa-users"></i>
+					<i class="far fa-users" aria-hidden="true"></i>
 					<span>{% trans %}navigation.team.label{% endtrans %}</span>
 				</a>
 			{% endif %}
@@ -93,13 +93,13 @@
         </li>
         <li class="{{ current_route in ['edit_profile', 'manage_account_security', 'manage_contact_preferences', 'manage_subscription'] ? 'active' : '' }}">
             <a href="{{ path('edit_profile') }}">
-                <i class="far fa-gear"></i>
+                <i class="far fa-gear" aria-hidden="true"></i>
                 <span>{% trans %}navigation.settings.label{% endtrans %}</span>
             </a>
         </li>
         <li class="{{ current_route in ['help'] ? 'active' : '' }}">
             <a href="{{ path('help') }}">
-                <i class="far fa-circle-question"></i>
+                <i class="far fa-circle-question" aria-hidden="true"></i>
                 <span>{% trans %}navigation.help.label{% endtrans %}</span>
             </a>
         </li>

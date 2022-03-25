@@ -2,7 +2,8 @@
 
 namespace App\Controller\Api\Project;
 
-use App\Controller\Api\AbstractApiController;
+use App\Controller\AbstractController;
+use App\Controller\Trait\ApiControllerTrait;
 use App\Entity\Page;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,8 +12,10 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/api/project/pages", name="api_project_pages_")
  */
-class PageController extends AbstractApiController
+class PageController extends AbstractController
 {
+	use ApiControllerTrait;
+
 	/**
 	 * @Route("", methods={"GET","HEAD"}, name="list", options={"expose": true})
 	 */

@@ -3,9 +3,9 @@
 namespace App\Mercure\EntityHandler;
 
 use App\Entity\Organization;
-use App\Mercure\MercureEntityInterface;
 use App\Entity\OrganizationMember;
 use App\Mercure\EntityHandlerInterface;
+use App\Mercure\MercureEntityInterface;
 
 class OrganizationHandler implements EntityHandlerInterface
 {

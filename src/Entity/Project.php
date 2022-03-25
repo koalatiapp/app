@@ -114,6 +114,14 @@ class Project implements MercureEntityInterface
 	 * @Groups({"default"})
 	 */
 	private ?Organization $ownerOrganization = null;
+	/**
+	 * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="project")
+	 * @ORM\OrderBy({"isResolved" = "ASC"}, {"dateCreated" = "ASC"})
+	 * @Groups({"comments"})
+	 *
+	 * @var Collection<int,Comment>
+	 */
+	private Collection $comments;
 
 	public function __construct()
 	{
@@ -121,6 +129,7 @@ class Project implements MercureEntityInterface
 		$this->pages = new ArrayCollection();
 		$this->teamMembers = new ArrayCollection();
 		$this->ignoreEntries = new ArrayCollection();
+		$this->comments = new ArrayCollection();
 	}
 
 	public function getId(): ?int
@@ -443,5 +452,33 @@ class Project implements MercureEntityInterface
 		}
 
 		return self::STATUS_IN_PROGRESS;
+	}
+
+	/**
+	 * @return Collection<int,Comment>
+	 */
+	public function getComments(): Collection
+	{
+		return $this->comments->filter(function (Comment $comment) {
+			return !$comment->getThread();
+		});
+	}
+
+	/**
+	 * @Groups({"default"})
+	 */
+	public function getCommentCount(): int
+	{
+		return $this->comments->count();
+	}
+
+	/**
+	 * @Groups({"default"})
+	 */
+	public function getUnresolvedCommentCount(): int
+	{
+		return $this->comments->filter(function (Comment $comment) {
+			return !$comment->isResolved() && !$comment->getThread();
+		})->count();
 	}
 }

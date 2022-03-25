@@ -1,4 +1,4 @@
-addedFiles=$(git diff --diff-filter=d --cached --name-only ":!tests")
+addedFiles=$(git diff --diff-filter=d --cached --name-only ":!tests" | grep ".php")
 
 if [ -z "$addedFiles" ];
 then

@@ -1,5 +1,8 @@
 /* stylelint-disable block-opening-brace-newline-after, block-closing-brace-newline-before, declaration-block-semicolon-newline-after */
 :root {
+	/* FontAwesome */
+	--fa-style-family: "Font Awesome 6 Pro";
+
 	/* Layout */
 	--sidebar-width: 270px;
 
@@ -25,6 +28,8 @@
 	--color-green-10: #E7FBDF;
 	--color-green-light: #B3FD9B;
 	--color-green-lighter: #B3FD9B;
+	--color-green-dark: #269900;
+	--color-green-darker: #186000;
 	--color-red: #ff4646;
 	--color-red-light: #F99;
 	--color-red-lighter: #FFD6D6;

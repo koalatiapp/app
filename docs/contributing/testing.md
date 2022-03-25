@@ -26,6 +26,28 @@ Backend tests are located in `tests/Backend`, and are ran using [PHPUnit](https:
 End-to-end tests are located in `tests/Full`, and are ran with [Playwright test runner](https://github.com/microsoft/playwright-test).
 Make sure you have the dependencies installed locally (by running `npm install` or `npm ci`), and run the following command:
 
+### E2E testing utilities
+A few utility functions exist to make E2E testing easier.  
+They are located in the `tests/Full/utilities.ts` file.
+
+To use them, simply import them as you would any other module:
+```js
+import { login, createProject, deleteProject } from "../utilities";
+```
+
+The available utility functions are:
+- `login`
+  - page: `Page`
+  - email: `string` (default: `"name@email.com"`)
+  - password: `string` (default: `"123456"`)
+- `createProject`
+  - page: `Page`
+  - name: `string` (default: `"Sample website"`)
+  - url: `string` (default: `"https://sample.koalati.com"`)
+- `deleteProject`
+  - page: `Page`
+  - projectId: `string`
+
 ---
 
 ## When and how to add tests

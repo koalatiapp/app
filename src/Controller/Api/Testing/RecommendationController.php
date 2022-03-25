@@ -2,7 +2,8 @@
 
 namespace App\Controller\Api\Testing;
 
-use App\Controller\Api\AbstractApiController;
+use App\Controller\AbstractController;
+use App\Controller\Trait\ApiControllerTrait;
 use App\Message\TestingRequest;
 use App\Repository\Testing\RecommendationRepository;
 use App\Security\ProjectVoter;
@@ -16,8 +17,10 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/api/testing/recommendations", name="api_testing_recommendation_")
  */
-class RecommendationController extends AbstractApiController
+class RecommendationController extends AbstractController
 {
+	use ApiControllerTrait;
+
 	/**
 	 * Returns the list of recommendations for the project, grouped by type.
 	 *

@@ -200,8 +200,14 @@
     "league/mime-type-detection": {
         "version": "1.5.1"
     },
+    "league/uri-parser": {
+        "version": "1.4.1"
+    },
     "lorenzo/pinky": {
         "version": "1.0.5"
+    },
+    "masterminds/html5": {
+        "version": "2.7.5"
     },
     "monolog/monolog": {
         "version": "2.3.2"
@@ -735,6 +741,21 @@
         },
         "files": [
             "config/packages/reset_password.yaml"
+        ]
+    },
+    "tgalopin/html-sanitizer": {
+        "version": "1.5.0"
+    },
+    "tgalopin/html-sanitizer-bundle": {
+        "version": "1.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "95b935177db9abb65356fe19e57fe5abd908b5b8"
+        },
+        "files": [
+            "config/packages/html_sanitizer.yaml"
         ]
     },
     "tijsverkoyen/css-to-inline-styles": {

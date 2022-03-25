@@ -2,7 +2,8 @@
 
 namespace App\Controller\Api\Testing;
 
-use App\Controller\Api\AbstractApiController;
+use App\Controller\AbstractController;
+use App\Controller\Trait\ApiControllerTrait;
 use App\Entity\Testing\IgnoreEntry;
 use App\Mercure\UpdateType;
 use App\Repository\Testing\IgnoreEntryRepository;
@@ -16,8 +17,10 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/api/testing/ignore-entries", name="api_testing_ignore_entry_")
  */
-class IgnoreEntriesController extends AbstractApiController
+class IgnoreEntriesController extends AbstractController
 {
+	use ApiControllerTrait;
+
 	/**
 	 * @Route("", methods={"GET","HEAD"}, name="list", options={"expose": true})
 	 */

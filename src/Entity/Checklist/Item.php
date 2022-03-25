@@ -2,8 +2,11 @@
 
 namespace App\Entity\Checklist;
 
+use App\Entity\Comment;
 use App\Mercure\MercureEntityInterface;
 use App\Repository\Checklist\ItemRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -57,6 +60,20 @@ class Item implements MercureEntityInterface
 	 * @Groups({"default"})
 	 */
 	private ?bool $isCompleted = false;
+
+	/**
+	 * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="checklistItem", orphanRemoval=true)
+	 * @ORM\OrderBy({"isResolved" = "ASC"}, {"dateCreated" = "ASC"})
+	 * @Groups({"comments"})
+	 *
+	 * @var Collection<int,Comment>
+	 */
+	private Collection $comments;
+
+	public function __construct()
+	{
+		$this->comments = new ArrayCollection();
+	}
 
 	public function getId(): ?int
 	{
@@ -139,5 +156,55 @@ class Item implements MercureEntityInterface
 		$this->isCompleted = $isCompleted;
 
 		return $this;
+	}
+
+	/**
+	 * @return Collection<int,Comment>
+	 */
+	public function getComments(): Collection
+	{
+		return $this->comments->filter(function (Comment $comment) {
+			return !$comment->getThread();
+		});
+	}
+
+	public function addComment(Comment $comment): self
+	{
+		if (!$this->comments->contains($comment)) {
+			$this->comments[] = $comment;
+			$comment->setChecklistItem($this);
+		}
+
+		return $this;
+	}
+
+	public function removeComment(Comment $comment): self
+	{
+		if ($this->comments->removeElement($comment)) {
+			// set the owning side to null (unless already changed)
+			if ($comment->getChecklistItem() === $this) {
+				$comment->setChecklistItem(null);
+			}
+		}
+
+		return $this;
+	}
+
+	/**
+	 * @Groups({"default"})
+	 */
+	public function getCommentCount(): int
+	{
+		return $this->comments->count();
+	}
+
+	/**
+	 * @Groups({"default"})
+	 */
+	public function getUnresolvedCommentCount(): int
+	{
+		return $this->comments->filter(function (Comment $comment) {
+			return !$comment->isResolved() && !$comment->getThread();
+		})->count();
 	}
 }

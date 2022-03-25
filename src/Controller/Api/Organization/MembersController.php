@@ -2,8 +2,8 @@
 
 namespace App\Controller\Api\Organization;
 
-use App\Controller\Api\AbstractApiController;
-use App\Entity\Organization;
+use App\Controller\AbstractController;
+use App\Controller\Trait\ApiControllerTrait;
 use App\Entity\OrganizationInvitation;
 use App\Entity\OrganizationMember;
 use App\Repository\OrganizationMemberRepository;
@@ -19,8 +19,10 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * @Route("/api/organization/members", name="api_organization_members_")
  */
-class MembersController extends AbstractApiController
+class MembersController extends AbstractController
 {
+	use ApiControllerTrait;
+
 	/**
 	 * @Route("", methods={"GET","HEAD"}, name="list", options={"expose": true})
 	 */

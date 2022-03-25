@@ -90,13 +90,25 @@ jobs:
               run: curl http://localhost
             - name: Check HTTPS reachability
               run: curl -k https://localhost
+            - name: Install Playwright dependencies
+              run: npx playwright@1.20 install-deps
             - name: Install JS testing dependencies
               run: npm ci
             - name: Build JS assets with Webpack Encore
-              run: npm run encore prod
-            - name: Install Playwright dependencies
-              run: npx playwright install-deps
+              run: NODE_ENV=test npm run encore prod
             - name: Install Playwright browsers
               run: npx playwright install
             - name: Run tests
               run: ./DEV/ci/run-tests.php --verbose
+            - name: Save log artifacts
+              if: always()
+              uses: actions/upload-artifact@v3
+              with:
+                name: logs
+                path: var/log
+            - name: Save testing artifacts
+              if: always()
+              uses: actions/upload-artifact@v3
+              with:
+                name: test-results
+                path: test-results

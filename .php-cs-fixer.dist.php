@@ -11,6 +11,7 @@ return $config->setRules([
         '@Symfony' => true,
         'yoda_style' => ['equal' => false, 'identical' => false],
         'increment_style' => ['style' => 'post'],
+		'single_quote' => false,
     ])
     ->setIndent("\t")
     ->setFinder($finder);

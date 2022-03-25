@@ -78,9 +78,18 @@ class ApiClient {
 		const response = await fetch(url, fetchOptions);
 		let responseData;
 
+		// If the request was redirect to a login page... redirect to a login page.
+		if (response.redirected && response.url.includes("login")) {
+			window.location.href = response.url;
+		}
+
 		try {
 			responseData = await response.json();
 		} catch (error) {
+			if (env.APP_ENV == "test") {
+				window.Flash.show("danger", JSON.stringify({ message: error.message, stack: error.stack }, null, 4));
+			}
+
 			window.Flash.show("danger", "api.flash.server_error");
 			throw error;
 		}

@@ -10,6 +10,12 @@ export class FeedbackFormToggle extends LitElement {
 		`;
 	}
 
+	constructor()
+	{
+		super();
+		this.setAttribute("role", "button");
+	}
+
 	connectedCallback()
 	{
 		super.connectedCallback();

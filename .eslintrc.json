@@ -8,7 +8,8 @@
 		"Routing": "readonly",
 		"Translator": "readonly",
 		"chai": "readonly",
-		"CURRENT_USER_ID": "readonly"
+		"CURRENT_USER_ID": "readonly",
+		"env": "readonly"
 	},
     "extends": [
         "eslint:recommended",

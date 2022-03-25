@@ -2,6 +2,8 @@
 
 namespace App\Controller\Api;
 
+use App\Controller\AbstractController;
+use App\Controller\Trait\ApiControllerTrait;
 use App\Util\Search\SearchEngine;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -10,8 +12,10 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/api/search", name="api_search")
  */
-class SearchController extends AbstractApiController
+class SearchController extends AbstractController
 {
+	use ApiControllerTrait;
+
 	/**
 	 * @Route("", methods={"POST"}, name="", options={"expose": true})
 	 */

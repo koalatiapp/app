@@ -5,6 +5,8 @@ namespace App\Mercure;
 use App\Mercure\EntityHandlerInterface;
 use App\Mercure\MercureEntityInterface;
 use App\Util\ClientMessageSerializer;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\Proxy;
 use Exception;
 use Hashids\HashidsInterface;
 use Symfony\Component\Mercure\Update;
@@ -38,6 +40,7 @@ class UpdateDispatcher
 		private MessageBusInterface $bus,
 		private HashidsInterface $idHasher,
 		private UserTopicBuilder $topicBuilder,
+		private EntityManagerInterface $entityManager,
 	) {
 		foreach ($entityHandlers as $entityHandler) {
 			$this->entityHandlers[$entityHandler->getSupportedEntity()] = $entityHandler;
@@ -109,7 +112,14 @@ class UpdateDispatcher
 	 */
 	private function generateUpdates(MercureEntityInterface $entity, string $type): array
 	{
-		$handler = $this->entityHandlers[$entity::class];
+		$entityClass = $entity::class;
+
+		if ($entity instanceof Proxy) {
+			$entityClass = $this->entityManager->getClassMetadata($entityClass)->rootEntityName;
+		}
+
+		$handler = $this->entityHandlers[$entityClass];
+
 		$entityId = $entity->getId();
 		$updates = [];
 

@@ -3,7 +3,6 @@
 namespace App\Storage;
 
 use Aws\S3\S3Client;
-use Exception;
 use League\Flysystem\AwsS3V3\AwsS3V3Adapter;
 use League\Flysystem\Filesystem;
 
@@ -14,44 +13,11 @@ use League\Flysystem\Filesystem;
  */
 abstract class AbstractStorage
 {
-	/**
-	 * Defines the name of the root diretory in which this type of storage takes place.
-	 *
-	 * @var string
-	 */
-	protected const DIRECTORY = '';
-
-	/**
-	 * @var \League\Flysystem\Filesystem
-	 */
-	protected $filesystem;
-
-	/**
-	 * Base URL of the CDN.
-	 * This is used to generate links to objects & files.
-	 *
-	 * @var string
-	 */
-	protected $cdnBaseUrl;
-
-	public function __construct(string $region, string $version, string $endpoint, string $key, string $secret, string $bucket, string $cdnBaseUrl)
+	public function __construct(
+		protected Filesystem $filesystem,
+		protected string $cdnBaseUrl,
+	)
 	{
-		if (!static::DIRECTORY) {
-			throw new Exception(sprintf('Storage class %s has not implemented the required DIRECTORY constant.', static::class));
-		}
-
-		$client = new S3Client([
-			'credentials' => [
-				'key' => $key,
-				'secret' => $secret,
-			],
-			'region' => $region,
-			'version' => $version,
-			'endpoint' => $endpoint,
-		]);
-		$adapter = new AwsS3V3Adapter($client, $bucket);
-		$this->filesystem = new Filesystem($adapter);
-		$this->cdnBaseUrl = $cdnBaseUrl;
 	}
 
 	/**

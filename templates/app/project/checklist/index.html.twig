@@ -3,6 +3,9 @@
 
 {% block title %}{% trans %}project_checklist.overview.title{% endtrans %}{% endblock %}
 {% block section_title %}{{ project_breadcrumb_link(project) }}{% endblock %}
+{% block head %}
+	{{ encore_entry_link_tags('checklist') }}
+{% endblock %}
 
 {% block page_tabs %}
 	{% include 'app/_parts/page_tabs.html.twig' with {page_tabs: [

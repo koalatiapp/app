@@ -2,6 +2,8 @@
 
 namespace App\Controller\Api;
 
+use App\Controller\AbstractController;
+use App\Controller\Trait\ApiControllerTrait;
 use App\Util\Meta\MetaFetcher;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -12,8 +14,10 @@ use Symfony\Contracts\Cache\ItemInterface;
 /**
  * @Route("/api/link-metas", name="api_link_metas")
  */
-class LinkMetasController extends AbstractApiController
+class LinkMetasController extends AbstractController
 {
+	use ApiControllerTrait;
+
 	protected const CACHE_DURATION_IN_DAYS = 10;
 
 	/**

@@ -2,14 +2,18 @@
 
 namespace App\Controller\Api;
 
+use App\Controller\AbstractController;
+use App\Controller\Trait\ApiControllerTrait;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/api/user", name="api_user_")
  */
-class UserController extends AbstractApiController
+class UserController extends AbstractController
 {
+	use ApiControllerTrait;
+
 	/**
 	 * Returns data about the current user.
 	 *

@@ -18,7 +18,7 @@ generic:
 
 api:
     flash:
-        server_error: Something went wrong on our side - please try again later.
+        server_error: Something went wrong. Please make sure you're still logged in, and try again.
 
 branding:
     name: Koalati
@@ -268,6 +268,7 @@ quick_actions:
     create_project: Create a project
 
 search:
+    button_label: Open the search bar
     label: Quick search
     placeholder: Search throughout Koalati
     empty_state: No results were found.
@@ -275,6 +276,7 @@ search:
     type:
         project: Project
         organization: Team
+        comment: Comment on %project%
 
 automated_testing:
     testing_request_created: We're running the tests again, the results should start appearing in just a few seconds.
@@ -473,9 +475,11 @@ project_dashboard:
                 count: "%count% possible improvements"
                 not_scanned: website not scanned yet
                 completed: no recommendations left!
-            bug_reports:
+            comments:
                 title: Bug reports
-                not_available: not available yet
+                none: no comments yet
+                resolved: every comment has been resolved!
+                unresolved_count: "%count% unresolved comments"
     links:
         checklist: Checklist
         recommendations: Recommendations
@@ -506,6 +510,8 @@ project_checklist:
         title: Checklist - step-by-step
     item:
         view_more: Learn more
+        comments_count: "{0}0 comments|{1}1 comment|]1,Inf[%count% comments"
+        unresolved_comments_count: "{0}0 unresolved comments|{1}1 unresolved comment|]1,Inf[%count% unresolved comments"
         resources: "Here are some Koalati-curated resources to help:"
 
 project_settings:
@@ -696,6 +702,19 @@ subscription:
 upgrade_suggestion:
     create_team: Upgrade to a plan that offers Team Creation to get started with your own team!
     testing: Upgrade to a plan that offers automated testing tools to start testing your projects!
+
+comment:
+    section_heading: Comments
+    editor_label: Add a comment
+    editor_submit: Add comment
+    editor_reply_label: Reply to this thread
+    editor_reply_submit: Submit reply
+    reply: Reply
+    resolve: Resolve
+    resolved: Resolved
+    view_replies: "{1}View 1 reply|]0,Inf[View %count% comments"
+    flash:
+        submitted: Your comment has been sent!
 
 email:
     welcome:
