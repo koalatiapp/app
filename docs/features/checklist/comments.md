@@ -16,7 +16,7 @@ Comment threads that haven't been resolved are indicated as "bug reports" on the
 summary page, in order to attract attention to them (as they usually indicate things that
 need to be fixed or worked on).
 
-Comments are HTML-enabled, and the _wysiwyg_ editor used on the frontend is [stylo](https://github.com/papyrs/stylo).
+Comments are HTML-enabled, and the _wysiwyg_ editor used on the frontend is [TinyMCE](https://tiny.cloud).
 
 All HTML is sanitized, and images are proxied to prevent any unwanted tracking of our users.
 
@@ -30,3 +30,4 @@ Mercure protocol.
 - Entities(s): [`src\Entity\Comment`](/src/Entity/Comment.php) 
 - Services(s): [`App\Util\HtmlSanitizer`](/src/Util/HtmlSanitizer.php) 
 - Web components: [`assets/app/comment/*`](/assets/app/comment) 
+- TinyMCE: [`public/ext/tinymce/*`](/public/ext/tinymce) 
