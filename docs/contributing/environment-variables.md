@@ -38,7 +38,6 @@ Here is a detailed list of all the environment variables, why they are needed, a
 | OPENGRAPHIO_API_KEY       | URL previews                        | Create an account on [OpenGraph.io](https://www.opengraph.io/) and enter your API key here.     |
 | URLMETA_ACCOUNT_EMAIL     | URL previews                        | Create an account on [URL Meta](https://urlmeta.org/) and enter your account's email here.      |
 | URLMETA_API_KEY           | URL previews                        | Create an account on [URL Meta](https://urlmeta.org/) and enter your API key here.              |
-| TINYMCE_API_KEY           | Comment text editor                 | Create an account on [Tiny.cloud](https://www.tiny.cloud/) and enter your API key here.              |
 
 ## Production specific
 

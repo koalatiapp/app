@@ -12,7 +12,6 @@ window.tinymce_init_callback = (e) => {
 export default function getTinyMceEditor(editorId, content = "") {
 	return html`
 		<tinymce-editor
-			api-key="${env.TINYMCE_API_KEY}"
 			src="/ext/tinymce/tinymce.min.js"
 			skin="oxide-koalati"
 			content_css="default-koalati"
