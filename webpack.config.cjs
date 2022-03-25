@@ -19,7 +19,13 @@ Encore
 		config.presets = [];
 	})
 
-	.addPlugin(new Dotenv( { path: "./.env.local", systemvars: true, prefix: "env." } ))
+	.addPlugin(
+		new Dotenv({
+			path: process.env.NODE_ENV == "test" ? "./.env.test" : "./.env.local",
+			systemvars: true,
+			prefix: "env."
+		})
+	)
 
 /*
      * ENTRY CONFIG
