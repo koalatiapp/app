@@ -145,8 +145,6 @@ export class NbSidePanel extends LitElement {
 
 	#initCloseOnClickOutside()
 	{
-		window.addEventListener("click", checkForOutsideClick);
-
 		const checkForOutsideClick = (e) => {
 			const exceptedSelector = ".flash-message";
 
@@ -158,6 +156,8 @@ export class NbSidePanel extends LitElement {
 				this.close();
 			}
 		};
+
+		window.addEventListener("click", checkForOutsideClick);
 	}
 }
 
