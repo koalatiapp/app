@@ -103,6 +103,9 @@ services:
     App\Storage\ProjectStorage:
         parent:  App\Storage\AbstractStorage
 
+    App\Storage\UserUploadStorage:
+        parent:  App\Storage\AbstractStorage
+
     App\ApiClient\ClientInterface:
         class: 'App\ApiClient\Client'
         arguments:

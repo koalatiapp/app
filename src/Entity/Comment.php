@@ -144,9 +144,7 @@ class Comment implements MercureEntityInterface
 		$this->content = $content;
 
 		// Create a text-only version of the content for prevewing and indexing purposes
-		$textContent = htmlspecialchars_decode(strip_tags($content));
-		$textContent = str_replace("​", " ", $textContent);
-		$this->textContent = $textContent;
+		$this->textContent = htmlspecialchars_decode(strip_tags($content));
 
 		return $this;
 	}

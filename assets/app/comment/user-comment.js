@@ -30,8 +30,11 @@ export class UserComment extends LitElement {
 				.body { margin-top: 1.5em; font-size: 1em; }
 				.body * { max-width: 100%; }
 
-				.body code { display: block; padding: .5em .65em; margin: .5em 0; font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace; font-size: .85em; background-color: rgba(27,31,35,.05); border-radius: 3px; }
+				.body code { display: block; padding: .5em .65em; margin: .5em 0; font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace; font-size: .85em; background-color: rgba(27,31,35,.05); border-radius: 3px; overflow: auto; }
 				.body blockquote { padding: 0.25em 1em; margin: 0.5em 0; color: var(--color-gray-dark); border-left: 4px solid var(--color-gray); }
+				.body table { width: 100%; table-layout: fixed; border-collapse: collapse; }
+				.body td,
+				.body th { padding: 0.5ch 0.75ch; vertical-align: top; border: 1px solid var(--color-blue-lighter); }
 
 				details { margin-top: 1.5em; }
 				summary { color: var(--color-blue); cursor: pointer; }

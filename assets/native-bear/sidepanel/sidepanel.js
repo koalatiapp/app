@@ -2,6 +2,7 @@ import { LitElement, html, css } from "lit";
 import stylesReset from "../styles-reset.js";
 import fontAwesomeImport from "../../utils/fontawesome-import.js";
 import getActiveElement from "../../utils/get-active-element.js";
+import elementContains from "../../utils/element-contains.js";
 import { MousewheelPreventionController } from "../../utils/controller/mousewheel-prevention-controller.js";
 
 export class NbSidePanel extends LitElement {
@@ -51,7 +52,7 @@ export class NbSidePanel extends LitElement {
 		this.setAttribute("aria-labelledby", "sidepanel-title");
 		this.animateAppearance().then(() => {
 			window.addEventListener("click", (e) => {
-				if (!this.contains(e.target)) {
+				if (e.isTrusted && !elementContains(this, e.target)) {
 					this.close();
 				}
 			});
