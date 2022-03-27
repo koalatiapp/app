@@ -282,7 +282,8 @@ automated_testing:
     testing_request_created: We're running the tests again, the results should start appearing in just a few seconds.
     progress:
         loading_first_results: We're scanning your website, please stand by! 🤓
-        scanning_status_indicator: We're scanning your website...
+        no_pages_yet: We're crawling your website to find all pages. This may take a few minutes for large websites.
+        scanning_status_indicator: We're testing your website...
         time_left: Estimated time left
         results_below: "All of your pages have been scanned: check out your results below!"
 
