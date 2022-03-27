@@ -65,6 +65,7 @@ class ApiClient {
 		const url = this._resolveRouteUrl(method, endpoint, body);
 		const fetchOptions = {
 			method: method,
+			headers: { "X-Requested-With": "XMLHttpRequest" },
 		};
 
 		if (abortController) {

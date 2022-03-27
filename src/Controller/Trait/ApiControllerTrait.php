@@ -11,6 +11,7 @@ use App\Util\ClientMessageSerializer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\EventListener\AbstractSessionListener;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 trait ApiControllerTrait
@@ -26,19 +27,32 @@ trait ApiControllerTrait
 	 */
 	private int $cacheDuration = 0;
 
-
 	/** @required */
 	public function setDependencies(
 		UpdateDispatcher $updateDispatcher,
 		ClientMessageSerializer $serializer,
 		TranslatorInterface $translator,
 		RequestStack $requestStack,
-	): void
-	{
+	): void {
 		$this->updateDispatcher = $updateDispatcher;
 		$this->serializer = $serializer;
 		$this->translator = $translator;
 		$this->requestStack = $requestStack;
+	}
+
+	/**
+	 * Prevents users from accessing API endpoints directly in their browser.
+	 *
+	 * This prevents users from clicking on API links from mischievous
+	 * people who might that might
+	 *
+	 * @required
+	 * */
+	public function preventDirectAccess(RequestStack $requestStack): void
+	{
+		if (!$requestStack->getCurrentRequest()->isXmlHttpRequest()) {
+			throw new BadRequestHttpException("Direct access to internal API endpoints is not allowed.", null, 400);
+		}
 	}
 
 	/**
