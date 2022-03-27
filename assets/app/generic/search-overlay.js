@@ -77,14 +77,14 @@ export class SearchOverlay extends LitElement {
 				<div id="search-inner">
 					<div class="search-label">${Translator.trans("search.label")}</div>
 					<div class="typed-input">
-						<nb-input type="text" name="search" placeholder="${Translator.trans("search.placeholder")}" disableAutofill @keydown=${this._resultsNavigationListener} @input=${this._updateSearchResults} @paste=${this._updateSearchResults} @cut=${this._updateSearchResults}>
+						<nb-input type="text" name="search" placeholder="${Translator.trans("search.placeholder")}" disableAutofill @keydown=${this._resultsNavigationListener} @input=${this._updateSearchResults} @paste=${this._updateSearchResults} @cut=${this._updateSearchResults} tabindex=${this.isOpen ? 1 : -1}>
 						<span class="type">
 							<i class="far fa-magnifying-glass"></i>
 						</span>
 					</div>
 					<div class="search-results"></div>
 					<div class="button-container center">
-						<nb-button color="dark" class="cancel" @click=${this.close}>
+						<nb-button color="dark" class="cancel" @click=${this.close} tabindex=${this.isOpen ? 1 : -1}>
 							${Translator.trans("generic.cancel")}
 						</nb-button>
 					</div>
