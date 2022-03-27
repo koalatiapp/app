@@ -5,7 +5,6 @@ namespace App\MessageHandler;
 use App\Entity\Page;
 use App\Message\SitemapRequest;
 use App\Message\TestingRequest;
-use App\Repository\PageRepository;
 use App\Repository\ProjectRepository;
 use App\Util\Sitemap\Builder;
 use App\Util\Url;

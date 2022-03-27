@@ -10,8 +10,7 @@ class HtmlSanitizer
 	public function __construct(
 		private SanitizerInterface $htmlSanitizer,
 		private RouterInterface $router,
-	)
-	{
+	) {
 	}
 
 	public function sanitize(string $unsafeHtml): string
@@ -32,7 +31,7 @@ class HtmlSanitizer
 				$proxyUrl = $router->generate(
 					"image_proxy",
 					[
-						"url" => urlencode($matches[3])
+						"url" => urlencode($matches[3]),
 					],
 					$router::ABSOLUTE_URL
 				);

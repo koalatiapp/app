@@ -2,8 +2,6 @@
 
 namespace App\Storage;
 
-use Aws\S3\S3Client;
-use League\Flysystem\AwsS3V3\AwsS3V3Adapter;
 use League\Flysystem\Filesystem;
 
 /**
@@ -16,8 +14,7 @@ abstract class AbstractStorage
 	public function __construct(
 		protected Filesystem $filesystem,
 		protected string $cdnBaseUrl,
-	)
-	{
+	) {
 	}
 
 	/**
