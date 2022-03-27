@@ -5,11 +5,11 @@ namespace App\Util\Sitemap;
 use App\Exception\CrawlingException;
 use App\Util\Url;
 use DOMDocument;
+use Exception;
+use Psr\Log\LoggerInterface;
 
 class Builder
 {
-	protected Url $urlHelper;
-
 	/**
 	 * Array of locations for the sitemap.
 	 * The location's URL is used as a key to prevent duplicates.
@@ -23,9 +23,11 @@ class Builder
 	 */
 	protected bool $shouldCrawlWebsite = true;
 
-	public function __construct(Url $urlHelper)
+	public function __construct(
+		private Url $urlHelper,
+		private LoggerInterface $logger,
+	)
 	{
-		$this->urlHelper = $urlHelper;
 	}
 
 	/**
@@ -79,6 +81,7 @@ class Builder
 				$this->crawlWebsite($websiteUrl);
 			} catch (CrawlingException $exception) {
 				// Oh well, let's hope the sitemap was good enough...
+				$this->logger->error($exception->getMessage(), $exception->getTrace());
 			}
 		}
 
@@ -122,8 +125,13 @@ class Builder
 		foreach ($domNodeList as $url) {
 			if (strtolower($url->tagName) == 'loc') {  // Make sure we don't get image:loc tags and stuff like that, which is frequent in Wordpress sitemaps
 				if ($url->parentNode && $url->parentNode->tagName == 'sitemap') {
-					foreach ($this->scanSitemap($url->nodeValue) as $childSitemapUrl) {
-						$urls[] = $childSitemapUrl;
+					try {
+						foreach ($this->scanSitemap($url->nodeValue) as $childSitemapUrl) {
+							$urls[] = $childSitemapUrl;
+						}
+					} catch (Exception $exception) {
+						// Sub-sitemap couldn't be fetched :/
+						$this->logger->error($exception->getMessage(), $exception->getTrace());
 					}
 
 					continue;
