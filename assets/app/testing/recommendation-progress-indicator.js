@@ -62,6 +62,13 @@ export class RecommendationProgressIndicator extends LitElement {
 			`;
 		}
 
+		if (!this.pageCount) {
+			return html`
+				<nb-loading-spinner></nb-loading-spinner>
+				<div>${Translator.trans("automated_testing.progress.no_pages_yet")}</div>
+			`;
+		}
+
 		if (this.hasRequestsPending) {
 			return html`
 				<nb-loading-spinner></nb-loading-spinner>
@@ -142,6 +149,8 @@ export class RecommendationProgressIndicator extends LitElement {
 	reset()
 	{
 		this._clearTimerInterval();
+		this.pageCount = 0;
+		this.activePageCount = 0;
 		this.hasRequestsPending = false;
 		this.pendingRequestCount = 0;
 		this.timeLeftInMs = 0;
@@ -154,6 +163,8 @@ export class RecommendationProgressIndicator extends LitElement {
 	_handleStatusUpdate(status)
 	{
 		this._hasReceivedFirstResponse = true;
+		this.pageCount = status.pageCount;
+		this.activePageCount = status.activePageCount;
 		this.hasRequestsPending = status.pending;
 		this.pendingRequestCount = status.requestCount;
 		this.timeLeftInMs = status.timeEstimate;

@@ -8,6 +8,7 @@ use App\Controller\Trait\ApiControllerTrait;
 use App\Message\TestingRequest;
 use App\Security\ProjectVoter;
 use App\Subscription\QuotaManager;
+use App\Util\Testing\TestingStatus;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -63,6 +64,6 @@ class TestingController extends AbstractController
 
 		$status = $statusApi->project($project);
 
-		return $this->apiSuccess($status);
+		return $this->apiSuccess(new TestingStatus($project, $status));
 	}
 }

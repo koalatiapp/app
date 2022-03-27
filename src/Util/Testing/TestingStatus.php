@@ -24,15 +24,30 @@ class TestingStatus implements MercureEntityInterface
 	private ?int $timeEstimate;
 
 	/**
+	 * @Groups({"default"})
+	 */
+	private int $pageCount;
+
+	/**
+	 * @Groups({"default"})
+	 */
+	private int $activePageCount;
+
+	/**
 	 * @param array<string,mixed> $data
 	 */
 	public function __construct(
 		private Project $project,
-		array $data)
+		array $data
+	)
 	{
 		$this->pending = $data["pending"];
 		$this->requestCount = $data["requestCount"];
 		$this->timeEstimate = $data["timeEstimate"];
+
+		// Add project pages data
+		$this->pageCount = $project->getPages()->count();
+		$this->activePageCount = $project->getActivePages()->count();
 	}
 
 	public function getId(): ?int
@@ -60,4 +75,13 @@ class TestingStatus implements MercureEntityInterface
 		return $this->timeEstimate;
 	}
 
+	public function getPageCount(): ?int
+	{
+		return $this->pageCount;
+	}
+
+	public function getActivePageCount(): ?int
+	{
+		return $this->activePageCount;
+	}
 }
