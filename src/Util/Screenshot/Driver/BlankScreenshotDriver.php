@@ -12,7 +12,8 @@ class BlankScreenshotDriver extends AbstractScreenshotDriver implements Screensh
 {
 	/**
 	 * The BlankScreenshotDriver's screenshot always returns a 1x1 gray image.
- 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+	 *
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	public function screenshot(string $url, int $viewportWidth, int $viewportHeight, ?int $renderWidth = null, int $renderScale = 1): string
 	{

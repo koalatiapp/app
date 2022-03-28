@@ -1,5 +1,6 @@
 import { NbButton } from "../../native-bear";
 import { ApiClient } from "../../utils/api";
+import confirm from "../../utils/confirm.js";
 
 export class PaddleSubscriptionButton extends NbButton {
 	static get styles()
@@ -13,6 +14,8 @@ export class PaddleSubscriptionButton extends NbButton {
 		return {
 			...super.properties,
 			productId: { type: String },
+			planName: { type: String },
+			actionType: { type: String },
 		};
 	}
 
@@ -22,7 +25,16 @@ export class PaddleSubscriptionButton extends NbButton {
 
 		this.addEventListener("click", (e) => {
 			e.preventDefault();
-			this.startCheckoutProcess();
+
+			if (this.loading) {
+				return;
+			}
+
+			if (this.actionType == "checkout") {
+				this.startCheckoutProcess();
+			} else {
+				this.startUpdateProcess();
+			}
 		});
 	}
 
@@ -34,11 +46,34 @@ export class PaddleSubscriptionButton extends NbButton {
 	async startCheckoutProcess()
 	{
 		this.loading = true;
-		const email = await this.getUserEmail();
+		const email = await this.#getUserEmail();
 		this.triggerPaddleCheckout(email);
 	}
 
-	getUserEmail()
+	async startUpdateProcess()
+	{
+		this.loading = true;
+
+		// Request user confirmation before changing subscription plan
+		const confirmMessage = Translator.trans("user_settings.subscription.plans.confirm_change", {
+			"newPlan": Translator.trans(`plan.${this.planName}.name`)
+		});
+		confirm(confirmMessage).then(proceed => {
+			if (!proceed) {
+				this.loading = false;
+				return;
+			}
+
+			// Make the API call to change the subscription
+			ApiClient.post("api_user_subscription_change_plan", { plan: this.planName }).then(() => {
+				this.loading = false;
+				window.Flash.show("success", "user_settings.subscription.flash.subscription_change_success");
+				setTimeout(() => { window.location.reload(); }, 5000);
+			});
+		});
+	}
+
+	#getUserEmail()
 	{
 		return ApiClient.get("api_user_current").then(response => response.data.email);
 	}

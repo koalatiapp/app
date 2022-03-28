@@ -19,7 +19,7 @@
     "league/flysystem-aws-s3-v3": "^2.0",
     "phpdocumentor/reflection-docblock": "^5.2",
     "pyrrah/gravatar-bundle": "^1.1",
-    "rayatomsk/paddle-api": "^0.5.0",
+    "rayatomsk/paddle-api": "^0.6.0",
     "roukmoute/hashids-bundle": "^3.0",
     "sentry/sentry-symfony": "^4.2",
     "symfony/asset": "5.4.*",

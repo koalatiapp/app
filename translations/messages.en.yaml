@@ -397,6 +397,7 @@ user_settings:
             select: Switch to %plan%
             current_label: Current plan
             price_suffix: per month
+            confirm_change: Are you sure you want to update your subscription to the %newPlan% plan?
         flash:
             subscription_change_success: Your subscription is being updated! Please hold on, this page will reload in just a moment...
 

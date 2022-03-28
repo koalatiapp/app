@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e3f1eb178e451c7d23624e5218f8213c",
+    "content-hash": "8b525442c1d555bc3663edb5cba7317f",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -4320,16 +4320,16 @@
         },
         {
             "name": "rayatomsk/paddle-api",
-            "version": "v0.5.0",
+            "version": "v0.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/RayAtomsk/paddle-api.git",
-                "reference": "a5fb175a573d7c8faa7b6a11b97a96f9072b8573"
+                "reference": "a92876891d41cd606f0edd3dc29033dc555d9f10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/RayAtomsk/paddle-api/zipball/a5fb175a573d7c8faa7b6a11b97a96f9072b8573",
-                "reference": "a5fb175a573d7c8faa7b6a11b97a96f9072b8573",
+                "url": "https://api.github.com/repos/RayAtomsk/paddle-api/zipball/a92876891d41cd606f0edd3dc29033dc555d9f10",
+                "reference": "a92876891d41cd606f0edd3dc29033dc555d9f10",
                 "shasum": ""
             },
             "require": {
@@ -4367,9 +4367,9 @@
             ],
             "support": {
                 "issues": "https://github.com/RayAtomsk/paddle-api/issues",
-                "source": "https://github.com/RayAtomsk/paddle-api/tree/master"
+                "source": "https://github.com/RayAtomsk/paddle-api/tree/v0.6.0"
             },
-            "time": "2020-07-16T16:11:07+00:00"
+            "time": "2021-11-15T16:25:11+00:00"
         },
         {
             "name": "roukmoute/hashids-bundle",
