@@ -32,6 +32,7 @@ RUN set -eux; \
 	apk add --update nodejs npm; \
 	docker-php-ext-configure zip; \
 	docker-php-ext-install -j$(nproc) \
+		pcntl \
 		intl \
 		zip \
 		mysqli \
