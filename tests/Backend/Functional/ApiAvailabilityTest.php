@@ -19,7 +19,7 @@ class ApiAvailabilityTest extends AbstractAppTestCase
 	 */
 	public function testApiCallIsSuccessful(string $url, string $method)
 	{
-		$this->client->request($method, $url);
+		$this->client->request($method, $url, [], [], ["HTTP_X-Requested-With" => "XMLHttpRequest"]);
 
 		$this->assertResponseIsSuccessful();
 	}
