@@ -51,7 +51,7 @@
     "twig/extra-bundle": "^3.3",
     "twig/inky-extra": "^3.3",
     "twig/markdown-extra": "^3.3",
-    "vdb/php-spider": "^0.5.2",
+    "vdb/php-spider": "^0.6.2",
     "willdurand/js-translation-bundle": "^4.0"
   },
   "require-dev": {
