@@ -6,30 +6,17 @@ use App\Message\FaviconRequest;
 use App\Repository\ProjectRepository;
 use App\Storage\ProjectStorage;
 use App\Util\Favicon\FaviconFetcherInterface;
+use App\Util\Url;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 class FaviconRequestHandler implements MessageHandlerInterface
 {
-	/**
-	 * @var ProjectRepository
-	 */
-	private $projectRepository;
-
-	/**
-	 * @var FaviconFetcherInterface
-	 */
-	private $faviconFetcher;
-
-	/**
-	 * @var ProjectStorage
-	 */
-	private $projectStorage;
-
-	public function __construct(ProjectRepository $projectRepository, FaviconFetcherInterface $faviconFetcher, ProjectStorage $projectStorage)
-	{
-		$this->projectRepository = $projectRepository;
-		$this->faviconFetcher = $faviconFetcher;
-		$this->projectStorage = $projectStorage;
+	public function __construct(
+		private ProjectRepository $projectRepository,
+		private FaviconFetcherInterface $faviconFetcher,
+		private ProjectStorage $projectStorage,
+		private Url $urlHelper,
+	) {
 	}
 
 	public function __invoke(FaviconRequest $message): void
@@ -37,6 +24,14 @@ class FaviconRequestHandler implements MessageHandlerInterface
 		$project = $this->projectRepository->find($message->getProjectId());
 
 		if (!$project) {
+			return;
+		}
+
+		$faviconUrl = $this->projectStorage->faviconUrl($project);
+
+		if ($this->urlHelper->exists($faviconUrl)) {
+			// We already have a favicon for this URL!
+			// @TODO: Add some kind of timer on this to allow refreshing favicons after a while (or on demand)
 			return;
 		}
 

@@ -2,8 +2,6 @@
 
 namespace App\Mercure;
 
-use App\Mercure\EntityHandlerInterface;
-use App\Mercure\MercureEntityInterface;
 use App\Util\ClientMessageSerializer;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\Proxy;
@@ -32,6 +30,7 @@ class UpdateDispatcher
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.bus)
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.entityHandlers)
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.idHasher)
+	 *
 	 * @param iterable<mixed,EntityHandlerInterface> $entityHandlers
 	 */
 	public function __construct(

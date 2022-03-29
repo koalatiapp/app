@@ -129,6 +129,9 @@ services:
             - '%env(TOOLS_API_URL)%'
             - '%env(TOOLS_API_BEARER_TOKEN)%'
 
+    App\Util\Screenshot\Driver\ScreenshotDriverInterface:
+        alias: App\Util\Screenshot\Driver\BlankScreenshotDriver
+
     App\Util\Screenshot\Driver\ApiFlash:
         arguments:
             - '%env(APIFLASH_ACCESS_KEY)%'

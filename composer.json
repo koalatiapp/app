@@ -19,7 +19,7 @@
     "league/flysystem-aws-s3-v3": "^2.0",
     "phpdocumentor/reflection-docblock": "^5.2",
     "pyrrah/gravatar-bundle": "^1.1",
-    "rayatomsk/paddle-api": "^0.5.0",
+    "rayatomsk/paddle-api": "^0.6.0",
     "roukmoute/hashids-bundle": "^3.0",
     "sentry/sentry-symfony": "^4.2",
     "symfony/asset": "5.4.*",
@@ -51,7 +51,7 @@
     "twig/extra-bundle": "^3.3",
     "twig/inky-extra": "^3.3",
     "twig/markdown-extra": "^3.3",
-    "vdb/php-spider": "^0.5.2",
+    "vdb/php-spider": "^0.6.2",
     "willdurand/js-translation-bundle": "^4.0"
   },
   "require-dev": {

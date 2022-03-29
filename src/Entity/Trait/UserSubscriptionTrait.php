@@ -14,9 +14,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
 trait UserSubscriptionTrait
 {
 	/**
-	 * @ORM\Column(type="integer", nullable=true)
+	 * @ORM\Column(type="string", nullable=true)
 	 */
-	private ?int $paddleUserId = null;
+	private ?string $paddleUserId = null;
+
+	/**
+	 * @ORM\Column(type="string", nullable=true)
+	 */
+	private ?string $paddleSubscriptionId = null;
 
 	/**
 	 * @ORM\Column(type="string", length=255, nullable=true)
@@ -39,14 +44,26 @@ trait UserSubscriptionTrait
 	 */
 	private ?DateTimeInterface $subscriptionRenewalDate = null;
 
-	public function getPaddleUserId(): ?int
+	public function getPaddleUserId(): ?string
 	{
 		return $this->paddleUserId;
 	}
 
-	public function setPaddleUserId(?int $paddleUserId): self
+	public function setPaddleUserId(?string $paddleUserId): self
 	{
 		$this->paddleUserId = $paddleUserId;
+
+		return $this;
+	}
+
+	public function getPaddleSubscriptionId(): ?string
+	{
+		return $this->paddleSubscriptionId;
+	}
+
+	public function setPaddleSubscriptionId(?string $paddleSubscriptionId): self
+	{
+		$this->paddleSubscriptionId = $paddleSubscriptionId;
 
 		return $this;
 	}

@@ -5,6 +5,21 @@ import getActiveElement from "../../utils/get-active-element.js";
 import elementContains from "../../utils/element-contains.js";
 import { MousewheelPreventionController } from "../../utils/controller/mousewheel-prevention-controller.js";
 
+/**
+ * Keeps a reference to every active sidepanel.
+ * @type {NbSidePanel[]}
+ */
+const sidepanelStack = [];
+
+/**
+  * Callback for the `keydown` event listener that handles closing the sidepanels via the Escape key.
+  */
+const escapeKeydownCallback = function(e) {
+	if (e.code == "Escape") {
+		NbSidePanel.closeCurrent();
+	}
+};
+
 export class NbSidePanel extends LitElement {
 	#isClosing = false;
 	#originalFocusElement = null;
@@ -51,7 +66,10 @@ export class NbSidePanel extends LitElement {
 		this.setAttribute("role", "complementary");
 		this.setAttribute("aria-labelledby", "sidepanel-title");
 		this.animateAppearance()
-			.then(() => this.#initCloseOnClickOutside());
+			.then(() => {
+				this.#initCloseEventListeners();
+				sidepanelStack.push(this);
+			});
 	}
 
 	firstUpdated()
@@ -100,7 +118,14 @@ export class NbSidePanel extends LitElement {
 			this.dispatchEvent(new CustomEvent("closed"));
 		});
 
+		sidepanelStack.pop();
+
 		this.#originalFocusElement?.focus?.();
+
+		// Remove the Escape listener if there is no more modal
+		if (!sidepanelStack.length) {
+			NbSidePanel.#removeEscapeEventListener();
+		}
 	}
 
 	animateAppearance()
@@ -143,8 +168,16 @@ export class NbSidePanel extends LitElement {
 		});
 	}
 
-	#initCloseOnClickOutside()
+	/**
+	 * Initializes the event listeners related to the modal, such as the close button.
+	 */
+	#initCloseEventListeners()
 	{
+		// Initialize document-wide event listener if this is the first modal of the stack
+		if (!sidepanelStack.length) {
+			window.addEventListener("keydown", escapeKeydownCallback);
+		}
+
 		const checkForOutsideClick = (e) => {
 			const exceptedSelector = ".flash-message";
 
@@ -158,6 +191,36 @@ export class NbSidePanel extends LitElement {
 		};
 
 		window.addEventListener("click", checkForOutsideClick);
+	}
+
+	/**
+	 * Returns the currently active modal instance.
+	 *
+	 * @returns {Modal|null} Instance of the currently active modal (or null if none is active)
+	 */
+	static getCurrent()
+	{
+		return sidepanelStack[sidepanelStack.length - 1] ?? null;
+	}
+
+	/**
+	  * Closes the currently active modal
+	  */
+	static closeCurrent()
+	{
+		NbSidePanel.getCurrent()?.close();
+	}
+
+	/**
+	 * Removes the Esc key event listener, which triggers the Close function.
+	 */
+	static #removeEscapeEventListener()
+	{
+		if (NbSidePanel.getCurrent()) {
+			return;
+		}
+
+		window.removeEventListener("keydown", escapeKeydownCallback);
 	}
 }
 

@@ -18,6 +18,7 @@ class UserTopicBuilder
 	public function getTopic(User $user): string
 	{
 		$userId = $this->idHasher->encode($user->getId());
+
 		return "http://koalati/$userId/";
 	}
 }

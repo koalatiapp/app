@@ -76,9 +76,11 @@ class PaddleController extends AbstractController
 		$planId = $request->request->get('subscription_plan_id');
 		$newPlan = $this->planManager->getPlanFromPaddleId($planId);
 		$paddleUserId = $request->request->get('user_id');
+		$paddleSubscriptionId = $request->request->get('subscription_id');
 
-		$user->setPaddleUserId($paddleUserId);
-		$paddleUser = $this->paddleApi->subscription()->listUsers($request->request->get('subscription_id'))[0] ?? null;
+		$user->setPaddleUserId($paddleUserId)
+			->setPaddleSubscriptionId($paddleSubscriptionId);
+		$paddleUser = $this->paddleApi->subscription()->listUsers($paddleSubscriptionId)[0] ?? null;
 		$nextPaymentDate = new DateTimeImmutable($paddleUser['next_payment']['date']);
 
 		if ($newPlan->isDowngradeComparedTo($originalPlan)) {
@@ -115,7 +117,8 @@ class PaddleController extends AbstractController
 
 		$user->setUpcomingSubscriptionPlan(FreePlan::UNIQUE_NAME)
 			->setSubscriptionChangeDate(new DateTime($endDateString))
-			->setSubscriptionRenewalDate(null);
+			->setSubscriptionRenewalDate(null)
+			->setPaddleSubscriptionId(null);
 		$this->handleDowngradeSideEffects($user);
 
 		$this->entityManager->persist($user);

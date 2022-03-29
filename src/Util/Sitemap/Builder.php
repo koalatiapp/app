@@ -26,8 +26,7 @@ class Builder
 	public function __construct(
 		private Url $urlHelper,
 		private LoggerInterface $logger,
-	)
-	{
+	) {
 	}
 
 	/**

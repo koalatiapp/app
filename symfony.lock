@@ -131,6 +131,9 @@
     "erusev/parsedown": {
         "version": "1.7.4"
     },
+    "felixfbecker/advanced-json-rpc": {
+        "version": "v3.2.1"
+    },
     "friendsofphp/php-cs-fixer": {
         "version": "2.19",
         "recipe": {
@@ -209,17 +212,26 @@
     "masterminds/html5": {
         "version": "2.7.5"
     },
+    "microsoft/tolerant-php-parser": {
+        "version": "v0.1.1"
+    },
     "monolog/monolog": {
         "version": "2.3.2"
     },
     "mtdowling/jmespath.php": {
         "version": "2.6.0"
     },
+    "netresearch/jsonmapper": {
+        "version": "v4.0.0"
+    },
     "nikic/php-parser": {
         "version": "v4.10.3"
     },
     "pdepend/pdepend": {
         "version": "2.8.0"
+    },
+    "phan/phan": {
+        "version": "4.1.0"
     },
     "php-cs-fixer/diff": {
         "version": "v1.3.1"
@@ -307,6 +319,9 @@
         "files": [
             "config/packages/roukmoute_hashids.yaml"
         ]
+    },
+    "sabre/event": {
+        "version": "5.1.4"
     },
     "sensio/framework-extra-bundle": {
         "version": "5.2",

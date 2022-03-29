@@ -39,8 +39,7 @@ class TestingStatus implements MercureEntityInterface
 	public function __construct(
 		private Project $project,
 		array $data
-	)
-	{
+	) {
 		$this->pending = $data["pending"];
 		$this->requestCount = $data["requestCount"];
 		$this->timeEstimate = $data["timeEstimate"];

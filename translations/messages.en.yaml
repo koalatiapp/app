@@ -1,6 +1,7 @@
 generic:
     you: You
     cancel: Cancel
+    confirm: Confirm
     just_now: Just now
     back_to_dashboard: Back to your dashboard
     project_section_title: '%name%'
@@ -394,8 +395,9 @@ user_settings:
             title: Your usage
         plans:
             select: Switch to %plan%
-            current_label: This is your current plan
+            current_label: Current plan
             price_suffix: per month
+            confirm_change: Are you sure you want to update your subscription to the %newPlan% plan?
         flash:
             subscription_change_success: Your subscription is being updated! Please hold on, this page will reload in just a moment...
 

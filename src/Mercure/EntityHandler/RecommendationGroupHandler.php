@@ -2,9 +2,9 @@
 
 namespace App\Mercure\EntityHandler;
 
-use App\Mercure\MercureEntityInterface;
 use App\Entity\Project;
 use App\Mercure\EntityHandlerInterface;
+use App\Mercure\MercureEntityInterface;
 use App\Util\Testing\RecommendationGroup;
 
 class RecommendationGroupHandler implements EntityHandlerInterface

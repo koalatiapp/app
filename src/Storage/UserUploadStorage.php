@@ -6,7 +6,7 @@ use League\Flysystem\Config as FlysystemConfig;
 use League\Flysystem\Visibility;
 
 /**
- * Storage service for user uploads
+ * Storage service for user uploads.
  */
 class UserUploadStorage extends AbstractStorage
 {
@@ -25,8 +25,8 @@ class UserUploadStorage extends AbstractStorage
 	 */
 	public function upload(string $contents): string
 	{
-		$filename = uniqid() . bin2hex(random_bytes(32));
-		$filepath = self::DIRECTORY . "/" . $filename;
+		$filename = uniqid().bin2hex(random_bytes(32));
+		$filepath = self::DIRECTORY."/".$filename;
 
 		$this->filesystem->write(
 			$filepath,

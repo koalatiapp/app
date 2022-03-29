@@ -2,7 +2,6 @@
 
 namespace App\Mercure;
 
-use App\Mercure\MercureEntityInterface;
 use App\Entity\User;
 
 /**
@@ -14,8 +13,6 @@ interface EntityHandlerInterface
 {
 	/**
 	 * Returns the class of the entity this handler supports.
-	 *
-	 * @return string
 	 */
 	public function getSupportedEntity(): string;
 
@@ -24,8 +21,6 @@ interface EntityHandlerInterface
 	 * Types should be in UpperCamelCase.
 	 *
 	 * Ex.: a handler that manages Comments might define its type as `"Comment"`.
-	 *
-	 * @return string
 	 */
 	public function getType(): string;
 

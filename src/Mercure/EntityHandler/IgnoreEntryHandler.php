@@ -3,8 +3,8 @@
 namespace App\Mercure\EntityHandler;
 
 use App\Entity\Testing\IgnoreEntry;
-use App\Mercure\MercureEntityInterface;
 use App\Mercure\EntityHandlerInterface;
+use App\Mercure\MercureEntityInterface;
 
 class IgnoreEntryHandler implements EntityHandlerInterface
 {

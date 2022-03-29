@@ -61,6 +61,7 @@ export default class Modal {
 	 * @param {string|object|Promise<string|object>} [options.content] - Content to display inside the modal.
 	 * @param {string} [options.contentUrl] - A URL from which to fetch the content to display inside the modal.
 	 * @param {boolean} [options.confirmClose=false] - Whether the user should have to confirm when they want to close the modal.
+	 * @param {boolean} [options.allowClosing=true] - Whether the user can close the modal. If `false`, the modal will have to be closed programmatically.
 	 */
 	constructor(options = {})
 	{
@@ -91,6 +92,7 @@ export default class Modal {
 	 * @param {string|object|Promise<string|object>} [options.content] - Content to display inside the modal.
 	 * @param {string} [options.contentUrl] - A URL from which to fetch the content to display inside the modal.
 	 * @param {boolean} [options.confirmClose=false] - Whether the user should have to confirm when they want to close the modal.
+	 * @param {boolean} [options.allowClosing=true] - Whether the user can close the modal. If `false`, the modal will have to be closed programmatically.
 	 */
 	_standardizeOptions(options)
 	{
@@ -99,6 +101,7 @@ export default class Modal {
 		}
 
 		options.confirmClose = options.confirmClose ?? false;
+		options.allowClosing = options.allowClosing ?? true;
 
 		return Object.freeze(options);
 	}
@@ -258,12 +261,16 @@ export default class Modal {
 	 * If another modal was present underneath, it will be brought back up.
 	 * The focus will be restored to the element that had it when the modal was created.
 	 *
-	 * @param {boolean} [skipConfirm=false] - Whether confirmation should be skipped if the modal requires confirmation on-close.
+	 * @param {boolean} [forceClose=false] - Whether confirmation should be skipped if the modal requires confirmation on-close.
 	 * @returns {Promise<boolean>} Returns a `Promise<boolean>` indicating if the modal was closed (`true`) or not (`false`).
 	 */
-	close(skipConfirm = false)
+	close(forceClose = false)
 	{
-		if (!skipConfirm && this.options.confirmClose) {
+		if (!forceClose && !this.options.allowClosing) {
+			return Promise.resolve(false);
+		}
+
+		if (!forceClose && this.options.confirmClose) {
 			// @TODO: Check for confirmation before closing
 		}
 
@@ -318,19 +325,19 @@ export default class Modal {
 	/**
 	 * Closes every active modal.
 	 *
-	 * @param {boolean} [skipConfirm=false] - Whether confirmations should be skipped when closing modals that require confirmation on-close.
+	 * @param {boolean} [forceClose=false] - Whether confirmations should be skipped when closing modals that require confirmation on-close.
 	 * @returns {Promise<boolean>} Returns a `Promise<boolean>` indicating if the modals were successfully closed (`true`) or not (`false`).
 	 */
-	static closeAll(skipConfirm = false)
+	static closeAll(forceClose = false)
 	{
 		if (!Modal.getCurrent()) {
 			return Promise.resolve(true);
 		}
 
-		// Recursively loop over every modal in the `modalStack`, calling and awaiting `close(skipConfirm)` for each of them
-		return Modal.getCurrent().close(skipConfirm).then(async (closed) => {
+		// Recursively loop over every modal in the `modalStack`, calling and awaiting `close(forceClose)` for each of them
+		return Modal.getCurrent().close(forceClose).then(async (closed) => {
 			if (closed) {
-				return await Modal.closeAll(skipConfirm);
+				return await Modal.closeAll(forceClose);
 			} else {
 				return false;
 			}

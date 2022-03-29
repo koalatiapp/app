@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Mercure;
+
 class UpdateType
 {
 	public const CREATE = "create";

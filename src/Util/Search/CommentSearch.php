@@ -45,10 +45,10 @@ class CommentSearch implements EntitySearchInterface
 				'id' => $encodedProjectId,
 				'search' => uniqid(),
 			]);
-			$url = $checklistPageUrl . "#item=$encodedItemId&comment=$encodedCommentId";
+			$url = $checklistPageUrl."#item=$encodedItemId&comment=$encodedCommentId";
 
 			if ($comment->getThread()) {
-				$url .= "&thread=" . $this->idHasher->encode($comment->getThread()->getId());
+				$url .= "&thread=".$this->idHasher->encode($comment->getThread()->getId());
 			}
 
 			$result = new SearchResult(
