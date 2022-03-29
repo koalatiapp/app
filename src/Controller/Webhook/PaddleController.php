@@ -78,7 +78,7 @@ class PaddleController extends AbstractController
 		$paddleUserId = $request->request->get('user_id');
 		$paddleSubscriptionId = $request->request->get('subscription_id');
 
-		$user->setPaddleUserId($paddleUserId)
+		$user->setPaddleUserId((string) $paddleUserId)
 			->setPaddleSubscriptionId($paddleSubscriptionId);
 		$paddleUser = $this->paddleApi->subscription()->listUsers($paddleSubscriptionId)[0] ?? null;
 		$nextPaymentDate = new DateTimeImmutable($paddleUser['next_payment']['date']);
