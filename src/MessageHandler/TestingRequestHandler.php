@@ -13,6 +13,8 @@ use App\Subscription\PlanManager;
 use App\Util\Testing\AvailableToolsFetcher;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpClient\Exception\TransportException;
+use Symfony\Component\Messenger\Exception\RecoverableMessageHandlingException;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -55,12 +57,15 @@ class TestingRequestHandler implements MessageHandlerInterface
 		if (!count($tools) || !count($pageUrls)) {
 			return;
 		}
+		try {
+			// Submit the processing request to the Tools API
+			$this->toolsEndpoint->request($pageUrls, $tools, $priority);
+		} catch (TransportException $exception) {
+			throw new RecoverableMessageHandlingException($exception->getMessage(), $exception->getCode(), $exception);
+		}
 
 		// Keep a record of these testing requests for account quotas (and analytics)
 		$this->recordProjectActivity($project, $tools, $pageUrls);
-
-		// Submit the processing request to the Tools API
-		$this->toolsEndpoint->request($pageUrls, $tools, $priority);
 
 		// Send an update to the client(s) to indicate that testing is in progress
 		$this->bus->dispatch(new TestingStatusRequest($project->getId()));
