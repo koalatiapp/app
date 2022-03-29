@@ -9,6 +9,7 @@ use App\Repository\ProjectRepository;
 use App\Util\Sitemap\Builder;
 use App\Util\Url;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -88,8 +89,17 @@ class SitemapRequestHandler implements MessageHandlerInterface
 		}
 
 		// @TODO: Check to delete / deactivate pages that aren't reachable anymore
+		try {
+			$this->em->flush();
+		} catch (Exception $exception) {
+			// Exception types can vary for integrity constraint errors
+			// But they only mean one thing in this context: the project no longer exists!
+			if (str_contains($exception->getMessage(), "SQLSTATE[23000]")) {
+				return;
+			}
 
-		$this->em->flush();
+			throw $exception;
+		}
 
 		// If a project ID was provided in the message, dispatch a new message to refresh that project's results
 		$this->bus->dispatch(new TestingRequest($message->getProjectId()));
