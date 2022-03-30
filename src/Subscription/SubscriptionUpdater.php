@@ -20,18 +20,24 @@ class SubscriptionUpdater
 	{
 		$subscriptionId = $this->getSubscriptionId($user);
 		$newPlan = $this->planManager->getPlanFromUniqueName($newPlanName);
+		$currentPlan = $this->planManager->getPlanFromEntity($user);
 
-		if (in_array($newPlan->getUniqueName(), [FreePlan::UNIQUE_NAME, TrialPlan::UNIQUE_NAME])) {
-			$this->cancelSubscription($user);
-
-			return;
+		if ($newPlan instanceof TrialPlan) {
+			$newPlan = new FreePlan();
 		}
+
+		$isUpgrade = $newPlan->isUpgradeComparedTo($currentPlan);
 
 		$this->paddleApi->subscription()->updateUser((int) $subscriptionId, [
 			"plan_id" => $newPlan->getPaddleId(),
+			"prorate" => $isUpgrade,
+			"bill_immediately" => $isUpgrade,
 		]);
 	}
 
+	/**
+	 * Cancels the user's subscription on Paddle, effective immediately.
+	 */
 	public function cancelSubscription(User $user): void
 	{
 		$subscriptionId = $this->getSubscriptionId($user);

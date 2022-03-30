@@ -54,7 +54,7 @@
 					{% if (upcomingPlan and upcomingPlan == constant("UNIQUE_NAME", plan)) or (not upcomingPlan and constant("PADDLE_ID", currentPlan) == constant("PADDLE_ID", plan)) %}
 						<nb-button disabled>{% trans with {"%plan%": ("plan." ~ plan ~ ".name")|trans} %}user_settings.subscription.plans.select{% endtrans %}</nb-button>
 					{% else %}
-						<paddle-subscription-button productId="{{ constant("PADDLE_ID", plan) }}" planName="{{ constant("UNIQUE_NAME", plan) }}" actionType="{{ app.user.paddleSubscriptionId ? "api" : "checkout" }}">
+						<paddle-subscription-button productId="{{ constant("PADDLE_ID", plan) }}" planName="{{ constant("UNIQUE_NAME", plan) }}" actionType="{{ app.user.paddleSubscriptionId ? "api" : "checkout" }}" changeType="{{ plan.isUpgradeComparedTo(currentPlan) ? "upgrade" : "downgrade" }}">
 							{% trans with {"%plan%": ("plan." ~ plan ~ ".name")|trans} %}user_settings.subscription.plans.select{% endtrans %}
 						</paddle-subscription-button>
 				{% endif %}
