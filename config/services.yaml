@@ -130,7 +130,7 @@ services:
             - '%env(TOOLS_API_BEARER_TOKEN)%'
 
     App\Util\Screenshot\Driver\ScreenshotDriverInterface:
-        alias: App\Util\Screenshot\Driver\BlankScreenshotDriver
+        alias: App\Util\Screenshot\Driver\ApiFlash
 
     App\Util\Screenshot\Driver\ApiFlash:
         arguments:
