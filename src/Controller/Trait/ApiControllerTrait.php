@@ -41,21 +41,6 @@ trait ApiControllerTrait
 	}
 
 	/**
-	 * Prevents users from accessing API endpoints directly in their browser.
-	 *
-	 * This prevents users from clicking on API links from mischievous
-	 * people who might that might
-	 *
-	 * @required
-	 * */
-	public function preventDirectAccess(RequestStack $requestStack): void
-	{
-		if (!$requestStack->getCurrentRequest()->isXmlHttpRequest()) {
-			throw new BadRequestHttpException("Direct access to internal API endpoints is not allowed.", null, 400);
-		}
-	}
-
-	/**
 	 * @SuppressWarnings(PHPMD.ExitExpression)
 	 */
 	protected function getProject(int | string | null $id, string $privilege = ProjectVoter::VIEW): ?Project

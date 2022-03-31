@@ -4,6 +4,7 @@ namespace App\Controller\Api\Checklist;
 
 use App\Controller\AbstractController;
 use App\Controller\Trait\ApiControllerTrait;
+use App\Controller\Trait\PreventDirectAccessTrait;
 use App\Entity\Checklist\ItemGroup;
 use App\Mercure\UpdateType;
 use App\Repository\Checklist\ItemRepository;
@@ -18,6 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ItemController extends AbstractController
 {
 	use ApiControllerTrait;
+	use PreventDirectAccessTrait;
 
 	/**
 	 * Returns the list of items for a given project's checklist.
