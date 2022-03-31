@@ -4,6 +4,7 @@ namespace App\Controller\Api;
 
 use App\Controller\AbstractController;
 use App\Controller\Trait\ApiControllerTrait;
+use App\Controller\Trait\PreventDirectAccessTrait;
 use App\Storage\UserUploadStorage;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;

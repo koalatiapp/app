@@ -4,6 +4,7 @@ namespace App\Controller\Api;
 
 use App\Controller\AbstractController;
 use App\Controller\Trait\ApiControllerTrait;
+use App\Controller\Trait\PreventDirectAccessTrait;
 use App\Entity\Comment;
 use App\Mercure\UpdateType;
 use App\Repository\Checklist\ItemRepository;
@@ -22,6 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class CommentController extends AbstractController
 {
 	use ApiControllerTrait;
+	use PreventDirectAccessTrait;
 
 	/**
 	 * @Route("", methods={"GET","HEAD"}, name="list", options={"expose": true})

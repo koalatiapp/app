@@ -4,6 +4,7 @@ namespace App\Controller\Api\Testing;
 
 use App\Controller\AbstractController;
 use App\Controller\Trait\ApiControllerTrait;
+use App\Controller\Trait\PreventDirectAccessTrait;
 use App\Message\TestingRequest;
 use App\Repository\Testing\RecommendationRepository;
 use App\Security\ProjectVoter;
@@ -20,6 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class RecommendationController extends AbstractController
 {
 	use ApiControllerTrait;
+	use PreventDirectAccessTrait;
 
 	/**
 	 * Returns the list of recommendations for the project, grouped by type.

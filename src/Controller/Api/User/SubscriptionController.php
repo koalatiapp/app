@@ -4,6 +4,7 @@ namespace App\Controller\Api\User;
 
 use App\Controller\AbstractController;
 use App\Controller\Trait\ApiControllerTrait;
+use App\Controller\Trait\PreventDirectAccessTrait;
 use App\Subscription\SubscriptionUpdater;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,6 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class SubscriptionController extends AbstractController
 {
 	use ApiControllerTrait;
+	use PreventDirectAccessTrait;
 
 	/**
 	 * @Route("/change", methods={"POST","PUT"}, name="change_plan", options={"expose": true})

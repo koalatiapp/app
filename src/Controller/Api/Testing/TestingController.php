@@ -5,6 +5,7 @@ namespace App\Controller\Api\Testing;
 use App\ApiClient\Endpoint\StatusEndpoint;
 use App\Controller\AbstractController;
 use App\Controller\Trait\ApiControllerTrait;
+use App\Controller\Trait\PreventDirectAccessTrait;
 use App\Message\TestingRequest;
 use App\Security\ProjectVoter;
 use App\Subscription\QuotaManager;
@@ -19,6 +20,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class TestingController extends AbstractController
 {
 	use ApiControllerTrait;
+	use PreventDirectAccessTrait;
 
 	/**
 	 * Submits an automated testing request for the project.

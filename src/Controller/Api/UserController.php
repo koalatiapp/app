@@ -4,6 +4,7 @@ namespace App\Controller\Api;
 
 use App\Controller\AbstractController;
 use App\Controller\Trait\ApiControllerTrait;
+use App\Controller\Trait\PreventDirectAccessTrait;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -13,6 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserController extends AbstractController
 {
 	use ApiControllerTrait;
+	use PreventDirectAccessTrait;
 
 	/**
 	 * Returns data about the current user.

@@ -4,6 +4,7 @@ namespace App\Controller\Api\Organization;
 
 use App\Controller\AbstractController;
 use App\Controller\Trait\ApiControllerTrait;
+use App\Controller\Trait\PreventDirectAccessTrait;
 use App\Entity\OrganizationInvitation;
 use App\Entity\OrganizationMember;
 use App\Repository\OrganizationMemberRepository;
@@ -22,6 +23,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class MembersController extends AbstractController
 {
 	use ApiControllerTrait;
+	use PreventDirectAccessTrait;
 
 	/**
 	 * @Route("", methods={"GET","HEAD"}, name="list", options={"expose": true})
