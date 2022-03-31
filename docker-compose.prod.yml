@@ -8,6 +8,8 @@ services:
         APP_ENV: prod
     environment:
       APP_ENV: prod
+    mem_limit: 4g
+    mem_reservation: 3g
 
   caddy:
     build:
