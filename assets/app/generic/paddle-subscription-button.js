@@ -1,3 +1,4 @@
+import { html } from "lit";
 import { NbButton } from "../../native-bear";
 import { ApiClient } from "../../utils/api";
 import confirm from "../../utils/confirm.js";
@@ -16,6 +17,7 @@ export class PaddleSubscriptionButton extends NbButton {
 			productId: { type: String },
 			planName: { type: String },
 			actionType: { type: String },
+			changeType: { type: String },
 		};
 	}
 
@@ -55,10 +57,14 @@ export class PaddleSubscriptionButton extends NbButton {
 		this.loading = true;
 
 		// Request user confirmation before changing subscription plan
-		const confirmMessage = Translator.trans("user_settings.subscription.plans.confirm_change", {
+		let confirmMessage = Translator.trans("user_settings.subscription.plans.confirm_" + this.changeType, {
 			"newPlan": Translator.trans(`plan.${this.planName}.name`)
 		});
-		confirm(confirmMessage).then(proceed => {
+
+		confirm(html`
+			${this.changeType == "upgrade" ? html`<p>${Translator.trans("user_settings.subscription.plans.upgrade_payment_notice")}</p>` : ""}
+			<p>${confirmMessage}</p>
+		`).then(proceed => {
 			if (!proceed) {
 				this.loading = false;
 				return;
