@@ -40,7 +40,7 @@ export class RecommendationProgressIndicator extends LitElement {
 	disconnectedCallback()
 	{
 		if (this.#mercureUpdateCallback) {
-			MercureClient.unsubscribe(this.supportedEntityType(), this.#mercureUpdateCallback);
+			MercureClient.unsubscribe("TestingStatus", this.#mercureUpdateCallback);
 		}
 
 		super.disconnectedCallback();
