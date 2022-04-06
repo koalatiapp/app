@@ -5,7 +5,8 @@ import faImport from "../../utils/fontawesome-import.js";
 import querySelectorAllAnywhere from "../../utils/query-selector-all-anywhere.js";
 
 export class RecommendationProgressIndicator extends LitElement {
-	#mercureUpdateCallback = null;
+	#mercureStatusUpdateCallback = null;
+	#mercureRecommendationUpdateCallback = null;
 
 	static get styles()
 	{
@@ -39,8 +40,12 @@ export class RecommendationProgressIndicator extends LitElement {
 
 	disconnectedCallback()
 	{
-		if (this.#mercureUpdateCallback) {
-			MercureClient.unsubscribe(this.supportedEntityType(), this.#mercureUpdateCallback);
+		if (this.#mercureStatusUpdateCallback) {
+			MercureClient.unsubscribe("TestingStatus", this.#mercureStatusUpdateCallback);
+		}
+
+		if (this.#mercureRecommendationUpdateCallback) {
+			MercureClient.unsubscribe("RecommendationGroup", this.#mercureRecommendationUpdateCallback);
 		}
 
 		super.disconnectedCallback();
@@ -51,6 +56,7 @@ export class RecommendationProgressIndicator extends LitElement {
 		super.firstUpdated();
 		this.fetchStatus();
 		this._initStatusUpdateListener();
+		this._initRecommendationUpdateListener();
 	}
 
 	render()
@@ -177,7 +183,7 @@ export class RecommendationProgressIndicator extends LitElement {
 
 	_initStatusUpdateListener()
 	{
-		this.#mercureUpdateCallback = (update) => {
+		this.#mercureStatusUpdateCallback = (update) => {
 			if (update.id != this.projectId) {
 				return;
 			}
@@ -190,7 +196,20 @@ export class RecommendationProgressIndicator extends LitElement {
 				this.fetchStatus();
 			}
 		};
-		MercureClient.subscribe("TestingStatus", this.#mercureUpdateCallback);
+		MercureClient.subscribe("TestingStatus", this.#mercureStatusUpdateCallback);
+	}
+
+	_initRecommendationUpdateListener()
+	{
+		// If we're receiving recommendations, clearly the website has been crawled!
+		this.#mercureRecommendationUpdateCallback = () => {
+			if (!this.pageCount) {
+				this.pageCount = 1;
+			}
+
+			MercureClient.unsubscribe("RecommendationGroup", this.#mercureRecommendationUpdateCallback);
+		};
+		MercureClient.subscribe("RecommendationGroup", this.#mercureRecommendationUpdateCallback);
 	}
 
 	// Timer related methods
