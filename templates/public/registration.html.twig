@@ -3,6 +3,7 @@
 {% block title %}{% trans %}registration.page_title{% endtrans %}{% endblock %}
 
 {% block head %}
+	<link rel="canonical" href="{{ url("registration") }}">
 	<style>
 		form { width: 40ch; max-width: 100%; }
 		form a { color: var(--color-blue); text-decoration: underline; }

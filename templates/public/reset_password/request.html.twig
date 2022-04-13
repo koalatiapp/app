@@ -2,6 +2,10 @@
 
 {% block title %}{% trans %}password_reset.email_form.page_title{% endtrans %}{% endblock %}
 
+{% block head %}
+	<link rel="canonical" href="{{ url("app_forgot_password_request") }}">
+{% endblock %}
+
 {% block body %}
 	<section>
 		<div class="container center column">
