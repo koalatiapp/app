@@ -220,6 +220,8 @@ export class UserComment extends LitElement {
 		}).finally(() => {
 			resolveButton.loading = false;
 		});
+
+		window.plausible("Checklist usage", { props: { action: "Resolved comment" } });
 	}
 
 	toggleReplyEditor(showEditor)

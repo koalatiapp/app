@@ -95,6 +95,8 @@ export class OrganizationInviteButton extends NbButton {
 
 			form.reset();
 			window.Flash.show("success", Translator.trans("organization.flash.invitation_sent", { name: formData.get("first_name") }));
+
+			window.plausible("Organization usage", { props: { action: "Invited new member" } });
 		});
 	}
 }

@@ -94,6 +94,8 @@ export class ProjectPagesList extends AbstractDynamicList {
 			}
 
 			this.requestUpdate("items");
+
+			window.plausible("Settings usage", { props: { action: "Toggled page" } });
 		});
 	}
 }

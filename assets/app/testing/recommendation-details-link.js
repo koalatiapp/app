@@ -49,6 +49,8 @@ export class RecommendationDetailsLink extends LitElement {
 				<recommendation-details .recommendationGroup=${this.recommendationGroup} recommendationId=${this.recommendationId}>
 			`
 		});
+
+		window.plausible("Testing usage", { props: { action: "Open recommendation details" } });
 	}
 
 	_keydownSpacebarHandler(e)

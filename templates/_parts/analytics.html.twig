@@ -1,0 +1,23 @@
+{% if app.environment == "prod" %}
+	<script defer data-domain="app.koalati.com" src="https://plausible.io/js/plausible.manual.js"></script>
+	<script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments); };</script>
+	<script type="module">
+		const originalPlausible = window.plausible;
+
+		window.plausible = function() {
+			const event = arguments[0];
+			const options = arguments[1] || {};
+			options.u = "{{ getAnalyticsUrl() }}";
+
+			originalPlausible(event, options);
+		}
+
+		window.plausible("pageview");
+	</script>
+{% else %}
+	<script>
+		window.plausible = function() {
+			console.log("The following event would have been sent to Plausible in a production environment:", arguments);
+		};
+	</script>
+{% endif %}

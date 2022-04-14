@@ -135,6 +135,8 @@ export class OrganizationMembersList extends AbstractDynamicList {
 					e.detail.dropdown.slottedToggleElement.innerHTML = Translator.trans("roles." + currentRole);
 				} else if (typeof response.data.message != "undefined") {
 					window.Flash.show("success", response.data.message);
+
+					window.plausible("Organization usage", { props: { action: "Updated member role" } });
 				}
 			});
 		});
@@ -147,6 +149,8 @@ export class OrganizationMembersList extends AbstractDynamicList {
 				if (typeof response != "undefined") {
 					this.items = this.items.filter(existingItem => existingItem.id != item.id);
 					window.Flash.show("success", response.data.message);
+
+					window.plausible("Organization usage", { props: { action: "Removed member" } });
 				}
 			});
 		}
