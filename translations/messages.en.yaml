@@ -256,6 +256,11 @@ navigation:
 
     settings:
         label: Settings
+        sublink:
+            profile: Profile
+            security: Security
+            subscription: Subscription
+            contact: Contact preferences
 
     help:
         label: Help
@@ -341,11 +346,6 @@ user:
     job_title: Job title
 
 user_settings:
-    tabs:
-        profile: Profile
-        security: Security
-        subscription: Subscription
-        contact: Contact preferences
     profile:
         title: Update your profile
         form:
