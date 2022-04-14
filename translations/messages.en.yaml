@@ -267,6 +267,7 @@ navigation:
 
 global_actions:
     profile: Your profile
+    susbcription: Subscription
     logout: Log out
 
 quick_actions:
