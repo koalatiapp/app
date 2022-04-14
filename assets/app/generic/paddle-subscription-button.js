@@ -61,6 +61,8 @@ export class PaddleSubscriptionButton extends NbButton {
 			"newPlan": Translator.trans(`plan.${this.planName}.name`)
 		});
 
+		window.plausible("Subscription change", { props: { action: "Initiate change" } });
+
 		confirm(html`
 			${this.changeType == "upgrade" ? html`<p>${Translator.trans("user_settings.subscription.plans.upgrade_payment_notice")}</p>` : ""}
 			<p>${confirmMessage}</p>
@@ -75,6 +77,8 @@ export class PaddleSubscriptionButton extends NbButton {
 				this.loading = false;
 				window.Flash.show("success", "user_settings.subscription.flash.subscription_change_success");
 				setTimeout(() => { window.location.reload(); }, 5000);
+
+				window.plausible("Subscription change", { props: { action: "Completed change", plan: this.planName } });
 			});
 		});
 	}

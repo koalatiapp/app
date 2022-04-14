@@ -14,6 +14,7 @@
         <img src="{{ gravatar(app.user.email) }}" loading="lazy">
 		<ul class="floating-dropdown reveal-on-hover text-center">
 			<li><a href="{{ path('edit_profile') }}">{% trans %}global_actions.profile{% endtrans %}</a></li>
+			<li><a href="{{ path('manage_subscription') }}">{% trans %}global_actions.susbcription{% endtrans %}</a></li>
 			<li><a href="{{ path('logout') }}">{% trans %}global_actions.logout{% endtrans %}</a></li>
 		</ul>
     </div>

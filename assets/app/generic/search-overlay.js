@@ -108,6 +108,8 @@ export class SearchOverlay extends LitElement {
 		originalFocusTarget = document.activeElement;
 		this.isOpen = true;
 		this.queryInput.focus();
+
+		window.plausible("Search", { props: { action: "Opened search overlay" } });
 	}
 
 	close()

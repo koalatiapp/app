@@ -13,3 +13,6 @@ services:
 
     App\Util\Screenshot\Driver\ScreenshotDriverInterface:
         alias: App\Util\Screenshot\Driver\BlankScreenshotDriver
+
+    App\Util\Analytics\AnalyticsInterface:
+        alias: App\Util\Analytics\Driver\MockDriver

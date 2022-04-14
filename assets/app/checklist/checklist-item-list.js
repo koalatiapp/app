@@ -183,6 +183,8 @@ export class ChecklistItemList extends AbstractDynamicList {
 		this.requestUpdate("items");
 
 		ApiClient.post("api_checklist_item_toggle", { id: item.id, is_completed: item.isCompleted ? 1 : 0 }, null);
+
+		window.plausible("Checklist usage", { props: { action: item.isCompleted ? "Unchecked item" : "Checked item" } });
 	}
 
 	_expandChecklistItem(item, expandResources)
@@ -218,6 +220,8 @@ export class ChecklistItemList extends AbstractDynamicList {
 
 		this.outlineItems((listItem) => listItem.id == item.id);
 		sidepanel.addEventListener("close", () => this.clearOutlines());
+
+		window.plausible("Checklist usage", { props: { action: "Opened item details" } });
 
 		return sidepanel;
 	}

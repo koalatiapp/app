@@ -83,6 +83,8 @@ export class TestingToolList extends AbstractDynamicList {
 			enabled: state ? 1 : 0
 		}, null).then(response => {
 			this.shadowRoot.querySelector(`nb-switch[tool-name="${response.data.tool}"]`).checked = response.data.enabled;
+
+			window.plausible("Settings usage", { props: { action: "Toggled tool" } });
 		});
 	}
 }

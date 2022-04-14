@@ -88,6 +88,8 @@ export class FeedbackFormToggle extends LitElement {
 		ApiClient.post("api_feedback_submit", data, null).then(() => {
 			window.Flash.show("success", Translator.trans("feedback.flash.success"));
 			Modal.closeCurrent();
+
+			window.plausible("Submitted feedback");
 		}).catch(() => {
 			window.Flash.show("danger", Translator.trans("feedback.flash.error"));
 			submitButton.loading = false;

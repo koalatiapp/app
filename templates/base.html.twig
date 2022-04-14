@@ -48,12 +48,7 @@
 		<script src="{{ url('bazinga_jstranslation_js') }}?{{ asset_version }}"></script>
         <link rel="stylesheet" href="{{ asset('css/dark-mode.css') }}" media="(prefers-color-scheme: dark)">
 
-		{% if app.environment == "prod" %}
-			<script defer data-domain="app.koalati.com" src="https://plausible.io/js/plausible.manual.js"></script>
-			<script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments); };</script>
-			<script>window.plausible("pageview", { u: "{{ getAnalyticsUrl() }}" });</script>
-		{% endif %}
-
+		{% include "_parts/analytics.html.twig" %}
 
 		{{ encore_entry_script_tags('app') }}
     </head>

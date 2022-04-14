@@ -123,6 +123,8 @@ export class RecommendationIgnoreForm extends LitElement {
 
 		await ApiClient.post("api_testing_ignore_entry_create", new FormData(this.form));
 		Modal.closeCurrent();
+
+		window.plausible("Testing usage", { props: { action: "Ignore recommendation", recommendation: this.recommendation } });
 	}
 }
 

@@ -33,6 +33,8 @@ export class RequestTestingButton extends NbButton {
 
 	_submitTestingRequest()
 	{
+		window.plausible("Testing usage", { props: { action: "Refresh recommendations" } });
+
 		if (this.loading) {
 			return;
 		}

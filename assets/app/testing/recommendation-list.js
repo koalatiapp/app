@@ -162,6 +162,8 @@ export class RecommendationList extends AbstractDynamicList {
 		ApiClient.put("api_testing_recommendation_group_complete", { id: completedItem.sampleId }, null).then(() => {
 			this.items = this.items.filter(item => item !== completedItem);
 		});
+
+		window.plausible("Testing usage", { props: { action: "Mark recommendation as completed" } });
 	}
 
 	_ignoreRecommendation(item)

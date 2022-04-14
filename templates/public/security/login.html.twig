@@ -3,6 +3,7 @@
 {% block title %}{% trans %}login.page_title{% endtrans %}{% endblock %}
 
 {% block head %}
+	<link rel="canonical" href="{{ url("login") }}">
 	<style>
 		form { width: 40ch; max-width: 100%; }
 		form a { color: var(--color-blue); text-decoration: underline; }
