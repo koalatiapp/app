@@ -184,7 +184,7 @@ export class ChecklistItemList extends AbstractDynamicList {
 
 		ApiClient.post("api_checklist_item_toggle", { id: item.id, is_completed: item.isCompleted ? 1 : 0 }, null);
 
-		window.plausible("Checklist usage", { props: { action: item.isCompleted ? "Unchecked item" : "Checked item" } });
+		window.plausible("Checklist usage", { props: { action: item.isCompleted ? "Checked item" : "Unchecked item" } });
 	}
 
 	_expandChecklistItem(item, expandResources)
