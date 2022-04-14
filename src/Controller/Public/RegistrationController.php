@@ -8,7 +8,9 @@ use App\Form\UserRegistrationType;
 use App\Security\LoginFormAuthenticator;
 use App\Subscription\Plan\FreePlan;
 use App\Subscription\Plan\TrialPlan;
+use App\Util\Analytics\AnalyticsInterface;
 use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,20 +24,17 @@ use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
 class RegistrationController extends AbstractController
 {
-	private UserPasswordHasherInterface $passwordHasher;
-
-	/**
-	 * @required
-	 */
-	public function setPasswordHasher(UserPasswordHasherInterface $passwordHasher): void
+	public function __construct(
+		private UserPasswordHasherInterface $passwordHasher,
+		private AnalyticsInterface $analytics,
+	)
 	{
-		$this->passwordHasher = $passwordHasher;
 	}
 
 	/**
 	 * @Route("/sign-up", name="registration")
 	 */
-	public function signUp(Request $request, UserAuthenticatorInterface $authenticator, LoginFormAuthenticator $loginFormAuthenticator, MailerInterface $mailer): Response
+	public function signUp(Request $request, UserAuthenticatorInterface $authenticator, LoginFormAuthenticator $loginFormAuthenticator, MailerInterface $mailer, EntityManagerInterface $entityManager): Response
 	{
 		$user = new User();
 		$form = $this->createForm(UserRegistrationType::class, $user);
@@ -70,9 +69,10 @@ class RegistrationController extends AbstractController
 			}
 
 			if ($mailSent) {
-				$em = $this->getDoctrine()->getManager();
-				$em->persist($user);
-				$em->flush();
+				$entityManager->persist($user);
+				$entityManager->flush();
+
+				$this->analytics->trackEvent("Sign up");
 
 				return $authenticator->authenticateUser($user, $loginFormAuthenticator, $request);
 			}

@@ -155,6 +155,9 @@ services:
         arguments:
             - ['@App\Util\Favicon\Driver\FaviconKit', '@App\Util\Favicon\Driver\GoogleFavicon']
 
+    App\Util\Analytics\AnalyticsInterface:
+        alias: App\Util\Analytics\Driver\Plausible
+
     Paddle\API:
         class: 'Paddle\API'
         arguments:
