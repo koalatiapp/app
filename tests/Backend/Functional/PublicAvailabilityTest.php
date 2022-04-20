@@ -27,6 +27,7 @@ class PublicAvailabilityTest extends WebTestCase
 		yield ['/reset-password'];
 		yield ['/reset-password/check-email'];
 		yield ['/login'];
+		yield ['/free-checklist'];
 	}
 
 	/**

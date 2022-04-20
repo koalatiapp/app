@@ -2,6 +2,8 @@ generic:
     you: You
     cancel: Cancel
     confirm: Confirm
+    close: Close
+    close_sidepanel: Close sidepanel
     just_now: Just now
     back_to_dashboard: Back to your dashboard
     project_section_title: '%name%'
@@ -205,6 +207,20 @@ password_reset:
         footer: >
             <p class="text-gray text-small">Please note that this link will expire in %expirationTime%.</p>
             <p class="text-gray text-small">If you didn't request a password reset, please ignore this message.</p>
+
+checklist_demo:
+    page_title: Website testing checklist
+    title: Website testing checklist
+    reset: Reset the checklist
+    sign_up: Sign up for free
+    intro: >
+        <p>You worked hard to build a nice website.<br>
+           Let's work just a bit more to make sure it's flawless!</p>
+        <p>Follow the steps in the checklist below to test your site for potential issues.<br>
+           Don't hesitate to click "Learn more" to get more information about a step.</p>
+        <p>To enjoy the fully-featured checklist with project-by-project progress and
+           collaboration features like comments, bug reports and live-updates,
+           <a href="%signUpLink%" class="text-link">sign up to Koalati for free</a>!</p>
 
 error_page:
     go_back: Go back to Koalati
