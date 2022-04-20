@@ -28,7 +28,7 @@ export class NbSidePanel extends LitElement {
 	{
 		return css`
 			${stylesReset}
-			:host { display: flex; width: 100%; max-width: 500px; flex-direction: column; background-color: var(--color-white); box-shadow: 0 0 3rem rgba(var(--shadow-rgb), .25); position: fixed; top: 0; right: 0; bottom: 0; }
+			:host { display: flex; width: 100%; max-width: 500px; flex-direction: column; background-color: var(--color-white); box-shadow: 0 0 3rem rgba(var(--shadow-rgb), .25); position: fixed; top: 0; right: 0; bottom: 0; z-index: 100; }
 
 			header { display: flex; justify-content: space-between; align-content: flex-start; gap: 1.5rem; padding: 1.5rem; background-color: var(--color-white); border-bottom: 1px solid var(--color-gray-light); }
 
@@ -75,7 +75,7 @@ export class NbSidePanel extends LitElement {
 	firstUpdated()
 	{
 		this.#originalFocusElement = getActiveElement();
-		this.shadowRoot.querySelector("#sidepanel").focus();
+		this.shadowRoot.querySelector(".close").focus();
 	}
 
 	render()
@@ -93,8 +93,8 @@ export class NbSidePanel extends LitElement {
 					<div class="context">${this.context}</div>
 				</div>
 				<div class="actions">
-					<nb-icon-button size="small" color="gray" @click=${this.close}>
-						<i class="far fa-times"></i>
+					<nb-icon-button class="close" size="small" color="gray" @click=${this.close}>
+						<i class="far fa-times" aria-label="${Translator.trans("generic.close_sidepanel")}"></i>
 					</nb-icon-button>
 				</div>
 			</header>

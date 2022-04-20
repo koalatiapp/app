@@ -50,6 +50,10 @@
 
 		{% include "_parts/analytics.html.twig" %}
 
+		<script>
+			window.mercureEventSource = { onmessage: () => {}, close: () => {} };
+		</script>
+
 		{{ encore_entry_script_tags('app') }}
     </head>
     <body>

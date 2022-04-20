@@ -30,7 +30,7 @@ hr.small,
 .text-green { color: var(--color-green); }
 
 /* Textual link */
-a.text-link { font-weight: 400; color: var(--color-blue); text-decoration: none; cursor: pointer; transition: all .15s ease; }
+a.text-link { font-weight: 400; color: var(--color-blue); text-decoration: underline; cursor: pointer; transition: all .15s ease; }
 a.text-link i { font-size: 1.15em; vertical-align: middle; }
 a.text-link:hover { color: var(--color-gray-darker); }
 

@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% trans %}checklist_demo.page_title{% endtrans %}{% endblock %}
+
+{% block head %}
+	<link rel="canonical" href="{{ url("checklist_demo") }}">
+
+	<style>
+		.intro { width: 72ch; max-width: 100%; font-size: 1.1em; }
+
+		footer { height: auto; margin-top: 0; background-color: #111; }
+		footer a { color: #dae1fb; }
+	</style>
+
+	<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+	<script src="{{ path('fos_js_routing_js', {callback: 'fos.Router.setData'}) }}"></script>
+	<script src="{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}"></script>
+	<script src="{{ url('bazinga_jstranslation_js') }}?{{ asset_version }}"></script>
+
+	{{ encore_entry_link_tags('checklist') }}
+{% endblock %}
+
+{% block body %}
+	<header class="sticky">
+		<a href="https://www.koalati.com" class="brand-logo">
+			<img src="{{ asset("media/brand/koalati-logo.svg") }}" alt="Koalati" width="150" loading="lazy">
+		</a>
+		<nb-button href="{{ path("registration") }}">
+			{% trans %}checklist_demo.sign_up{% endtrans %}
+		</nb-button>
+	</header>
+
+	<section>
+		<div class="container center column">
+			<div class="intro text-center">
+				<h1 class="huge">{% trans %}checklist_demo.title{% endtrans %}</h1>
+				{% trans with {"%signUpLink%": path("registration")} %}checklist_demo.intro{% endtrans %}
+			</div>
+
+			<nb-button onclick="document.querySelector('demo-checklist').reset()" size="tiny" color="gray">
+				<i class="far fa-arrows-rotate"></i>
+				&nbsp;
+				{% trans %}checklist_demo.reset{% endtrans %}
+			</nb-button>
+
+			<hr class="spacer small">
+
+			<demo-checklist data-template="{{ serializedItemGroups|json_encode }}"></demo-checklist>
+		</div>
+	</section>
+
+	<section class="wave-section">
+		<div class="cta-container text-center">
+			<h2>Wanna start shipping better websites?</h2>
+
+			<nb-button href="{{ path("registration") }}" size="large" color="white">Try Koalati for free today!</nb-button>
+
+			<hr class="spacer small">
+
+			<p class="text-small">
+				No credit card required.<br>
+				No tricking you into accidentally paying after your trial expires, either.
+			</p>
+		</div>
+	</section>
+{% endblock %}
+
+{% block javascripts %}
+	{{ encore_entry_script_tags('checklist') }}
+{% endblock %}

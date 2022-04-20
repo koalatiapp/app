@@ -33,6 +33,15 @@ export class AbstractDynamicList extends NbList {
 		this._isWaitingForServerResponse = false;
 	}
 
+	connectedCallback()
+	{
+		super.connectedCallback();
+
+		this.addEventListener("items-initialized", () => {
+			this.#initMercureUpdateListener();
+		}, { once: true });
+	}
+
 	render()
 	{
 		return [
@@ -43,6 +52,11 @@ export class AbstractDynamicList extends NbList {
 
 	firstUpdated()
 	{
+		if (this.items) {
+			this.dispatchEvent(new CustomEvent("items-initialized"));
+			return;
+		}
+
 		this.fetchListData();
 	}
 
@@ -131,12 +145,15 @@ export class AbstractDynamicList extends NbList {
 			this.items = Array.isArray(response.data) ? response.data : Object.values(response.data);
 
 			this.dispatchEvent(new CustomEvent("items-initialized"));
-
-			if (this.supportedEntityType()) {
-				this.#mercureUpdateCallback = (update) => this.#processMercureUpdate(update);
-				MercureClient.subscribe(this.supportedEntityType(), this.#mercureUpdateCallback);
-			}
 		});
+	}
+
+	#initMercureUpdateListener()
+	{
+		if (this.supportedEntityType()) {
+			this.#mercureUpdateCallback = (update) => this.#processMercureUpdate(update);
+			MercureClient.subscribe(this.supportedEntityType(), this.#mercureUpdateCallback);
+		}
 	}
 
 	#processMercureUpdate(update)

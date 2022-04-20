@@ -6,6 +6,7 @@ use App\Repository\Checklist\ItemGroupRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ItemGroupRepository::class)
@@ -16,6 +17,7 @@ class ItemGroup
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
 	 * @ORM\Column(type="integer")
+	 * @Groups({"default"})
 	 */
 	private ?int $id = null;
 
@@ -27,11 +29,13 @@ class ItemGroup
 
 	/**
 	 * @ORM\Column(type="string", length=255)
+	 * @Groups({"default"})
 	 */
 	private ?string $name;
 
 	/**
 	 * @ORM\OneToMany(targetEntity=Item::class, mappedBy="parentGroup")
+	 * @Groups({"default"})
 	 *
 	 * @var Collection<int,Item>
 	 */

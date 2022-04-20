@@ -1,7 +1,6 @@
 import { html, css, render } from "lit";
 import { AbstractDynamicList } from "../abstract-dynamic-list";
 import fontawesomeImport from "../../utils/fontawesome-import";
-import { ApiClient } from "../../utils/api";
 
 export class ChecklistItemList extends AbstractDynamicList {
 	static get styles()
@@ -60,14 +59,16 @@ export class ChecklistItemList extends AbstractDynamicList {
 							<i class="fad fa-circle-info"></i>&nbsp;
 							${Translator.trans("project_checklist.item.view_more")}
 						</a>
-						<a href="#" class="view-item-details comments ${item.unresolvedCommentCount ? "unresolved" : (item.commentCount ? "resolved" : "none")}"
-							@click=${e => { e.preventDefault(); list._expandChecklistItem(item, false); }}>
-							<i class="fad fa-comment"></i>&nbsp;
-							${item.unresolvedCommentCount
-								? Translator.transChoice("project_checklist.item.unresolved_comments_count", item.unresolvedCommentCount, { "count": item.unresolvedCommentCount })
-								: Translator.transChoice("project_checklist.item.comments_count", item.commentCount, { "count": item.commentCount })
-							}
-						</a>
+						${list.projectId ? html`
+							<a href="#" class="view-item-details comments ${item.unresolvedCommentCount ? "unresolved" : (item.commentCount ? "resolved" : "none")}"
+								@click=${e => { e.preventDefault(); list._expandChecklistItem(item, false); }}>
+								<i class="fad fa-comment"></i>&nbsp;
+								${item.unresolvedCommentCount
+									? Translator.transChoice("project_checklist.item.unresolved_comments_count", item.unresolvedCommentCount, { "count": item.unresolvedCommentCount })
+									: Translator.transChoice("project_checklist.item.comments_count", item.commentCount, { "count": item.commentCount })
+								}
+							</a>
+						`: ""}
 					`;
 				},
 				placeholder: html`
@@ -180,9 +181,9 @@ export class ChecklistItemList extends AbstractDynamicList {
 				break;
 			}
 		}
-		this.requestUpdate("items");
 
-		ApiClient.post("api_checklist_item_toggle", { id: item.id, is_completed: item.isCompleted ? 1 : 0 }, null);
+		this.requestUpdate("items");
+		this.dispatchEvent(new CustomEvent("checklist-item-toggled", { bubbles: true, composed: true, detail: { item, checked: item.isCompleted } }));
 
 		window.plausible("Checklist usage", { props: { action: item.isCompleted ? "Checked item" : "Unchecked item" } });
 	}
@@ -210,11 +211,12 @@ export class ChecklistItemList extends AbstractDynamicList {
 				</nb-accordion>
 			`: ""}
 
-			<hr>
-
-			<h3>${Translator.trans("comment.section_heading")}</h3>
-			<br>
-			<comment-list projectId=${this.projectId} checklistItemId=${item.id}></comment-list>
+			${this.projectId ? html`
+				<hr>
+				<h3>${Translator.trans("comment.section_heading")}</h3>
+				<br>
+				<comment-list projectId=${this.projectId} checklistItemId=${item.id}></comment-list>
+			` : ""}
 		`, sidepanel);
 		document.body.append(sidepanel);
 
