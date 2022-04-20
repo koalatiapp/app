@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Api;
+namespace App\Controller\Api\Public;
 
 use App\Controller\AbstractController;
 use App\Controller\Trait\ApiControllerTrait;
@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Cache\ItemInterface;
 
 /**
- * @Route("/api/link-metas", name="api_link_metas")
+ * @Route("/api/public/link-metas", name="api_link_metas")
  */
 class LinkMetasController extends AbstractController
 {

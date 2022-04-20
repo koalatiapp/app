@@ -27,7 +27,7 @@ class ApiAvailabilityTest extends AbstractAppTestCase
 	public function urlProvider()
 	{
 		yield ['/api/checklist/items', 'GET'];
-		yield ['/api/link-metas?url=https://koalati.com', 'GET'];
+		yield ['/api/public/link-metas?url=https://koalati.com', 'GET'];
 		yield ['/api/organization/members', 'GET'];
 		yield ['/api/organization/ew8BEeB2PO', 'GET'];
 		yield ['/api/project/automated-testing-settings/tools', 'GET'];
