@@ -33,10 +33,10 @@
 		<meta name="theme-color" content="#1d2c5e" media="(prefers-color-scheme: dark)">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
-		<meta name="description" content="{{ block("description") ?: "A QA platform for web agencies and developers who care." }}">
+		<meta name="description" content="{% block description %}A QA platform for web agencies and developers who care.{% endblock %}">
 		<meta property="og:site_name" content="Koalati">
 		<meta property="og:title" content="{{ block("title") ?: "Streamlined quality control for web developers" }}">
-		<meta property="og:image" content="{{ block("og_image") ?: absolute_url(asset('media/og-image.jpg')) }}">
+		<meta property="og:image" content="{% block og_image %}{{ absolute_url(asset('media/og-image.jpg')) }}{% endblock %}">
 		<meta property="og:type" content="website">
 		<meta name="twitter:card" content="summary_large_image">
 		<meta name="twitter:site" content="@koalatiweb">
