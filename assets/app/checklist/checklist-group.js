@@ -99,6 +99,7 @@ export class ChecklistGroup extends LitElement {
 
 	_updateProgression()
 	{
+		this.items = this.list.items;
 		this.itemCount = this.list.items.length;
 		this.completedItemCount = this.list.items.filter(item => item.isCompleted).length;
 
