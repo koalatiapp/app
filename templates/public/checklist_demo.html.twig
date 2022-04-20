@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}{% trans %}checklist_demo.page_title{% endtrans %}{% endblock %}
+{% block description %}{% trans %}checklist_demo.meta_description{% endtrans %}{% endblock %}
+{% block og_image %}{{ absolute_url(asset('media/checklist-og-image.jpg')) }}{% endblock %}
 
 {% block head %}
 	<link rel="canonical" href="{{ url("checklist_demo") }}">

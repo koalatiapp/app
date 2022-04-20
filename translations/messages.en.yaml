@@ -210,6 +210,7 @@ password_reset:
 
 checklist_demo:
     page_title: Website testing checklist
+    meta_description: Improve your websites by following this detailed testing checklist!
     title: Website testing checklist
     reset: Reset the checklist
     sign_up: Sign up for free
