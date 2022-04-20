@@ -19,12 +19,7 @@
 {% endblock %}
 
 {% block body %}
-	{% for group in project.checklist.itemGroups|default([]) %}
-		<checklist-group projectId="{{ project.id|hashids_encode }}" groupId="{{ group.id|hashids_encode }}">
-			{{ group.name }}
-		</checklist-group>
-		<hr class="spacer">
-	{% endfor %}
+	<project-checklist projectId="{{ project.id|hashids_encode }}"></project-checklist>
 {% endblock %}
 
 {% block javascripts %}

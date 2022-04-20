@@ -53,6 +53,7 @@ export class ChecklistGroup extends LitElement {
 		this.completedItemCount = 0;
 		this.previouslyCompleted = false;
 		this.closed = false;
+		this.items = null;
 	}
 
 	render()
@@ -76,7 +77,7 @@ export class ChecklistGroup extends LitElement {
 						</span>
 					`}
 				</h2>
-				<checklist-item-list projectId=${this.projectId} groupId=${this.groupId} @items-initialized=${this._initProgression} @items-updated=${this._updateProgression} aria-hidden=${this.closed ? "true" : "false"} id="checklist-group-${this.groupId}"></checklist-item-list>
+				<checklist-item-list .items=${this.items} projectId=${this.projectId} groupId=${this.groupId} @items-initialized=${this._initProgression} @items-updated=${this._updateProgression} aria-hidden=${this.closed ? "true" : "false"} id="checklist-group-${this.groupId}"></checklist-item-list>
 			</div>
 	  	`;
 	}
