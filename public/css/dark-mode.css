@@ -78,7 +78,7 @@ input[type="checkbox"],
 input[type="radio"] { border-color: #444867; }
 
 /* Text links */
-a.text-link { color: var(--color-blue-light); }
+a.text-link { color: var(--color-blue-darker); }
 
 /* Text colors */
 .text-red { color: #d65757; }
