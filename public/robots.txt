@@ -1,6 +1,3 @@
 User-agent: *
-Allow: /login
-Allow: /sign-up
-Allow: /reset-password
-Allow: /free-checklist
-Disallow: /
+Disallow: /api/
+Allow: /
