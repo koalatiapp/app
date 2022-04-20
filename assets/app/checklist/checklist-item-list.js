@@ -59,7 +59,7 @@ export class ChecklistItemList extends AbstractDynamicList {
 							<i class="fad fa-circle-info"></i>&nbsp;
 							${Translator.trans("project_checklist.item.view_more")}
 						</a>
-						${this.projectId ? html`
+						${list.projectId ? html`
 							<a href="#" class="view-item-details comments ${item.unresolvedCommentCount ? "unresolved" : (item.commentCount ? "resolved" : "none")}"
 								@click=${e => { e.preventDefault(); list._expandChecklistItem(item, false); }}>
 								<i class="fad fa-comment"></i>&nbsp;
