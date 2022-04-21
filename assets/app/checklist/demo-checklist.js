@@ -35,8 +35,16 @@ export class DemoChecklist extends LitElement
 			// There's no mercure update to trigger the group progress update,
 			// so we have to trigger it manually.
 			const updatedItemGroup = this.shadowRoot.activeElement;
-			const updatedItemList = updatedItemGroup.shadowRoot.activeElement;
-			updatedItemList.dispatchEvent(new CustomEvent("items-updated"));
+			const updatedItemList = updatedItemGroup?.shadowRoot?.activeElement;
+
+			if (updatedItemList) {
+				updatedItemList.dispatchEvent(new CustomEvent("items-updated"));
+			} else {
+				// If we couldn't find the affected group... update all of them, just to be safe.
+				for (const itemGroup of this.shadowRoot.querySelectorAll("checklist-group")) {
+					itemGroup.list.dispatchEvent(new CustomEvent("items-updated"));
+				}
+			}
 		});
 	}
 
