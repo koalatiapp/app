@@ -9,7 +9,7 @@ export class ChecklistItemList extends AbstractDynamicList {
 			super.styles,
 			css`
 				.nb--list-header { display: none; }
-				.nb--list-item { grid-template-areas: "checkbox title"; grid-template-columns: 1.5rem 1fr 2.5rem; }
+				.nb--list-item { grid-template-areas: "checkbox title"; grid-template-columns: 1.5rem 1fr; }
 
 				.nb--list-item-column[nb-column="checkbox"] { display: flex; }
 				nb-markdown { display: block; font-size: 1.05em; font-weight: 500; }
