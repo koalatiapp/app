@@ -10,7 +10,7 @@ export class NbButton extends LitElement {
 			stylesReset,
 			css`
 				:host { display: inline-block; }
-				.button { display: flex; justify-content: center; align-items: center; padding: 16px 30px; font-family: inherit; font-size: .85rem; font-weight: 600; line-height: 1.3; text-decoration: none; text-align: center; color: var(--button-text-color, #fff); background-color: var(--button-bg-color, #2751e6); border: none; border-radius: 13px; box-shadow: 0 2px 10px 0 rgba(var(--shadow-rgb, "0, 0, 0"), .15); cursor: pointer; transition: background .25s ease, box-shadow .25s ease; }
+				.button { display: flex; justify-content: center; align-items: center; padding: 16px 30px; margin: 0; font-family: inherit; font-size: .85rem; font-weight: 600; line-height: 1.3; text-decoration: none; text-align: center; color: var(--button-text-color, #fff); background-color: var(--button-bg-color, #2751e6); border: none; border-radius: 13px; box-shadow: 0 2px 10px 0 rgba(var(--shadow-rgb, "0, 0, 0"), .15); cursor: pointer; transition: background .25s ease, box-shadow .25s ease; }
 				.button:hover { color: var(--button-text-color-hover, white); background-color: var(--button-bg-color-hover, #5074f2); box-shadow: 0 3px 15px 0 rgba(var(--shadow-rgb, "0, 0, 0"), .25); }
 				.button.small { padding: 10px 20px; font-weight: 500; }
 				.button.large { padding: 18px 45px; font-size: 1rem; }
