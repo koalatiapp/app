@@ -1,5 +1,6 @@
 import { LitElement, html, css } from "lit";
 import stylesReset from "../styles-reset.js";
+import fontawesomeImport from "../../utils/fontawesome-import";
 
 export class NbInput extends LitElement {
 	static get formAssociated()
@@ -29,6 +30,11 @@ export class NbInput extends LitElement {
 				:host(.medium) { width: 40ch; }
 				:host([type="date"]) { width: 12ch; }
 
+				/* Password inputs */
+				.input-wrapper { width: 100%; position: relative; }
+				.input[type="password"] { padding-right: calc(2rem + 16px); }
+				.toggle-reveal { position: absolute; top: 8px; right: 8px; }
+
 				@media (prefers-color-scheme: dark) {
 					.input { color: var(--color-black); background-color: var(--color-gray-lighter); border-color: #444867; }
 					.input::placeholder { color: var(--color-gray-light); }
@@ -47,6 +53,7 @@ export class NbInput extends LitElement {
 			step: {type: Number},
 			required: {type: Boolean},
 			readonly: {type: Boolean},
+			revealed: {type: Boolean},
 			disabled: {type: Boolean},
 			disableAutofill: {type: Boolean},
 			rows: {type: Number},
@@ -68,6 +75,7 @@ export class NbInput extends LitElement {
 		this.rows = 3;
 		this._required = false;
 		this.readonly = false;
+		this.revealed = false;
 		this.disabled = false;
 		this.disableAutofill = false;
 		this.inputId = "input" + Math.random().toString(16).slice(2);
@@ -86,7 +94,15 @@ export class NbInput extends LitElement {
 		return html`
 			${this.label ? html`<label for=${this.inputId}>${this.label}</label>` : ""}
 			<slot></slot>
-			<input class="input" id=${this.inputId} name=${this.disableAutofill ? "" : this.name} type=${this.type} placeholder=${this.placeholder} autocomplete=${this.autocomplete} value=${this.value}  ?readonly=${this.readonly} ?disabled=${this.disabled} @input=${this._updateValue}>
+			<div class="input-wrapper">
+				<input class="input" id=${this.inputId} name=${this.disableAutofill ? "" : this.name} type=${this.type == "password" && this.revealed ? "text" : this.type} placeholder=${this.placeholder} autocomplete=${this.autocomplete} value=${this.value}  ?readonly=${this.readonly} ?disabled=${this.disabled} @input=${this._updateValue}>
+				${this.type == "password" ? html`
+					<nb-icon-button class="toggle-reveal" size="tiny" color="gray" @click=${this.#revealPassword}>
+						<i class="fas fa-${this.revealed ? "eye-slash" : "eye"}" aria-label=${Translator.trans(`generic.password.${this.revealed ? "hide" : "reveal"}`)}></i>
+					</button>
+					${fontawesomeImport}
+				` : ""}
+			</div>
 	  	`;
 	}
 
@@ -134,6 +150,18 @@ export class NbInput extends LitElement {
 		this.value = newValue;
 		this.internals.setValidity(validity, validationMessage, input);
 		this.internals.setFormValue(newValue);
+	}
+
+	#revealPassword()
+	{
+		this.revealed = !this.revealed;
+
+		const input = this.input;
+		const end = input.value.length;
+
+		// Move focus to END of input field
+		input.focus();
+		setTimeout(() => input.setSelectionRange(end, end), 0);
 	}
 }
 

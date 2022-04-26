@@ -18,6 +18,9 @@ generic:
             hours: "%hours%h"
             minutes: "%minutes%m"
             seconds: "%seconds%s"
+    password:
+        reveal: Reveal password
+        hide: Hide password
 
 api:
     flash:

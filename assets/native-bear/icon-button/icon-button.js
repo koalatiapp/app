@@ -9,6 +9,7 @@ export class NbIconButton extends NbButton {
 			css`
 				.button { width: 3rem; padding: 11px; font-size: 1.6rem; line-height: 1; }
 				.button.small { width: 2.2rem; padding: 11px; font-size: .85rem; }
+				.button.tiny { width: 2rem; padding: 8px; font-size: .8rem; }
 			`
 		];
 	}
