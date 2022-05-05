@@ -28,7 +28,7 @@ export class NbButton extends LitElement {
 
 				@media (prefers-color-scheme: dark) {
 					.button.gray { --button-bg-color: #393f56; --button-bg-color-hover: var(--color-gray-light); color: var(--color-gray); }
-					.button.white { --button-bg-color: var(--color-black); --button-bg-color-hover: var(--color-gray-dark); --button-text-color-hover: var(--color-blue-dark); }
+					.button.white { --button-text-color: var(--color-white); --button-bg-color: var(--color-black); --button-bg-color-hover: var(--color-gray-dark); --button-text-color-hover: var(--color-blue-dark); }
 					.button.lighter { --button-bg-color: var(--color-blue-20); --button-bg-color-hover: var(--color-blue-50); }
 				}
 			`
