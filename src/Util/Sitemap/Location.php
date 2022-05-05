@@ -20,11 +20,6 @@ class Location
 	 */
 	public ?string $title = null;
 
-	/**
-	 * Error code encountered when fetching the page or document.
-	 */
-	public ?int $errorCode = null;
-
 	public function __construct(string $url, ?string $title = null)
 	{
 		$this->url = $url;
