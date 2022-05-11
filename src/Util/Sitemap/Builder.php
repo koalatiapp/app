@@ -2,7 +2,7 @@
 
 namespace App\Util\Sitemap;
 
-use App\Exception\CrawlingException;
+use App\Util\Sitemap\Exception\CrawlerException;
 use App\Util\Url;
 use DOMDocument;
 use Exception;
@@ -16,12 +16,7 @@ class Builder
 	 *
 	 * @var array<string, \App\Util\Sitemap\Location>
 	 */
-	protected array $locations = [];
-
-	/**
-	 * Whether the website should be crawled to generate a more complete sitemap.
-	 */
-	protected bool $shouldCrawlWebsite = true;
+	private array $locations = [];
 
 	public function __construct(
 		private Url $urlHelper,
@@ -39,53 +34,39 @@ class Builder
 		return $this->locations;
 	}
 
-	public function enableWebsiteCrawling(): self
-	{
-		$this->shouldCrawlWebsite = true;
-
-		return $this;
-	}
-
-	public function disableWebsiteCrawling(): self
-	{
-		$this->shouldCrawlWebsite = false;
-
-		return $this;
-	}
-
 	/**
 	 * Builds a sitemap from a website's URL.
 	 * The website's sitemap, if available, is fetched and scanned.
 	 * If the builder's `crawlWebsite` property is set to true, the website will also be crawled to generate a more complete sitemap.
 	 *
 	 * @param string $websiteUrl URL of the website to build the sitemap from
+	 * @param callable $pageFoundCallback Callable to invoke anytime a new page is found.
+	 * The callback will receive a `App\Util\Sitemap\Location` argument with the page's information.
 	 *
 	 * @return self
 	 */
-	public function buildFromWebsiteUrl(string $websiteUrl)
+	public function buildFromWebsiteUrl(string $websiteUrl, callable $pageFoundCallback)
 	{
 		// Standardize the provided URL
 		$websiteUrl = $this->urlHelper->standardize($websiteUrl, false);
 
 		// Check if a sitemap is available and scan it if possible
-		if ($sitemapUrl = $this->findSitemapFromWebsiteUrl($websiteUrl)) {
+		$sitemapUrl = $this->findSitemapFromWebsiteUrl($websiteUrl);
+
+		if ($sitemapUrl) {
 			foreach ($this->scanSitemap($sitemapUrl) as $url) {
-				$this->addLocation($url);
+				call_user_func($pageFoundCallback,  new Location($url));
 			}
 		}
 
-		// Crawl the website for a more complete sitemap (unless disabled)
-		if ($this->shouldCrawlWebsite) {
-			try {
-				$this->crawlWebsite($websiteUrl);
-			} catch (CrawlingException $exception) {
-				// Oh well, let's hope the sitemap was good enough...
-				$this->logger->error($exception->getMessage(), $exception->getTrace());
-			}
+		// Crawl the website for a more complete sitemap
+		try {
+			$crawler = new Crawler($websiteUrl, $pageFoundCallback);
+			$crawler->crawl();
+		} catch (CrawlerException $exception) {
+			// Oh well, let's hope the sitemap was good enough...
+			$this->logger->error($exception->getMessage(), $exception->getTrace());
 		}
-
-		$this->standardizeProtocols();
-		$this->fetchMissingTitles();
 
 		return $this;
 	}
@@ -141,77 +122,5 @@ class Builder
 		}
 
 		return $urls;
-	}
-
-	/**
-	 * Crawls a website's pages and adds its pages to the Builder's internal locations array.
-	 *
-	 * @return self
-	 */
-	public function crawlWebsite(string $websiteUrl)
-	{
-		$websiteUrl = $this->urlHelper->standardize($websiteUrl, false);
-		$pages = (new Crawler($websiteUrl))->crawl();
-
-		foreach ($pages as $url => $title) {
-			$this->addLocation($url, $title);
-		}
-
-		return $this;
-	}
-
-	/**
-	 * Adds a location to the sitemap.
-	 */
-	protected function addLocation(string $url, ?string $title = null): self
-	{
-		if (!isset($this->locations[$url])) {
-			$this->locations[$url] = new Location($url, $title);
-		} elseif ($title !== null) {
-			$this->locations[$url]->title = $title;
-		}
-
-		return $this;
-	}
-
-	/**
-	 * Standardizes the protocol of the URLs in the sitemap.
-	 * If one or more URL use HTTPS, all URLs will be converted to use it.
-	 */
-	protected function standardizeProtocols(): self
-	{
-		$useHttps = false;
-
-		foreach ($this->locations as $url => $location) {
-			if (stripos($url, 'https://') === 0) {
-				$useHttps = true;
-				break;
-			}
-		}
-
-		if ($useHttps) {
-			$newLocations = [];
-
-			foreach ($this->locations as $url => $location) {
-				$newUrl = $this->urlHelper->standardize($url, true);
-				$location->url = $newUrl;
-				$newLocations[$newUrl] = $location;
-			}
-
-			$this->locations = $newLocations;
-		}
-
-		return $this;
-	}
-
-	protected function fetchMissingTitles(): self
-	{
-		foreach ($this->locations as &$location) {
-			if (!$location->title) {
-				$location->fetchTitle();
-			}
-		}
-
-		return $this;
 	}
 }
