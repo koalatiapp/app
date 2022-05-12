@@ -60,7 +60,7 @@ class SitemapRequestHandler implements MessageHandlerInterface
 				}
 			}
 			// Otherwise, create the new page
-			else {
+			else if (strlen($location->url) <= 510) {
 				$page = new Page($project, $location->url, $location->title);
 				$pagesByUrl[$location->url] = $page;
 				$this->em->persist($page);
