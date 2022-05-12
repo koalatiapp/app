@@ -1,6 +1,7 @@
 // Polyfills
 import "element-internals-polyfill";
 
+export {NbPagination} from "./pagination/pagination";
 export {NbList} from "./list/list";
 export {NbField} from "./field/field";
 export {NbInput} from "./input/input";
