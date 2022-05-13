@@ -75,6 +75,11 @@
     "preferred-install": {
       "*": "dist"
     },
+	"allow-plugins": {
+		"composer/*": true,
+		"phpstan/extension-installer": true,
+		"symfony/*": true
+	},
     "sort-packages": true
   },
   "autoload": {
