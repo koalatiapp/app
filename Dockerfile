@@ -109,12 +109,12 @@ ENV APP_ENV ${APP_ENV:-prod}
 RUN set -eux; \
 	mkdir -p var/cache var/log; \
 	if [ "$APP_ENV" = "prod" ]; then \
-		composer install --prefer-dist --no-dev --no-progress --no-interaction; \
+		composer install --prefer-dist --no-dev --no-progress --no-scripts --no-interaction; \
 		composer dump-autoload --classmap-authoritative --no-dev; \
 		composer symfony:dump-env prod; \
 		composer run-script --no-dev post-install-cmd; \
 	else \
-		composer install --prefer-dist --no-progress --no-interaction; \
+		composer install --prefer-dist --no-progress --no-scripts --no-interaction; \
 		composer dump-autoload --classmap-authoritative; \
 		composer symfony:dump-env dev; \
 		composer run-script --dev post-install-cmd; \
