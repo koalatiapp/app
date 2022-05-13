@@ -29,7 +29,7 @@ RUN set -eux; \
 		libxslt-dev \
 		zlib-dev \
 	; \
-	apk add --update nodejs npm; \
+	apk add --update nodejs npm supervisor; \
 	docker-php-ext-configure zip; \
 	docker-php-ext-install -j$(nproc) \
 		pcntl \
