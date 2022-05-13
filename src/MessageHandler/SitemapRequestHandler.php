@@ -12,9 +12,11 @@ use App\Util\Sitemap\Location;
 use App\Util\Url;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Symfony\Component\HttpClient\Exception\TransportException;
 use Symfony\Component\Messenger\Exception\UnrecoverableMessageHandlingException;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class SitemapRequestHandler implements MessageHandlerInterface
 {
@@ -24,6 +26,7 @@ class SitemapRequestHandler implements MessageHandlerInterface
 		private Url $urlHelper,
 		private EntityManagerInterface $em,
 		private MessageBusInterface $bus,
+		private HttpClientInterface $httpClient,
 	)
 	{
 	}
@@ -39,16 +42,20 @@ class SitemapRequestHandler implements MessageHandlerInterface
 			return;
 		}
 
+		$supportsSsl = $this->websiteSupportsSsl($project);
 		// Crawl website and sitemap, creating/updating pages everytime a page is found
-		$websiteUrl = $this->urlHelper->standardize($project->getUrl(), false);
+		$websiteUrl = $this->urlHelper->standardize($project->getUrl(), $supportsSsl);
 		/** @var array<string,Page> */
 		$pagesByUrl = [];
 
 		foreach ($project->getPages() as $page) {
-			$pagesByUrl[$page->getUrl()] = $page;
+			$pageUrl = $this->urlHelper->standardize($page->getUrl(), $supportsSsl);
+			$pagesByUrl[$pageUrl] = $page;
 		}
 
-		$this->sitemapBuilder->buildFromWebsiteUrl($websiteUrl, function (Location $location) use (&$pagesByUrl, $project, $message) {
+		$this->sitemapBuilder->buildFromWebsiteUrl($websiteUrl, function (Location $location) use (&$pagesByUrl, $project, $message, $supportsSsl) {
+			$location->url = $this->urlHelper->standardize($location->url, $supportsSsl);
+
 			// Check if an existing page can be updated
 			if (isset($pagesByUrl[$location->url])) {
 				$page = $pagesByUrl[$location->url];
@@ -121,5 +128,23 @@ class SitemapRequestHandler implements MessageHandlerInterface
 
 			usleep(10);
 		}
+	}
+
+	private function websiteSupportsSsl(Project $project): bool
+	{
+		try {
+			$httpsUrl = $this->urlHelper->standardize($project->getUrl(), true);
+			$response = $this->httpClient->request("GET", $httpsUrl);
+
+			if (!in_array(substr((string)$response->getStatusCode(), 0, 1), ["2", "3"])) {
+				return false;
+			}
+		} catch (TransportException $exception) {
+			if (str_contains(strtolower($exception->getMessage()), "ssl")) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 }
