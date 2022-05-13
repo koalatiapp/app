@@ -124,6 +124,8 @@ RUN set -eux; \
 	chmod +x bin/console; sync
 VOLUME /srv/app/var
 
+RUN ls -lah
+
 ENTRYPOINT ["docker-entrypoint"]
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
 
