@@ -1,7 +1,7 @@
 # Messenger
 
-[Symfony's Messenger](https://symfony.com/doc/current/messenger.html#consuming-messages-running-the-worker) runs automatically in the background of the `php` container.
+[Symfony's Messenger](https://symfony.com/doc/current/messenger.html#consuming-messages-running-the-worker) runs in the `php` container, handled via supervisor.
 
-This is currently done via a [cron job](cronjobs.md]).
-
-The outputs of the command are muted by default, but all PHP errors are reported to Sentry if the `SENTRY_DSN` environment variable is configured.
+The configuration for the messenger can be found in:
+- [`config/packages/messenger.yaml`](/config/packages/messenger.yaml)
+- [`docker/php/supervisor/supervisord.conf`](/docker/php/supervisor/supervisord.conf)

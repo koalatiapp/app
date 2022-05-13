@@ -5,14 +5,24 @@ framework:
 
         transports:
             # https://symfony.com/doc/current/messenger.html#transport-configuration
-            async: '%env(MESSENGER_TRANSPORT_DSN)%'
+            async_priority_high:
+                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                 options:
+                    queue_name: high
+                    redeliver_timeout: 60
+
+            async_priority_low:
+                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                 options:
+                    queue_name: low
+                    redeliver_timeout: 60
             # failed: 'doctrine://default?queue_name=failed'
             # sync: 'sync://'
 
         routing:
             # Route your messages to the transports
-            'App\Message\SitemapRequest': async
-            'App\Message\TestingRequest': async
-            'App\Message\TestingStatusRequest': async
-            'App\Message\ScreenshotRequest': async
-            'App\Message\FaviconRequest': async
+            'App\Message\SitemapRequest': async_priority_high
+            'App\Message\TestingRequest': async_priority_high
+            'App\Message\TestingStatusRequest': async_priority_low
+            'App\Message\ScreenshotRequest': async_priority_high
+            'App\Message\FaviconRequest': async_priority_high
