@@ -29,7 +29,7 @@ RUN set -eux; \
 		libxslt-dev \
 		zlib-dev \
 	; \
-	apk add --update nodejs npm supervisor; \
+	apk add --update nodejs npm; \
 	docker-php-ext-configure zip; \
 	docker-php-ext-install -j$(nproc) \
 		pcntl \
@@ -69,8 +69,6 @@ HEALTHCHECK --interval=10s --timeout=3s --retries=3 CMD ["docker-healthcheck"]
 
 RUN ln -s $PHP_INI_DIR/php.ini-production $PHP_INI_DIR/php.ini
 COPY docker/php/conf.d/symfony.prod.ini $PHP_INI_DIR/conf.d/symfony.ini
-
-COPY docker/php/supervisor/supervisord.conf /etc/supervisord.conf
 
 COPY docker/php/php-fpm.d/zz-docker.conf /usr/local/etc/php-fpm.d/zz-docker.conf
 
@@ -124,10 +122,8 @@ RUN set -eux; \
 	chmod +x bin/console; sync
 VOLUME /srv/app/var
 
-RUN ls -lah
-
 ENTRYPOINT ["docker-entrypoint"]
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
+CMD ["php-fpm"]
 
 FROM caddy:${CADDY_VERSION}-builder-alpine AS symfony_caddy_builder
 

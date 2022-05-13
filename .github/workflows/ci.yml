@@ -59,7 +59,6 @@ jobs:
               run: docker-compose pull
             - name: Start services
               run: docker-compose --env-file .env.test up --build -d
-            - run: docker-compose exec -T php ls -lah
             - name: Wait for services
               run: |
                   APP_BOOT_TIMEOUT=`expr $(date +%s) + 600`
@@ -87,7 +86,6 @@ jobs:
                     esac
                   done
                   exit 1
-            - run: docker-compose exec -T php ls -lah
             - name: Check HTTP reachability
               run: curl http://localhost
             - name: Check HTTPS reachability
@@ -100,7 +98,6 @@ jobs:
               run: NODE_ENV=test npm run encore prod
             - name: Install Playwright browsers
               run: npx playwright install
-            - run: docker-compose exec -T php ls -lah
             - name: Run tests
               run: ./DEV/ci/run-tests.php --verbose
             - name: Save log artifacts
