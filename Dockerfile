@@ -104,8 +104,6 @@ RUN composer create-project "symfony/skeleton ${SYMFONY_VERSION}" . --stability=
 
 COPY . .
 
-RUN ls -lah vendor
-
 ARG APP_ENV="prod"
 ENV APP_ENV ${APP_ENV:-prod}
 RUN set -eux; \
@@ -124,10 +122,6 @@ RUN set -eux; \
 	npm ci --production; \
 	npm run encore production; \
 	chmod +x bin/console; sync
-
-RUN ls -lah vendor
-
-
 VOLUME /srv/app/var
 
 ENTRYPOINT ["docker-entrypoint"]
