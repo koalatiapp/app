@@ -113,7 +113,7 @@ export class RecommendationDetails extends LitElement {
 				return html`
 					<nb-accordion ?open=${this.recommendationGroup.recommendations.indexOf(recommendation) === 0}>
 						<div slot="summary">
-							<div class="page-title">${escapeHtml(recommendation.relatedPage.title) || Translator.trans("page.unknown_title")}</div>
+							<div class="page-title">${escapeHtml(recommendation.relatedPage.title) || recommendation.relatedPage.url}</div>
 							<div class="page-url">${recommendation.relatedPage.url}</div>
 						</div>
 
