@@ -109,6 +109,7 @@ class Page
 	public function setTitle(?string $title): self
 	{
 		$this->title = mb_substr($title ?: '', 0, 255);
+		$this->setDateUpdated(new DateTime());
 
 		return $this;
 	}

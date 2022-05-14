@@ -2,7 +2,9 @@
 
 namespace App\Util\Sitemap;
 
-use App\Exception\CrawlingException;
+use App\Util\Sitemap\Exception\CrawlerException;
+use App\Util\Sitemap\Exception\CrawlerPageMaximumException;
+use App\Util\Sitemap\Exception\CrawlerTimeoutException;
 use Exception;
 use Symfony\Component\DomCrawler\Crawler as DomCrawler;
 use VDB\Spider\Discoverer\XPathExpressionDiscoverer;
@@ -16,15 +18,24 @@ use VDB\Spider\Spider;
 
 class Crawler
 {
-	protected Spider $spider;
+	public const MAX_CRAWL_DURATION = 1800;
+	public const MAX_CRAWL_PAGES = 2500;
 
-	public function __construct(string $websiteUrl)
+	/**
+	 * @var array<string,Location>
+	 */
+	private array $pagesFound = [];
+
+	private Spider $spider;
+
+	public function __construct(string $websiteUrl, ?callable $pageFoundCallback = null)
 	{
-		$this->spider = $this->initializeSpider($websiteUrl);
+		$this->spider = $this->initializeSpider($websiteUrl, $pageFoundCallback);
 	}
 
-	protected function initializeSpider(string $websiteUrl): Spider
+	protected function initializeSpider(string $websiteUrl, ?callable $pageFoundCallback = null): Spider
 	{
+		$startTime = microtime(true);
 		$spider = new Spider($websiteUrl);
 		/**
 		 * @var \VDB\Spider\QueueManager\InMemoryQueueManager
@@ -55,47 +66,68 @@ class Crawler
 			[$politenessPolicyEventListener, 'onCrawlPreRequest']
 		);
 
+		// Check if the maximum crawl duration has been exceeded
+		$downloader->getDispatcher()->addListener(
+			SpiderEvents::SPIDER_CRAWL_PRE_REQUEST,
+			function () use ($startTime) {
+				if (count($this->pagesFound) >= Crawler::MAX_CRAWL_PAGES) {
+					throw new CrawlerPageMaximumException();
+				}
+
+				if (microtime(true) >= $startTime + Crawler::MAX_CRAWL_DURATION) {
+					throw new CrawlerTimeoutException();
+				}
+			}
+		);
+
+		$spider->getDispatcher()->addListener(
+			SpiderEvents::SPIDER_CRAWL_RESOURCE_PERSISTED,
+			function () use ($downloader, $pageFoundCallback) {
+				$persistenceHandler = $downloader->getPersistenceHandler();
+
+				/** @var \VDB\Spider\Resource */
+				$resource = $persistenceHandler->current();
+				$persistenceHandler->next();
+
+				/** @var DomCrawler */
+				$crawler = $resource->getCrawler();
+
+				// Only add pages with an <html> tag to the list - others are likely files or images
+				if (!$crawler->filterXpath('//html')->count()) {
+					return;
+				}
+
+				$url = $this->getStandardUrlFromCrawler($crawler);
+
+				if (!isset($this->pagesFound[$url])) {
+					$this->pagesFound[$url] = new Location($url);
+				}
+
+				// If this page has already been crawled successfully, skip it
+				if ($this->pagesFound[$url]->title) {
+					return;
+				}
+
+				try {
+					$title = $crawler->filterXpath('//title')->text();
+				} catch (Exception $exception) {
+					$title = null;
+				}
+
+				$this->pagesFound[$url]->title = $title;
+
+				if ($pageFoundCallback) {
+					call_user_func($pageFoundCallback, $this->pagesFound[$url]);
+				}
+			}
+		);
+
 		return $spider;
 	}
 
 	/**
-	 * @return array<string,string|null> Array of page titles, indexed by URL
-	 */
-	public function crawlPages(): array
-	{
-		$pages = [];
-		$this->spider->crawl();
-
-		foreach ($this->spider->getDownloader()->getPersistenceHandler() as $resource) {
-			/** @var DomCrawler */
-			$crawler = $resource->getCrawler();
-
-			// Only add pages with an <html> tag to the list - others are likely files or images
-			if (!$crawler->filterXpath('//html')->count()) {
-				continue;
-			}
-
-			$url = $this->getStandardUrlFromCrawler($crawler);
-
-			// If this page has already been crawled successfully, skip it
-			if (($pages[$url] ?? null) !== null) {
-				continue;
-			}
-
-			try {
-				$title = $crawler->filterXpath('//title')->text();
-			} catch (Exception $exception) {
-				$title = null;
-			}
-
-			$pages[$url] = $title;
-		}
-
-		return $pages;
-	}
-
-	/**
-	 * Returns the canonical URL if available, or the `$crawler->getUri()` otherwise.
+	 * Returns the canonical URL if available, then the og:url if available,
+	 * or the `$crawler->getUri()` otherwise.
 	 */
 	private function getStandardUrlFromCrawler(DomCrawler $crawler): string
 	{
@@ -107,43 +139,30 @@ class Crawler
 			return $canonicalUrl;
 		}
 
+		// Check for og:URL
+		$ogurlTag = $crawler->filterXPath('//meta[@property="og:url"]');
+		if ($ogurlTag->count()) {
+			$ogurl = $ogurlTag->attr('content');
+
+			return $ogurl;
+		}
+
 		return $crawler->getUri();
 	}
 
 	/**
-	 * Discards repeated URLs (ex.: both HTTP and HTTPS are present, etc.).
+	 * Crawls a website's pages and returns its pages URLs and titles.
 	 *
-	 * @param array<string,string|null> $pages
-	 *
-	 * @return array<string,string|null> Array of page titles, indexed by URL
-	 */
-	public function filterDuplicatePages(array $pages): array
-	{
-		// Discard repeated URLs (ex.: both HTTP and HTTPS are present, etc.)
-		foreach (array_keys($pages) as $url) {
-			$httpUrl = str_replace('https://', 'http://', $url);
-			if ($httpUrl != $url && isset($pages[$httpUrl])) {
-				unset($pages[$httpUrl]);
-			}
-		}
-
-		return $pages;
-	}
-
-	/**
-	 * Crawls a website's pages and returns an array of its pages URLs and titles.
-	 *
-	 * @return array<string,string|null> Array of page titles, indexed by URL
+	 * @return array<string,Location> Array of pages (locations), indexed by URL
 	 */
 	public function crawl(): array
 	{
 		try {
-			$pages = $this->crawlPages();
-			$pages = $this->filterDuplicatePages($pages);
+			$this->spider->crawl();
 		} catch (\Exception $exception) {
-			throw new CrawlingException(previous: $exception);
+			throw new CrawlerException(previous: $exception);
 		}
 
-		return $pages;
+		return $this->pagesFound;
 	}
 }

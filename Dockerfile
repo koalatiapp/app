@@ -29,7 +29,7 @@ RUN set -eux; \
 		libxslt-dev \
 		zlib-dev \
 	; \
-	apk add --update nodejs npm; \
+	apk add --update nodejs npm supervisor; \
 	docker-php-ext-configure zip; \
 	docker-php-ext-install -j$(nproc) \
 		pcntl \
@@ -70,6 +70,8 @@ HEALTHCHECK --interval=10s --timeout=3s --retries=3 CMD ["docker-healthcheck"]
 RUN ln -s $PHP_INI_DIR/php.ini-production $PHP_INI_DIR/php.ini
 COPY docker/php/conf.d/symfony.prod.ini $PHP_INI_DIR/conf.d/symfony.ini
 
+COPY docker/php/supervisor/supervisord.conf /etc/supervisord.conf
+
 COPY docker/php/php-fpm.d/zz-docker.conf /usr/local/etc/php-fpm.d/zz-docker.conf
 
 COPY docker/php/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
@@ -91,7 +93,7 @@ ARG STABILITY="stable"
 ENV STABILITY ${STABILITY:-stable}
 
 # Allow to select skeleton version
-ARG SYMFONY_VERSION=""
+ARG SYMFONY_VERSION="5.4.*"
 
 # Download the Symfony skeleton and leverage Docker cache layers
 RUN composer create-project "symfony/skeleton ${SYMFONY_VERSION}" . --stability=$STABILITY --prefer-dist --no-dev --no-progress --no-interaction; \
@@ -123,7 +125,7 @@ RUN set -eux; \
 VOLUME /srv/app/var
 
 ENTRYPOINT ["docker-entrypoint"]
-CMD ["php-fpm"]
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
 
 FROM caddy:${CADDY_VERSION}-builder-alpine AS symfony_caddy_builder
 

@@ -27,7 +27,7 @@ export class NbList extends LitElement {
 				.nb--list-item-column[nb-column="actions"]:last-child { text-align: right; }
 				.nb--list-item-column-placeholder { margin: .15em 0; font-size: .75rem; background-color: #f5f5f5; border-radius: 4px; }
 				.nb--list-empty-state { padding: 10px 15px; font-size: 1rem; color: var(--color-gray); }
-				.nb--list-pagination { margin-top: 30px; text-align: center; }
+				nb-pagination { margin-top: 30px; }
 
 				/* Light background mode */
 				:host([light]) .nb--list-item { background-color: var(--color-blue-lightest); border: 1px solid var(--color-gray-light); box-shadow: none; }
@@ -238,11 +238,7 @@ export class NbList extends LitElement {
 		}
 
 		return html`
-			<div class="nb--list-pagination">
-				${[...Array(pageCount).keys()].map(i => html`
-					<nb-button size="small" color=${this.page == i + 1 ? "blue" : "gray"} @click=${() => this.page = i + 1}>${i+1}</nb-button>
-				`)}
-			</div>
+			<nb-pagination pageCount=${pageCount} current=${this.page} @pagination-change=${e => this.page = e.detail.page}></nb-pagination>
 		`;
 	}
 

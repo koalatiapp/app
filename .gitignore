@@ -20,6 +20,10 @@
 # Node / NPM
 node_modules
 
+# Supervisor
+supervisord.log
+supervisord.pid
+
 ###> symfony/phpunit-bridge ###
 .phpunit.result.cache
 /phpunit.xml

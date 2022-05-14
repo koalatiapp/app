@@ -6,7 +6,7 @@ services:
       context: .
       target: symfony_php
       args:
-        SYMFONY_VERSION: ${SYMFONY_VERSION:-}
+        SYMFONY_VERSION: ${SYMFONY_VERSION:-5.4.*}
         STABILITY: ${STABILITY:-stable}
     restart: unless-stopped
     volumes:
@@ -20,7 +20,7 @@ services:
       MERCURE_URL: ${MERCURE_URL:-http://caddy/.well-known/mercure}
       MERCURE_PUBLIC_URL: ${MERCURE_PUBLIC_URL:-https://localhost/.well-known/mercure}
       MERCURE_JWT_SECRET: ${MERCURE_JWT_SECRET}
-      SYMFONY_VERSION:
+      SYMFONY_VERSION: 5.4.*
 
   caddy:
     build:
