@@ -70,6 +70,8 @@ HEALTHCHECK --interval=10s --timeout=3s --retries=3 CMD ["docker-healthcheck"]
 RUN ln -s $PHP_INI_DIR/php.ini-production $PHP_INI_DIR/php.ini
 COPY docker/php/conf.d/symfony.prod.ini $PHP_INI_DIR/conf.d/symfony.ini
 
+COPY docker/php/supervisor/supervisord.conf /etc/supervisord.conf
+
 COPY docker/php/php-fpm.d/zz-docker.conf /usr/local/etc/php-fpm.d/zz-docker.conf
 
 COPY docker/php/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
@@ -123,7 +125,7 @@ RUN set -eux; \
 VOLUME /srv/app/var
 
 ENTRYPOINT ["docker-entrypoint"]
-CMD ["php-fpm"]
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
 
 FROM caddy:${CADDY_VERSION}-builder-alpine AS symfony_caddy_builder
 
