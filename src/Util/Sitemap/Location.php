@@ -20,10 +20,16 @@ class Location
 	 */
 	public ?string $title = null;
 
-	public function __construct(string $url, ?string $title = null)
+	/**
+	 * HTTP status code of the page or document.
+	 */
+	public ?int $statusCode = null;
+
+	public function __construct(string $url, ?string $title = null, ?int $statusCode = null)
 	{
 		$this->url = $url;
 		$this->title = $title;
+		$this->statusCode = $statusCode;
 	}
 
 	/**

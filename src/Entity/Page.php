@@ -246,4 +246,23 @@ class Page
 
 		return $this;
 	}
+
+	/**
+	 * Returns:
+	 * - `true` if the page responds with an error code,
+	 * - `false` if the page returns a 200 OK
+	 * - `null` if the page hasn't been crawled yet.
+	 *
+	 * @return boolean|null
+	 */
+	public function respondsWithError(): ?bool
+	{
+		$httpCode = $this->getHttpCode();
+
+		if (!$httpCode) {
+			return null;
+		}
+
+		return $httpCode >= 400;
+	}
 }
