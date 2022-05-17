@@ -91,6 +91,7 @@ class Crawler
 
 				/** @var DomCrawler */
 				$crawler = $resource->getCrawler();
+				$statusCode = $resource->getResponse()->getStatusCode();
 
 				// Only add pages with an <html> tag to the list - others are likely files or images
 				if (!$crawler->filterXpath('//html')->count()) {
@@ -102,6 +103,7 @@ class Crawler
 				if (!isset($this->pagesFound[$url])) {
 					$this->pagesFound[$url] = new Location($url);
 				}
+
 
 				// If this page has already been crawled successfully, skip it
 				if ($this->pagesFound[$url]->title) {
@@ -115,6 +117,7 @@ class Crawler
 				}
 
 				$this->pagesFound[$url]->title = $title;
+				$this->pagesFound[$url]->statusCode = $statusCode;
 
 				if ($pageFoundCallback) {
 					call_user_func($pageFoundCallback, $this->pagesFound[$url]);

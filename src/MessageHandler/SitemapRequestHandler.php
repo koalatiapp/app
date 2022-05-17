@@ -59,22 +59,28 @@ class SitemapRequestHandler implements MessageHandlerInterface
 			// Check if an existing page can be updated
 			if (isset($pagesByUrl[$location->url])) {
 				$page = $pagesByUrl[$location->url];
+				$page->setHttpCode($location->statusCode);
 
 				if ($location->title && $page->getTitle() != $location->title) {
 					$page->setTitle($location->title);
-					$this->em->persist($page);
-					$this->flushOrStopIfProjectIsDeleted();
 				}
+
+				$this->em->persist($page);
+				$this->flushOrStopIfProjectIsDeleted();
 			}
 			// Otherwise, create the new page
 			else if (strlen($location->url) <= 510) {
 				$page = new Page($project, $location->url, $location->title);
+				$page->setHttpCode($location->statusCode);
 				$pagesByUrl[$location->url] = $page;
+
 				$this->em->persist($page);
 				$this->flushOrStopIfProjectIsDeleted();
 
-				// If a project ID was provided in the message, dispatch a new message to refresh that project's results
-				$this->bus->dispatch(new TestingRequest($message->getProjectId(), null, [$page->getId()]));
+				if (!$page->respondsWithError()) {
+					// If a project ID was provided in the message, dispatch a new message to refresh that project's results
+					$this->bus->dispatch(new TestingRequest($message->getProjectId(), null, [$page->getId()]));
+				}
 			}
 		});
 
