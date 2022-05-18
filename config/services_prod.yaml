@@ -3,20 +3,6 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
-    App\Util\Meta\MetaDriverInterface:
-        alias: App\Util\Meta\Driver\MockMetaDriver
-
-    League\Flysystem\FilesystemAdapter:
-        class: League\Flysystem\Local\LocalFilesystemAdapter
-        arguments:
-            - '%kernel.project_dir%/var/storage/'
-
-    App\Util\Screenshot\Driver\ScreenshotDriverInterface:
-        alias: App\Util\Screenshot\Driver\BlankScreenshotDriver
-
-    App\Util\Analytics\AnalyticsInterface:
-        alias: App\Util\Analytics\Driver\MockDriver
-
     Sentry\Integration\IgnoreErrorsIntegration:
         arguments:
             $options:

@@ -15,7 +15,7 @@ class Client implements ClientInterface
 {
 	protected HttpClientInterface $httpClient;
 
-	protected ?string $urlPrefix = "";
+	protected string $urlPrefix = "";
 
 	/**
 	 * @param string $apiUrl         URL of the tools API
@@ -27,7 +27,7 @@ class Client implements ClientInterface
 		$this->httpClient = HttpClient::createForBaseUri($apiUrl, [
 			'auth_bearer' => $apiBearerToken,
 		]);
-		$this->urlPrefix = parse_url($apiUrl, PHP_URL_PATH);
+		$this->urlPrefix = parse_url($apiUrl, PHP_URL_PATH) ?: "";
 	}
 
 	/**
