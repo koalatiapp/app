@@ -5,3 +5,6 @@ when@prod:
         messenger:
             enabled: true # flushes Sentry messages at the end of each message handling
             capture_soft_fails: true # captures exceptions marked for retry too
+        options:
+            integrations:
+                - 'Sentry\Integration\IgnoreErrorsIntegration'
