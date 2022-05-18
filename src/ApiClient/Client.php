@@ -9,13 +9,13 @@ use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class Client implements ClientInterface
 {
-	/**
-	 * @var \Symfony\Contracts\HttpClient\HttpClientInterface;
-	 */
-	protected $httpClient;
+	protected HttpClientInterface $httpClient;
+
+	protected ?string $urlPrefix = "";
 
 	/**
 	 * @param string $apiUrl         URL of the tools API
@@ -27,6 +27,7 @@ class Client implements ClientInterface
 		$this->httpClient = HttpClient::createForBaseUri($apiUrl, [
 			'auth_bearer' => $apiBearerToken,
 		]);
+		$this->urlPrefix = parse_url($apiUrl, PHP_URL_PATH);
 	}
 
 	/**
@@ -67,7 +68,7 @@ class Client implements ClientInterface
 			$queryString = http_build_query($body);
 		}
 
-		$url = $endpoint;
+		$url = rtrim($this->urlPrefix, "/") . $endpoint;
 
 		if ($queryString) {
 			$queryPrefix = str_contains($endpoint, '?') ? '&' : '?';
