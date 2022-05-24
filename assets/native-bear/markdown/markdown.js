@@ -47,7 +47,6 @@ export class NbMarkdown extends ZeroMd {
 		const script = this.querySelector("script[type='text/markdown']");
 		if (script) {
 			script.setAttribute("data-dedent", 1);
-			this._initializeScriptChangeDetection(script);
 		}
 		super.connectedCallback();
 		this._makeLinksOpenInNewTab();
@@ -63,21 +62,6 @@ export class NbMarkdown extends ZeroMd {
 				}
 			}
 		});
-	}
-
-	/**
-	 * Automatically re-renders the content when the source <script> changes
-	 */
-	_initializeScriptChangeDetection(script)
-	{
-		const observer = new MutationObserver(() => this.updateRenderContent());
-		observer.observe(script, { characterData: true, attributes: true, childList: true, subtree: true });
-	}
-
-	async updateRenderContent (opts = {}) {
-		await this.waitForReady();
-		const md = await this.buildMd(opts);
-		this.shadowRoot.querySelector(".markdown-body").replaceWith(md);
 	}
 }
 

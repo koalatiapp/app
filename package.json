@@ -10,7 +10,7 @@
     "escape-html": "^1.0.3",
     "lit": "^2.1.2",
     "timeago.js": "^4.0.2",
-    "zero-md": "^2.1.1"
+    "zero-md": "^2.3.5"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
