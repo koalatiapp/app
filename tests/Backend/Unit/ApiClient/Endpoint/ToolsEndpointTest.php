@@ -4,6 +4,8 @@ namespace App\Tests\Unit\ApiClient\Endpoint;
 
 use App\ApiClient\Endpoint\ToolsEndpoint;
 use App\ApiClient\MockClient;
+use App\ApiClient\MockServerlessClient;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
@@ -19,8 +21,12 @@ class ToolsEndpointTest extends WebTestCase
 	public function setup(): void
 	{
 		self::bootKernel();
-		$mockApiClient = new MockClient();
-		$this->toolsEndpoint = new ToolsEndpoint($mockApiClient);
+
+		$this->toolsEndpoint = new ToolsEndpoint(
+			new MockClient(),
+			new MockServerlessClient(),
+			$this->createStub(LoggerInterface::class)
+		);
 	}
 
 	/**
