@@ -14,6 +14,9 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 /**
  * @ORM\Entity(repositoryClass=PageRepository::class)
+ * @ORM\Table(indexes={
+ * 		@Index(name="page_url_index", columns={"url"})
+ * })
  */
 class Page
 {

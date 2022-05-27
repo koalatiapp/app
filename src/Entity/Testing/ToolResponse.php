@@ -12,6 +12,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ToolResponseRepository::class)
+ * @ORM\Table(indexes={
+ * 		@Index(name="page_url_index", columns={"tool", "url"})
+ * })
  */
 class ToolResponse
 {

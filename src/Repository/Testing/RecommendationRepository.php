@@ -38,11 +38,9 @@ class RecommendationRepository extends ServiceEntityRepository
 	public function findFromToolResponse(ToolResponse $toolResponse): ArrayCollection
 	{
 		$result = $this->createQueryBuilder('r')
-			->innerJoin('r.relatedPage', 'relatedPage')
 			->innerJoin('r.parentResult', 'parentResult')
 			->innerJoin('parentResult.parentResponse', 'parentResponse')
-			->innerJoin('r.relatedPage', 'p')
-			->andWhere('relatedPage.url = :url')
+			->andWhere('parentResponse.url = :url')
 			->andWhere('parentResponse.tool = :tool')
 			->setParameter('url', $toolResponse->getUrl())
 			->setParameter('tool', $toolResponse->getTool())
