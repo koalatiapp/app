@@ -4,6 +4,8 @@ namespace App\Tests\Unit\ApiClient\Endpoint;
 
 use App\ApiClient\Endpoint\StatusEndpoint;
 use App\ApiClient\MockClient;
+use App\ApiClient\MockServerlessClient;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
@@ -19,8 +21,12 @@ class StatusEndpointTest extends WebTestCase
 	public function setup(): void
 	{
 		self::bootKernel();
-		$mockApiClient = new MockClient();
-		$this->statusEndpoint = new StatusEndpoint($mockApiClient);
+
+		$this->statusEndpoint = new StatusEndpoint(
+			new MockClient(),
+			new MockServerlessClient(),
+			$this->createStub(LoggerInterface::class)
+		);
 	}
 
 	/**

@@ -126,8 +126,13 @@ services:
     App\ApiClient\ClientInterface:
         class: 'App\ApiClient\Client'
         arguments:
-            - '%env(TOOLS_API_URL)%'
-            - '%env(TOOLS_API_BEARER_TOKEN)%'
+            - '%env(TOOLS_API_WORKER_URL)%'
+            - '%env(TOOLS_API_WORKER_BEARER_TOKEN)%'
+
+    App\ApiClient\ServerlessClient:
+        arguments:
+            - '%env(TOOLS_API_FUNCTIONS_URL)%'
+            - '%env(TOOLS_API_FUNCTIONS_BEARER_TOKEN)%'
 
     App\Util\Screenshot\Driver\ScreenshotDriverInterface:
         alias: App\Util\Screenshot\Driver\ApiFlash
