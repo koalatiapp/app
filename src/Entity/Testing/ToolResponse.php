@@ -12,6 +12,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ToolResponseRepository::class)
+ * @ORM\Table(indexes={
+ * 		@ORM\Index(name="page_url_index", columns={"tool", "url"})
+ * })
  */
 class ToolResponse
 {
@@ -30,7 +33,7 @@ class ToolResponse
 	private string $tool;
 
 	/**
-	 * @ORM\Column(type="string", length=1024)
+	 * @ORM\Column(type="string", length=510)
 	 * @Groups({"default"})
 	 */
 	private string $url;
