@@ -13,13 +13,14 @@ use VDB\Spider\EventListener\PolitenessPolicyListener;
 use VDB\Spider\Filter\Prefetch\AllowedHostsFilter;
 use VDB\Spider\Filter\Prefetch\UriFilter;
 use VDB\Spider\Filter\Prefetch\UriWithHashFragmentFilter;
+use VDB\Spider\Filter\Prefetch\UriWithQueryStringFilter;
 use VDB\Spider\QueueManager\InMemoryQueueManager;
 use VDB\Spider\Spider;
 
 class Crawler
 {
 	public const MAX_CRAWL_DURATION = 1800;
-	public const MAX_CRAWL_PAGES = 2500;
+	public const MAX_CRAWL_PAGES = 1000;
 
 	/**
 	 * @var array<string,Location>
@@ -104,7 +105,6 @@ class Crawler
 					$this->pagesFound[$url] = new Location($url);
 				}
 
-
 				// If this page has already been crawled successfully, skip it
 				if ($this->pagesFound[$url]->title) {
 					return;
@@ -119,7 +119,8 @@ class Crawler
 				$this->pagesFound[$url]->title = $title;
 				$this->pagesFound[$url]->statusCode = $statusCode;
 
-				if ($pageFoundCallback) {
+				// Only add pages that don't have a query string.
+				if ($pageFoundCallback && !str_contains($url, "?")) {
 					call_user_func($pageFoundCallback, $this->pagesFound[$url]);
 				}
 			}
