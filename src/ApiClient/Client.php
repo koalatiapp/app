@@ -10,6 +10,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
 class Client implements ClientInterface
 {
@@ -60,7 +61,7 @@ class Client implements ClientInterface
 	{
 		$method = trim(strtoupper($method));
 		$endpoint = '/'.ltrim($endpoint, '/');
-		$options = ['body' => $body];
+		$options = ['json' => $body];
 		$queryString = '';
 
 		if ($method == 'GET') {
@@ -76,12 +77,26 @@ class Client implements ClientInterface
 		}
 
 		$response = $this->httpClient->request($method, $url, $options);
+
+		$this->handleResponseErrors($response, $endpoint);
+
+		return $response->toArray();
+	}
+
+	/**
+	 * @throws Exception
+	 * @throws UnauthorizedHttpException
+	 * @throws NotFoundHttpException
+	 * @throws ToolsApiBadResponseException
+	 */
+	protected function handleResponseErrors(ResponseInterface $response, string $endpoint): void
+	{
 		$statusCode = $response->getStatusCode();
 
 		if ($statusCode == 401 || $statusCode == 403) {
-			throw new UnauthorizedHttpException('The tools API denied access because your request lacked proper authorization. Make sure to provide a valid bearer token in the "TOOLS_API_BEARER_TOKEN" environment variable.');
+			throw new UnauthorizedHttpException('The tools API denied access because your request lacked proper authorization. Make sure to provide a valid bearer token.');
 		} elseif ($statusCode == 404) {
-			throw new NotFoundHttpException(sprintf('The tools API endpoint "%s" could not be found. Make sure to provide a valid API URL in the "TOOLS_API_URL" environment variable.', $endpoint));
+			throw new NotFoundHttpException(sprintf('The tools API endpoint "%s" could not be found. Make sure to provide a valid API URL.', $endpoint));
 		} elseif ($statusCode != 200) {
 			throw new Exception(sprintf('An unknown error (code %s) occured in a request to the tools API endpoint "%s".', $statusCode, $endpoint), $statusCode);
 		}
@@ -91,7 +106,5 @@ class Client implements ClientInterface
 		if (!$decodedResponse['success']) {
 			throw new ToolsApiBadResponseException($decodedResponse['message'] ?? 'No error message was provided by the API.');
 		}
-
-		return $response->toArray();
 	}
 }

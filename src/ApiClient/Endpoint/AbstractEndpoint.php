@@ -3,16 +3,16 @@
 namespace App\ApiClient\Endpoint;
 
 use App\ApiClient\ClientInterface;
+use App\ApiClient\ServerlessClient;
+use Psr\Log\LoggerInterface;
 
 abstract class AbstractEndpoint
 {
-	/**
-	 * @var ClientInterface;
-	 */
-	protected $client;
-
-	public function __construct(ClientInterface $client)
+	public function __construct(
+		protected ClientInterface $client,
+		protected ServerlessClient $serverlessClient,
+		protected LoggerInterface $logger,
+	)
 	{
-		$this->client = $client;
 	}
 }

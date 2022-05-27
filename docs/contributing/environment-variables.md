@@ -32,12 +32,21 @@ Here is a detailed list of all the environment variables, why they are needed, a
 | STORAGE_BUCKET            | Storage of user-generated media     | Configure with any S3-standardized hosting service (Amazon S3, DigitalOcean Spaces, etc.)       |
 | STORAGE_ENDPOINT          | Storage of user-generated media     | Configure with any S3-standardized hosting service (Amazon S3, DigitalOcean Spaces, etc.)       |
 | STORAGE_CDN_URL           | Storage of user-generated media     | Configure with any S3-standardized hosting service (Amazon S3, DigitalOcean Spaces, etc.)       |
-| TOOLS_API_URL             | Tools service API (recommendations) | Define the URL at which the tools service API is reachable (including the port, if not 80/443)  |
-| TOOLS_API_BEARER_TOKEN    | Tools service API (recommendations) | https://github.com/koalatiapp/tools-service#authentication                                      |
+| TOOLS_API_WORKER_URL          | Tools service API (recommendations) | Define the URL at which the tools service API is reachable (including the port, if not 80/443)  |
+| TOOLS_API_WORKER_BEARER_TOKEN | Tools service API (recommendations) | https://github.com/koalatiapp/tools-service#authentication                                      |
 | APIFLASH_ACCESS_KEY       | Project screenshot                  | Create an account on [API FLASH](https://apiflash.com/) and enter your access key here.         |
 | OPENGRAPHIO_API_KEY       | URL previews                        | Create an account on [OpenGraph.io](https://www.opengraph.io/) and enter your API key here.     |
 | URLMETA_ACCOUNT_EMAIL     | URL previews                        | Create an account on [URL Meta](https://urlmeta.org/) and enter your account's email here.      |
 | URLMETA_API_KEY           | URL previews                        | Create an account on [URL Meta](https://urlmeta.org/) and enter your API key here.              |
+
+
+## Optional variables
+
+| Name                      | Purpose                             | How to set it up                                                                                |
+|---------------------------|-------------------------------------|-------------------------------------------------------------------------------------------------|
+| TOOLS_API_FUNCTIONS_URL          | Tools service API (recommendations) | Define the URL at which the tool service serverless functions, which may be used to lighten the load on the worker(s), are reachable. |
+| TOOLS_API_FUNCTIONS_BEARER_TOKEN | Tools service API (recommendations) | https://github.com/koalatiapp/tools-service-functions
+
 
 ## Production specific
 

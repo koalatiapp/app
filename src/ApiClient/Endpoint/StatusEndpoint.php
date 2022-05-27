@@ -3,6 +3,7 @@
 namespace App\ApiClient\Endpoint;
 
 use App\Entity\Project;
+use Exception;
 
 final class StatusEndpoint extends AbstractEndpoint
 {
@@ -80,9 +81,17 @@ final class StatusEndpoint extends AbstractEndpoint
 	 */
 	public function project(Project $project): array
 	{
-		$response = $this->client->request('GET', '/status/project', [
-			'url' => $project->getUrl(),
-		]);
+		try {
+			$response = $this->serverlessClient->request('GET', '/project-status', [
+				'url' => $project->getUrl(),
+			]);
+		} catch (Exception $exception) {
+			$this->logger->error($exception->getMessage(), $exception->getTrace());
+
+			$response = $this->client->request('GET', '/status/project', [
+				'url' => $project->getUrl(),
+			]);
+		}
 
 		return $response['data'] ?? [];
 	}

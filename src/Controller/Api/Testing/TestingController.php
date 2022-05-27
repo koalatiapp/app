@@ -7,6 +7,7 @@ use App\Controller\AbstractController;
 use App\Controller\Trait\ApiControllerTrait;
 use App\Controller\Trait\PreventDirectAccessTrait;
 use App\Message\TestingRequest;
+use App\MessageHandler\TestingRequestHandler;
 use App\Security\ProjectVoter;
 use App\Subscription\QuotaManager;
 use App\Util\Testing\TestingStatus;
@@ -31,7 +32,7 @@ class TestingController extends AbstractController
 	 *
 	 * @Route("/create", methods={"POST"}, name="create", options={"expose": true})
 	 */
-	public function create(Request $request, QuotaManager $quotaManager): JsonResponse
+	public function create(Request $request, QuotaManager $quotaManager, TestingRequestHandler $testingRequestHandler): JsonResponse
 	{
 		$projectId = $request->request->get('project_id');
 
@@ -43,7 +44,10 @@ class TestingController extends AbstractController
 		$project = $this->getProject($projectId, ProjectVoter::PARTICIPATE);
 
 		$this->denyAccessUnlessGranted(ProjectVoter::TESTING, $project);
-		$this->dispatchMessage(new TestingRequest($project->getId()));
+
+		// In this case, we don't want to put this in the message queue and wait.
+		// We want the testing to start right now!
+		$testingRequestHandler(new TestingRequest($project->getId()));
 
 		$quotaManager->notifyIfQuotaExceeded($project);
 
