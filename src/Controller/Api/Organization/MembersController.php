@@ -68,6 +68,8 @@ class MembersController extends AbstractController
 			}
 		}
 
+		$organizationName = $membership->getOrganization()->getName();
+
 		$em = $this->getDoctrine()->getManager();
 		$em->remove($membership);
 		$em->flush();
@@ -75,7 +77,7 @@ class MembersController extends AbstractController
 		return $this->apiSuccess([
 			'message' => $this->translator->trans('organization.flash.member_removed_successfully', [
 				'%user%' => $membership->getUser()->getFullName(),
-				'%organization%' => $membership->getOrganization()->getName(),
+				'%organization%' => $organizationName,
 			]),
 		]);
 	}
