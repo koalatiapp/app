@@ -3,8 +3,6 @@
 namespace App\Twig;
 
 use App\Util\Analytics\UrlRedactor;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Routing\RouterInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 

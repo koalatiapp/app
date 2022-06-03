@@ -86,7 +86,7 @@ class SecuritySettingsController extends AbstractController
 		return $passwordForm;
 	}
 
-	private function processEmailForm(Request $request): FormInterface | Response
+	private function processEmailForm(Request $request): FormInterface|Response
 	{
 		$user = $this->getUser();
 		$emailForm = $this->createForm(UserChangeEmailType::class, $user);
@@ -110,7 +110,7 @@ class SecuritySettingsController extends AbstractController
 		return $emailForm;
 	}
 
-	private function processDeletionForm(Request $request): FormInterface | Response
+	private function processDeletionForm(Request $request): FormInterface|Response
 	{
 		$user = $this->getUser();
 		$deletionForm = $this->createForm(UserDeleteAccountType::class, $user);

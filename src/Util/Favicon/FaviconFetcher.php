@@ -3,8 +3,6 @@
 namespace App\Util\Favicon;
 
 use App\Util\Favicon\Driver\FaviconDriverInterface;
-use Exception;
-use Psr\Log\LoggerInterface;
 use Throwable;
 
 class FaviconFetcher implements FaviconFetcherInterface

@@ -27,8 +27,7 @@ class SitemapRequestHandler implements MessageHandlerInterface
 		private EntityManagerInterface $em,
 		private MessageBusInterface $bus,
 		private HttpClientInterface $httpClient,
-	)
-	{
+	) {
 	}
 
 	/**
@@ -69,7 +68,7 @@ class SitemapRequestHandler implements MessageHandlerInterface
 				$this->flushOrStopIfProjectIsDeleted();
 			}
 			// Otherwise, create the new page
-			else if (strlen($location->url) <= 510) {
+			elseif (strlen($location->url) <= 510) {
 				$page = new Page($project, $location->url, $location->title);
 				$page->setHttpCode($location->statusCode);
 				$pagesByUrl[$location->url] = $page;
@@ -107,7 +106,6 @@ class SitemapRequestHandler implements MessageHandlerInterface
 
 	/**
 	 * @param array<string,Page> $pagesByUrl
-	 * @return void
 	 */
 	private function fetchMissingTitles(array $pagesByUrl): void
 	{
@@ -142,7 +140,7 @@ class SitemapRequestHandler implements MessageHandlerInterface
 			$httpsUrl = $this->urlHelper->standardize($project->getUrl(), true);
 			$response = $this->httpClient->request("GET", $httpsUrl);
 
-			if (!in_array(substr((string)$response->getStatusCode(), 0, 1), ["2", "3"])) {
+			if (!in_array(substr((string) $response->getStatusCode(), 0, 1), ["2", "3"])) {
 				return false;
 			}
 		} catch (TransportException $exception) {

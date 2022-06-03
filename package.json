@@ -1,32 +1,32 @@
 {
   "name": "@koalati/app",
   "dependencies": {
-    "@sentry/browser": "^6.19.1",
+    "@sentry/browser": "^7.0.0",
     "@symfony/webpack-encore": "^1.8.1",
-    "@tinymce/tinymce-webcomponent": "^1.2.0",
+    "@tinymce/tinymce-webcomponent": "^2.0.0",
     "core-js": "^3.10.2",
     "dotenv-webpack": "^7.1.0",
-    "element-internals-polyfill": "0.1.46",
+    "element-internals-polyfill": "^1.1.4",
     "escape-html": "^1.0.3",
     "lit": "^2.1.2",
     "timeago.js": "^4.0.2",
     "zero-md": "^2.3.5"
   },
   "devDependencies": {
-    "@esm-bundle/chai": "^4.3.4",
-    "@open-wc/testing": "^2.5.33",
+    "@esm-bundle/chai": "^4.3.4-fix.0",
+    "@open-wc/testing": "^3.1.5",
     "@playwright/test": "^1.19.1",
     "@web/test-runner": "^0.13.5",
     "@web/test-runner-mocha": "^0.7.2",
     "@web/test-runner-playwright": "^0.8.8",
     "eslint": "^8.10.0",
     "eslint-plugin-html": "^6.1.1",
-    "eslint-plugin-vue": "^7.3.0",
-    "expect-playwright": "^0.4.1",
-    "mocha": "^6.2.3",
+    "eslint-plugin-vue": "^9.1.0",
+    "expect-playwright": "^0.8.0",
+    "mocha": "^10.0.0",
     "playwright": "^1.20.0",
-    "stylelint": "^13.8.0",
-    "stylelint-config-standard": "^20.0.0"
+    "stylelint": "^14.8.5",
+    "stylelint-config-standard": "^25.0.0"
   },
   "scripts": {
     "encore": "encore",

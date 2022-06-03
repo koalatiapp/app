@@ -30,6 +30,7 @@ class ProjectController extends AbstractController
 		}
 
 		if (!$ownerType) {
+			// @TODO: Optimize this query (the `getAllProjects() could be replaced by one SQL query with a few joins/subqueries)
 			return $this->apiSuccess($this->getUser()->getAllProjects());
 		}
 

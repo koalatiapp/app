@@ -19,8 +19,7 @@ class Plausible implements AnalyticsInterface
 		private HttpClientInterface $httpClient,
 		private RequestStack $requestStack,
 		private LoggerInterface $logger,
-	)
-	{
+	) {
 	}
 
 	public function trackEvent(string $name, array $props = []): void
@@ -42,7 +41,7 @@ class Plausible implements AnalyticsInterface
 						"url" => $this->urlRedactor->getAnalyticsUrl(),
 						"domain" => "app.koalati.com",
 						"props" => $props,
-					])
+					]),
 				]
 			);
 		} catch (Exception $exception) {

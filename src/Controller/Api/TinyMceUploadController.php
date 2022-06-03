@@ -4,7 +4,6 @@ namespace App\Controller\Api;
 
 use App\Controller\AbstractController;
 use App\Controller\Trait\ApiControllerTrait;
-use App\Controller\Trait\PreventDirectAccessTrait;
 use App\Storage\UserUploadStorage;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,7 +15,7 @@ class TinyMceUploadController extends AbstractController
 {
 	use ApiControllerTrait;
 
-	const MAX_FILESIZE = 20000000; // 20 MB
+	public const MAX_FILESIZE = 20000000; // 20 MB
 
 	/**
 	 * @Route("/api/tinymce-upload/image", name="api_tinymce_upload_image", options={"expose": true})

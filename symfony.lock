@@ -353,6 +353,9 @@
             "config/packages/sentry.yaml"
         ]
     },
+    "stella-maris/clock": {
+        "version": "0.1.4"
+    },
     "symfony/amqp-messenger": {
         "version": "v5.2.1"
     },
@@ -568,9 +571,6 @@
         "version": "v1.20.0"
     },
     "symfony/polyfill-mbstring": {
-        "version": "v1.20.0"
-    },
-    "symfony/polyfill-php70": {
         "version": "v1.20.0"
     },
     "symfony/polyfill-php73": {
@@ -790,6 +790,9 @@
     },
     "twig/twig": {
         "version": "v3.1.1"
+    },
+    "tysonandre/var_representation_polyfill": {
+        "version": "0.1.1"
     },
     "vdb/php-spider": {
         "version": "v0.5.2"
