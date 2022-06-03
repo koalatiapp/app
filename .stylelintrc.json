@@ -11,6 +11,11 @@
 		"number-leading-zero": "never",
 		"no-descending-specificity": null,
 		"rule-empty-line-before": null,
-		"font-family-no-missing-generic-family-keyword": null
+		"font-family-no-missing-generic-family-keyword": null,
+		"max-line-length": null,
+		"string-quotes": null,
+		"color-function-notation": null,
+		"alpha-value-notation": null,
+		"property-no-vendor-prefix": null
   }
 }
