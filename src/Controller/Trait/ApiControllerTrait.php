@@ -11,7 +11,6 @@ use App\Util\ClientMessageSerializer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\EventListener\AbstractSessionListener;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 trait ApiControllerTrait
@@ -43,7 +42,7 @@ trait ApiControllerTrait
 	/**
 	 * @SuppressWarnings(PHPMD.ExitExpression)
 	 */
-	protected function getProject(int | string | null $id, string $privilege = ProjectVoter::VIEW): ?Project
+	protected function getProject(int|string|null $id, string $privilege = ProjectVoter::VIEW): ?Project
 	{
 		if (!$id) {
 			return null;
@@ -79,7 +78,7 @@ trait ApiControllerTrait
 	/**
 	 * @SuppressWarnings(PHPMD.ExitExpression)
 	 */
-	protected function getOrganization(int | string | null $id, string $privilege = OrganizationVoter::VIEW): ?Organization
+	protected function getOrganization(int|string|null $id, string $privilege = OrganizationVoter::VIEW): ?Organization
 	{
 		if (!$id) {
 			return null;

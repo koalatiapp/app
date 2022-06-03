@@ -177,7 +177,7 @@ class RecommendationGroup implements Countable, MercureEntityInterface
 	 *
 	 * @param ArrayCollection<int, Recommendation> $recommendations
 	 *
-	 * @return Array<string,RecommendationGroup>
+	 * @return array<string,RecommendationGroup>
 	 */
 	public static function fromLooseRecommendations(ArrayCollection $recommendations): array
 	{

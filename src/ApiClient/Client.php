@@ -69,7 +69,7 @@ class Client implements ClientInterface
 			$queryString = http_build_query($body);
 		}
 
-		$url = rtrim($this->urlPrefix, "/") . $endpoint;
+		$url = rtrim($this->urlPrefix, "/").$endpoint;
 
 		if ($queryString) {
 			$queryPrefix = str_contains($endpoint, '?') ? '&' : '?';

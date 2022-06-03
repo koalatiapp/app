@@ -27,8 +27,7 @@ class RegistrationController extends AbstractController
 	public function __construct(
 		private UserPasswordHasherInterface $passwordHasher,
 		private AnalyticsInterface $analytics,
-	)
-	{
+	) {
 	}
 
 	/**

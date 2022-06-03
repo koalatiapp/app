@@ -61,7 +61,7 @@ class OrganizationMember
 	/**
 	 * @param string|array<int,string> $roles
 	 */
-	public function __construct(Organization $organization, User $user, string | array $roles)
+	public function __construct(Organization $organization, User $user, string|array $roles)
 	{
 		$this->setOrganization($organization);
 		$this->setUser($user);
