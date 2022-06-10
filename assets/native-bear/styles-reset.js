@@ -22,7 +22,7 @@ export default css`
 	.spacer.small { margin: .8rem auto; }
 
 	*:where(:focus-visible),
-	*:where(.simulate-focus) { outline: 3px solid var(--color-blue-50); border-radius: .5rem; box-shadow: 0 0 1rem 0 rgba(var(--shadow-rgb), .2); }
+	*:where(.simulate-focus) { outline: 3px solid var(--color-blue-50); outline-offset: 1px; border-radius: .5rem; box-shadow: 0 0 1rem 0 rgba(var(--shadow-rgb), .2); }
 
 	@media (prefers-color-scheme: dark) {
 		*:where(:focus-visible),
