@@ -48,7 +48,6 @@ export class CommentEditor extends LitElement {
 	render()
 	{
 		return html`
-			<link rel="stylesheet" href="https://cdn.quilljs.com/latest/quill.snow.css">
 			<label for="comment-editor-${this.#editorId}">
 				${Translator.trans(this.threadId ? "comment.editor_reply_label" : "comment.editor_label")}
 			</label>
