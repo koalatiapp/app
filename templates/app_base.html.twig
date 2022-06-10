@@ -49,7 +49,7 @@
 
 		<script>
 			window.CURRENT_USER_ID = "{{ app.user.id|hashids_encode }}";
-			window.mercureEventSource = new EventSource("{{ mercure('http://koalati/' ~ app.user.id|hashids_encode ~ '/', {subscribe: 'http://koalati/' ~ app.user.id|hashids_encode ~ '/'})|escape('js') }}", {
+			window.mercureEventSource = new EventSource("{{ mercure(mercure_topic(app.user), mercure_config(app.user))|escape('js') }}", {
 				withCredentials: true
 			});
 		</script>
