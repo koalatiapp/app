@@ -12,7 +12,6 @@ abstract class AbstractEndpoint
 		protected ClientInterface $client,
 		protected ServerlessClient $serverlessClient,
 		protected LoggerInterface $logger,
-	)
-	{
+	) {
 	}
 }

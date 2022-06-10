@@ -39,9 +39,9 @@ class Builder
 	 * The website's sitemap, if available, is fetched and scanned.
 	 * If the builder's `crawlWebsite` property is set to true, the website will also be crawled to generate a more complete sitemap.
 	 *
-	 * @param string $websiteUrl URL of the website to build the sitemap from
+	 * @param string   $websiteUrl        URL of the website to build the sitemap from
 	 * @param callable $pageFoundCallback Callable to invoke anytime a new page is found.
-	 * The callback will receive a `App\Util\Sitemap\Location` argument with the page's information.
+	 *                                    The callback will receive a `App\Util\Sitemap\Location` argument with the page's information.
 	 *
 	 * @return self
 	 */
@@ -55,7 +55,7 @@ class Builder
 
 		if ($sitemapUrl) {
 			foreach ($this->scanSitemap($sitemapUrl) as $url) {
-				call_user_func($pageFoundCallback,  new Location($url));
+				call_user_func($pageFoundCallback, new Location($url));
 			}
 		}
 
@@ -102,9 +102,13 @@ class Builder
 		$domDocument->load($sitemapUrl);
 		$domNodeList = $domDocument->getElementsByTagName('loc');
 
+		/** @var \DOMElement $url */
 		foreach ($domNodeList as $url) {
 			if (strtolower($url->tagName) == 'loc') {  // Make sure we don't get image:loc tags and stuff like that, which is frequent in Wordpress sitemaps
-				if ($url->parentNode && $url->parentNode->tagName == 'sitemap') {
+				/** @var \DOMElement|null */
+				$parentNode = $url->parentNode;
+
+				if ($parentNode && $parentNode->tagName == 'sitemap') {
 					try {
 						foreach ($this->scanSitemap($url->nodeValue) as $childSitemapUrl) {
 							$urls[] = $childSitemapUrl;

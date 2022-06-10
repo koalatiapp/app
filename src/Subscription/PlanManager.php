@@ -38,7 +38,7 @@ class PlanManager
 		return $this->plans[$planUniqueName];
 	}
 
-	public function getPlanFromEntity(User | Organization $entity): PlanInterface
+	public function getPlanFromEntity(User|Organization $entity): PlanInterface
 	{
 		$user = $entity;
 

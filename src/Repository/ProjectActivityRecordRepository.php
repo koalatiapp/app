@@ -20,7 +20,7 @@ class ProjectActivityRecordRepository extends ServiceEntityRepository
 		parent::__construct($registry, ProjectActivityRecord::class);
 	}
 
-	public function getActiveProjectCount(User | Organization $entity, DateTimeInterface | string | null $fromDate = null, DateTimeInterface | string | null $toDate = null): int
+	public function getActiveProjectCount(User|Organization $entity, DateTimeInterface|string|null $fromDate = null, DateTimeInterface|string|null $toDate = null): int
 	{
 		if (!$fromDate) {
 			$fromDate = new DateTime('first day of this month midnight');

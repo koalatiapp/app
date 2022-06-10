@@ -1,4 +1,4 @@
-import { fixture, html } from "@open-wc/testing";
+import { chai, fixture, html } from "@open-wc/testing";
 import { NbInput } from "../../../../assets/native-bear";
 
 const assert = chai.assert;

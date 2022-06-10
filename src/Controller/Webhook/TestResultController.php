@@ -216,7 +216,7 @@ class TestResultController extends AbstractController
 	 *
 	 * @return array<string,mixed>
 	 */
-	private function standardizeRawRecommendation(string | array $rawRecommendation): array
+	private function standardizeRawRecommendation(string|array $rawRecommendation): array
 	{
 		// Fallback for tools still using the old format of string recommendations
 		if (is_string($rawRecommendation)) {

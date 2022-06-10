@@ -11,6 +11,7 @@
 # Linting / CI
 /.php_cs
 /.php_cs.cache
+.php-cs-fixer.cache
 /test-results
 
 # OS specifics

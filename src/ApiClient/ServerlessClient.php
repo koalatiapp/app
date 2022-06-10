@@ -4,14 +4,9 @@ namespace App\ApiClient;
 
 use App\ApiClient\Exception\ServerlessClientNotConfiguredException;
 use App\ApiClient\Exception\ToolsApiBadResponseException;
-use App\ApiClient\Exception\ToolsApiConfigurationException;
 use Exception;
-use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
-
 
 class ServerlessClient extends Client
 {
@@ -59,7 +54,7 @@ class ServerlessClient extends Client
 			$queryString = http_build_query($body);
 		}
 
-		$url = rtrim($this->urlPrefix, "/") . $endpoint;
+		$url = rtrim($this->urlPrefix, "/").$endpoint;
 
 		if ($queryString) {
 			$queryPrefix = str_contains($endpoint, '?') ? '&' : '?';

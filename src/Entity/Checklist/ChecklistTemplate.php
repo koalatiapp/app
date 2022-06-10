@@ -187,7 +187,7 @@ class ChecklistTemplate
 		return $this;
 	}
 
-	public function getOwner(): Organization | User
+	public function getOwner(): Organization|User
 	{
 		return $this->getOwnerOrganization() ?: $this->getOwnerUser();
 	}

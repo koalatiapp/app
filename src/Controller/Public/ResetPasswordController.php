@@ -155,7 +155,7 @@ class ResetPasswordController extends AbstractController
 				$e->getReason()
 			));
 
-			//return $this->redirectToRoute('app_check_email');
+			// return $this->redirectToRoute('app_check_email');
 			return $this->redirectToRoute('app_forgot_password_request');
 		}
 

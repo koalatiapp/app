@@ -91,7 +91,7 @@ class IgnoreEntry implements MercureEntityInterface
 	 */
 	private ?string $recommendationTitle;
 
-	public function __construct(string $tool, string $test, string $recommendationUniqueName, string $recommendationTitle, null | Organization | User | Project | Page $scopeTarget = null, ?User $createdBy = null)
+	public function __construct(string $tool, string $test, string $recommendationUniqueName, string $recommendationTitle, null|Organization|User|Project|Page $scopeTarget = null, ?User $createdBy = null)
 	{
 		$this->dateCreated = new DateTime();
 		$this->setTool($tool);
@@ -221,7 +221,7 @@ class IgnoreEntry implements MercureEntityInterface
 		return $this;
 	}
 
-	public function setScope(Organization | User | Project | Page $scopeTarget): self
+	public function setScope(Organization|User|Project|Page $scopeTarget): self
 	{
 		switch (get_class($scopeTarget)) {
 			case Organization::class:
