@@ -71,9 +71,6 @@ class RecommendationGroup implements Countable, MercureEntityInterface
 		return $this->getRecommendations()->first() ?: null;
 	}
 
-	/**
-	 * @Groups({"default"})
-	 */
 	public function getProject(): ?Project
 	{
 		return $this->getSample()?->getProject();
