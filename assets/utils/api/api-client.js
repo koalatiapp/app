@@ -91,7 +91,10 @@ class ApiClient {
 				window.Flash.show("danger", JSON.stringify({ message: error.message, stack: error.stack }, null, 4));
 			}
 
-			window.Flash.show("danger", "api.flash.server_error");
+			if (errorCallback == ApiClient.ERROR_FLASH) {
+				window.Flash.show("danger", "api.flash.server_error");
+			}
+
 			throw error;
 		}
 
