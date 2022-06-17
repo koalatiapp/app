@@ -52,5 +52,5 @@
 
 	<hr class="spacer">
 
-	<recommendation-list projectId="{{ project.id|hashids_encode }}"></recommendation-list>
+	<recommendation-list projectId="{{ project.id|hashids_encode }}" organizationId="{{ project.ownerOrganization ? project.ownerOrganization.id|hashids_encode : null }}"></recommendation-list>
 {% endblock %}

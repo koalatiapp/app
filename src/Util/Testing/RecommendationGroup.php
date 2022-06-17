@@ -133,6 +133,16 @@ class RecommendationGroup implements Countable, MercureEntityInterface
 	/**
 	 * @Groups({"default"})
 	 */
+	public function getProjectOwnerId(): ?int
+	{
+		$projectOwner = $this->getSample()?->getProject()->getOwner();
+
+		return $projectOwner->getId();
+	}
+
+	/**
+	 * @Groups({"default"})
+	 */
 	public function getTool(): ?string
 	{
 		return $this->getSample()?->getParentResult()?->getParentResponse()?->getTool();

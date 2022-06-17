@@ -1,6 +1,7 @@
 import { html, css } from "lit";
 import { AbstractDynamicList } from "../abstract-dynamic-list";
 import Modal from "../../utils/modal";
+import MercureClient from "../../utils/mercure-client.js";
 import fontawesomeImport from "../../utils/fontawesome-import";
 import { ApiClient } from "../../utils/api";
 
@@ -35,7 +36,8 @@ export class RecommendationList extends AbstractDynamicList {
 	static get properties() {
 		return {
 			...super.properties,
-			projectId: {type: String}
+			projectId: {type: String},
+			organizationId: {type: String},
 		};
 	}
 
@@ -115,9 +117,11 @@ export class RecommendationList extends AbstractDynamicList {
 	{
 		super();
 		this.projectId = null;
+		this.organizationId = null;
 		this.sortBy = "type";
 		this.sortDirection = "DESC";
 		this.itemsPerPage = 10;
+		this.#initIgnoreEntryMercureListener();
 	}
 
 	supportedEntityType()
@@ -173,6 +177,39 @@ export class RecommendationList extends AbstractDynamicList {
 			content: html`
 				<recommendation-ignore-form .recommendation=${item}></recommendation-ignore-form>
 			`
+		});
+	}
+
+	#initIgnoreEntryMercureListener()
+	{
+		MercureClient.subscribe("IgnoreEntry", update => {
+			let itemsHaveChanged = false;
+			const targetProjectId = update.data.targetProject?.id;
+			const targetOrganizationId = update.data.targetOrganization?.id;
+
+			if (update.event != "create") {
+				return;
+			}
+
+			if (targetProjectId && targetProjectId != this.projectId) {
+				return;
+			}
+
+			if (targetOrganizationId && targetOrganizationId != this.organizationId) {
+				return;
+			}
+
+			const filteredList = this.items.filter(recommendation => {
+				return recommendation.tool != update.data.tool || recommendation.uniqueName != update.data.recommendationUniqueName;
+			});
+
+			if (filteredList.length != this.items.length) {
+				this.items = filteredList;
+
+				if (itemsHaveChanged) {
+					this.dispatchEvent(new CustomEvent("items-updated"));
+				}
+			}
 		});
 	}
 }
