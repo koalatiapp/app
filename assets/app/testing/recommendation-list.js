@@ -55,7 +55,7 @@ export class RecommendationList extends AbstractDynamicList {
 						<nb-markdown barebones>
 							<script type="text/markdown">${strippedTitle}</script>
 						</nb-markdown>
-						<recommendation-details-link recommendationId=${item.sampleId}>
+						<recommendation-details-link recommendationId=${item.sampleId} modalTitle=${strippedTitle}>
 							<i class="fad fa-circle-info"></i>&nbsp;
 							${Translator.trans("recommendation.view_more")}
 						</recommendation-details-link>

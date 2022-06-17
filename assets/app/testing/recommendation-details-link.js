@@ -18,7 +18,8 @@ export class RecommendationDetailsLink extends LitElement {
 
 	static get properties() {
 		return {
-			recommendationId: {type: String}
+			recommendationId: {type: String},
+			modalTitle: {type: String},
 		};
 	}
 
@@ -27,6 +28,7 @@ export class RecommendationDetailsLink extends LitElement {
 		super();
 		this.recommendationId = null;
 		this.recommendationGroup = null;
+		this.modalTitle = null;
 	}
 
 	render()
@@ -43,7 +45,7 @@ export class RecommendationDetailsLink extends LitElement {
 		e && e.preventDefault();
 
 		new Modal({
-			title: html`${this.recommendationGroup.title.replace(/`(.+?)`/g, "$1")}`,
+			title: html`${this.modalTitle.replace(/`(.+?)`/g, "$1")}`,
 			size: "large",
 			content: html`
 				<recommendation-details .recommendationGroup=${this.recommendationGroup} recommendationId=${this.recommendationId}>
