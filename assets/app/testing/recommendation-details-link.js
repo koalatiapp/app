@@ -43,7 +43,7 @@ export class RecommendationDetailsLink extends LitElement {
 		e && e.preventDefault();
 
 		new Modal({
-			title: Translator.trans("recommendation.modal.title"),
+			title: html`${this.recommendationGroup.title.replace(/`(.+?)`/g, "$1")}`,
 			size: "large",
 			content: html`
 				<recommendation-details .recommendationGroup=${this.recommendationGroup} recommendationId=${this.recommendationId}>

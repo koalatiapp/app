@@ -88,13 +88,6 @@ export class RecommendationDetails extends LitElement {
 
 		return html`
 			${faImport}
-			<div class="sample-recommendation-title">
-				<nb-markdown barebones>
-					<script type="text/markdown">
-						${this.recommendationGroup.title}
-					</script>
-				</nb-markdown>
-			</div>
 			<h3>${Translator.trans("recommendation.modal.description_heading")}</h3>
 			<nb-markdown>
 				<script type="text/markdown">
