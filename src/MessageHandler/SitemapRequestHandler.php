@@ -52,36 +52,46 @@ class SitemapRequestHandler implements MessageHandlerInterface
 			$pagesByUrl[$pageUrl] = $page;
 		}
 
-		$this->sitemapBuilder->buildFromWebsiteUrl($websiteUrl, function (Location $location) use (&$pagesByUrl, $project, $message, $supportsSsl) {
-			$location->url = $this->urlHelper->standardize($location->url, $supportsSsl);
+		/** @param array<int,Location> $locations */
+		$pageFoundCallback = function (array $locations) use (&$pagesByUrl, $project, $message, $supportsSsl) {
+			$pagesToTest = [];
 
-			// Check if an existing page can be updated
-			if (isset($pagesByUrl[$location->url])) {
-				$page = $pagesByUrl[$location->url];
-				$page->setHttpCode($location->statusCode);
+			foreach ($locations as $location) {
+				$location->url = $this->urlHelper->standardize($location->url, $supportsSsl);
 
-				if ($location->title && $page->getTitle() != $location->title) {
-					$page->setTitle($location->title);
+				// Check if an existing page can be updated
+				if (isset($pagesByUrl[$location->url])) {
+					$page = $pagesByUrl[$location->url];
+					$page->setHttpCode($location->statusCode);
+
+					if ($location->title && $page->getTitle() != $location->title) {
+						$page->setTitle($location->title);
+					}
+
+					$this->em->persist($page);
 				}
+				// Otherwise, create the new page
+				elseif (strlen($location->url) <= 510) {
+					$page = new Page($project, $location->url, $location->title);
+					$page->setHttpCode($location->statusCode);
+					$pagesByUrl[$location->url] = $page;
 
-				$this->em->persist($page);
-				$this->flushOrStopIfProjectIsDeleted();
-			}
-			// Otherwise, create the new page
-			elseif (strlen($location->url) <= 510) {
-				$page = new Page($project, $location->url, $location->title);
-				$page->setHttpCode($location->statusCode);
-				$pagesByUrl[$location->url] = $page;
+					$this->em->persist($page);
 
-				$this->em->persist($page);
-				$this->flushOrStopIfProjectIsDeleted();
-
-				if (!$page->respondsWithError()) {
-					// If a project ID was provided in the message, dispatch a new message to refresh that project's results
-					$this->bus->dispatch(new TestingRequest($message->getProjectId(), null, [$page->getId()]));
+					if (!$page->respondsWithError()) {
+						$pagesToTest[] = $page;
+					}
 				}
 			}
-		});
+
+			$this->flushOrStopIfProjectIsDeleted();
+
+			// Dispatch a testing request to start the testing on new pages
+			$pageIds = array_map(fn (Page $page) => $page->getId(), $pagesToTest);
+			$this->bus->dispatch(new TestingRequest($message->getProjectId(), null, $pageIds));
+		};
+
+		$this->sitemapBuilder->buildFromWebsiteUrl($websiteUrl, $pageFoundCallback);
 
 		$this->fetchMissingTitles($pagesByUrl);
 		$this->flushOrStopIfProjectIsDeleted();

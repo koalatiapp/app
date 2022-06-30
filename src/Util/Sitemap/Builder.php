@@ -54,9 +54,13 @@ class Builder
 		$sitemapUrl = $this->findSitemapFromWebsiteUrl($websiteUrl);
 
 		if ($sitemapUrl) {
+			$newLocations = [];
+
 			foreach ($this->scanSitemap($sitemapUrl) as $url) {
-				call_user_func($pageFoundCallback, new Location($url));
+				$newLocations[] = new Location($url);
 			}
+
+			call_user_func($pageFoundCallback, $newLocations);
 		}
 
 		// Crawl the website for a more complete sitemap
@@ -91,7 +95,7 @@ class Builder
 	 *
 	 * @param string $sitemapUrl URL of the sitemap to scan
 	 *
-	 * @return array<string>
+	 * @return array<int,string>
 	 */
 	public function scanSitemap(string $sitemapUrl): array
 	{
