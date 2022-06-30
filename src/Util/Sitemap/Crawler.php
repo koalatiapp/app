@@ -18,8 +18,15 @@ use VDB\Spider\Spider;
 
 class Crawler
 {
-	public const MAX_CRAWL_DURATION = 1800;
-	public const MAX_CRAWL_PAGES = 1000;
+	/**
+	 * Maximum crawling duration in seconds.
+	 */
+	public const MAX_CRAWL_DURATION = 600;
+
+	/**
+	 * Maximum number of unique pages to crawl.
+	 */
+	public const MAX_CRAWL_PAGES = 100;
 
 	/**
 	 * @var array<string,Location>
@@ -43,7 +50,7 @@ class Crawler
 		$queueManager = $spider->getQueueManager();
 		$spider->getDiscovererSet()->set(new XPathExpressionDiscoverer('//a'));
 		$spider->getDiscovererSet()->maxDepth = 30;
-		$queueManager->maxQueueSize = 1000;
+		$queueManager->maxQueueSize = self::MAX_CRAWL_PAGES;
 		$queueManager->setTraversalAlgorithm(InMemoryQueueManager::ALGORITHM_BREADTH_FIRST);
 
 		// Filter out URLs from external domains
