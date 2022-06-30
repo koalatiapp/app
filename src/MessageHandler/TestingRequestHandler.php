@@ -59,7 +59,7 @@ class TestingRequestHandler implements MessageHandlerInterface
 		}
 		try {
 			// Submit the processing request to the Tools API
-			$this->toolsEndpoint->request($pageUrls, $tools, $priority);
+			$this->toolsEndpoint->request(array_values($pageUrls), array_values($tools), $priority);
 		} catch (TransportException $exception) {
 			throw new RecoverableMessageHandlingException($exception->getMessage(), $exception->getCode(), $exception);
 		}
