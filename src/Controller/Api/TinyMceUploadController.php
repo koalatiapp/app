@@ -42,7 +42,7 @@ class TinyMceUploadController extends AbstractController
 			return $this->badRequest("Missing file.");
 		}
 
-		if ($file->getSize() > self::MAX_FILESIZE) {
+		if (!$file->isValid() || $file->getSize() > self::MAX_FILESIZE) {
 			return $this->badRequest("Your file is too big. Maximum size: ".(self::MAX_FILESIZE / 1000000)."MB");
 		}
 
