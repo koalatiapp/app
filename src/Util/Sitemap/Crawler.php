@@ -127,7 +127,7 @@ class Crawler
 
 				// Only add pages that don't have a query string.
 				if ($pageFoundCallback && !str_contains($url, "?")) {
-					call_user_func($pageFoundCallback, $this->pagesFound[$url]);
+					call_user_func($pageFoundCallback, [$this->pagesFound[$url]]);
 				}
 			}
 		);
