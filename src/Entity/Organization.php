@@ -40,7 +40,7 @@ class Organization implements MercureEntityInterface
 	/**
 	 * @var \Doctrine\Common\Collections\Collection<int, OrganizationMember>
 	 * @ORM\OneToMany(targetEntity=OrganizationMember::class, mappedBy="organization", orphanRemoval=true)
-	 * @Groups({"default"})
+	 * @Groups({"members"})
 	 * @MaxDepth(1)
 	 */
 	private $members;
@@ -48,7 +48,7 @@ class Organization implements MercureEntityInterface
 	/**
 	 * @var \Doctrine\Common\Collections\Collection<int, Project>
 	 * @ORM\OneToMany(targetEntity=Project::class, mappedBy="ownerOrganization")
-	 * @Groups({"default"})
+	 * @Groups({"projects"})
 	 * @MaxDepth(1)
 	 */
 	private $projects;
