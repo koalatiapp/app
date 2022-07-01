@@ -31,7 +31,7 @@ class SitemapRequestHandler implements MessageHandlerInterface
 	}
 
 	/**
-	 * @SuppressWarnings(PHPMD.ElseExpression)
+	 * @SuppressWarnings(PHPMD.CyclomaticComplexity)
 	 */
 	public function __invoke(SitemapRequest $message): void
 	{
@@ -55,6 +55,7 @@ class SitemapRequestHandler implements MessageHandlerInterface
 		/** @param array<int,Location> $locations */
 		$pageFoundCallback = function (array $locations) use (&$pagesByUrl, $project, $message, $supportsSsl) {
 			$pagesToTest = [];
+			$pendingPersistCount = 0;
 
 			foreach ($locations as $location) {
 				$location->url = $this->urlHelper->standardize($location->url, $supportsSsl);
@@ -81,6 +82,14 @@ class SitemapRequestHandler implements MessageHandlerInterface
 					if (!$page->respondsWithError()) {
 						$pagesToTest[] = $page;
 					}
+				}
+
+				$pendingPersistCount++;
+
+				// Flusing more frequently prevents the db queries from being too big, which can cause the "MySQL server has gone away" error
+				if ($pendingPersistCount == 10) {
+					$this->flushOrStopIfProjectIsDeleted();
+					$pendingPersistCount = 0;
 				}
 			}
 
