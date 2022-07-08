@@ -26,8 +26,8 @@ class Flash
 		const translatedMessage = Translator.trans(message, messageValues);
 		const defaultIcon = "fad fa-info-circle";
 		const icons = {
-			"success": "fad fa-check-circle",
-			"error": "fad fa-times-circle",
+			"success": "fad fa-circle-check",
+			"danger": "fad fa-times-circle",
 			"warning": "fad fa-exclamation-circle",
 		};
 		const messageNode = document.createElement("div");

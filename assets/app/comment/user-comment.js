@@ -135,7 +135,7 @@ export class UserComment extends LitElement {
 					${!this.thread && this.isResolved ?
 						html`
 							<span class="resolved">
-								<i class="fas fa-check-circle"></i>
+								<i class="fas fa-circle-check"></i>
 								&nbsp;
 								${Translator.trans("comment.resolved")}
 							</span>

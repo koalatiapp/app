@@ -42,4 +42,7 @@ As a TL;DR: just don't be an ass. If you respect other people and watch your lan
 ## License
 
 Koalati is an open-source platform that is distributed with an MIT license.
+
+Tools and resources like FontAwesome 6 Pro are used with the appropriate license, and are not covered by the MIT license.
+
 For more information about Koalati's licensing, visit [the Licensing page](https://docs.koalati.com/docs/licensing) of our contributor documentation.
