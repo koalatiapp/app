@@ -84,7 +84,7 @@ export class NbDropdown extends LitElement {
 		});
 
 		// Initialize options from child <option> nodes if there are no options
-		if (!this.options.length) {
+		if (!Object.values(this.options).length) {
 			this.options = {};
 
 			for (const optionNode of this.querySelectorAll("option")) {
