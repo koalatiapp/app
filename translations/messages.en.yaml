@@ -531,7 +531,7 @@ project_checklist:
         overview: Overview
         detailed: Step-by-step
     overview:
-        title: Checklist - overview
+        title: Checklist
     detailed:
         title: Checklist - step-by-step
     item:
@@ -539,6 +539,12 @@ project_checklist:
         comments_count: "{0}0 comments|{1}1 comment|]1,Inf[%count% comments"
         unresolved_comments_count: "{0}0 unresolved comments|{1}1 unresolved comment|]1,Inf[%count% unresolved comments"
         resources: "Here are some Koalati-curated resources to help:"
+    filter:
+        no_filter: No filter
+        unresolved: Unresolved issues
+        commented: Has comments
+        completed: Completed
+        todo: To do
 
 project_settings:
     tabs:

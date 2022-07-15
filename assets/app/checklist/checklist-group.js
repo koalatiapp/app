@@ -41,6 +41,7 @@ export class ChecklistGroup extends LitElement {
 			itemCount: {type: Number},
 			completedItemCount: {type: Number},
 			closed: {type: Boolean},
+			filter: {type: String},
 			_loaded: {state: true},
 		};
 	}
@@ -54,6 +55,7 @@ export class ChecklistGroup extends LitElement {
 		this.previouslyCompleted = false;
 		this.closed = false;
 		this.items = null;
+		this.filter = null;
 	}
 
 	render()
@@ -77,7 +79,7 @@ export class ChecklistGroup extends LitElement {
 						</span>
 					`}
 				</h2>
-				<checklist-item-list .items=${this.items} projectId=${this.projectId} groupId=${this.groupId} @items-initialized=${this._initProgression} @items-updated=${this._updateProgression} aria-hidden=${this.closed ? "true" : "false"} id="checklist-group-${this.groupId}"></checklist-item-list>
+				<checklist-item-list .items=${this.items} .filterCallback=${this._filterCallback} projectId=${this.projectId} groupId=${this.groupId} @items-initialized=${this._initProgression} @items-updated=${this._updateProgression} aria-hidden=${this.closed ? "true" : "false"} id="checklist-group-${this.groupId}"></checklist-item-list>
 			</div>
 	  	`;
 	}
@@ -113,6 +115,39 @@ export class ChecklistGroup extends LitElement {
 	toggle()
 	{
 		this.closed = !this.closed;
+	}
+
+	get _filterCallback()
+	{
+		switch (this.filter) {
+		case null:
+		case "":
+			return null;
+
+		case "unresolved":
+			return item => {
+				return item.unresolvedCommentCount > 0;
+			};
+
+		case "commented":
+			return item => {
+				return item.commentCount > 0;
+			};
+
+		case "completed":
+			return item => {
+				return item.isCompleted;
+			};
+
+		case "todo":
+			return item => {
+				return !item.isCompleted;
+			};
+
+		default:
+			console.error(`The filter "${this.filter}" is not supported or implemented by the checklist group.`);
+			return null;
+		}
 	}
 }
 

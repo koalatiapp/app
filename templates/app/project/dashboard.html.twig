@@ -92,7 +92,7 @@
 						{% if project.unresolvedCommentCount == 0 %}
 							<span class="text-highlight green">{% trans %}project_dashboard.summary.step.comments.resolved{% endtrans %}</span>
 						{% else %}
-							<span class="text-highlight red">{% trans with {"%count%": project.unresolvedCommentCount} %}project_dashboard.summary.step.comments.unresolved_count{% endtrans %}</span>
+							<a href="{{ path('project_checklist', {id: project.id|hashids_encode, filter: "unresolved"}) }}" class="text-highlight red">{% trans with {"%count%": project.unresolvedCommentCount} %}project_dashboard.summary.step.comments.unresolved_count{% endtrans %}</a>
 						{% endif %}
 					{% endif %}
 				</li>

@@ -227,6 +227,16 @@ export class ChecklistItemList extends AbstractDynamicList {
 
 		return sidepanel;
 	}
+
+	/**
+	 * @inheritdoc
+	 */
+	static get _itemIdentifierCallback()
+	{
+		return item => {
+			return item.id;
+		};
+	}
 }
 
 customElements.define("checklist-item-list", ChecklistItemList);

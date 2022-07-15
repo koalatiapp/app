@@ -1,6 +1,8 @@
 {% extends 'app_base.html.twig' %}
 {% from 'app/_macros/project.html.twig' import project_breadcrumb_link %}
 
+{% set active_filter = app.request.get('filter') in ["unresolved", "commented", "completed", "todo"] ? app.request.get('filter') : null %}
+
 {% block title %}{% trans %}project_checklist.overview.title{% endtrans %}{% endblock %}
 {% block section_title %}{{ project_breadcrumb_link(project) }}{% endblock %}
 {% block head %}
@@ -15,13 +17,43 @@
 {% endblock %}
 
 {% block page_actions %}
-
+	<nb-dropdown id="checklist-filter-toggle" class="align-right" color="{{ active_filter ? "blue" : "gray" }}" reveal-on-hover>
+		<span slot="toggle">{{ ("project_checklist.filter." ~ (active_filter ?: "no_filter"))|trans }}</span>
+		<option value="">{% trans %}project_checklist.filter.no_filter{% endtrans %}</option>
+		<option value="unresolved">{% trans %}project_checklist.filter.unresolved{% endtrans %}</option>
+		<option value="commented">{% trans %}project_checklist.filter.commented{% endtrans %}</option>
+		<option value="completed">{% trans %}project_checklist.filter.completed{% endtrans %}</option>
+		<option value="todo">{% trans %}project_checklist.filter.todo{% endtrans %}</option>
+	</nb-dropdown>
 {% endblock %}
 
 {% block body %}
-	<project-checklist projectId="{{ project.id|hashids_encode }}"></project-checklist>
+	<project-checklist projectId="{{ project.id|hashids_encode }}" filter="{{ active_filter }}"></project-checklist>
 {% endblock %}
 
 {% block javascripts %}
 	{{ encore_entry_script_tags('checklist') }}
+
+	<script type="module">
+		const checklist = document.querySelector("project-checklist");
+		const filterDropdown = document.querySelector("#checklist-filter-toggle");
+
+		filterDropdown.addEventListener("select", function(e) {
+			const filter = e.detail.value;
+
+			checklist.filter = filter;
+			filterDropdown.color = filter ? "blue" : "gray";
+
+			// Update the URL
+			const url = new URL(window.location.href);
+
+			if (filter) {
+				url.searchParams.set("filter", filter);
+			} else {
+				url.searchParams.delete("filter");
+			}
+
+			window.history.replaceState({}, document.title, url.toString());
+		});
+	</script>
 {% endblock %}

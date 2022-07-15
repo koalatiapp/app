@@ -50,6 +50,7 @@ export class NbList extends LitElement {
 			sortBy: {type: String},
 			sortDirection: {type: String},
 			emptyState: {type: String},
+			filterCallback: {state: true},
 			_itemSelectionCallback: {state: true},
 			_loading: {state: true},
 		};
@@ -169,6 +170,11 @@ export class NbList extends LitElement {
 		return this.items === null;
 	}
 
+	get visibleItemCount()
+	{
+		return this._itemsArray.length;
+	}
+
 	_emptyStateLabel()
 	{
 		return this.emptyState;
@@ -261,24 +267,29 @@ export class NbList extends LitElement {
 
 	_filterItems(items)
 	{
-		if (!this._searchQuery) {
-			return items;
+		let filteredItems = items;
+
+		// Implementation-specific filter
+		if (this.filterCallback) {
+			filteredItems = filteredItems.filter(this.filterCallback);
 		}
 
-		const defaultFilterCallback = (item) => {
-			let itemString = "";
-			for (const value of Object.values(item)) {
-				if (["string", "number"].indexOf(typeof value) != -1 && value.toString().toLowerCase().indexOf("koalati") == -1) {
-					itemString += value + " ";
+		// Search query filter
+		if (this._searchQuery) {
+			filteredItems = filteredItems.filter(item => {
+				let itemString = "";
+				for (const value of Object.values(item)) {
+					if (["string", "number"].indexOf(typeof value) != -1 && value.toString().toLowerCase().indexOf("koalati") == -1) {
+						itemString += value + " ";
+					}
 				}
-			}
-			itemString = itemString.trim().toLowerCase();
-			const queryString = this._searchQuery.trim().toLowerCase();
-			return itemString.indexOf(queryString) != -1;
-		};
-		const filterCallback = this._filterCallback || defaultFilterCallback;
+				itemString = itemString.trim().toLowerCase();
+				const queryString = this._searchQuery.trim().toLowerCase();
+				return itemString.indexOf(queryString) != -1;
+			});
+		}
 
-		return items.filter(filterCallback);
+		return filteredItems;
 	}
 
 	_sortItems(items)
