@@ -3,3 +3,4 @@
 .text-highlight.red { color: #910909; background-color: var(--color-red-lighter); }
 .text-highlight.yellow { color: var(--color-black); background-color: var(--color-yellow-light); }
 .text-highlight.orange { color: #683f00; background-color: var(--color-orange-lighter); }
+a.text-highlight:hover { text-decoration: underline; }

@@ -17,11 +17,13 @@ export class NbDropdown extends LitElement {
 				.dropdown-list > li:first-child button { border-radius: 10px 10px 0 0; }
 				.dropdown-list > li:last-child button { border-radius: 0 0 10px 10px; }
 
+				:host(.align-right) .dropdown-list { right: 0 }
+
 				.dropdown-button { display: block; width: 100%; height: 100%; padding: 10px 15px; margin: 0; text-align: left; color: inherit; background-color: transparent; border: none; -webkit-appearance: none; appearance: none; cursor: pointer; }
 				.dropdown-button:hover { background-color: var(--color-gray-light); }
 
-				:host([open]),
-				.floating-dropdown:focus-within,
+				:host([open]) .dropdown-list,
+				.floating-dropdown:focus-within .dropdown-list,
 				:host([reveal-on-hover]:hover) .dropdown-list { opacity: 1; pointer-events: auto; }
 
 				@media (prefers-color-scheme: dark) {
@@ -33,7 +35,7 @@ export class NbDropdown extends LitElement {
 
 	static get properties() {
 		return {
-			open: {type: Boolean},
+			open: {type: Boolean, reflect: true},
 			color: {type: String},
 			eventData: {attribute: false},
 			options: {attribute: false}
@@ -45,7 +47,7 @@ export class NbDropdown extends LitElement {
 		super();
 		this.open = false;
 		this.eventData = {};
-		this.options = [];
+		this.options = {};
 		this.color = "gray";
 	}
 
@@ -54,7 +56,7 @@ export class NbDropdown extends LitElement {
 		return html`
 			${fontawesomeImport}
 
-			<nb-button size="small" color=${this.color} no-shadow>
+			<nb-button size="small" color=${this.color} no-shadow @click=${() => this._toggle()}>
 				<slot name="toggle"></slot>
 				&nbsp;&nbsp;&nbsp;
 				<i class="far fa-angle-down"></i>
@@ -78,7 +80,25 @@ export class NbDropdown extends LitElement {
 
 		this.addEventListener("select", e => {
 			this.slottedToggleElement.innerHTML = e.detail.label;
+			this.open = false;
 		});
+
+		// Initialize options from child <option> nodes if there are no options
+		if (!this.options.length) {
+			this.options = {};
+
+			for (const optionNode of this.querySelectorAll("option")) {
+				this.options[optionNode.value] = optionNode.innerHTML.trim();
+				optionNode.remove();
+			}
+		}
+	}
+
+	_toggle()
+	{
+		if (!this.getAttribute("reveal-on-hover")) {
+			this.open = !this.open;
+		}
 	}
 
 	get slottedToggleElement()

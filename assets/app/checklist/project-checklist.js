@@ -1,4 +1,4 @@
-import { LitElement, html } from "lit";
+import { LitElement, html, css } from "lit";
 import { ApiClient } from "../../utils/api";
 import stylesReset from "../../native-bear/styles-reset.js";
 
@@ -6,7 +6,12 @@ export class ProjectChecklist extends LitElement
 {
 	static get styles()
 	{
-		return stylesReset;
+		return [
+			stylesReset,
+			css`
+				checklist-group[hidden] + .spacer { display: none; }
+			`
+		];
 	}
 
 	static get properties()
@@ -14,6 +19,7 @@ export class ProjectChecklist extends LitElement
 		return {
 			projectId: {type: String},
 			groups: {type: Array},
+			filter: {type: String}
 		};
 	}
 
@@ -21,6 +27,7 @@ export class ProjectChecklist extends LitElement
 	{
 		super();
 		this.groups = [];
+		this.filter = null;
 		this._loaded = false;
 	}
 
@@ -43,12 +50,54 @@ export class ProjectChecklist extends LitElement
 	{
 		return html`
 			${this.groups.map(group => html`
-				<checklist-group projectId=${this.projectId} groupId=${group.id} .items=${group.items}>
+				<checklist-group projectId=${this.projectId} groupId=${group.id} filter=${this.filter} .items=${group.items}>
 					${group.name}
 				</checklist-group>
 				<hr class="spacer">
 			`)}
 		`;
+	}
+
+	firstUpdated(changedProperties)
+	{
+		if (changedProperties.has("filter")) {
+			this.updateComplete.then(() => {
+				return new Promise(resolve => {
+					const waitForGroupsInitializationInternal = setInterval(() => {
+						if (Object.values(this.groups).length > 0) {
+							clearInterval(waitForGroupsInitializationInternal);
+							resolve();
+						}
+					}, 50);
+				});
+			}).then(() => {
+				this._updateGroupsVisibility();
+			});
+		}
+	}
+
+	willUpdate(changedProperties)
+	{
+		if (changedProperties.has("filter")) {
+			this._updateGroupsVisibility();
+		}
+	}
+
+	/**
+	 * Automatically opens groups with visible items, and closes groups
+	 * with no visible items.
+	 */
+	_updateGroupsVisibility()
+	{
+		const hasFilter = !!this.filter;
+
+		for (const group of this.shadowRoot.querySelectorAll("checklist-group")) {
+			if (hasFilter) {
+				group.closed = group?.list.visibleItemCount == 0;
+			} else {
+				group.closed = group.completedItemCount >= group.itemCount;
+			}
+		}
 	}
 }
 
