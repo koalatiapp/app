@@ -76,7 +76,7 @@ export class ProjectChecklist extends LitElement
 		}
 	}
 
-	willUpdate(changedProperties)
+	updated(changedProperties)
 	{
 		if (changedProperties.has("filter")) {
 			this._updateGroupsVisibility();
@@ -92,11 +92,13 @@ export class ProjectChecklist extends LitElement
 		const hasFilter = !!this.filter;
 
 		for (const group of this.shadowRoot.querySelectorAll("checklist-group")) {
-			if (hasFilter) {
-				group.closed = group?.list.visibleItemCount == 0;
-			} else {
-				group.closed = group.completedItemCount >= group.itemCount;
-			}
+			group.updateComplete.then(() => {
+				if (hasFilter) {
+					group.closed = group?.list.visibleItemCount == 0;
+				} else {
+					group.closed = group.completedItemCount >= group.itemCount;
+				}
+			});
 		}
 	}
 }
