@@ -85,8 +85,8 @@ plan:
                     educational resources
                 </li>
                 <li>
-                    <i class="far fa-check text-green"></i>
-                    unlimited project members
+                    <i class="far fa-times text-gray"></i>
+                    no project members
                 </li>
                 <li>
                     <i class="far fa-times text-gray"></i>
@@ -117,7 +117,7 @@ plan:
                 </li>
                 <li>
                     <i class="far fa-check text-green"></i>
-                    unlimited project members
+                    project members
                 </li>
                 <li>
                     <i class="far fa-check text-green"></i>
@@ -148,7 +148,7 @@ plan:
                 </li>
                 <li>
                     <i class="far fa-check text-green"></i>
-                    unlimited project members
+                    project members
                 </li>
                 <li>
                     <i class="far fa-check text-green"></i>
