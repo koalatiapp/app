@@ -20,6 +20,8 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 class TestingRequestHandler implements MessageHandlerInterface
 {
+	public const MAX_PAGES_TO_TEST = 100;
+
 	/**
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
@@ -53,10 +55,27 @@ class TestingRequestHandler implements MessageHandlerInterface
 		$priority = $project->getPriority();
 		$tools = $this->getToolsToUse($message, $project);
 
+		// Remove invalid URLs
+		$pageUrls = array_filter($pageUrls, function ($url) {
+			return (bool) filter_var($url, FILTER_VALIDATE_URL);
+		});
+
 		// If there are no enable tools or active pages, the handling ends here.
 		if (!count($tools) || !count($pageUrls)) {
 			return;
 		}
+
+		// Sort URLs by length, with the shortests ones appearing first.
+		// Pages with shorter URLs are often more relevant for testing.
+		usort($pageUrls, function (string $urlA, string $urlB) {
+			return strlen(urldecode($urlA)) > strlen(urldecode($urlB)) ? 1 : -1;
+		});
+
+		// Limit the number of URLs sent for testing to reduce load on server
+		if (count($pageUrls) > self::MAX_PAGES_TO_TEST) {
+			$pageUrls = array_slice($pageUrls, 0, self::MAX_PAGES_TO_TEST);
+		}
+
 		try {
 			// Submit the processing request to the Tools API
 			$this->toolsEndpoint->request(array_values($pageUrls), array_values($tools), $priority);
