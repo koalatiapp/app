@@ -61,7 +61,7 @@ class Client implements ClientInterface
 	{
 		$method = trim(strtoupper($method));
 		$endpoint = '/'.ltrim($endpoint, '/');
-		$options = ['json' => $body];
+		$options = ['body' => $body];
 		$queryString = '';
 
 		if ($method == 'GET') {
