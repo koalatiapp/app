@@ -10,10 +10,23 @@ export class FeedbackFormToggle extends LitElement {
 		`;
 	}
 
+	static get properties() {
+		return {
+			type: {type: String},
+			displayMode: {type: String},
+			defaultMessage: {type: String},
+		};
+	}
+
 	constructor()
 	{
 		super();
+
 		this.setAttribute("role", "button");
+
+		this.type = null;
+		this.displayMode = null;
+		this.defaultMessage = null;
 	}
 
 	connectedCallback()
@@ -24,6 +37,10 @@ export class FeedbackFormToggle extends LitElement {
 
 	_becomeClickable()
 	{
+		if (this.displayMode == "button") {
+			return;
+		}
+
 		this.addEventListener("click", (e) => {
 			e.preventDefault();
 			this.showFeedbackForm();
@@ -43,6 +60,14 @@ export class FeedbackFormToggle extends LitElement {
 
 	render()
 	{
+		if (this.displayMode == "button") {
+			return html`
+				<nb-button @click=${() => this.showFeedbackForm()} size=${this.getAttribute("size") || "small"} color=${this.getAttribute("color") || "gray"}>
+					<slot></slot>
+				</nb-button>
+			`;
+		}
+
 		return html`
 			<slot></slot>
 	  	`;
@@ -55,14 +80,14 @@ export class FeedbackFormToggle extends LitElement {
 			content: html`
 				<form @submit=${this.constructor._submitCallback}>
 					<nb-radio-list name="type" label="${Translator.trans("feedback.form.type.label")}" required>
-						<option value="bug" selected>${Translator.trans("feedback.form.type.bug")}</option>
-						<option value="suggestion">${Translator.trans("feedback.form.type.suggestion")}</option>
-						<option value="other">${Translator.trans("feedback.form.type.other")}</option>
+						<option value="bug" ?selected=${!this.type || this.type == "bug"}>${Translator.trans("feedback.form.type.bug")}</option>
+						<option value="suggestion" ?selected=${this.type == "suggestion"}>${Translator.trans("feedback.form.type.suggestion")}</option>
+						<option value="other" ?selected=${this.type == "other"}>${Translator.trans("feedback.form.type.other")}</option>
 					</nb-radio-list>
 
 					<hr class="spacer small">
 
-					<nb-input name="message" type="textarea" label="${Translator.trans("feedback.form.message.label")}" rows="6" required></nb-input>
+					<nb-input name="message" type="textarea" label="${Translator.trans("feedback.form.message.label")}" value=${this.defaultMessage} rows="6" required></nb-input>
 
 					<hr>
 

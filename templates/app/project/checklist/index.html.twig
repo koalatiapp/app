@@ -7,6 +7,10 @@
 {% block section_title %}{{ project_breadcrumb_link(project) }}{% endblock %}
 {% block head %}
 	{{ encore_entry_link_tags('checklist') }}
+
+	<style>
+		project-checklist { display: block !important; min-height: 100vh; }
+	</style>
 {% endblock %}
 
 {% block page_tabs %}
@@ -29,6 +33,23 @@
 
 {% block body %}
 	<project-checklist projectId="{{ project.id|hashids_encode }}" filter="{{ active_filter }}"></project-checklist>
+
+	<hr class="thick">
+
+	<div class="grid">
+		<div class="card">
+			<h3>Done with the checklist?</h3>
+			<p>We tested your site automatically while you were busy.</p>
+			<p>Based on the results, we have a few recommendations to help you take your site to the next level.</p>
+			<hr class="spacer small">
+			<nb-button href="{{ path('project_testing', {id: project.id|hashids_encode}) }}" size="small">Explore recommendations</a>
+		</div>
+		<div class="card secondary">
+			<h3>Feel like something is missing?</h3>
+			<p>If you have suggestions on how to improve this checklist, we'd be more than happy to hear them out!</p>
+			<feedback-form-toggle displayMode="button" color="light" type="suggestion" defaultMessage="Hey there!&#10;&#10;I have a suggestion to improve the checklist:&#10;&#10;">I have a suggestion!</feedback-form-toggle>
+		</div>
+	</div>
 {% endblock %}
 
 {% block javascripts %}
