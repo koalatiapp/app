@@ -2,7 +2,7 @@
 
 namespace App\Subscription\Plan;
 
-class SoloPlan extends AbstractPlan
+class SoloPlan extends NoPlan
 {
 	/**
 	 * @var string UNIQUE_NAME Plan unique name
@@ -38,4 +38,9 @@ class SoloPlan extends AbstractPlan
 	 * @var bool HAS_MONITORING_ACCESS Whether the user has access to the monitoring features
 	 */
 	public const HAS_MONITORING_ACCESS = true;
+
+	public function isPaidPlan(): bool
+	{
+		return true;
+	}
 }
