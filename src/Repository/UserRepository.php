@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\User;
-use App\Subscription\Plan\FreePlan;
+use App\Subscription\Plan\NoPlan;
 use App\Subscription\Plan\TrialPlan;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -69,11 +69,11 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
 		return $this->createQueryBuilder('u')
 			->andWhere('u.subscriptionPlan = :trialPlan')
-			->andWhere('u.upcomingSubscriptionPlan = :freePlan')
+			->andWhere('u.upcomingSubscriptionPlan = :NoPlan')
 			->andWhere('u.subscriptionChangeDate > :now')
 			->andWhere('u.subscriptionChangeDate <= :expireBeforeDate')
 			->setParameter('trialPlan', TrialPlan::UNIQUE_NAME)
-			->setParameter('freePlan', FreePlan::UNIQUE_NAME)
+			->setParameter('NoPlan', NoPlan::UNIQUE_NAME)
 			->setParameter('now', new DateTime())
 			->setParameter('expireBeforeDate', $expireBeforeDate)
 			->getQuery()

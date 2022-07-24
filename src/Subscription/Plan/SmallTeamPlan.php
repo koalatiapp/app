@@ -15,9 +15,14 @@ class SmallTeamPlan extends SoloPlan
 	public const PADDLE_ID = '664975';
 
 	/**
-	 * @var int MAX_ACTIVE_PROJECTS Maximum number of active projects a user can have during a given month
+	 * @var int MAX_ACTIVE_PAGES_PER_PROJECT Maximum number of active pages a project can have
 	 */
-	public const MAX_ACTIVE_PROJECTS = 30;
+	public const MAX_ACTIVE_PAGES_PER_PROJECT = 100;
+
+	/**
+	 * @var int MAX_PROJECT_MEMBERS Maximum numbers of members a user can have in their project
+	 */
+	public const MAX_PROJECT_MEMBERS = PHP_INT_MAX;
 
 	/**
 	 * @var int MAX_TEAM_OWNED Maximum numbers of team a user can own

@@ -5,7 +5,7 @@ namespace App\Controller\Webhook;
 use App\Controller\AbstractController;
 use App\Entity\User;
 use App\Repository\UserRepository;
-use App\Subscription\Plan\FreePlan;
+use App\Subscription\Plan\NoPlan;
 use App\Subscription\PlanManager;
 use DateTime;
 use DateTimeImmutable;
@@ -115,7 +115,7 @@ class PaddleController extends AbstractController
 		$user = $this->getTargetUser($request);
 		$endDateString = $request->request->get('cancellation_effective_date');
 
-		$user->setUpcomingSubscriptionPlan(FreePlan::UNIQUE_NAME)
+		$user->setUpcomingSubscriptionPlan(NoPlan::UNIQUE_NAME)
 			->setSubscriptionChangeDate(new DateTime($endDateString))
 			->setSubscriptionRenewalDate(null)
 			->setPaddleSubscriptionId(null);

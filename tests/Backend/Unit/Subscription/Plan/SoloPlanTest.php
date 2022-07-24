@@ -3,7 +3,7 @@
 namespace App\Tests\Backend\Unit\Subscription\Plan;
 
 use App\Subscription\Plan\BusinessPlan;
-use App\Subscription\Plan\FreePlan;
+use App\Subscription\Plan\NoPlan;
 use App\Subscription\Plan\SmallTeamPlan;
 use App\Subscription\Plan\SoloPlan;
 use App\Subscription\Plan\TrialPlan;
@@ -19,7 +19,7 @@ class SoloPlanTest extends TestCase
 	 */
 	public function testIsUpgradeComparedTo(): void
 	{
-		$this->assertTrue((new SoloPlan())->isUpgradeComparedTo(new FreePlan()), 'SoloPlan isUpgradeComparedTo FreePlan');
+		$this->assertTrue((new SoloPlan())->isUpgradeComparedTo(new NoPlan()), 'SoloPlan isUpgradeComparedTo NoPlan');
 		$this->assertTrue((new SoloPlan())->isUpgradeComparedTo(new TrialPlan()), 'SoloPlan isUpgradeComparedTo TrialPlan');
 		$this->assertFalse((new SoloPlan())->isUpgradeComparedTo(new SoloPlan()), 'SoloPlan isUpgradeComparedTo SoloPlan');
 		$this->assertFalse((new SoloPlan())->isUpgradeComparedTo(new SmallTeamPlan()), 'SoloPlan isUpgradeComparedTo SmallTeamPlan');
@@ -31,7 +31,7 @@ class SoloPlanTest extends TestCase
 	 */
 	public function testIsDowngradeComparedTo(): void
 	{
-		$this->assertFalse((new SoloPlan())->isDowngradeComparedTo(new FreePlan()), 'SoloPlan isDowngradeComparedTo FreePlan');
+		$this->assertFalse((new SoloPlan())->isDowngradeComparedTo(new NoPlan()), 'SoloPlan isDowngradeComparedTo NoPlan');
 		$this->assertFalse((new SoloPlan())->isDowngradeComparedTo(new TrialPlan()), 'SoloPlan isDowngradeComparedTo TrialPlan');
 		$this->assertFalse((new SoloPlan())->isDowngradeComparedTo(new SoloPlan()), 'SoloPlan isDowngradeComparedTo SoloPlan');
 		$this->assertTrue((new SoloPlan())->isDowngradeComparedTo(new SmallTeamPlan()), 'SoloPlan isDowngradeComparedTo SmallTeamPlan');

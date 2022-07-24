@@ -5,7 +5,7 @@ namespace App\Subscription\Plan;
 abstract class AbstractPlan implements PlanInterface
 {
 	/**
-	 * @return string UNIQUE_NAME Plan unique name
+	 * @return string Plan unique name
 	 */
 	public function getUniqueName(): string
 	{
@@ -13,7 +13,7 @@ abstract class AbstractPlan implements PlanInterface
 	}
 
 	/**
-	 * @return string PADDLE_ID ID of this plan in Paddle
+	 * @return string ID of this plan in Paddle
 	 */
 	public function getPaddleId(): string
 	{
@@ -21,15 +21,15 @@ abstract class AbstractPlan implements PlanInterface
 	}
 
 	/**
-	 * @return int MAX_ACTIVE_PROJECTS Maximum number of active projects a user can have during a given month
+	 * @return int Maximum number of active pages a project can have
 	 */
-	public function getMaxActiveProjects(): int
+	public function getMaxActivePagesPerProject(): int
 	{
-		return static::MAX_ACTIVE_PROJECTS;
+		return static::MAX_ACTIVE_PAGES_PER_PROJECT;
 	}
 
 	/**
-	 * @return int MAX_TEAM_OWNED Maximum numbers of team a user can own
+	 * @return int Maximum numbers of team a user can own
 	 */
 	public function getMaxTeamOwned(): int
 	{
@@ -37,7 +37,7 @@ abstract class AbstractPlan implements PlanInterface
 	}
 
 	/**
-	 * @return int MAX_PROJECT_MEMBERS Maximum numbers of members a user can have in their project
+	 * @return int Maximum numbers of members a user can have in their project
 	 */
 	public function getMaxProjectMembers(): int
 	{
@@ -45,7 +45,7 @@ abstract class AbstractPlan implements PlanInterface
 	}
 
 	/**
-	 * @return bool HAS_CHECKLIST_ACCESS Whether the user has access to the Checklist feature
+	 * @return bool Whether the user has access to the Checklist feature
 	 */
 	public function hasChecklistAccess(): bool
 	{
@@ -53,7 +53,7 @@ abstract class AbstractPlan implements PlanInterface
 	}
 
 	/**
-	 * @return bool HAS_TESTING_ACCESS Whether the user has access to the testing features
+	 * @return bool Whether the user has access to the testing features
 	 */
 	public function hasTestingAccess(): bool
 	{
@@ -61,7 +61,7 @@ abstract class AbstractPlan implements PlanInterface
 	}
 
 	/**
-	 * @return bool HAS_MONITORING_ACCESS Whether the user has access to the monitoring features
+	 * @return bool Whether the user has access to the monitoring features
 	 */
 	public function hasMonitoringAccess(): bool
 	{
@@ -71,11 +71,11 @@ abstract class AbstractPlan implements PlanInterface
 	public function isUpgradeComparedTo(PlanInterface $comparativePlan): bool
 	{
 		if ($this instanceof TrialPlan) {
-			return $comparativePlan instanceof FreePlan;
+			return $comparativePlan instanceof NoPlan;
 		}
 
 		if ($comparativePlan instanceof TrialPlan) {
-			return get_class($this) != FreePlan::class;
+			return get_class($this) != NoPlan::class;
 		}
 
 		return is_subclass_of($this, $comparativePlan::class);
@@ -84,14 +84,19 @@ abstract class AbstractPlan implements PlanInterface
 	public function isDowngradeComparedTo(PlanInterface $comparativePlan): bool
 	{
 		if ($this instanceof TrialPlan) {
-			return !($comparativePlan instanceof FreePlan);
+			return !($comparativePlan instanceof NoPlan);
 		}
 
 		if ($comparativePlan instanceof TrialPlan) {
-			return get_class($this) == FreePlan::class;
+			return get_class($this) == NoPlan::class;
 		}
 
 		return is_subclass_of($comparativePlan, $this::class);
+	}
+
+	public function isPaidPlan(): bool
+	{
+		return true;
 	}
 
 	public function __toString()

@@ -20,8 +20,6 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 class TestingRequestHandler implements MessageHandlerInterface
 {
-	public const MAX_PAGES_TO_TEST = 100;
-
 	/**
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
@@ -50,6 +48,7 @@ class TestingRequestHandler implements MessageHandlerInterface
 			return;
 		}
 
+		$maxActivePageCount = $plan->getMaxActivePagesPerProject();
 		$pages = $this->getPagesToTest($message, $project);
 		$pageUrls = $pages->map(fn ($page) => $page->getUrl())->toArray();
 		$priority = $project->getPriority();
@@ -72,8 +71,8 @@ class TestingRequestHandler implements MessageHandlerInterface
 		});
 
 		// Limit the number of URLs sent for testing to reduce load on server
-		if (count($pageUrls) > self::MAX_PAGES_TO_TEST) {
-			$pageUrls = array_slice($pageUrls, 0, self::MAX_PAGES_TO_TEST);
+		if (count($pageUrls) > $maxActivePageCount) {
+			$pageUrls = array_slice($pageUrls, 0, $maxActivePageCount);
 		}
 
 		try {

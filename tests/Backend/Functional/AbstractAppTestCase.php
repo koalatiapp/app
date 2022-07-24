@@ -17,7 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 abstract class AbstractAppTestCase extends WebTestCase
 {
 	protected const USER_TEST = 'user.test';
-	protected const USER_FREE_PLAN = 'user.plan.free';
+	protected const USER_NO_PLAN = 'user.plan.none';
 	protected const USER_SOLO_PLAN = 'user.plan.solo';
 	protected const USER_SMALL_TEAM_PLAN = 'user.plan.team';
 	protected const USER_BUSINESS_PLAN = 'user.plan.business';
@@ -37,7 +37,7 @@ abstract class AbstractAppTestCase extends WebTestCase
 
 		$userEmail = match ($key) {
 			self::USER_TEST => 'name@email.com',
-			self::USER_FREE_PLAN => 'free@plan.com',
+			self::USER_NO_PLAN => 'no@plan.com',
 			self::USER_SOLO_PLAN => 'solo@plan.com',
 			self::USER_SMALL_TEAM_PLAN => 'smallteam@plan.com',
 			self::USER_BUSINESS_PLAN => 'business@plan.com',

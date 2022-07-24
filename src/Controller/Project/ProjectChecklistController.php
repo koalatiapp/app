@@ -2,15 +2,19 @@
 
 namespace App\Controller\Project;
 
+use App\Controller\Trait\SuggestUpgradeControllerTrait;
 use App\Entity\Checklist\Checklist;
 use App\Entity\Project;
 use App\Repository\Checklist\ChecklistTemplateRepository;
+use App\Security\ProjectVoter;
 use App\Util\Checklist\TemplateHydrator;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ProjectChecklistController extends AbstractProjectController
 {
+	use SuggestUpgradeControllerTrait;
+
 	/**
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.templateRepository)
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.templateHydrator)
@@ -52,6 +56,10 @@ class ProjectChecklistController extends AbstractProjectController
 	{
 		$project = $this->getProject($id);
 
+		if (!$this->isGranted(ProjectVoter::CHECKLIST, $project)) {
+			return $this->suggestPlanUpgrade('upgrade_suggestion.checklist');
+		}
+
 		if (!$project->getChecklist()) {
 			$this->autogenerateChecklist($project);
 		}
@@ -67,6 +75,10 @@ class ProjectChecklistController extends AbstractProjectController
 	public function stepByStep(int $id): Response
 	{
 		$project = $this->getProject($id);
+
+		if (!$this->isGranted(ProjectVoter::CHECKLIST, $project)) {
+			return $this->suggestPlanUpgrade('upgrade_suggestion.checklist');
+		}
 
 		return $this->render('app/project/checklist/index.html.twig', [
 			'project' => $project,

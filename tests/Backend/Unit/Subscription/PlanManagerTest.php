@@ -6,9 +6,12 @@ use App\Entity\Organization;
 use App\Entity\OrganizationMember;
 use App\Entity\User;
 use App\Exception\NonExistantSubscriptionPlanException;
+use App\Subscription\Plan\BusinessAnnualPlan;
 use App\Subscription\Plan\BusinessPlan;
-use App\Subscription\Plan\FreePlan;
+use App\Subscription\Plan\NoPlan;
+use App\Subscription\Plan\SmallTeamAnnualPlan;
 use App\Subscription\Plan\SmallTeamPlan;
+use App\Subscription\Plan\SoloAnnualPlan;
 use App\Subscription\Plan\SoloPlan;
 use App\Subscription\Plan\TrialPlan;
 use App\Subscription\PlanManager;
@@ -34,16 +37,22 @@ class PlanManagerTest extends KernelTestCase
 		$availablePlans = $this->planManager->getAvailablePlans();
 
 		$this->assertArrayHasKey('Trial', $availablePlans);
-		$this->assertArrayHasKey('Free', $availablePlans);
+		$this->assertArrayHasKey('NoSubscription', $availablePlans);
 		$this->assertArrayHasKey('Solo', $availablePlans);
+		$this->assertArrayHasKey('SoloAnnual', $availablePlans);
 		$this->assertArrayHasKey('SmallTeam', $availablePlans);
+		$this->assertArrayHasKey('SmallTeamAnnual', $availablePlans);
 		$this->assertArrayHasKey('Business', $availablePlans);
+		$this->assertArrayHasKey('BusinessAnnual', $availablePlans);
 
 		$this->assertEquals($availablePlans['Trial']::class, TrialPlan::class);
-		$this->assertEquals($availablePlans['Free']::class, FreePlan::class);
+		$this->assertEquals($availablePlans['NoSubscription']::class, NoPlan::class);
 		$this->assertEquals($availablePlans['Solo']::class, SoloPlan::class);
+		$this->assertEquals($availablePlans['SoloAnnual']::class, SoloAnnualPlan::class);
 		$this->assertEquals($availablePlans['SmallTeam']::class, SmallTeamPlan::class);
+		$this->assertEquals($availablePlans['SmallTeamAnnual']::class, SmallTeamAnnualPlan::class);
 		$this->assertEquals($availablePlans['Business']::class, BusinessPlan::class);
+		$this->assertEquals($availablePlans['BusinessAnnual']::class, BusinessAnnualPlan::class);
 	}
 
 	/**
@@ -52,7 +61,7 @@ class PlanManagerTest extends KernelTestCase
 	public function testGetPlanFromUniqueName(): void
 	{
 		$this->assertEquals($this->planManager->getPlanFromUniqueName('Trial')::class, TrialPlan::class);
-		$this->assertEquals($this->planManager->getPlanFromUniqueName('Free')::class, FreePlan::class);
+		$this->assertEquals($this->planManager->getPlanFromUniqueName('NoSubscription')::class, NoPlan::class);
 		$this->assertEquals($this->planManager->getPlanFromUniqueName('Solo')::class, SoloPlan::class);
 		$this->assertEquals($this->planManager->getPlanFromUniqueName('SmallTeam')::class, SmallTeamPlan::class);
 		$this->assertEquals($this->planManager->getPlanFromUniqueName('Business')::class, BusinessPlan::class);
@@ -83,7 +92,7 @@ class PlanManagerTest extends KernelTestCase
 	 */
 	public function testGetPlanFromPaddleId(): void
 	{
-		$this->assertEquals($this->planManager->getPlanFromPaddleId('738679')::class, FreePlan::class, 'Get FreePlan from Paddle ID');
+		$this->assertEquals($this->planManager->getPlanFromPaddleId('738679')::class, NoPlan::class, 'Get NoPlan from Paddle ID');
 		$this->assertEquals($this->planManager->getPlanFromPaddleId('664974')::class, SoloPlan::class, 'Get SoloPlan from Paddle ID');
 		$this->assertEquals($this->planManager->getPlanFromPaddleId('664975')::class, SmallTeamPlan::class, 'Get SmallTeamPlan from Paddle ID');
 		$this->assertEquals($this->planManager->getPlanFromPaddleId('664976')::class, BusinessPlan::class, 'Get BusinessPlan from Paddle ID');

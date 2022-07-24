@@ -7,7 +7,6 @@ use App\Form\Project\NewProjectType;
 use App\Message\FaviconRequest;
 use App\Message\ScreenshotRequest;
 use App\Message\SitemapRequest;
-use App\Subscription\QuotaManager;
 use App\Util\Url;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,7 +18,7 @@ class ProjectCreationController extends AbstractProjectController
 	/**
 	 * @Route("/project/create", name="project_creation")
 	 */
-	public function projectCreation(Url $urlHelper, Request $request, QuotaManager $quotaManager): Response
+	public function projectCreation(Url $urlHelper, Request $request): Response
 	{
 		$project = new Project();
 		$project->setOwnerUser($this->getUser());
@@ -66,8 +65,6 @@ class ProjectCreationController extends AbstractProjectController
 				$this->dispatchMessage(new FaviconRequest($project->getId()));
 				$this->dispatchMessage(new SitemapRequest($project->getId()));
 				$this->addFlash('success', 'project_creation.flash.created_successfully', ['%name%' => $project->getName()]);
-
-				$quotaManager->notifyIfQuotaExceeded($project);
 
 				return $this->redirectToRoute('project_dashboard', ['id' => $this->idHasher->encode($project->getId())]);
 			}

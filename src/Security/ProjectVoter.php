@@ -4,6 +4,7 @@ namespace App\Security;
 
 use App\Entity\Project;
 use App\Entity\User;
+use App\Subscription\Plan\NoPlan;
 use App\Subscription\PlanManager;
 use Exception;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -14,6 +15,7 @@ class ProjectVoter extends Voter
 	public const VIEW = 'view';
 	public const PARTICIPATE = 'participate';
 	public const MANAGE = 'manage';
+	public const CHECKLIST = 'checklist';
 	public const TESTING = 'testing';
 
 	/**
@@ -33,17 +35,28 @@ class ProjectVoter extends Voter
 	}
 
 	/**
+	 * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+	 * @SuppressWarnings(PHPMD.NPathComplexity)
+	 *
 	 * @param Project $project
 	 */
 	protected function voteOnAttribute(string $attribute, mixed $project, TokenInterface $token): bool
 	{
-		if (!in_array($attribute, [self::VIEW, self::PARTICIPATE, self::MANAGE, self::TESTING])) {
+		if (!in_array($attribute, [self::VIEW, self::PARTICIPATE, self::MANAGE, self::CHECKLIST, self::TESTING])) {
 			throw new Exception("Undefined project voter attribute: $attribute");
 		}
 
-		if ($attribute == self::TESTING) {
-			$plan = $this->planManager->getPlanFromEntity($project->getOwner());
+		$plan = $this->planManager->getPlanFromEntity($project->getOwner());
 
+		if ($plan instanceof NoPlan && $attribute != self::VIEW) {
+			return false;
+		}
+
+		if ($attribute == self::CHECKLIST) {
+			return $plan->hasChecklistAccess();
+		}
+
+		if ($attribute == self::TESTING) {
 			return $plan->hasTestingAccess();
 		}
 

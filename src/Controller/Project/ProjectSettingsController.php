@@ -2,11 +2,13 @@
 
 namespace App\Controller\Project;
 
+use App\Controller\Trait\SuggestUpgradeControllerTrait;
 use App\Entity\Project;
 use App\Form\Project\ProjectSettingsType;
 use App\Message\FaviconRequest;
 use App\Message\ScreenshotRequest;
 use App\Message\SitemapRequest;
+use App\Security\ProjectVoter;
 use App\Util\Testing\AvailableToolsFetcher;
 use App\Util\Url;
 use Symfony\Component\Form\Form;
@@ -17,12 +19,18 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ProjectSettingsController extends AbstractProjectController
 {
+	use SuggestUpgradeControllerTrait;
+
 	/**
 	 * @Route("/project/{id}/settings/team", name="project_settings_team")
 	 */
 	public function teamSettings(int $id): Response
 	{
 		$project = $this->getProject($id);
+
+		if (!$this->isGranted(ProjectVoter::MANAGE, $project)) {
+			return $this->suggestPlanUpgrade('upgrade_suggestion.project');
+		}
 
 		return $this->render('app/project/settings/team.html.twig', ['project' => $project]);
 	}
@@ -34,6 +42,10 @@ class ProjectSettingsController extends AbstractProjectController
 	{
 		$project = $this->getProject($id);
 
+		if (!$this->isGranted(ProjectVoter::MANAGE, $project)) {
+			return $this->suggestPlanUpgrade('upgrade_suggestion.project');
+		}
+
 		return $this->render('app/project/settings/checklist.html.twig', ['project' => $project]);
 	}
 
@@ -43,6 +55,10 @@ class ProjectSettingsController extends AbstractProjectController
 	public function automatedTestingSettings(int $id, AvailableToolsFetcher $availableToolsFetcher): Response
 	{
 		$project = $this->getProject($id);
+
+		if (!$this->isGranted(ProjectVoter::MANAGE, $project)) {
+			return $this->suggestPlanUpgrade('upgrade_suggestion.project');
+		}
 
 		return $this->render('app/project/settings/automated-testing.html.twig', ['project' => $project, 'tools' => $availableToolsFetcher->getTools()]);
 	}
@@ -54,6 +70,10 @@ class ProjectSettingsController extends AbstractProjectController
 	{
 		$project = $this->getProject($id);
 		$originalProject = clone $project;
+
+		if (!$this->isGranted(ProjectVoter::MANAGE, $project)) {
+			return $this->suggestPlanUpgrade('upgrade_suggestion.project');
+		}
 
 		/**
 		 * @var \Symfony\Component\Form\Form $form

@@ -4,7 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\User;
 use App\Subscription\Plan\BusinessPlan;
-use App\Subscription\Plan\FreePlan;
+use App\Subscription\Plan\NoPlan;
 use App\Subscription\Plan\SmallTeamPlan;
 use App\Subscription\Plan\SoloPlan;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -37,12 +37,12 @@ class UserFixtures extends Fixture
 			));
 		$manager->persist($user);
 
-		// User with "Free" plan
+		// User without subscription plan
 		$user = new User();
-		$user->setEmail('free@plan.com')
+		$user->setEmail('no@plan.com')
 			->setFirstName('Jimmy "Free"')
 			->setLastName('Will')
-			->setSubscriptionPlan(FreePlan::UNIQUE_NAME)
+			->setSubscriptionPlan(NoPlan::UNIQUE_NAME)
 			->setPassword($this->passwordHasher->hashPassword(
 				$user,
 				'123456'

@@ -26,7 +26,7 @@ class Crawler
 	/**
 	 * Maximum number of unique pages to crawl.
 	 */
-	public const MAX_CRAWL_PAGES = 100;
+	public const MAX_CRAWL_PAGES = 1000;
 
 	/**
 	 * @var array<string,Location>

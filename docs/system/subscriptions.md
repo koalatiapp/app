@@ -31,13 +31,3 @@ TODO: The internal API returns a 403 response code with a special message, which
 
 #### For message handlers
 In case a message makes its way through without the user having adequate permissions with their current plan, the handler should simply end the processing of that message without any further feedback.
-
-
-### Quotas
-At the moment, the only quota is that of the active projects per month. 
-
-This quota is actually a soft-limit: the users are not stopped from going over their quota, but they will receive a notice that they are over their quota and should upgrade their plan if they plan to keep exceeding it. 
-
-This check/notice is handled by the [QuotaManager](/src/Subscription/QuotaManager.php)'s `notifyIfQuotaExceeded(Project $project)` method, which should be called whenever an action could have increased the number of active projects for a user.
-
-TODO: Implement either a hard limit for quotas, or a way to easily monitor and handle users who always go over their quota.

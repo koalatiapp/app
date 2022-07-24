@@ -16,6 +16,7 @@
 			.current-indicator { display: inline-block; margin-bottom: 1rem; transform: none; position: static; }
 		}
 	</style>
+	{{ encore_entry_link_tags('settings') }}
 {% endblock %}
 
 {% block body %}
@@ -38,14 +39,18 @@
 	<div class="grid">
 		{% for plan in plans %}
 			<div class="card plan">
+				<h3 class="name">{{ ("plan." ~ plan ~ ".name")|trans }}</h3>
+
 				{% if constant("PADDLE_ID", currentPlan) == constant("PADDLE_ID", plan) %}
 					<div class="current-indicator">{% trans %}user_settings.subscription.plans.current_label{% endtrans %}</div>
 				{% endif %}
-				<h3 class="name">{{ ("plan." ~ plan ~ ".name")|trans }}</h3>
+
 				<div class="price">{{ ("plan." ~ plan ~ ".price")|trans }}</div>
 				<div class="price-suffix">{% trans %}user_settings.subscription.plans.price_suffix{% endtrans %}</div>
 				{{ ("plan." ~ plan ~ ".features")|trans|raw }}
+
 				<hr>
+
 				<div class="button-container">
 					{% if (upcomingPlan and upcomingPlan == constant("UNIQUE_NAME", plan)) or (not upcomingPlan and constant("PADDLE_ID", currentPlan) == constant("PADDLE_ID", plan)) %}
 						<nb-button disabled>{% trans with {"%plan%": ("plan." ~ plan ~ ".name")|trans} %}user_settings.subscription.plans.select{% endtrans %}</nb-button>
@@ -77,15 +82,30 @@
 				{% endif %}
 			</ul>
 		</div>
-		<div class="card">
-			<h2>{% trans %}user_settings.subscription.usage.title{% endtrans %}</h2>
-			<canvas id="usage-chart" width="400" height="100"></canvas>
-		</div>
+		{% if currentPlan.isPaidPlan() and app.user.subscriptionRenewalDate %}
+			<div class="card">
+				<h2>{% trans %}user_settings.subscription.overview.cancellation{% endtrans %}</h2>
+				{% trans with {
+					"%endDate%": app.user.subscriptionRenewalDate|date("F jS Y"),
+					"%supportUrl%": path("help"),
+				} %}user_settings.subscription.overview.cancellation_text{% endtrans %}
+
+				<hr class="spacer small">
+
+				<subscription-cancel-button color="danger" size="small">
+					{% trans %}user_settings.subscription.overview.cancellation_button{% endtrans %}
+				</subscription-cancel-button>
+			</div>
+		{% else %}
+			<div></div>
+		{% endif %}
 	</div>
 {% endblock %}
 
 {% set paddle_vendor_id = app.request.server.get("PADDLE_VENDOR_ID") %}
 {% block javascripts %}
+	{{ encore_entry_script_tags('settings') }}
+
 	{% if not app.user.paddleSubscriptionId %}
 		<script src="https://cdn.paddle.com/paddle/paddle.js"></script>
 		<script type="text/javascript" paddle-vendor-id="{{ paddle_vendor_id }}">
@@ -105,45 +125,4 @@
 			})();
 		</script>
 	{% endif %}
-
-	{% include "app/_parts/chartjs.html.twig" %}
-	<script usage-history-data="{{ activeProjectCountHistory|json_encode }}" max-active-projects="{{ currentPlan.maxActiveProjects }}">
-		/* global Chart */
-		const maxActiveProjects = document.currentScript.getAttribute("max-active-projects");
-		const usageData = JSON.parse(document.currentScript.getAttribute("usage-history-data"));
-		const monthLabels = Object.keys(usageData);
-		const quotaLineData = Array(monthLabels.length + 2).fill(maxActiveProjects);
-		const chartContext = document.getElementById("usage-chart").getContext("2d");
-
-		new Chart(chartContext, {
-			type: "bar",
-			data: {
-				labels: ["", ...monthLabels, ""],
-				datasets: [{
-					type: "bar",
-					label: "Active projects",
-					data: usageData,
-				}, {
-					type: "line",
-					label: "Quota for your plan",
-					data: quotaLineData,
-					borderColor: "#c11919",
-					backgroundColor: "#c11919",
-					pointRadius: 0,
-				}],
-			},
-			options: {
-				animations: "",
-				scales: {
-					y: {
-						beginAtZero: true,
-						suggestedMax: Math.max(...[maxActiveProjects, ...Object.values(usageData)]) + 1,
-						ticks: {
-							precision: 0
-						}
-					}
-				},
-			}
-		});
-		</script>
 {% endblock %}
