@@ -3,8 +3,11 @@
 namespace App\Controller\User;
 
 use App\Controller\AbstractController;
+use App\Subscription\Plan\BusinessAnnualPlan;
 use App\Subscription\Plan\BusinessPlan;
+use App\Subscription\Plan\SmallTeamAnnualPlan;
 use App\Subscription\Plan\SmallTeamPlan;
+use App\Subscription\Plan\SoloAnnualPlan;
 use App\Subscription\Plan\SoloPlan;
 use App\Subscription\PlanManager;
 use DateTime;
@@ -32,6 +35,9 @@ class SubscriptionController extends AbstractController
 			new SoloPlan(),
 			new SmallTeamPlan(),
 			new BusinessPlan(),
+			new SoloAnnualPlan(),
+			new SmallTeamAnnualPlan(),
+			new BusinessAnnualPlan(),
 		];
 
 		$upcomingPlan = null;

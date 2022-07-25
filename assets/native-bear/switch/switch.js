@@ -17,6 +17,12 @@ export class NbSwitch extends LitElement {
 
 				:host([labelFirst]) .switch { order: 2; }
 
+				:host([showBothLabels]) { display: inline-grid; grid-template-columns: 1fr auto 1fr; }
+				:host([showBothLabels]) .state-label.off { text-align: right; font-weight: 500; color: var(--color-black); }
+				:host([showBothLabels]) .state-label.on { text-align: left; }
+				:host([showBothLabels][checked]) .state-label.on { font-weight: 500; color: var(--color-black); }
+				:host([showBothLabels][checked]) .state-label.off { font-weight: 400; color: var(--color-gray-dark); }
+
 				@media (prefers-color-scheme: dark) {
 					:host([checked]) .switch { background-color: var(--color-blue); border-color: var(--color-blue); }
 					:host([checked]) .ball { background-color: var(--color-black); }
@@ -36,6 +42,7 @@ export class NbSwitch extends LitElement {
 			onLabel: { type: String },
 			offLabel: { type: String },
 			checked: { type: Boolean, reflect: true },
+			showBothLabels: { type: Boolean },
 		};
 	}
 
@@ -45,6 +52,7 @@ export class NbSwitch extends LitElement {
 		this.onLabel = null;
 		this.offLabel = null;
 		this.checked = false;
+		this.showBothLabels = false;
 		this.internals = this.attachInternals();
 
 		try {
@@ -58,6 +66,16 @@ export class NbSwitch extends LitElement {
 
 	render()
 	{
+		if (this.showBothLabels) {
+			return html`
+				<span class="state-label off">${this.offLabel}</span>
+				<span class="switch">
+					<span class="ball"></span>
+				</span>
+				<span class="state-label on">${this.onLabel}</span>
+			  `;
+		}
+
 		return html`
 			<span class="switch">
 				<span class="ball"></span>
@@ -71,6 +89,17 @@ export class NbSwitch extends LitElement {
 		super.connectedCallback();
 		this._registerClickListener();
 		this.internals.ariaChecked = this.checked ? "true" : "false";
+
+		this.setAttribute("tabindex", 0);
+
+		this.addEventListener("keydown", (e) => {
+			if (e.key != "Enter") {
+				return;
+			}
+
+			e.preventDefault();
+			this.click();
+		});
 	}
 
 	toggle(forceState)

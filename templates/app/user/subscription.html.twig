@@ -11,6 +11,10 @@
 		.plan li { margin: .75em auto; }
 		.plan li i { margin-right: .5ch; text-indent: -1ch; }
 		.current-indicator { padding: 0.25em 1em; font-size: .75rem; font-weight: 600; color: var(--color-white); background-color: var(--color-black); border-radius: 0.7em; position: absolute; top: -1em; left: 50%; transform: translate(-50%); }
+		.annual-indicator { display: inline-block; padding: 0.25em 1em; font-size: .75rem; font-weight: 600; color: var(--color-black); background-color: var(--color-green-20); border-radius: 0.7em; position: absolute; top: 1em; left: -1.25em; transform: rotate(-30deg); }
+
+		#plans[frequency="monthly"] .plan[frequency="annual"] { display: none; }
+		#plans[frequency="annual"] .plan[frequency="monthly"] { display: none; }
 
 		@media (max-width: 1080px) {
 			.current-indicator { display: inline-block; margin-bottom: 1rem; transform: none; position: static; }
@@ -20,7 +24,6 @@
 {% endblock %}
 
 {% block body %}
-
 	{% if upcomingPlan %}
 		<div class="notice">
 			{% if constant("UNIQUE_NAME", currentPlan) == "Trial" %}
@@ -37,38 +40,7 @@
 	{% endif %}
 
 	<div class="grid">
-		{% for plan in plans %}
-			<div class="card plan">
-				<h3 class="name">{{ ("plan." ~ plan ~ ".name")|trans }}</h3>
-
-				{% if constant("PADDLE_ID", currentPlan) == constant("PADDLE_ID", plan) %}
-					<div class="current-indicator">{% trans %}user_settings.subscription.plans.current_label{% endtrans %}</div>
-				{% endif %}
-
-				<div class="price">{{ ("plan." ~ plan ~ ".price")|trans }}</div>
-				<div class="price-suffix">{% trans %}user_settings.subscription.plans.price_suffix{% endtrans %}</div>
-				{{ ("plan." ~ plan ~ ".features")|trans|raw }}
-
-				<hr>
-
-				<div class="button-container">
-					{% if (upcomingPlan and upcomingPlan == constant("UNIQUE_NAME", plan)) or (not upcomingPlan and constant("PADDLE_ID", currentPlan) == constant("PADDLE_ID", plan)) %}
-						<nb-button disabled>{% trans with {"%plan%": ("plan." ~ plan ~ ".name")|trans} %}user_settings.subscription.plans.select{% endtrans %}</nb-button>
-					{% else %}
-						<paddle-subscription-button productId="{{ constant("PADDLE_ID", plan) }}" planName="{{ constant("UNIQUE_NAME", plan) }}" actionType="{{ app.user.paddleSubscriptionId ? "api" : "checkout" }}" changeType="{{ plan.isUpgradeComparedTo(currentPlan) ? "upgrade" : "downgrade" }}">
-							{% trans with {"%plan%": ("plan." ~ plan ~ ".name")|trans} %}user_settings.subscription.plans.select{% endtrans %}
-						</paddle-subscription-button>
-				{% endif %}
-				</div>
-			</div>
-		{% endfor %}
-	</div>
-
-	<hr class="large">
-
-	<div class="grid">
 		<div class="card">
-			<h2>{% trans %}user_settings.subscription.overview.title{% endtrans %}</h2>
 			<ul>
 				<li>
 					<strong>{% trans %}user_settings.subscription.overview.current_plan{% endtrans %}:</strong>
@@ -100,6 +72,58 @@
 			<div></div>
 		{% endif %}
 	</div>
+
+	<hr>
+	<hr class="spacer small">
+
+	<div class="text-center">
+		<div id="renewal-frequency-wrapper">
+			<nb-switch
+				onLabel="{% trans %}user_settings.subscription.frequency.annual{% endtrans %}"
+				offLabel="{% trans %}user_settings.subscription.frequency.monthly{% endtrans %}"
+				id="frequency-switch"
+				showBothLabels></nb-switch>
+		</div>
+	</div>
+
+	<hr class="spacer small">
+
+	<div class="grid" frequency="monthly" id="plans">
+		{% for plan in plans %}
+			{% set plan_trans_key = plan|replace({"Annual": ""}) %}
+
+			<div class="card plan" frequency="{{ plan.isAnnualPlan ? "annual" : "monthly" }}">
+				<h3 class="name">{{ ("plan." ~ plan_trans_key ~ ".name")|trans }}</h3>
+
+				{% if constant("PADDLE_ID", currentPlan) == constant("PADDLE_ID", plan) %}
+					<div class="current-indicator">{% trans %}user_settings.subscription.plans.current_label{% endtrans %}</div>
+				{% endif %}
+
+				{% if plan.isAnnualPlan %}
+					<div class="price">{{ ("plan." ~ plan_trans_key ~ ".annual_price")|trans }}</div>
+					<div class="price-suffix">{% trans %}user_settings.subscription.plans.price_suffix_annual{% endtrans %}</div>
+					<div class="annual-indicator">{% trans %}user_settings.subscription.plans.annual_indicator{% endtrans %}</div>
+				{% else %}
+					<div class="price">{{ ("plan." ~ plan_trans_key ~ ".price")|trans }}</div>
+					<div class="price-suffix">{% trans %}user_settings.subscription.plans.price_suffix{% endtrans %}</div>
+				{% endif %}
+
+				{{ ("plan." ~ plan_trans_key ~ ".features")|trans|raw }}
+
+				<hr>
+
+				<div class="button-container">
+					{% if (upcomingPlan and upcomingPlan == constant("UNIQUE_NAME", plan)) or (not upcomingPlan and constant("PADDLE_ID", currentPlan) == constant("PADDLE_ID", plan)) %}
+						<nb-button disabled>{% trans with {"%plan%": ("plan." ~ plan_trans_key ~ ".name")|trans} %}user_settings.subscription.plans.select{% endtrans %}</nb-button>
+					{% else %}
+						<paddle-subscription-button productId="{{ constant("PADDLE_ID", plan) }}" planName="{{ constant("UNIQUE_NAME", plan) }}" actionType="{{ app.user.paddleSubscriptionId ? "api" : "checkout" }}" changeType="{{ plan.isUpgradeComparedTo(currentPlan) ? "upgrade" : "downgrade" }}">
+							{% trans with {"%plan%": ("plan." ~ plan_trans_key ~ ".name")|trans} %}user_settings.subscription.plans.select{% endtrans %}
+						</paddle-subscription-button>
+				{% endif %}
+				</div>
+			</div>
+		{% endfor %}
+	</div>
 {% endblock %}
 
 {% set paddle_vendor_id = app.request.server.get("PADDLE_VENDOR_ID") %}
@@ -125,4 +149,13 @@
 			})();
 		</script>
 	{% endif %}
+
+	<script type="module">
+		const plansWrapper = document.querySelector("#plans");
+		const frequencySwitch = document.querySelector("#frequency-switch");
+
+		frequencySwitch.addEventListener("change", () => {
+			plansWrapper.setAttribute("frequency", frequencySwitch.checked ? "annual" : "monthly");
+		});
+	</script>
 {% endblock %}

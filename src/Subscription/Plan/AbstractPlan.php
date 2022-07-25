@@ -99,6 +99,11 @@ abstract class AbstractPlan implements PlanInterface
 		return true;
 	}
 
+	public function isAnnualPlan(): bool
+	{
+		return str_ends_with($this->getUniqueName(), "Annual");
+	}
+
 	public function __toString()
 	{
 		return static::UNIQUE_NAME;

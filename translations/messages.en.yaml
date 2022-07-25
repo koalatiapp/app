@@ -43,6 +43,7 @@ plan:
     Solo:
         name: Solo
         price: $15
+        annual_price: $150
         features: >
             <ul class="features">
                 <li>
@@ -69,6 +70,7 @@ plan:
     SmallTeam:
         name: Small team
         price: $75
+        annual_price: $750
         features: >
             <ul class="features">
                 <li>
@@ -96,6 +98,7 @@ plan:
     Business:
         name: Business
         price: $200
+        annual_price: $2,000
         features: >
             <ul class="features">
                 <li>
@@ -391,9 +394,14 @@ user_settings:
             select: Switch to %plan%
             current_label: Current plan
             price_suffix: per month
+            price_suffix_annual: per year
+            annual_indicator: 2 months free!
             upgrade_payment_notice: When you upgrade your plan, you will be billed the prorated cost of this new plan for the remainder of your current billing period.
             confirm_upgrade: Are you sure you want to upgrade your subscription to the %newPlan% plan?
             confirm_downgrade: Are you sure you want to downgrade your subscription to the %newPlan% plan?
+        frequency:
+            monthly: Monthly
+            annual: Annual ✨
         flash:
             subscription_change_success: Your subscription is being updated! Please hold on, this page will reload in just a moment...
             subscription_cancellation_success: Your subscription has been cancelled! Please hold on, this page will reload in just a moment...

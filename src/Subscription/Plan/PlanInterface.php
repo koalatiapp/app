@@ -90,5 +90,7 @@ interface PlanInterface
 
 	public function isPaidPlan(): bool;
 
+	public function isAnnualPlan(): bool;
+
 	public function __toString();
 }
