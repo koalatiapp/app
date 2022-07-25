@@ -48,7 +48,7 @@ class ProjectVoter extends Voter
 
 		$plan = $this->planManager->getPlanFromEntity($project->getOwner());
 
-		if ($plan instanceof NoPlan && $attribute != self::VIEW) {
+		if (get_class($plan) == NoPlan::class && $attribute != self::VIEW) {
 			return false;
 		}
 
