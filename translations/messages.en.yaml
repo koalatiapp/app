@@ -40,6 +40,8 @@ plan:
     Trial:
         name: Free Trial
         price: $0
+    SoloAnnual:
+        name: Solo (annual)
     Solo:
         name: Solo
         price: $15
@@ -67,6 +69,8 @@ plan:
                     no team creation
                 </li>
             </ul>
+    SmallTeamAnnual:
+        name: Small team (annual)
     SmallTeam:
         name: Small team
         price: $75
@@ -94,7 +98,8 @@ plan:
                     team creation
                 </li>
             </ul>
-
+    BusinessAnnual:
+        name: Business (annual)
     Business:
         name: Business
         price: $200
