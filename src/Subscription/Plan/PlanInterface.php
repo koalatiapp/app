@@ -15,9 +15,9 @@ interface PlanInterface
 	public const PADDLE_ID = '';
 
 	/**
-	 * @var int MAX_ACTIVE_PROJECTS Maximum number of active projects a user can have during a given month
+	 * @var int MAX_ACTIVE_PAGES_PER_PROJECT Maximum number of active pages a project can have
 	 */
-	public const MAX_ACTIVE_PROJECTS = 0;
+	public const MAX_ACTIVE_PAGES_PER_PROJECT = 0;
 
 	/**
 	 * @var int MAX_TEAM_OWNED Maximum numbers of team a user can own
@@ -45,48 +45,52 @@ interface PlanInterface
 	public const HAS_MONITORING_ACCESS = false;
 
 	/**
-	 * @return string UNIQUE_NAME Plan unique name
+	 * @return string Plan unique name
 	 */
 	public function getUniqueName(): string;
 
 	/**
-	 * @return string PADDLE_ID ID of this plan in Paddle
+	 * @return string of this plan in Paddle
 	 */
 	public function getPaddleId(): string;
 
 	/**
-	 * @return int MAX_ACTIVE_PROJECTS Maximum number of active projects a user can have during a given month
+	 * @return int Maximum number of active pages a project can have
 	 */
-	public function getMaxActiveProjects(): int;
+	public function getMaxActivePagesPerProject(): int;
 
 	/**
-	 * @return int MAX_TEAM_OWNED Maximum numbers of team a user can own
+	 * @return int Maximum numbers of team a user can own
 	 */
 	public function getMaxTeamOwned(): int;
 
 	/**
-	 * @return int MAX_PROJECT_MEMBERS Maximum numbers of members a user can have in their project
+	 * @return int Maximum numbers of members a user can have in their project
 	 */
 	public function getMaxProjectMembers(): int;
 
 	/**
-	 * @return bool HAS_CHECKLIST_ACCESS Whether the user has access to the Checklist feature
+	 * @return bool Whether the user has access to the Checklist feature
 	 */
 	public function hasChecklistAccess(): bool;
 
 	/**
-	 * @return bool HAS_TESTING_ACCESS Whether the user has access to the testing features
+	 * @return bool Whether the user has access to the testing features
 	 */
 	public function hasTestingAccess(): bool;
 
 	/**
-	 * @return bool HAS_MONITORING_ACCESS Whether the user has access to the monitoring features
+	 * @return bool Whether the user has access to the monitoring features
 	 */
 	public function hasMonitoringAccess(): bool;
 
 	public function isUpgradeComparedTo(PlanInterface $comparativePlan): bool;
 
 	public function isDowngradeComparedTo(PlanInterface $comparativePlan): bool;
+
+	public function isPaidPlan(): bool;
+
+	public function isAnnualPlan(): bool;
 
 	public function __toString();
 }

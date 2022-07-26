@@ -3,38 +3,38 @@
 namespace App\Tests\Backend\Unit\Subscription\Plan;
 
 use App\Subscription\Plan\BusinessPlan;
-use App\Subscription\Plan\FreePlan;
+use App\Subscription\Plan\NoPlan;
 use App\Subscription\Plan\SmallTeamPlan;
 use App\Subscription\Plan\SoloPlan;
 use App\Subscription\Plan\TrialPlan;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \FreePlan::
+ * @covers \NoPlan::
  */
-class FreePlanTest extends TestCase
+class NoPlanTest extends TestCase
 {
 	/**
-	 * @covers \FreePlan::isUpgradeComparedTo
+	 * @covers \NoPlan::isUpgradeComparedTo
 	 */
 	public function testIsUpgradeComparedTo(): void
 	{
-		$this->assertFalse((new FreePlan())->isUpgradeComparedTo(new FreePlan()), 'FreePlan isUpgradeComparedTo FreePlan');
-		$this->assertFalse((new FreePlan())->isUpgradeComparedTo(new TrialPlan()), 'FreePlan isUpgradeComparedTo TrialPlan');
-		$this->assertFalse((new FreePlan())->isUpgradeComparedTo(new SoloPlan()), 'FreePlan isUpgradeComparedTo SoloPlan');
-		$this->assertFalse((new FreePlan())->isUpgradeComparedTo(new SmallTeamPlan()), 'FreePlan isUpgradeComparedTo SmallTeamPlan');
-		$this->assertFalse((new FreePlan())->isUpgradeComparedTo(new BusinessPlan()), 'FreePlan isUpgradeComparedTo BusinessPlan');
+		$this->assertFalse((new NoPlan())->isUpgradeComparedTo(new NoPlan()), 'NoPlan isUpgradeComparedTo NoPlan');
+		$this->assertFalse((new NoPlan())->isUpgradeComparedTo(new TrialPlan()), 'NoPlan isUpgradeComparedTo TrialPlan');
+		$this->assertFalse((new NoPlan())->isUpgradeComparedTo(new SoloPlan()), 'NoPlan isUpgradeComparedTo SoloPlan');
+		$this->assertFalse((new NoPlan())->isUpgradeComparedTo(new SmallTeamPlan()), 'NoPlan isUpgradeComparedTo SmallTeamPlan');
+		$this->assertFalse((new NoPlan())->isUpgradeComparedTo(new BusinessPlan()), 'NoPlan isUpgradeComparedTo BusinessPlan');
 	}
 
 	/**
-	 * @covers \FreePlan::isDowngradeComparedTo
+	 * @covers \NoPlan::isDowngradeComparedTo
 	 */
 	public function testIsDowngradeComparedTo(): void
 	{
-		$this->assertFalse((new FreePlan())->isDowngradeComparedTo(new FreePlan()), 'FreePlan isDowngradeComparedTo FreePlan');
-		$this->assertTrue((new FreePlan())->isDowngradeComparedTo(new TrialPlan()), 'FreePlan isDowngradeComparedTo TrialPlan');
-		$this->assertTrue((new FreePlan())->isDowngradeComparedTo(new SoloPlan()), 'FreePlan isDowngradeComparedTo SoloPlan');
-		$this->assertTrue((new FreePlan())->isDowngradeComparedTo(new SmallTeamPlan()), 'FreePlan isDowngradeComparedTo SmallTeamPlan');
-		$this->assertTrue((new FreePlan())->isDowngradeComparedTo(new BusinessPlan()), 'FreePlan isDowngradeComparedTo BusinessPlan');
+		$this->assertFalse((new NoPlan())->isDowngradeComparedTo(new NoPlan()), 'NoPlan isDowngradeComparedTo NoPlan');
+		$this->assertTrue((new NoPlan())->isDowngradeComparedTo(new TrialPlan()), 'NoPlan isDowngradeComparedTo TrialPlan');
+		$this->assertTrue((new NoPlan())->isDowngradeComparedTo(new SoloPlan()), 'NoPlan isDowngradeComparedTo SoloPlan');
+		$this->assertTrue((new NoPlan())->isDowngradeComparedTo(new SmallTeamPlan()), 'NoPlan isDowngradeComparedTo SmallTeamPlan');
+		$this->assertTrue((new NoPlan())->isDowngradeComparedTo(new BusinessPlan()), 'NoPlan isDowngradeComparedTo BusinessPlan');
 	}
 }

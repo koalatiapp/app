@@ -15,9 +15,9 @@ class BusinessPlan extends SmallTeamPlan
 	public const PADDLE_ID = '664976';
 
 	/**
-	 * @var int MAX_ACTIVE_PROJECTS Maximum number of active projects a user can have during a given month
+	 * @var int MAX_ACTIVE_PAGES_PER_PROJECT Maximum number of active pages a project can have
 	 */
-	public const MAX_ACTIVE_PROJECTS = 100;
+	public const MAX_ACTIVE_PAGES_PER_PROJECT = PHP_INT_MAX;
 
 	/**
 	 * @var int MAX_TEAM_OWNED Maximum numbers of team a user can own

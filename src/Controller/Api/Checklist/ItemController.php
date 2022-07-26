@@ -40,6 +40,11 @@ class ItemController extends AbstractController
 		}
 
 		$project = $this->getProject($projectId);
+
+		if (!$this->isGranted(ProjectVoter::CHECKLIST, $project)) {
+			return $this->accessDenied();
+		}
+
 		$checklist = $project->getChecklist();
 
 		if ($groupId) {

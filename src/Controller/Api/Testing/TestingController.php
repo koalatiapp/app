@@ -9,7 +9,6 @@ use App\Controller\Trait\PreventDirectAccessTrait;
 use App\Message\TestingRequest;
 use App\MessageHandler\TestingRequestHandler;
 use App\Security\ProjectVoter;
-use App\Subscription\QuotaManager;
 use App\Util\Testing\TestingStatus;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,7 +31,7 @@ class TestingController extends AbstractController
 	 *
 	 * @Route("/create", methods={"POST"}, name="create", options={"expose": true})
 	 */
-	public function create(Request $request, QuotaManager $quotaManager, TestingRequestHandler $testingRequestHandler): JsonResponse
+	public function create(Request $request, TestingRequestHandler $testingRequestHandler): JsonResponse
 	{
 		$projectId = $request->request->get('project_id');
 
@@ -48,8 +47,6 @@ class TestingController extends AbstractController
 		// In this case, we don't want to put this in the message queue and wait.
 		// We want the testing to start right now!
 		$testingRequestHandler(new TestingRequest($project->getId()));
-
-		$quotaManager->notifyIfQuotaExceeded($project);
 
 		return $this->apiSuccess();
 	}

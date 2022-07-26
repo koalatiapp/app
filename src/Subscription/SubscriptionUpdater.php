@@ -3,7 +3,7 @@
 namespace App\Subscription;
 
 use App\Entity\User;
-use App\Subscription\Plan\FreePlan;
+use App\Subscription\Plan\NoPlan;
 use App\Subscription\Plan\TrialPlan;
 use Exception;
 use Paddle\API as PaddleAPI;
@@ -23,7 +23,7 @@ class SubscriptionUpdater
 		$currentPlan = $this->planManager->getPlanFromEntity($user);
 
 		if ($newPlan instanceof TrialPlan) {
-			$newPlan = new FreePlan();
+			$newPlan = new NoPlan();
 		}
 
 		$isUpgrade = $newPlan->isUpgradeComparedTo($currentPlan);

@@ -34,55 +34,29 @@ footer:
     terms_of_service: Terms of use
 
 plan:
+    NoSubscription:
+        name: Not subscribed
+        price: N/A
     Trial:
         name: Free Trial
         price: $0
-    Free:
-        name: Free
-        price: $0
-        features: >
-            <ul class="features">
-                <li>
-                    <i class="far fa-check text-green"></i>
-                    pre-launch checklist
-                </li>
-                <li>
-                    <i class="far fa-check text-green"></i>
-                    educational resources
-                </li>
-                <li>
-                    <i class="far fa-times text-gray"></i>
-                    no automated tools
-                </li>
-                <li>
-                    <i class="far fa-times text-gray"></i>
-                    no project members
-                </li>
-                <li>
-                    <i class="far fa-times text-gray"></i>
-                    no team creation
-                </li>
-            </ul>
     Solo:
         name: Solo
-        price: $9
+        price: $15
+        annual_price: $150
         features: >
             <ul class="features">
                 <li>
                     <i class="far fa-check text-green"></i>
-                    up to <strong>3 active projects</strong>
+                    QA checklist
                 </li>
                 <li>
                     <i class="far fa-check text-green"></i>
-                    every automated tool
+                    automated testing
                 </li>
                 <li>
                     <i class="far fa-check text-green"></i>
-                    pre-launch checklist
-                </li>
-                <li>
-                    <i class="far fa-check text-green"></i>
-                    educational resources
+                    up to <strong>30 pages per project</strong>
                 </li>
                 <li>
                     <i class="far fa-times text-gray"></i>
@@ -93,27 +67,23 @@ plan:
                     no team creation
                 </li>
             </ul>
-
     SmallTeam:
         name: Small team
         price: $75
+        annual_price: $750
         features: >
             <ul class="features">
                 <li>
                     <i class="far fa-check text-green"></i>
-                    up to <strong>30 active projects</strong>
+                    QA checklist
                 </li>
                 <li>
                     <i class="far fa-check text-green"></i>
-                    every automated tool
+                    automated testing
                 </li>
                 <li>
                     <i class="far fa-check text-green"></i>
-                    pre-launch checklist
-                </li>
-                <li>
-                    <i class="far fa-check text-green"></i>
-                    educational resources
+                    up to <strong>100 pages per project</strong>
                 </li>
                 <li>
                     <i class="far fa-check text-green"></i>
@@ -128,23 +98,20 @@ plan:
     Business:
         name: Business
         price: $200
+        annual_price: $2,000
         features: >
             <ul class="features">
                 <li>
                     <i class="far fa-check text-green"></i>
-                    up to <strong>100 active projects</strong>
+                    QA checklist
                 </li>
                 <li>
                     <i class="far fa-check text-green"></i>
-                    every automated tool
+                    automated testing
                 </li>
                 <li>
                     <i class="far fa-check text-green"></i>
-                    pre-launch checklist
-                </li>
-                <li>
-                    <i class="far fa-check text-green"></i>
-                    educational resources
+                    <strong>unlimited pages per project</strong>
                 </li>
                 <li>
                     <i class="far fa-check text-green"></i>
@@ -216,7 +183,7 @@ checklist_demo:
     meta_description: Improve your websites by following this detailed testing checklist!
     title: Website testing checklist
     reset: Reset the checklist
-    sign_up: Sign up for free
+    sign_up: Start your free trial
     intro: >
         <p>You worked hard to build a nice website.<br>
            Let's work just a bit more to make sure it's flawless!</p>
@@ -224,7 +191,7 @@ checklist_demo:
            Don't hesitate to click "Learn more" to get more information about a step.</p>
         <p>To enjoy the fully-featured checklist with project-by-project progress and
            collaboration features like comments, bug reports and live-updates,
-           <a href="%signUpLink%" class="text-link">sign up to Koalati for free</a>!</p>
+           <a href="%signUpLink%" class="text-link">start your free Koalati trial</a>!</p>
 
 error_page:
     go_back: Go back to Koalati
@@ -410,19 +377,34 @@ user_settings:
             title: Overview
             current_plan: Your current plan
             upcoming_plan_change_notice: Your plan will change to <strong>%name%</strong> on %date%.
-            upcoming_trial_end_notice: You are currently on a free trial of the <strong>Small Team</strong> plan.<br> When your trial ends on %date%, you will be moved to the <strong>Free</strong> plan.
+            upcoming_trial_end_notice: You are currently on a free trial of the <strong>Small Team</strong> plan.<br> When your trial ends on %date%, you will be have to pick a subscription plan.
             next_renewal_date: Next renewal date
+            cancellation: Cancellation
+            cancellation_text: >
+                <p>To cancel your current subscription, simply click on the button below.</p>
+                <p>Once you cancel, your active subscription will expire on <strong>%endDate%</strong>.</p>
+                <p>After that, you won't be able to access your projects anymore until you subscribe again.</p>
+                <p>If you have any questions regarding cancellation, don't hesitate to <a href="%supportUrl%" class="text-link">reach out</a>.</p>
+            cancellation_button: Cancel my subscription
+            cancellation_confirm_prompt: Are you certain you want to cancel your Koalati subscription?
+            cancellation_confirm_button: Yes, cancel my subscription
         usage:
             title: Your usage
         plans:
             select: Switch to %plan%
             current_label: Current plan
             price_suffix: per month
+            price_suffix_annual: per year
+            annual_indicator: 2 months free!
             upgrade_payment_notice: When you upgrade your plan, you will be billed the prorated cost of this new plan for the remainder of your current billing period.
             confirm_upgrade: Are you sure you want to upgrade your subscription to the %newPlan% plan?
             confirm_downgrade: Are you sure you want to downgrade your subscription to the %newPlan% plan?
+        frequency:
+            monthly: Monthly
+            annual: Annual ✨
         flash:
             subscription_change_success: Your subscription is being updated! Please hold on, this page will reload in just a moment...
+            subscription_cancellation_success: Your subscription has been cancelled! Please hold on, this page will reload in just a moment...
 
 dashboard:
     title: Dashboard
@@ -733,7 +715,9 @@ subscription:
 
 upgrade_suggestion:
     create_team: Upgrade to a plan that offers Team Creation to get started with your own team!
-    testing: Upgrade to a plan that offers automated testing tools to start testing your projects!
+    testing: Choose a subscription plan to start testing your projects with Koalati's automated testing tools!
+    checklist: Choose a subscription plan to start testing your projects with Koalati's QA checklist!
+    project: Choose a subscription plan to get back into quality control and testing with Koalati!
 
 comment:
     section_heading: Comments
@@ -774,9 +758,8 @@ email:
             <h1>Hey %firstName%,</h1>
             <p>Thanks again for checking out Koalati!</p>
             <p>As you may know, <strong>your free trial is ending on %expirationDate%</strong>.</p>
-            <p>If you would like to keep using our premium features after that, you can <a href="%subscriptionLink%">upgrade to a paid plan</a>.</p>
-            <p>If the free features are all that you need for now, then you don't need to do anything. Don't worry, you won't be getting any surprise credit card charges from us. </p>
-            <p>Either way, enjoy the platform!</p>
+            <p>If you would like to keep using the platform after that date, you can <a href="%subscriptionLink%">upgrade to a paid plan</a>.</p>
+            <p>Don't worry, you won't be getting any surprise credit card charges from us until you make a move yourself.</p>
         feedback_heading: We'd love to hear from you
         feedback_content: >
             <p>If you have a minute, we would appreciate if you could <a href="https://form.typeform.com/to/upF60b3N">fill our 1-minute feedback survey</a>.</p>

@@ -23,7 +23,7 @@ export class NbButton extends LitElement {
 				.button.light { --button-bg-color: var(--color-blue-20); --button-text-color: var(--color-black); --button-bg-color-hover: var(--color-blue-80); --shadow-rgb: 65, 91, 229; }
 				.button.lighter { --button-bg-color: var(--color-blue-10); --button-text-color: var(--color-gray-darker); --button-bg-color-hover: var(--color-blue-20); --button-text-color-hover: var(--color-gray-darker); }
 				.button[disabled] { opacity: .1; filter: grayscale(1); pointer-events: none; }
-				.button.loading { opacity: .1; filter: grayscale(1); pointer-events: none; }
+				.button.loading { opacity: .1; filter: grayscale(1); pointer-events: none; animation: pulse 1s infinite; }
 				:host([no-shadow]) .button { box-shadow: none; }
 
 				@media (prefers-color-scheme: dark) {
@@ -31,6 +31,11 @@ export class NbButton extends LitElement {
 					.button.white { --button-text-color: var(--color-white); --button-bg-color: var(--color-black); --button-bg-color-hover: var(--color-gray-dark); --button-text-color-hover: var(--color-blue-dark); }
 					.button.light { --button-bg-color: var(--color-blue-50); --button-bg-color-hover: var(--color-blue-80); }
 					.button.lighter { --button-bg-color: var(--color-blue-20); --button-bg-color-hover: var(--color-blue-50); }
+				}
+
+				@keyframes pulse {
+					0%, 90% { transform: scale(1); }
+					45% { transform: scale(var(--fa-beat-scale, .95)); }
 				}
 			`
 		];
@@ -69,14 +74,14 @@ export class NbButton extends LitElement {
 	{
 		if (this.href) {
 			return html`
-				<a href=${this.href} class=${this._classes.join(" ").trim()} target=${this.target} ?disabled=${this.disabled} tabindex=${this.disabled ? -1 : 0} rel="${this.target == "_blank" ? "noopener" : ""}">
+				<a href=${this.href} class=${this._classes.join(" ").trim()} target=${this.target} ?disabled=${this.disabled || this.loading} tabindex=${this.disabled || this.loading ? -1 : 0} rel="${this.target == "_blank" ? "noopener" : ""}">
 					<slot></slot>
 				</a>
 			`;
 		}
 
 		return html`
-			<button type=${this.type} class=${this._classes.join(" ").trim()} name=${this.name} ?disabled=${this.disabled} @click=${this._handleClick}>
+			<button type=${this.type} class=${this._classes.join(" ").trim()} name=${this.name} ?disabled=${this.disabled || this.loading} @click=${this._handleClick}>
 				<slot></slot>
 			</button>
 	  	`;

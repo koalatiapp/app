@@ -5,6 +5,7 @@ namespace App\Controller\Api\Checklist;
 use App\Controller\AbstractController;
 use App\Controller\Trait\ApiControllerTrait;
 use App\Controller\Trait\PreventDirectAccessTrait;
+use App\Security\ProjectVoter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -34,6 +35,11 @@ class GroupController extends AbstractController
 		}
 
 		$project = $this->getProject($projectId);
+
+		if (!$this->isGranted(ProjectVoter::CHECKLIST, $project)) {
+			return $this->accessDenied();
+		}
+
 		$checklist = $project->getChecklist();
 
 		return $this->apiSuccess($checklist->getItemGroups());

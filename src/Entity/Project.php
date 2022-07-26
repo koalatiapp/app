@@ -211,7 +211,7 @@ class Project implements MercureEntityInterface
 	/**
 	 * Returns the priority of this project's processing requests.
 	 * The higher the number, the higher the priority.
-	 * The default priority for free users is `1`.
+	 * The default priority is `1`.
 	 *
 	 * @TODO: Check the project/user/organization's subscription plan (replacing this method stub)
 	 */

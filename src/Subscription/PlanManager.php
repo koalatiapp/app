@@ -5,7 +5,7 @@ namespace App\Subscription;
 use App\Entity\Organization;
 use App\Entity\User;
 use App\Exception\NonExistantSubscriptionPlanException;
-use App\Subscription\Plan\FreePlan;
+use App\Subscription\Plan\NoPlan;
 use App\Subscription\Plan\PlanInterface;
 
 class PlanManager
@@ -49,7 +49,7 @@ class PlanManager
 		$planUniqueName = $user->getSubscriptionPlan();
 
 		if (!$planUniqueName) {
-			return new FreePlan();
+			return new NoPlan();
 		}
 
 		return $this->getPlanFromUniqueName($planUniqueName);

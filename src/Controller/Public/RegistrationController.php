@@ -6,7 +6,7 @@ use App\Controller\AbstractController;
 use App\Entity\User;
 use App\Form\UserRegistrationType;
 use App\Security\LoginFormAuthenticator;
-use App\Subscription\Plan\FreePlan;
+use App\Subscription\Plan\NoPlan;
 use App\Subscription\Plan\TrialPlan;
 use App\Util\Analytics\AnalyticsInterface;
 use DateTime;
@@ -47,7 +47,7 @@ class RegistrationController extends AbstractController
 			// Start users on a 14 day trial
 			$user->setSubscriptionPlan(TrialPlan::UNIQUE_NAME)
 				->setSubscriptionChangeDate(new DateTime('+14 days'))
-				->setUpcomingSubscriptionPlan(FreePlan::UNIQUE_NAME);
+				->setUpcomingSubscriptionPlan(NoPlan::UNIQUE_NAME);
 
 			$email = (new TemplatedEmail())
 				->to(new Address($user->getEmail(), $user->getFirstName()))
