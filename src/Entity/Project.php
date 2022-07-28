@@ -27,6 +27,7 @@ class Project implements MercureEntityInterface
 	public const STATUS_IN_PROGRESS = 'IN_PROGRESS';
 	public const STATUS_MAINTENANCE = 'MAINTENANCE';
 	public const STATUS_COMPLETED = 'COMPLETED';
+
 	public const ROLE_ADMIN = 'ROLE_ADMIN';
 	public const ROLE_MANAGE = 'ROLE_MANAGE';
 	public const ROLE_USER = 'ROLE_USER';
@@ -123,6 +124,13 @@ class Project implements MercureEntityInterface
 	 */
 	private Collection $comments;
 
+	/**
+	 * @ORM\Column(type="array", nullable=true)
+	 *
+	 * @var array<int,string>
+	 */
+	private ?array $tags = [];
+
 	public function __construct()
 	{
 		$this->dateCreated = new DateTime();
@@ -130,6 +138,7 @@ class Project implements MercureEntityInterface
 		$this->teamMembers = new ArrayCollection();
 		$this->ignoreEntries = new ArrayCollection();
 		$this->comments = new ArrayCollection();
+		$this->tags = [];
 	}
 
 	public function getId(): ?int
@@ -320,8 +329,8 @@ class Project implements MercureEntityInterface
 	{
 		return $this->getSortedRecommendations()->filter(function ($recommendation) {
 			return !$recommendation->getIsCompleted()
-				&& !$recommendation->isIgnored()
-				&& !$recommendation->getRelatedPage()->getIsIgnored();
+							   && !$recommendation->isIgnored()
+							   && !$recommendation->getRelatedPage()->getIsIgnored();
 		});
 	}
 
@@ -480,5 +489,39 @@ class Project implements MercureEntityInterface
 		return $this->comments->filter(function (Comment $comment) {
 			return !$comment->isResolved() && !$comment->getThread();
 		})->count();
+	}
+
+	/**
+	 * @Groups({"default"})
+	 *
+	 * @return array<int,string>
+	 */
+	public function getTags(): array
+	{
+		return $this->tags ?? [];
+	}
+
+	/**
+	 * @param array<int,string> $tags
+	 */
+	public function setTags(?array $tags): self
+	{
+		$this->tags = $tags ?: [];
+
+		return $this;
+	}
+
+	public function addTag(string $tag): self
+	{
+		if (!in_array($tag, $this->getTags())) {
+			$this->tags[] = $tag;
+		}
+
+		return $this;
+	}
+
+	public function hasTag(string $tag): bool
+	{
+		return in_array($tag, $this->getTags());
 	}
 }

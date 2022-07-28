@@ -7,6 +7,7 @@ use App\Form\Project\NewProjectType;
 use App\Message\FaviconRequest;
 use App\Message\ScreenshotRequest;
 use App\Message\SitemapRequest;
+use App\Util\StackDetector;
 use App\Util\Url;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,7 +19,7 @@ class ProjectCreationController extends AbstractProjectController
 	/**
 	 * @Route("/project/create", name="project_creation")
 	 */
-	public function projectCreation(Url $urlHelper, Request $request): Response
+	public function projectCreation(Url $urlHelper, Request $request, StackDetector $stackDetector): Response
 	{
 		$project = new Project();
 		$project->setOwnerUser($this->getUser());
@@ -55,6 +56,12 @@ class ProjectCreationController extends AbstractProjectController
 				if (is_numeric($ownerValue) && isset($availableOrganizationsById[$ownerValue])) {
 					$project->setOwnerUser(null);
 					$project->setOwnerOrganization($availableOrganizationsById[$ownerValue]);
+				}
+
+				// Detect website framework / CMS
+				$framework = $stackDetector->detectFramework($websiteUrl);
+				if ($framework) {
+					$project->addTag($framework);
 				}
 
 				$em = $this->getDoctrine()->getManager();
