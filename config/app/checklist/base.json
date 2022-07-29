@@ -272,7 +272,7 @@
 		"items": [
 			{
 				"title": "Every form asks for as little information as possible.",
-				"description": "Filling in a form is hard work for users.\n\nWith every field you remove from a form, you increase the chances that users will complete it. That means: **fewer fields = higher conversion rate**.\n\nRemove fields which collect information that can be: \n\n-derived in some other way, \n- collected at a later date\n- simply omitted.",
+				"description": "Filling in a form is hard work for users.\n\nWith every field you remove from a form, you increase the chances that users will complete it. That means: **fewer fields = higher conversion rate**.\n\nRemove fields which collect information that can be: \n\n- derived in some other way, \n- collected at a later date\n- simply omitted.",
 				"resourceUrls": [
 					"https://www.nngroup.com/articles/web-form-design/"
 				]
@@ -459,8 +459,7 @@
 				"title": "Every page defines its canonical URL.",
 				"description": "The canonical URL is the main URL for your page.\n\nTo a search engine, `mywebsite.com` and `mywebsite.com?search=koala` look like different pages, when they are likely just slightly adjusted versions of the same page.\n\nDefining a canonical URL helps search engines understand which URL is the main URL for a page, and which are alternative versions of the same page.\n\nThis can greatly benefit your SEO, as it prevents potential duplicate content issues on search engines.",
 				"resourceUrls": [
-					"https://ahrefs.com/blog/canonical-tags/",
-					"https://webflow.com/feature/set-a-global-canonical-tag-to-improve-site-seo"
+					"https://ahrefs.com/blog/canonical-tags/"
 				]
 			},
 			{

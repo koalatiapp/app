@@ -52,5 +52,85 @@
 				]
 			}
 		]
+	},
+	{
+		"title": "Basics",
+		"items": [
+			{
+				"title": "The website has a working favicon that matches the brand.",
+				"resourceUrls": [
+					"https://university.webflow.com/lesson/favicons-and-touch-icons"
+				]
+			},
+			{
+				"title": "The 404 (Not Found) error page matches your brand and contains link(s) to the website.",
+				"resourceUrls": [
+					"https://university.webflow.com/lesson/custom-404-page"
+				]
+			}
+		]
+	},
+	{
+		"title": "Design",
+		"items": [
+			{
+				"title": "Visited links are displayed in a different color or style in order to look \"used\".",
+				"resourceUrls": [
+					"https://university.webflow.com/lesson/states#focused-(keyboard)-state"
+				]
+			}
+		]
+	},
+	{
+		"title": "Accessibility",
+		"items": [
+			{
+				"title": "Every image that conveys information or context has an `alt` attribute that describes its content.",
+				"resourceUrls": [
+					"https://university.webflow.com/lesson/alt-text"
+				]
+			},
+			{
+				"title": "Every decorative image has an empty `alt` attribute.",
+				"resourceUrls": [
+					"https://university.webflow.com/lesson/alt-text"
+				]
+			},
+			{
+				"title": "Every page can be navigated logically and interacted with using only the keyboard.",
+				"resourceUrls": [
+					"https://university.webflow.com/lesson/states#focused-state"
+				]
+			}
+		]
+	},
+	{
+		"title": "SEO (Search Engine Optimization)",
+		"items": [
+			{
+				"title": "Every page has a `<title>` tag with a title that is optimized for SEO.",
+				"resourceUrls": [
+					"https://university.webflow.com/lesson/seo-title-meta-description"
+				]
+			},
+			{
+				"title": "Every page has a meta description with a short description that is optimized for SEO.",
+				"resourceUrls": [
+					"https://university.webflow.com/lesson/seo-title-meta-description"
+				]
+			},
+			{
+				"title": "Every page defines its canonical URL.",
+				"resourceUrls": [
+					"https://webflow.com/feature/set-a-global-canonical-tag-to-improve-site-seo"
+				]
+			},
+			{
+				"title": "301 redirections have been created and tested _(if applicable)_.",
+				"resourceUrls": [
+					"https://university.webflow.com/lesson/set-301-redirects-to-maintain-seo-ranking"
+				]
+			}
+		]
 	}
 ]
