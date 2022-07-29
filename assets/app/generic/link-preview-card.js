@@ -75,10 +75,10 @@ export class LinkPreviewCard extends LitElement {
 			<a href=${this.url} class="link-card" target="_blank">
 				<img src=${this.imageUrl || `https://via.placeholder.com/600x315/DAE1FB/102984.png?text=${this.hostname}`} alt="" loading="lazy">
 				<div class="text">
-					<div class="site" ?hidden=${!!this.siteName}>${this.siteName}</div>
+					<div class="site" ?hidden=${!this.siteName}>${this.siteName}</div>
 					<div class="title">${this.title || html`<div class="placeholder"></div>`}</div>
 					<div class="url" aria-hidden="true">${this.hostname}</div>
-					<div class="description" ?hidden=${!!this.description}>${this.descriptionSnippet}</div>
+					<div class="description" ?hidden=${!this.description}>${this.descriptionSnippet}</div>
 				</div>
 			</a>
 	  	`;
@@ -87,12 +87,23 @@ export class LinkPreviewCard extends LitElement {
 	fetchMetadata()
 	{
 		ApiClient.get("api_link_metas", { url: this.url }).then(response => {
-			this.#loaded = true;
 			this.url = response.data.url;
-			this.siteName = response.data.siteName == response.data.title ? "" : response.data.siteName;
 			this.title = response.data.title;
 			this.description = response.data.description;
 			this.imageUrl = response.data.imageUrl;
+
+			if (response.data.siteName && response.data.title.indexOf(response.data.siteName) != 0) {
+				this.siteName = response.data.siteName;
+			} else {
+				const titleSuffix = this.title.replace(/^.+(\s[-|•—]\s.+)$/, "$1");
+
+				if (titleSuffix) {
+					this.siteName = titleSuffix.replace(/^\s[-|•—]\s(.+)$/, "$1");
+					this.title = this.title.replace(titleSuffix, "");
+				}
+			}
+
+			this.#loaded = true;
 		});
 	}
 
