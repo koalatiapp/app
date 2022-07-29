@@ -688,6 +688,16 @@ project:
         generic: Owner
         self: You
         team: "%teamName% (team)"
+    tag:
+        webflow: Webflow
+        wordpress: Wordpress
+        shopify: Shopify
+        mangeto: Mangeto
+        prestashop: Prestashop
+        joomla: Joomla
+        drupal: Drupal
+        october: October
+        django: Django
 
 feedback:
     cta: Submit feedback

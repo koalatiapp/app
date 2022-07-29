@@ -24,7 +24,6 @@ class Checklist
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=ChecklistTemplate::class, inversedBy="childChecklists")
-	 * @ORM\JoinColumn(nullable=false)
 	 */
 	private ?ChecklistTemplate $template;
 
@@ -40,14 +39,14 @@ class Checklist
 	private ?DateTimeInterface $dateUpdated;
 
 	/**
-	 * @ORM\OneToMany(targetEntity=ItemGroup::class, mappedBy="checklist")
+	 * @ORM\OneToMany(targetEntity=ItemGroup::class, mappedBy="checklist", cascade={"persist", "remove"})
 	 *
 	 * @var Collection<int,ItemGroup>
 	 */
 	private Collection $itemGroups;
 
 	/**
-	 * @ORM\OneToMany(targetEntity=Item::class, mappedBy="checklist")
+	 * @ORM\OneToMany(targetEntity=Item::class, mappedBy="checklist", cascade={"persist", "remove"})
 	 *
 	 * @var Collection<int,Item>
 	 */

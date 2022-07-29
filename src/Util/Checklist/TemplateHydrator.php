@@ -15,6 +15,7 @@ class TemplateHydrator
 		$checklist = (new Checklist())
 			->setProject($project)
 			->setTemplate($template);
+		$project->setChecklist($checklist);
 
 		foreach ($template->getChecklistContent() as $groupTemplate) {
 			$group = (new ItemGroup())->setName($groupTemplate['title']);

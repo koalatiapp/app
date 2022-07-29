@@ -1,0 +1,136 @@
+[
+	{
+		"title": "Webflow",
+		"items": [
+			{
+				"title": "Images have been compressed with Webflow's built-in WebP conversion tool.",
+				"description": "Compressing images makes them smaller, which reduces the weight of your pages and makes your site load faster.\n\nWebflow offers a built-in tool to convert all of your images to WebP and compress them, all at once.\n\nWe recommend you convert all of your images except SVGs, which are already light and scalable by nature.\n\nIf the WebP version of an image is larger than the original, Webflow will automatically revert it to the original, so you can use this tool on all of your images without any issues.\n\nTo use Webflow's WebP conversion tool, expand the Assets panel, select your images and click the Compress button.",
+				"resourceUrls": [
+					"https://university.webflow.com/lesson/webp-conversion-tool"
+				]
+			},
+			{
+				"title": "Minification of CSS, HTML and Javascript is enabled.",
+				"description": "Minifying your site's code reduces the weight of your page, which makes your site load faster.\n\nIf you are hosting your website on Webflow, there is no downside to enabling minification of CSS, Javascript and HTML: it can only help your loading speeds.",
+				"resourceUrls": [
+					"https://university.webflow.com/lesson/advanced-publishing-options-wf"
+				]
+			},
+			{
+				"title": "Unused classes are cleaned up.",
+				"description": "Removing unused classes from your site reduces the weight of your website's code and improve your site's performance.\n\nYou can clean up all of your project's unused classes in one fell swoop by using the _Clean up_ button in Webflow's style manager.",
+				"resourceUrls": [
+					"https://university.webflow.com/lesson/style-manager#delete-all-unused-classes-in-the-style-manager"
+				]
+			},
+			{
+				"title": "Unused interactions and animations are cleaned up.",
+				"description": "Removing unused interactions and animations from your site reduces the weight of your website's code and improve your site's performance.\n\nYou can clean up all of your project's unused classes in one fell swoop by using the _Clean up_ button in Webflow's style manager.",
+				"resourceUrls": [
+					"https://webflow.com/feature/clean-up-unused-interactions"
+				]
+			},
+			{
+				"title": "Unused fonts are removed.",
+				"description": "Removing unused fonts from your site reduces the weight of your website's code and improve your site's performance.\n\nYou can see and manage which fonts your website is including in the Fonts tab of your project settings.",
+				"resourceUrls": [
+
+				]
+			},
+			{
+				"title": "Webflow.io subdomain indexing is disabled",
+				"description": "When developing and updating your website, the .webflow.io subdomain is used as a preview for you and your team. However, you don't want Google and other search engines to index this site if you are using a custom domain.\n\nTo prevent Google from indexing the .webflow.io development website, check the \"Disable Webflow sudomain indexing\" in the SEO tab of your project settings.",
+				"resourceUrls": [
+					"https://university.webflow.com/lesson/disable-search-engine-indexing#how-to-disable-indexing-of-the-webflow-subdomain"
+				]
+			},
+			{
+				"title": "A default domain is defined.",
+				"description": "When your website is published to many different custom domains without having a default domain set up, search engines may flag your site as offering \"duplicate content\".\n\nTo prevent SEO issues and to standardize your visitors browsing experience, select a default domain in your project's settings.\n\nWhen a domain is defined as the default, all your other custom domains will redirect to the default domain.\n\nIt is recommended that you use a domain with the `www.` prefix as the default to avoid potential SSL issues.",
+				"resourceUrls": [
+					"https://university.webflow.com/lesson/set-a-default-domain"
+				]
+			}
+		]
+	},
+	{
+		"title": "Basics",
+		"items": [
+			{
+				"title": "The website has a working favicon that matches the brand.",
+				"resourceUrls": [
+					"https://university.webflow.com/lesson/favicons-and-touch-icons"
+				]
+			},
+			{
+				"title": "The 404 (Not Found) error page matches your brand and contains link(s) to the website.",
+				"resourceUrls": [
+					"https://university.webflow.com/lesson/custom-404-page"
+				]
+			}
+		]
+	},
+	{
+		"title": "Design",
+		"items": [
+			{
+				"title": "Visited links are displayed in a different color or style in order to look \"used\".",
+				"resourceUrls": [
+					"https://university.webflow.com/lesson/states#focused-(keyboard)-state"
+				]
+			}
+		]
+	},
+	{
+		"title": "Accessibility",
+		"items": [
+			{
+				"title": "Every image that conveys information or context has an `alt` attribute that describes its content.",
+				"resourceUrls": [
+					"https://university.webflow.com/lesson/alt-text"
+				]
+			},
+			{
+				"title": "Every decorative image has an empty `alt` attribute.",
+				"resourceUrls": [
+					"https://university.webflow.com/lesson/alt-text"
+				]
+			},
+			{
+				"title": "Every page can be navigated logically and interacted with using only the keyboard.",
+				"resourceUrls": [
+					"https://university.webflow.com/lesson/states#focused-state"
+				]
+			}
+		]
+	},
+	{
+		"title": "SEO (Search Engine Optimization)",
+		"items": [
+			{
+				"title": "Every page has a `<title>` tag with a title that is optimized for SEO.",
+				"resourceUrls": [
+					"https://university.webflow.com/lesson/seo-title-meta-description"
+				]
+			},
+			{
+				"title": "Every page has a meta description with a short description that is optimized for SEO.",
+				"resourceUrls": [
+					"https://university.webflow.com/lesson/seo-title-meta-description"
+				]
+			},
+			{
+				"title": "Every page defines its canonical URL.",
+				"resourceUrls": [
+					"https://webflow.com/feature/set-a-global-canonical-tag-to-improve-site-seo"
+				]
+			},
+			{
+				"title": "301 redirections have been created and tested _(if applicable)_.",
+				"resourceUrls": [
+					"https://university.webflow.com/lesson/set-301-redirects-to-maintain-seo-ranking"
+				]
+			}
+		]
+	}
+]
