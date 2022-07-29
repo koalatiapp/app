@@ -1,5 +1,4 @@
 import { LitElement, html, css } from "lit";
-import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { ApiClient } from "../../utils/api";
 import stylesReset from "../../native-bear/styles-reset.js";
 
@@ -14,7 +13,7 @@ export class LinkPreviewCard extends LitElement {
 				.text { padding: .6rem .75rem; line-height: 1.3; }
 				.site { font-size: .85rem; font-weight: 400; color: var(--color-gray-dark); }
 				.title { font-size: .95rem; font-weight: 700; color: var(--color-black); }
-				.url { margin: .25rem 0; font-size: .8rem; color: var(--color-blue); }
+				.url { margin: .25rem 0; font-size: .8rem; word-break: break-all; color: var(--color-blue); }
 				.description { margin: .5rem 0; font-size: .8rem; color: var(--color-gray-dark); }
 
 				.placeholder { height: 1em; width: 90%; margin: .3em 0; background-color: #f5f5f5; border-radius: 5px; }
@@ -52,8 +51,8 @@ export class LinkPreviewCard extends LitElement {
 				<div class="text">
 					<div class="site">${this.siteName || html`<div class="placeholder"></div>`}</div>
 					<div class="title">${this.title || html`<div class="placeholder"></div>`}</div>
-					<div class="url" aria-hidden="true">${unsafeHTML(this.url.replace(/([-/_])/g, "$1<wbr>"))}</div>
-					<div class="description">${this.description || html`<div class="placeholder"></div><div class="placeholder"></div><div class="placeholder"></div>`}</div>
+					<div class="url" aria-hidden="true">${this.url.replace(/^https?:\/\/(.+?)(?:\/.*)?$/, "$1")}</div>
+					<div class="description">${this.descriptionSnippet || html`<div class="placeholder"></div><div class="placeholder"></div><div class="placeholder"></div>`}</div>
 				</div>
 			</a>
 	  	`;
@@ -68,6 +67,17 @@ export class LinkPreviewCard extends LitElement {
 			this.description = response.data.description;
 			this.imageUrl = response.data.imageUrl;
 		});
+	}
+
+	get descriptionSnippet()
+	{
+		const maxLength = 120;
+
+		if (!this.description || this.description.length <= maxLength) {
+			return this.description;
+		}
+
+		return this.description.substr(0, maxLength).replace(/^(.+)[\s.]\w+$/, "$1").trim() + "...";
 	}
 }
 
