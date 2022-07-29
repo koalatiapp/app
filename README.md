@@ -18,8 +18,11 @@ This is the official repository for the Koalati web application, available at [a
   - [Subscriptions](docs/system/subscriptions.md)
   - [Cron jobs](docs/system/cronjobs.md)
 ### Features
+  - Projects
+    - [Framework detection](docs/features/project/framework-detection.md)
   - [Automated testing tools and recommendations](docs/features/testing/testing.md)
-  - [Checklist and QA wizard](docs/features/checklist/checklist.md)
+  - [Checklist / QA wizard](docs/features/checklist/checklist.md)
+    - [Comments / bug reports](docs/features/checklist/comments.md)
 
 ---
 

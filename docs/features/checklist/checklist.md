@@ -32,7 +32,7 @@ Here's how each of these goals is translated into actual features in the app:
 ## Implementation
 Each project has a checklist that is generated based on a JSON template provided by Koalati.
 
-The `TemplateHydrator` service handles the "hydration" of the template into actual entities
+The `App\Util\Checklist\Generator` service handles the "hydration" of the template into actual entities
 for a given project. This happens automatically upon the first visit of the checklist page
 for any given project.
 
