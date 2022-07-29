@@ -88,9 +88,9 @@ export class LinkPreviewCard extends LitElement {
 	{
 		ApiClient.get("api_link_metas", { url: this.url }).then(response => {
 			this.url = response.data.url;
-			this.title = response.data.title;
-			this.description = response.data.description;
-			this.imageUrl = response.data.imageUrl;
+			this.title = response.data.title ?? "";
+			this.description = response.data.description ?? "";
+			this.imageUrl = response.data.imageUrl ?? "";
 
 			if (response.data.siteName && response.data.title.indexOf(response.data.siteName) != 0) {
 				this.siteName = response.data.siteName;
