@@ -64,6 +64,8 @@
 			<a href="https://www.koalati.com/privacy-policy">{% trans %}footer.privacy_policy{% endtrans %}</a>
 		</footer>
 
-        {% block javascripts %}{% endblock %}
+        {% block javascripts %}
+			<script type="module" src="{{ asset('js/base/form-submission.js') }}"></script>
+		{% endblock %}
     </body>
 </html>
