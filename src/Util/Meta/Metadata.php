@@ -31,7 +31,7 @@ class Metadata
 	 */
 	public ?string $imageUrl;
 
-	public function __construct(string $url, ?string $siteName, ?string $title, ?string $description, ?string $imageUrl)
+	public function __construct(string $url, ?string $siteName = null, ?string $title = null, ?string $description = null, ?string $imageUrl = null)
 	{
 		$this->url = $url;
 		$this->siteName = $siteName;
