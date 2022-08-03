@@ -121,6 +121,13 @@ class MembersController extends AbstractController
 		$firstName = trim($request->request->get('first_name'));
 		$email = strtolower(trim($request->request->get('email')));
 
+		if (filter_var($firstName, FILTER_VALIDATE_URL) || $firstName) {
+			return $this->apiError($translator->trans('generic.error.invalid_name'));
+		}
+
+		// Prevent URLs while allowing URL-looking strings (ex.: Dr.Emile)
+		$firstName = str_replace('.', ' ', $firstName);
+
 		// Check if there's already a pending invitation for that email
 		foreach ($organization->getOrganizationInvitations() as $invitation) {
 			if (!$invitation->hasExpired() && !$invitation->isUsed() && $invitation->getEmail() == $email) {

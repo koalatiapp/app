@@ -21,6 +21,8 @@ generic:
     password:
         reveal: Reveal password
         hide: Hide password
+    error:
+        invalid_name: This name is invalid. Please enter a valid name.
 
 api:
     flash:
@@ -156,6 +158,7 @@ registration:
             privacyPolicy: Ethics and privacy are paramount at Koalati. To see what type of data we collect and how we handle it, take a look at the <a href="https://www.koalati.com/privacy-policy">Koalati privacy policy</a>.
         error:
             email_failed: It looks like the email address you provided is invalid. Please make sure it is valid.
+            invalid_name: This name is invalid. Please enter a valid name.
 
 password_reset:
     email_form:
