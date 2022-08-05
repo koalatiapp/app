@@ -151,7 +151,7 @@ services:
             - '%env(OPENGRAPHIO_API_KEY)%'
 
     App\Util\Meta\MetaDriverInterface:
-        alias: App\Util\Meta\Driver\OpenGraphIo
+        alias: App\Util\Meta\Driver\InternalMetaApi
 
     App\Util\Favicon\FaviconFetcherInterface:
         alias: App\Util\Favicon\FaviconFetcher

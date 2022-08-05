@@ -130,6 +130,13 @@
 				"resourceUrls": [
 					"https://university.webflow.com/lesson/set-301-redirects-to-maintain-seo-ranking"
 				]
+			},
+			{
+				"title": "Alternative domain names redirect to your primary domain name.",
+				"description": "For Webflow websites, defining a domain as the default domain in your Site Settings will automatically redirect other variants to this domain. It is recommended that you use a domain with the `www.` prefix as the default to avoid potential SSL issues.",
+				"resourceUrls": [
+					"https://university.webflow.com/lesson/set-a-default-domain"
+				]
 			}
 		]
 	}
