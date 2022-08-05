@@ -4,10 +4,10 @@
 		"items": [
 			{
 				"title": "A well-rounded security plugin is installed and activated.",
-				"description": "Wordpress sites are heavily targeted by hackers. To protect your site, it is heavily recommended to use install and configure a well-rounded security plugin.\n\nWe recommend you use either Wordfence or All In One WP Security & Firewall. \n\nSucuri is also a good option if you are willing to pay a recurring subscription fee (although the free version is also worth installing, even in addition to another security plugin, just for its one-click \"Hardening\" options!).\n\nOnce your desired plugin is installed, make sure to browse their settings and follow their recommendations so your site is as secure as possible.",
+				"description": "Wordpress sites are heavily targeted by hackers. To protect your site, it is heavily recommended to use install and configure a well-rounded security plugin.\n\nWe recommend you use either [Wordfence](https://wordpress.org/plugins/wordfence/) or [All In One WP Security & Firewall](https://wordpress.org/plugins/all-in-one-wp-security-and-firewall/). \n\n[Sucuri](https://wordpress.org/plugins/sucuri-scanner/) is also a good option if you are willing to pay a recurring subscription fee (although the free version is also worth installing, even in addition to another security plugin, just for its one-click \"Hardening\" options!).\n\nOnce your desired plugin is installed, make sure to browse their settings and follow their recommendations so your site is as secure as possible.",
 				"resourceUrls": [
-					"https://wordpress.org/plugins/all-in-one-wp-security-and-firewall/",
 					"https://wordpress.org/plugins/wordfence/",
+					"https://wordpress.org/plugins/all-in-one-wp-security-and-firewall/",
 					"https://wordpress.org/plugins/sucuri-scanner/"
 				]
 			},
@@ -29,7 +29,7 @@
 			},
 			{
 				"title": "File editing via the admin area is disabled.",
-				"description": "Wordpress offers a file editing interface in its admin area.\n\nThis can be dangerous if your site is infiltrated by hackers, or even if used by an authorized person who simply doesn't know what they are doing.\n\nYou can disable this feature by adding the following code in your `wp-config.php` file:\n\n```php\n// Disable file editing in the admin area\ndefine( 'DISALLOW_FILE_EDIT', true );\n```\n\nIf you are using the Sucuri Security plugin, you can do this by:\n\n1. Going to Sucuri Security > Settings > Hardening;\n2. Clicking _Apply Hardening_ for _Disable Plugin and Theme Editor_.",
+				"description": "Wordpress offers a file editing interface in its admin area.\n\nThis can be dangerous if your site is infiltrated by hackers, or even if used by an authorized person who simply doesn't know what they are doing.\n\nYou can disable this feature by adding the following code in your `wp-config.php` file:\n\n```php\n// Disable file editing in the admin area\ndefine('DISALLOW_FILE_EDIT', true);\n```\n\nIf you are using the Sucuri Security plugin, you can do this by:\n\n1. Going to Sucuri Security > Settings > Hardening;\n2. Clicking _Apply Hardening_ for _Disable Plugin and Theme Editor_.",
 				"resourceUrls": [
 					"https://publishpress.com/blog/wordpress-publishing/how-to-control-access-to-the-theme-editor-in-wordpress/"
 				]
