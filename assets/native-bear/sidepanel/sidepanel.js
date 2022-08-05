@@ -75,7 +75,9 @@ export class NbSidePanel extends LitElement {
 	firstUpdated()
 	{
 		this.#originalFocusElement = getActiveElement();
-		this.shadowRoot.querySelector(".close").focus();
+		this.shadowRoot.querySelector(".close").focus({
+			preventScroll: true,
+		});
 	}
 
 	render()
@@ -120,7 +122,9 @@ export class NbSidePanel extends LitElement {
 
 		sidepanelStack.pop();
 
-		this.#originalFocusElement?.focus?.();
+		this.#originalFocusElement?.focus?.({
+			preventScroll: true
+		});
 
 		// Remove the Escape listener if there is no more modal
 		if (!sidepanelStack.length) {
