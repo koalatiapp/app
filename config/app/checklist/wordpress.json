@@ -1,3 +1,130 @@
 [
-
+	{
+		"title": "Wordpress",
+		"items": [
+			{
+				"title": "A well-rounded security plugin is installed and activated.",
+				"description": "Wordpress sites are heavily targeted by hackers. To protect your site, it is heavily recommended to use install and configure a well-rounded security plugin.\n\nWe recommend you use either Wordfence or All In One WP Security & Firewall. \n\nSucuri is also a good option if you are willing to pay a recurring subscription fee (although the free version is also worth installing, even in addition to another security plugin, just for its one-click \"Hardening\" options!).\n\nOnce your desired plugin is installed, make sure to browse their settings and follow their recommendations so your site is as secure as possible.",
+				"resourceUrls": [
+					"https://wordpress.org/plugins/all-in-one-wp-security-and-firewall/",
+					"https://wordpress.org/plugins/wordfence/",
+					"https://wordpress.org/plugins/sucuri-scanner/"
+				]
+			},
+			{
+				"title": "A code minification plugin is installed and activated.",
+				"description": "Minifying your site's code reduces the weight of your page, which makes your site load faster.\n\nWe recommend you use either:\n\n- [WP-Optimize](https://wordpress.org/plugins/wp-optimize/), which is a well-rounded performance plugin with a free version that handles caching, code minification, and image compression.\n- [Autoptimize](https://wordpress.org/plugins/autoptimize/), which is free plugin that is solely-focused on code minification and aggregation;",
+				"resourceUrls": [
+					"https://wordpress.org/plugins/wp-optimize/",
+					"https://wordpress.org/plugins/autoptimize/"
+				]
+			},
+			{
+				"title": "A caching plugin is installed and activated.",
+				"description": "By default, Wordpress re-builds pages on every requests. Unless your pages are updated every few seconds, this can be very heavy for little to no reason.\n\nCaching plugins create static HTML versions of your pages and serves those pages to most of your visitors, reducing server load and speeding up load times for the visitors.\n\nWe recommend you use either:\n\n- [WP-Optimize](https://wordpress.org/plugins/wp-optimize/), which is a well-rounded performance plugin with a free version that handles caching, code minification, and image compression;\n- [WP Super Cache](https://wordpress.org/plugins/wp-super-cache/), which is free plugin that is solely-focused on caching your pages.",
+				"resourceUrls": [
+					"https://wordpress.org/plugins/wp-optimize/",
+					"https://wordpress.org/plugins/wp-super-cache/"
+				]
+			},
+			{
+				"title": "File editing via the admin area is disabled.",
+				"description": "Wordpress offers a file editing interface in its admin area.\n\nThis can be dangerous if your site is infiltrated by hackers, or even if used by an authorized person who simply doesn't know what they are doing.\n\nYou can disable this feature by adding the following code in your `wp-config.php` file:\n\n```php\n// Disable file editing in the admin area\ndefine( 'DISALLOW_FILE_EDIT', true );\n```\n\nIf you are using the Sucuri Security plugin, you can do this by:\n\n1. Going to Sucuri Security > Settings > Hardening;\n2. Clicking _Apply Hardening_ for _Disable Plugin and Theme Editor_.",
+				"resourceUrls": [
+					"https://publishpress.com/blog/wordpress-publishing/how-to-control-access-to-the-theme-editor-in-wordpress/"
+				]
+			},
+			{
+				"title": "Wordpress database tables have a random or custom prefix.",
+				"description": "By default, every database table for Wordpress sites use the `wp_` prefix. This makes it very easy for hackers and attackers to guess your database structure, which is useful for SQL injection attacks.\n\nChanging that prefix is a relatively simple way to improve the security of your Wordpress site.\n\nCheck out the recommended guides below to learn how to change the database table prefix.",
+				"resourceUrls": [
+					"https://wp-staging.com/3-ways-to-change-the-wordpress-database-prefix-method-simplified/",
+					"https://wpmudev.com/blog/wordpress-database-prefix/"
+				]
+			},
+			{
+				"title": "The admin menu only contains useful/relevant items for each user role.",
+				"description": "The menu in the admin area of a Wordpress site can quickly become overwhelming for users, especially as you add more plugins and custom post types.\n\nTo make the site easier to manage for your client(s), you should hide every menu item that they do not need to have access to.\n\nThis can be done programmatically, or via an easy-to-use plugin such as [Hide Admin Menu](https://wordpress.org/plugins/hide-admin-menu/).",
+				"resourceUrls": [
+					"https://wordpress.org/plugins/hide-admin-menu/"
+				]
+			}
+		]
+	},
+	{
+		"title": "Basics",
+		"items": [
+			{
+				"title": "The website has a working favicon that matches the brand.",
+				"resourceUrls": [
+					"https://kinsta.com/knowledgebase/wordpress-favicon/"
+				]
+			},
+			{
+				"title": "The 404 (Not Found) error page matches your brand and contains link(s) to the website.",
+				"resourceUrls": [
+					"https://codex.wordpress.org/Creating_an_Error_404_Page"
+				]
+			}
+		]
+	},
+	{
+		"title": "Accessibility",
+		"items": [
+			{
+				"title": "Every image that conveys information or context has an `alt` attribute that describes its content.",
+				"resourceUrls": [
+					"https://www.wpbeginner.com/beginners-guide/image-alt-text-vs-image-title-in-wordpress-whats-the-difference/"
+				]
+			}
+		]
+	},
+	{
+		"title": "SEO (Search Engine Optimization)",
+		"items": [
+			{
+				"title": "Every page has a `<title>` tag with a title that is optimized for SEO.",
+				"resourceUrls": [
+					"https://yoast.com/page-titles-seo/"
+				]
+			},
+			{
+				"title": "Every page has a meta description with a short description that is optimized for SEO.",
+				"resourceUrls": [
+					"https://yoast.com/meta-descriptions/"
+				]
+			},
+			{
+				"title": "Every page defines its canonical URL.",
+				"resourceUrls": [
+					"https://yoast.com/help/canonical-urls-in-yoast-seo/"
+				]
+			},
+			{
+				"title": "Every page has a simple URL that is easy to read and understand.",
+				"description": "",
+				"resourceUrls": [
+					"https://yoast.com/seo-friendly-urls/"
+				]
+			},
+			{
+				"title": "301 redirections have been created and tested _(if applicable)_.",
+				"resourceUrls": [
+					"https://yoast.com/create-301-redirect-wordpress/"
+				]
+			}
+		]
+	},
+	{
+		"title": "Security",
+		"items": [
+			{
+				"title": "Website backups are set-up and configured to run frequently.",
+				"description": "For Wordpress sites, you can look into the different backup plugins, which allow you to manage your backups and backup settings straight from your Wordpress dashboard. There are also third-party services that are specialized in Worpdress backups.",
+				"resourceUrls": [
+					"https://www.wpbeginner.com/plugins/7-best-wordpress-backup-plugins-compared-pros-and-cons/"
+				]
+			}
+		]
+	}
 ]
