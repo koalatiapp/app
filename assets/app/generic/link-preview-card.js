@@ -103,6 +103,11 @@ export class LinkPreviewCard extends LitElement {
 				}
 			}
 
+			if (!this.title && this.siteName) {
+				this.title = this.siteName;
+				this.siteName = null;
+			}
+
 			this.#loaded = true;
 		});
 	}
