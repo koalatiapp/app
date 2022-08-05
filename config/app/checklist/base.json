@@ -477,6 +477,48 @@
 				"resourceUrls": [
 					"https://moz.com/learn/seo/redirection"
 				]
+			},
+			{
+				"title": "Alternative domain names redirect to your primary domain name.",
+				"description": "If you have multiple domains or subdomains, you should pick one as the primary domain for your site. Other domains and subdomain should always redirect to the primary domain.\n\nThis is less confusing for visitors, and prevents search engines like Google from considering your alternative URLs as duplicated content.\n\nIf your site is running on the Apache web server, you can use a redirection in your `.htaccess` file to achieve this:\n\n```apache\nRewriteEngine on\nRewriteCond %{HTTP_HOST} !^www.site.com$ [NC]\nRewriteRule ^(.*)$ http://www.site.com/$1 [R,L]\n```\n",
+				"resourceUrls": [
+				]
+			},
+			{
+				"title": "The robots.txt file allows search engines to crawl all public pages.",
+				"description": "A robots.txt file (accessible at _yourwebsite.com/robots.txt_) tells automated scripts like Google's crawler how to crawl your site, and which pages they are allowed (and not allowed) to crawl.\n\nTo ensure Google and other search engines can crawl and index your site correctly, make sure you robots.txt file does not block them.\n\nIf you do not have a robots.txt, you don't have to worry about it. \nIf you have a robots.txt file, make sure it does not `Disallow` the pages you want search engines to crawl and index.",
+				"resourceUrls": [
+					"https://moz.com/learn/seo/robotstxt",
+					"https://developers.google.com/search/docs/advanced/robots/intro"
+				]
+			}
+		]
+	},
+	{
+		"title": "Security",
+		"items": [
+			{
+				"title": "An SSL certificate is set up and configured for auto-renewal.",
+				"description": "SSL certificates allow websites to move from HTTP to HTTPS, enabling encryption of requests between the client and the server.\n\nIf you are unsure of how to create an SSL certificate and enable HTTPS, look for documentation from your hosting provider.\n\nIf you manage your own server(s), you can create an SSL certificate for free using [Let's Encrypt](https://letsencrypt.org/).\n\nMake sure your certificate auto-renews to prevent downtimes or security issues on your website.\n\n**Once HTTPS is enabled for your website,** make sure to browse it again to see if everything works as expected. HTTPS comes with additional security requirements that may introduce unexpected issues, such as HTTP assets like images, styles, scripts or fonts that won't load.",
+				"resourceUrls": [
+					"https://letsencrypt.org/",
+					"https://www.cloudflare.com/en-ca/learning/ssl/what-is-an-ssl-certificate/"
+				]
+			},
+			{
+				"title": "Requests to non-HTTPS URLs are redirected to HTTPS.",
+				"description": "Once HTTPS is enabled on your site, you should ensure that all traffic goes through the HTTPS version of your site (instead of the HTTP version) to improve security and prevent potential errors.\n\nFor a site running on **Apache web server**, you can add this code to your `.htaccess` file or to your VirtualHost configuration to redirect HTTP traffic to HTTPS:\n\n```apache\nRewriteEngine On\nRewriteCond %{HTTPS} off\nRewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]\n```\n\nFor a site running on **Nginx** web server, you can use the following configuration:\n\n```nginx\nserver {\n\tlisten 80 default_server;\n\n\tserver_name _;\n\n\treturn 301 https://$host$request_uri;\n}\n```\n",
+				"resourceUrls": [
+					"https://linuxize.com/post/redirect-http-to-https-in-apache/",
+					"https://serversforhackers.com/c/redirect-http-to-https-nginx"
+				]
+			},
+			{
+				"title": "Website backups are set-up and configured to run frequently.",
+				"description": "Having backups in place allow you to revert to a previous version of your site if a problem occurs.\n\nYour hosting provider likely provides a backup solution. Third-party backup services are also available, for a fee.\n\nIf you manage your own server(s), make sure you have a well-rounded backup system in place. For WHM users/administrators, we recommend using [JetBackup](https://www.jetbackup.com/).",
+				"resourceUrls": [
+					"https://rewind.com/blog/backup-website-essential-guide/"
+				]
 			}
 		]
 	}
