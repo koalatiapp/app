@@ -7,6 +7,7 @@ use App\Entity\Project;
 use App\Message\SitemapRequest;
 use App\Message\TestingRequest;
 use App\Repository\ProjectRepository;
+use App\Subscription\PlanManager;
 use App\Util\Sitemap\Builder;
 use App\Util\Sitemap\Location;
 use App\Util\Url;
@@ -27,11 +28,13 @@ class SitemapRequestHandler implements MessageHandlerInterface
 		private EntityManagerInterface $em,
 		private MessageBusInterface $bus,
 		private HttpClientInterface $httpClient,
+		private PlanManager $planManager,
 	) {
 	}
 
 	/**
 	 * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+	 * @SuppressWarnings(PHPMD.NPathComplexity)
 	 */
 	public function __invoke(SitemapRequest $message): void
 	{
@@ -41,6 +44,8 @@ class SitemapRequestHandler implements MessageHandlerInterface
 			return;
 		}
 
+		$userPlan = $this->planManager->getPlanFromEntity($project->getOwner());
+		$pageLimit = $userPlan->getMaxActivePagesPerProject();
 		$supportsSsl = $this->websiteSupportsSsl($project);
 		// Crawl website and sitemap, creating/updating pages everytime a page is found
 		$websiteUrl = $this->urlHelper->standardize($project->getUrl(), $supportsSsl);
@@ -52,8 +57,10 @@ class SitemapRequestHandler implements MessageHandlerInterface
 			$pagesByUrl[$pageUrl] = $page;
 		}
 
+		$pageIdsSentForTest = [];
+
 		/** @param array<int,Location> $locations */
-		$pageFoundCallback = function (array $locations) use (&$pagesByUrl, $project, $message, $supportsSsl) {
+		$pageFoundCallback = function (array $locations) use (&$pagesByUrl, $project, $message, $supportsSsl, $pageIdsSentForTest, $pageLimit) {
 			$pagesToTest = [];
 			$pendingPersistCount = 0;
 
@@ -95,9 +102,18 @@ class SitemapRequestHandler implements MessageHandlerInterface
 
 			$this->flushOrStopIfProjectIsDeleted();
 
-			// Dispatch a testing request to start the testing on new pages
 			$pageIds = array_map(fn (Page $page) => $page->getId(), $pagesToTest);
-			$this->bus->dispatch(new TestingRequest($message->getProjectId(), null, $pageIds));
+			$pageIdsSentForTest = array_unique(array_merge($pageIdsSentForTest, $pageIds));
+
+			// Enforce max active pages per projects
+			if (count($pageIdsSentForTest) > $pageLimit) {
+				$pageIds = array_slice($pageIds, 0, max(0, $pageLimit - count($pageIdsSentForTest)));
+			}
+
+			// Dispatch a testing request to start the testing on new pages
+			if ($pageIds) {
+				$this->bus->dispatch(new TestingRequest($message->getProjectId(), null, $pageIds));
+			}
 		};
 
 		$this->sitemapBuilder->buildFromWebsiteUrl($websiteUrl, $pageFoundCallback);
