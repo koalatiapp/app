@@ -102,6 +102,11 @@ class SitemapRequestHandler implements MessageHandlerInterface
 
 			$this->flushOrStopIfProjectIsDeleted();
 
+			// Sort pages by relevance (shortest URLs first)
+			usort($pagesToTest, function (Page $a, Page $b) {
+				return strlen($a->getUrl()) <=> strlen($b->getUrl());
+			});
+
 			$pageIds = array_map(fn (Page $page) => $page->getId(), $pagesToTest);
 			$pageIdsSentForTest = array_unique(array_merge($pageIdsSentForTest, $pageIds));
 
