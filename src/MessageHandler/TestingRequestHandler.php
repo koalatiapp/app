@@ -67,7 +67,7 @@ class TestingRequestHandler implements MessageHandlerInterface
 		// Sort URLs by length, with the shortests ones appearing first.
 		// Pages with shorter URLs are often more relevant for testing.
 		usort($pageUrls, function (string $urlA, string $urlB) {
-			return strlen(urldecode($urlA)) > strlen(urldecode($urlB)) ? 1 : -1;
+			return strlen(urldecode($urlA)) <=> strlen(urldecode($urlB));
 		});
 
 		// Limit the number of URLs sent for testing to reduce load on server
