@@ -11,7 +11,7 @@ export class ProjectPagesList extends AbstractDynamicList {
 				.nb--list-header,
 				.nb--list-item { grid-template-areas: "page actions"; grid-template-columns: 1fr 15ch; }
 				.nb--list-item-column[nb-column="page"] .title { display: block; margin-bottom: .15em; font-weight: 600; text-decoration: none; white-space: nowrap; text-overflow: ellipsis; color: var(--color-black); overflow: hidden; }
-				.nb--list-item-column[nb-column="page"] a { font-size: .8rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--color-gray-dark); }
+				.nb--list-item-column[nb-column="page"] a { display: inline-block; max-width: 100%; font-size: .8rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--color-gray-dark); }
 				.nb--list-item-column[nb-column="page"] a:hover { text-decoration: underline; color: var(--color-black); }
 				.nb--list-item-column[nb-column="tool"] a i { margin-left: .25em; color: var(--color-blue); opacity: .5; }
 
