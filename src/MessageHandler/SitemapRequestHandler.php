@@ -60,7 +60,7 @@ class SitemapRequestHandler implements MessageHandlerInterface
 		$pageIdsSentForTest = [];
 
 		/** @param array<int,Location> $locations */
-		$pageFoundCallback = function (array $locations) use (&$pagesByUrl, $project, $message, $supportsSsl, $pageIdsSentForTest, $pageLimit) {
+		$pageFoundCallback = function (array $locations) use (&$pagesByUrl, &$pageIdsSentForTest, $project, $message, $supportsSsl, $pageLimit) {
 			$pagesToTest = [];
 			$pendingPersistCount = 0;
 
@@ -102,18 +102,15 @@ class SitemapRequestHandler implements MessageHandlerInterface
 
 			$this->flushOrStopIfProjectIsDeleted();
 
-			// Sort pages by relevance (shortest URLs first)
-			usort($pagesToTest, function (Page $pageA, Page $pageB) {
-				return strlen($pageA->getUrl()) <=> strlen($pageB->getUrl());
-			});
-
 			$pageIds = array_map(fn (Page $page) => $page->getId(), $pagesToTest);
-			$pageIdsSentForTest = array_merge($pageIdsSentForTest, $pageIds);
 
 			// Enforce max active pages per projects
-			if (count($pageIdsSentForTest) > $pageLimit) {
-				$pageIds = array_slice($pageIds, 0, max(0, $pageLimit - count($pageIdsSentForTest)));
+			if (count($pageIdsSentForTest) >= $pageLimit) {
+				return;
 			}
+
+			$pageIds = array_slice($pageIds, 0, max(0, $pageLimit - count($pageIdsSentForTest)));
+			$pageIdsSentForTest = array_merge($pageIdsSentForTest, $pageIds);
 
 			// Dispatch a testing request to start the testing on new pages
 			if ($pageIds) {

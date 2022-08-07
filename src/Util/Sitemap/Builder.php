@@ -95,7 +95,7 @@ class Builder
 	 *
 	 * @param string $sitemapUrl URL of the sitemap to scan
 	 *
-	 * @return array<int,string>
+	 * @return array<int,string> list of URLs, sorted by length
 	 */
 	public function scanSitemap(string $sitemapUrl): array
 	{
@@ -128,6 +128,11 @@ class Builder
 				$urls[] = $url->nodeValue;
 			}
 		}
+
+		// Sort URLS by length (length is a decent indicator of relevance)
+		usort($urls, function (string $urlA, string $urlB) {
+			return strlen($urlA) <=> strlen($urlB);
+		});
 
 		return $urls;
 	}
