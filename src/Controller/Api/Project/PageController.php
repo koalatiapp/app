@@ -29,9 +29,15 @@ class PageController extends AbstractController
 			return $this->apiError('You must provide a valid value for `project_id`.');
 		}
 
-		$organization = $this->getProject($projectId);
+		$project = $this->getProject($projectId);
+		$pages = $project->getPages()->toArray();
 
-		return $this->apiSuccess($organization->getPages());
+		// Sort pages by relevance (shortest URLs first)
+		usort($pages, function (Page $pageA, Page $pageB) {
+			return strlen($pageA->getUrl()) <=> strlen($pageB->getUrl());
+		});
+
+		return $this->apiSuccess($pages);
 	}
 
 	/**
