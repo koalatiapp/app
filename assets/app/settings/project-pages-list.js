@@ -45,7 +45,7 @@ export class ProjectPagesList extends AbstractDynamicList {
 					<div class="nb--list-item-column-placeholder" style="width: 90%; height: .8rem;">&nbsp;</div>
 				`,
 				sortingValue: (page) => {
-					return page.url.replace(/^https?:\/\/(.+)$/, "$1");
+					return page.url.length;
 				}
 			},
 			{
