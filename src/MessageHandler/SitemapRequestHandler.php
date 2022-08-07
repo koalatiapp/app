@@ -108,7 +108,7 @@ class SitemapRequestHandler implements MessageHandlerInterface
 			});
 
 			$pageIds = array_map(fn (Page $page) => $page->getId(), $pagesToTest);
-			$pageIdsSentForTest = array_unique(array_merge($pageIdsSentForTest, $pageIds));
+			$pageIdsSentForTest = array_merge($pageIdsSentForTest, $pageIds);
 
 			// Enforce max active pages per projects
 			if (count($pageIdsSentForTest) > $pageLimit) {
