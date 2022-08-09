@@ -131,7 +131,7 @@ export class RecommendationList extends AbstractDynamicList {
 
 	supportedUpdateFilter(update)
 	{
-		return update.data.project?.id == this.projectId;
+		return update.data?.project_id == this.projectId;
 	}
 
 	render()
