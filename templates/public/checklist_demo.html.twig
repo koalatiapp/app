@@ -17,7 +17,7 @@
 	<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
 	<script src="{{ path('fos_js_routing_js', {callback: 'fos.Router.setData'}) }}"></script>
 	<script src="{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}"></script>
-	<script src="{{ url('bazinga_jstranslation_js') }}?{{ asset_version }}"></script>
+	<script src="{{ url('bazinga_jstranslation_js') }}?{{ release_version }}"></script>
 
 	{{ encore_entry_link_tags('checklist') }}
 {% endblock %}

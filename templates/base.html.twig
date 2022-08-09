@@ -45,7 +45,7 @@
         {% block head %}{% endblock %}
 
 		<script src="{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}"></script>
-		<script src="{{ url('bazinga_jstranslation_js') }}?{{ asset_version }}"></script>
+		<script src="{{ url('bazinga_jstranslation_js') }}?{{ release_version }}"></script>
         <link rel="stylesheet" href="{{ asset('css/dark-mode.css') }}" media="(prefers-color-scheme: dark)">
 
 		{% include "_parts/analytics.html.twig" %}
