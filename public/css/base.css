@@ -1,3 +1,4 @@
+body.page-transition::before { content: ' '; width: 100%; height: 5px; background-color: var(--color-blue-light); transform: scaleX(0); transform-origin: left; position: fixed; top: 0; left: 0; z-index: 9999999; animation: loading-bar-filling 3s forwards; }
 h1 { font-size: 1.75rem; font-weight: 700; line-height: 1.5; }
 h2 { margin-bottom: 1.5em; font-size: 1.2rem; font-weight: 600; line-height: 1.25; }
 h3 { font-size: 1.2rem; font-weight: 500; line-height: 1.25; }
@@ -57,4 +58,11 @@ ul.bullet-list li + li { margin-top: .5em; }
 	.spacer.small { margin: 10px auto; }
 
 	.mobile-hidden { display: none !important; }
+}
+
+@keyframes loading-bar-filling {
+	0% { transform: scaleX(0%); }
+	25% { transform: scaleX(85%); }
+	30% { transform: scaleX(85%); }
+	100% { transform: scaleX(99%); }
 }
