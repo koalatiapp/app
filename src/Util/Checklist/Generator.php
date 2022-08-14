@@ -16,23 +16,25 @@ class Generator
 	) {
 	}
 
-	public function generateChecklist(Project $project): Checklist
+	public function generateChecklist(?Project $project): Checklist
 	{
-		if ($project->getChecklist()) {
+		if ($project?->getChecklist()) {
 			return $project->getChecklist();
 		}
 
-		$checklist = (new Checklist())
-			->setProject($project);
-
+		$checklist = (new Checklist());
 		$this->addGroupsFromConfig($checklist, "checklist/base");
 
-		if ($project->hasTag(Framework::WORDPRESS)) {
-			$this->addWordpressTasks($checklist);
-		} elseif ($project->hasTag(Framework::SHOPIFY)) {
-			$this->addShopifyTasks($checklist);
-		} elseif ($project->hasTag(Framework::WEBFLOW)) {
-			$this->addWebflowTasks($checklist);
+		if ($project) {
+			$checklist->setProject($project);
+
+			if ($project->hasTag(Framework::WORDPRESS)) {
+				$this->addWordpressTasks($checklist);
+			} elseif ($project->hasTag(Framework::SHOPIFY)) {
+				$this->addShopifyTasks($checklist);
+			} elseif ($project->hasTag(Framework::WEBFLOW)) {
+				$this->addWebflowTasks($checklist);
+			}
 		}
 
 		return $checklist;
