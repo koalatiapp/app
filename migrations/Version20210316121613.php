@@ -21,14 +21,13 @@ final class Version20210316121613 extends AbstractMigration
 	{
 		// this up() migration is auto-generated, please modify it to your needs
 		$this->addSql('ALTER TABLE project ADD owner_organization_id INT DEFAULT NULL');
-		$this->addSql('ALTER TABLE project ADD CONSTRAINT FK_2FB3D0EEAF5EABE9 FOREIGN KEY (owner_organization_id) REFERENCES organization (id)');
 		$this->addSql('CREATE INDEX IDX_2FB3D0EEAF5EABE9 ON project (owner_organization_id)');
 	}
 
 	public function down(Schema $schema): void
 	{
 		// this down() migration is auto-generated, please modify it to your needs
-		$this->addSql('ALTER TABLE project DROP FOREIGN KEY FK_2FB3D0EEAF5EABE9');
+
 		$this->addSql('DROP INDEX IDX_2FB3D0EEAF5EABE9 ON project');
 		$this->addSql('ALTER TABLE project DROP owner_organization_id');
 	}

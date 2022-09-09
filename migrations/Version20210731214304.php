@@ -23,8 +23,6 @@ final class Version20210731214304 extends AbstractMigration
 	{
 		// this up() migration is auto-generated, please modify it to your needs
 		$this->addSql('ALTER TABLE checklist_template ADD owner_user_id INT DEFAULT NULL, ADD owner_organization_id INT DEFAULT NULL');
-		$this->addSql('ALTER TABLE checklist_template ADD CONSTRAINT FK_CA6463412B18554A FOREIGN KEY (owner_user_id) REFERENCES `user` (id)');
-		$this->addSql('ALTER TABLE checklist_template ADD CONSTRAINT FK_CA646341AF5EABE9 FOREIGN KEY (owner_organization_id) REFERENCES organization (id)');
 		$this->addSql('CREATE INDEX IDX_CA6463412B18554A ON checklist_template (owner_user_id)');
 		$this->addSql('CREATE INDEX IDX_CA646341AF5EABE9 ON checklist_template (owner_organization_id)');
 	}
@@ -32,8 +30,7 @@ final class Version20210731214304 extends AbstractMigration
 	public function down(Schema $schema): void
 	{
 		// this down() migration is auto-generated, please modify it to your needs
-		$this->addSql('ALTER TABLE checklist_template DROP FOREIGN KEY FK_CA6463412B18554A');
-		$this->addSql('ALTER TABLE checklist_template DROP FOREIGN KEY FK_CA646341AF5EABE9');
+
 		$this->addSql('DROP INDEX IDX_CA6463412B18554A ON checklist_template');
 		$this->addSql('DROP INDEX IDX_CA646341AF5EABE9 ON checklist_template');
 		$this->addSql('ALTER TABLE checklist_template DROP owner_user_id, DROP owner_organization_id');

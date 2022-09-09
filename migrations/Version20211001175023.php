@@ -21,8 +21,6 @@ final class Version20211001175023 extends AbstractMigration
 	{
 		// this up() migration is auto-generated, please modify it to your needs
 		$this->addSql('CREATE TABLE project_activity_record (id INT AUTO_INCREMENT NOT NULL, project_id INT DEFAULT NULL, user_id INT NOT NULL, website_url VARCHAR(512) NOT NULL, date_created DATETIME NOT NULL, page_url VARCHAR(512) NOT NULL, tool VARCHAR(255) NOT NULL, INDEX IDX_F1730A61166D1F9C (project_id), INDEX IDX_F1730A61A76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_0900_ai_ci` ENGINE = InnoDB');
-		$this->addSql('ALTER TABLE project_activity_record ADD CONSTRAINT FK_F1730A61166D1F9C FOREIGN KEY (project_id) REFERENCES project (id)');
-		$this->addSql('ALTER TABLE project_activity_record ADD CONSTRAINT FK_F1730A61A76ED395 FOREIGN KEY (user_id) REFERENCES `user` (id)');
 	}
 
 	public function down(Schema $schema): void

@@ -24,20 +24,12 @@ final class Version20210731164931 extends AbstractMigration
 		$this->addSql('CREATE TABLE checklist_template (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, description LONGTEXT DEFAULT NULL, is_public TINYINT(1) NOT NULL, checklist_content JSON NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_0900_ai_ci` ENGINE = InnoDB');
 		$this->addSql('CREATE TABLE item (id INT AUTO_INCREMENT NOT NULL, checklist_id INT NOT NULL, parent_group_id INT DEFAULT NULL, title LONGTEXT NOT NULL, description LONGTEXT NOT NULL, resource_urls LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:array)\', INDEX IDX_1F1B251EB16D08A7 (checklist_id), INDEX IDX_1F1B251E61997596 (parent_group_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_0900_ai_ci` ENGINE = InnoDB');
 		$this->addSql('CREATE TABLE item_group (id INT AUTO_INCREMENT NOT NULL, checklist_id INT NOT NULL, name VARCHAR(255) NOT NULL, INDEX IDX_47675F15B16D08A7 (checklist_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_0900_ai_ci` ENGINE = InnoDB');
-		$this->addSql('ALTER TABLE checklist ADD CONSTRAINT FK_5C696D2F5DA0FB8 FOREIGN KEY (template_id) REFERENCES checklist_template (id)');
-		$this->addSql('ALTER TABLE checklist ADD CONSTRAINT FK_5C696D2F166D1F9C FOREIGN KEY (project_id) REFERENCES project (id)');
-		$this->addSql('ALTER TABLE item ADD CONSTRAINT FK_1F1B251EB16D08A7 FOREIGN KEY (checklist_id) REFERENCES checklist (id)');
-		$this->addSql('ALTER TABLE item ADD CONSTRAINT FK_1F1B251E61997596 FOREIGN KEY (parent_group_id) REFERENCES item_group (id)');
-		$this->addSql('ALTER TABLE item_group ADD CONSTRAINT FK_47675F15B16D08A7 FOREIGN KEY (checklist_id) REFERENCES checklist (id)');
 	}
 
 	public function down(Schema $schema): void
 	{
 		// this down() migration is auto-generated, please modify it to your needs
-		$this->addSql('ALTER TABLE item DROP FOREIGN KEY FK_1F1B251EB16D08A7');
-		$this->addSql('ALTER TABLE item_group DROP FOREIGN KEY FK_47675F15B16D08A7');
-		$this->addSql('ALTER TABLE checklist DROP FOREIGN KEY FK_5C696D2F5DA0FB8');
-		$this->addSql('ALTER TABLE item DROP FOREIGN KEY FK_1F1B251E61997596');
+
 		$this->addSql('DROP TABLE checklist');
 		$this->addSql('DROP TABLE checklist_template');
 		$this->addSql('DROP TABLE item');
