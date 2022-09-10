@@ -78,17 +78,8 @@ class StatusEndpointTest extends WebTestCase
 	public function testTimeEstimates()
 	{
 		$this->assertSame([
-			'lowPriority' => [
-				'@koalati/tool-seo' => [
-					'processing_time' => 6000,
-					'completion_time' => 6865,
-				],
-			],
-			'highPriority' => [
-				'@koalati/tool-seo' => [
-					'processing_time' => 3000,
-					'completion_time' => 3865,
-				],
+			'@koalati/tool-seo' => [
+				'processing_time' => 3000,
 			],
 		], $this->statusEndpoint->timeEstimates());
 	}

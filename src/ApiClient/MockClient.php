@@ -8,6 +8,9 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 
 final class MockClient extends Client
 {
+	/**
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+	 */
 	public function __construct()
 	{
 		$this->httpClient = new MockHttpClient(function (string $method, string $url) {
@@ -38,17 +41,8 @@ final class MockClient extends Client
 						'success' => true,
 						'message' => '',
 						'data' => [
-							'lowPriority' => [
-								'@koalati/tool-seo' => [
-									'processing_time' => 6000,
-									'completion_time' => 6865,
-								],
-							],
-							'highPriority' => [
-								'@koalati/tool-seo' => [
-									'processing_time' => 3000,
-									'completion_time' => 3865,
-								],
+							'@koalati/tool-seo' => [
+								'processing_time' => 3000,
 							],
 						],
 					];
