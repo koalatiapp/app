@@ -121,7 +121,7 @@ class MembersController extends AbstractController
 		$firstName = trim($request->request->get('first_name'));
 		$email = strtolower(trim($request->request->get('email')));
 
-		if (filter_var($firstName, FILTER_VALIDATE_URL) || $firstName) {
+		if (filter_var($firstName, FILTER_VALIDATE_URL) || !$firstName) {
 			return $this->apiError($translator->trans('generic.error.invalid_name'));
 		}
 
