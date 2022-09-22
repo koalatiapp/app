@@ -74,6 +74,7 @@ jobs:
                         UNHEALTHY_ALLOWANCE_LEFT=20
                         sleep 1;;
                       healthy)
+                        sleep 5
                         exit 0;;
                       unhealthy)
                         if [ $UNHEALTHY_ALLOWANCE_LEFT -eq 0 ]; then
