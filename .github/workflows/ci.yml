@@ -74,12 +74,6 @@ jobs:
                         UNHEALTHY_ALLOWANCE_LEFT=20
                         sleep 1;;
                       healthy)
-                        echo "healthy - booted successfully"
-                        docker logs --since="10m" "$(docker-compose ps -q php)"
-                        echo "Attempting curl: "
-                        echo `curl http://localhost`
-                        echo "Current status:"
-                        echo $(docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" "$(docker-compose ps -q php)")
                         exit 0;;
                       unhealthy)
                         if [ $UNHEALTHY_ALLOWANCE_LEFT -eq 0 ]; then
