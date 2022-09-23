@@ -74,7 +74,8 @@ jobs:
                         UNHEALTHY_ALLOWANCE_LEFT=20
                         sleep 1;;
                       healthy)
-                        sleep 30
+                        echo "healthy - booted successfully"
+                        docker logs --since="10m" "$(docker-compose ps -q php)"
                         exit 0;;
                       unhealthy)
                         if [ $UNHEALTHY_ALLOWANCE_LEFT -eq 0 ]; then
