@@ -23,7 +23,7 @@ class SubscriptionUpdater
 		$currentPlan = $this->planManager->getPlanFromEntity($user);
 
 		if ($newPlan instanceof TrialPlan) {
-			$newPlan = new NoPlan();
+			$newPlan = $this->planManager->getPlanFromUniqueName(NoPlan::class);
 		}
 
 		$isUpgrade = $newPlan->isUpgradeComparedTo($currentPlan);

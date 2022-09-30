@@ -2,8 +2,15 @@
 
 namespace App\Subscription\Plan;
 
+use App\Util\SelfHosting;
+
 abstract class AbstractPlan implements PlanInterface
 {
+	public function __construct(
+		private SelfHosting $selfHosting
+	) {
+	}
+
 	/**
 	 * @return string Plan unique name
 	 */
@@ -17,6 +24,10 @@ abstract class AbstractPlan implements PlanInterface
 	 */
 	public function getPaddleId(): string
 	{
+		if ($this->selfHosting->isSelfHosted()) {
+			return '';
+		}
+
 		return static::PADDLE_ID;
 	}
 
@@ -25,6 +36,10 @@ abstract class AbstractPlan implements PlanInterface
 	 */
 	public function getMaxActivePagesPerProject(): int
 	{
+		if ($this->selfHosting->isSelfHosted()) {
+			return PHP_INT_MAX;
+		}
+
 		return static::MAX_ACTIVE_PAGES_PER_PROJECT;
 	}
 
@@ -33,6 +48,10 @@ abstract class AbstractPlan implements PlanInterface
 	 */
 	public function getMaxTeamOwned(): int
 	{
+		if ($this->selfHosting->isSelfHosted()) {
+			return PHP_INT_MAX;
+		}
+
 		return static::MAX_TEAM_OWNED;
 	}
 
@@ -41,6 +60,10 @@ abstract class AbstractPlan implements PlanInterface
 	 */
 	public function getMaxProjectMembers(): int
 	{
+		if ($this->selfHosting->isSelfHosted()) {
+			return PHP_INT_MAX;
+		}
+
 		return static::MAX_PROJECT_MEMBERS;
 	}
 
@@ -49,6 +72,10 @@ abstract class AbstractPlan implements PlanInterface
 	 */
 	public function hasChecklistAccess(): bool
 	{
+		if ($this->selfHosting->isSelfHosted()) {
+			return true;
+		}
+
 		return static::HAS_CHECKLIST_ACCESS;
 	}
 
@@ -57,6 +84,10 @@ abstract class AbstractPlan implements PlanInterface
 	 */
 	public function hasTestingAccess(): bool
 	{
+		if ($this->selfHosting->isSelfHosted()) {
+			return true;
+		}
+
 		return static::HAS_TESTING_ACCESS;
 	}
 
@@ -65,6 +96,10 @@ abstract class AbstractPlan implements PlanInterface
 	 */
 	public function hasMonitoringAccess(): bool
 	{
+		if ($this->selfHosting->isSelfHosted()) {
+			return true;
+		}
+
 		return static::HAS_MONITORING_ACCESS;
 	}
 
@@ -96,6 +131,10 @@ abstract class AbstractPlan implements PlanInterface
 
 	public function isPaidPlan(): bool
 	{
+		if ($this->selfHosting->isSelfHosted()) {
+			return false;
+		}
+
 		return true;
 	}
 

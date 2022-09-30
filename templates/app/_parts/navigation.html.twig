@@ -103,11 +103,13 @@
 						{% trans %}navigation.settings.sublink.profile{% endtrans %}
 					</a>
 				</li>
-				<li class="{{ current_route in ['manage_subscription'] ? 'active' : '' }}">
-					<a href="{{ path('manage_subscription') }}">
-						{% trans %}navigation.settings.sublink.subscription{% endtrans %}
-					</a>
-				</li>
+				{% if not self_hosting_mode %}
+					<li class="{{ current_route in ['manage_subscription'] ? 'active' : '' }}">
+						<a href="{{ path('manage_subscription') }}">
+							{% trans %}navigation.settings.sublink.subscription{% endtrans %}
+						</a>
+					</li>
+				{% endif %}
 				<li class="{{ current_route in ['manage_account_security'] ? 'active' : '' }}">
 					<a href="{{ path('manage_account_security') }}">
 						{% trans %}navigation.settings.sublink.security{% endtrans %}

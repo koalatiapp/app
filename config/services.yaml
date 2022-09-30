@@ -10,6 +10,8 @@ imports:
 parameters:
     test_stub_dir: '%kernel.project_dir%/tests/stub'
     paddle_public_key: '%env(PADDLE_PUBLIC_KEY)%'
+    self_hosting_mode: '%env(bool:SELF_HOSTING)%'
+    invite_only_registration_mode: '%env(bool:INVITE_ONLY_REGISTRATION_MODE)%'
 
 services:
     # default configuration for services in *this* file

@@ -6,6 +6,7 @@ twig:
         '%kernel.project_dir%/email_assets/css': email-styles
     globals:
         release_version: '%env(KOALATI_RELEASE_VERSION)%'
+        self_hosting_mode: '%self_hosting_mode%'
 
 when@test:
     twig:

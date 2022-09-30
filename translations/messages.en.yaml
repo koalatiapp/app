@@ -23,6 +23,7 @@ generic:
         hide: Hide password
     error:
         invalid_name: This name is invalid. Please enter a valid name.
+    self_hosted: Self-hosted
 
 api:
     flash:
@@ -142,6 +143,7 @@ login:
     forgot_password: Forgot your password?
     no_account: Don't have an account?
     register: Create an account
+    ask_for_an_invite: Ask an administrator for an invite!
 
 registration:
     page_title: Create your account
