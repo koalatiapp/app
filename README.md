@@ -17,6 +17,9 @@ This is the official repository for the Koalati web application, available at [a
   - [The Messenger (background tasks)](docs/system/messenger.md)
   - [Subscriptions](docs/system/subscriptions.md)
   - [Cron jobs](docs/system/cronjobs.md)
+  - [Icons](docs/system/icons.md)
+  - [Server to client updates (Mercure)](docs/system/server-client-updates.md)
+  - [Self-hosting](docs/system/self-hosting.md)
 ### Features
   - Projects
     - [Framework detection](docs/features/project/framework-detection.md)
