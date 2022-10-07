@@ -38,4 +38,5 @@ yarn-error.log
 ###< symfony/webpack-encore-bundle ###
 
 # Local filestorage
-/public/storage/
+/public/storage/*
+!/public/storage/.gitkeep
