@@ -154,7 +154,7 @@ services:
             - '%env(OPENGRAPHIO_API_KEY)%'
 
     App\Util\Meta\MetaDriverInterface:
-        alias: App\Util\Meta\Driver\InternalMetaApi
+        alias: App\Util\Meta\Driver\BasicHttp
 
     App\Util\Favicon\FaviconFetcherInterface:
         alias: App\Util\Favicon\FaviconFetcher
