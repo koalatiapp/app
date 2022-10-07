@@ -2,7 +2,7 @@ name: Self-hosting release
 
 on:
     release:
-        types: [released]
+        types: [published]
 
 jobs:
     docker-push:
@@ -19,7 +19,7 @@ jobs:
             - name: Test version number generation
               run: |
                 echo "Exact version: " koalati/app:`sed 's/^v//' <<< '${{ github.event.release.tag_name }}'`
-                echo "Major version: " koalati/app:`sed 's/^v\([0-9]*[0-9]*\).\([0-9]*[0-9]*\).\([0-9]*[0-9]*\)\(-[a-zA-Z][a-zA-Z]*\)\{0,1\}.*$/\1.\4/' <<< '${{ github.event.release.tag_name }}'`
+                echo "Major version: " koalati/app:`sed 's/^v\([0-9]*[0-9]*\).\([0-9]*[0-9]*\).\([0-9]*[0-9]*\)\(-[a-zA-Z][a-zA-Z]*\)\{0,1\}.*$/\1\4/' <<< '${{ github.event.release.tag_name }}'`
                 echo "Minor version: " koalati/app:`sed 's/^v\([0-9]*[0-9]*\).\([0-9]*[0-9]*\).\([0-9]*[0-9]*\)\(-[a-zA-Z][a-zA-Z]*\)\{0,1\}.*$/\1.\2\4/' <<< '${{ github.event.release.tag_name }}'`
                 echo "Patch version: " koalati/app:`sed 's/^v\([0-9]*[0-9]*\).\([0-9]*[0-9]*\).\([0-9]*[0-9]*\)\(-[a-zA-Z][a-zA-Z]*\)\{0,1\}.*$/\1.\2.\3\4/' <<< '${{ github.event.release.tag_name }}'`
                 echo "Latest version: " koalati/app:latest`sed 's/^v\([0-9]*[0-9]*\).\([0-9]*[0-9]*\).\([0-9]*[0-9]*\)\(-[a-zA-Z][a-zA-Z]*\)\{0,1\}.*$/\4/' <<< '${{ github.event.release.tag_name }}'`
@@ -30,7 +30,7 @@ jobs:
                 docker buildx build --target=symfony_php --push \
                 --tag koalati/app-php:latest`sed 's/^v\([0-9]*[0-9]*\).\([0-9]*[0-9]*\).\([0-9]*[0-9]*\)\(-[a-zA-Z][a-zA-Z]*\)\{0,1\}.*$/\4/' <<< '${{ github.event.release.tag_name }}'` \
                 --tag koalati/app-php:`sed 's/^v//' <<< '${{ github.event.release.tag_name }}'` \
-                --tag koalati/app-php:`sed 's/^v\([0-9]*[0-9]*\).\([0-9]*[0-9]*\).\([0-9]*[0-9]*\)\(-[a-zA-Z][a-zA-Z]*\)\{0,1\}.*$/\1.\4/' <<< '${{ github.event.release.tag_name }}'` \
+                --tag koalati/app-php:`sed 's/^v\([0-9]*[0-9]*\).\([0-9]*[0-9]*\).\([0-9]*[0-9]*\)\(-[a-zA-Z][a-zA-Z]*\)\{0,1\}.*$/\1\4/' <<< '${{ github.event.release.tag_name }}'` \
                 --tag koalati/app-php:`sed 's/^v\([0-9]*[0-9]*\).\([0-9]*[0-9]*\).\([0-9]*[0-9]*\)\(-[a-zA-Z][a-zA-Z]*\)\{0,1\}.*$/\1.\2\4/' <<< '${{ github.event.release.tag_name }}'` \
                 --tag koalati/app-php:`sed 's/^v\([0-9]*[0-9]*\).\([0-9]*[0-9]*\).\([0-9]*[0-9]*\)\(-[a-zA-Z][a-zA-Z]*\)\{0,1\}.*$/\1.\2.\3\4/' <<< '${{ github.event.release.tag_name }}'` \
                 --platform linux/amd64,linux/arm/v7,linux/arm64/v8 .
@@ -39,7 +39,7 @@ jobs:
                 docker buildx build --target=symfony_caddy --push \
                 --tag koalati/app-caddy:latest`sed 's/^v\([0-9]*[0-9]*\).\([0-9]*[0-9]*\).\([0-9]*[0-9]*\)\(-[a-zA-Z][a-zA-Z]*\)\{0,1\}.*$/\4/' <<< '${{ github.event.release.tag_name }}'` \
                 --tag koalati/app-caddy:`sed 's/^v//' <<< '${{ github.event.release.tag_name }}'` \
-                --tag koalati/app-caddy:`sed 's/^v\([0-9]*[0-9]*\).\([0-9]*[0-9]*\).\([0-9]*[0-9]*\)\(-[a-zA-Z][a-zA-Z]*\)\{0,1\}.*$/\1.\4/' <<< '${{ github.event.release.tag_name }}'` \
+                --tag koalati/app-caddy:`sed 's/^v\([0-9]*[0-9]*\).\([0-9]*[0-9]*\).\([0-9]*[0-9]*\)\(-[a-zA-Z][a-zA-Z]*\)\{0,1\}.*$/\1\4/' <<< '${{ github.event.release.tag_name }}'` \
                 --tag koalati/app-caddy:`sed 's/^v\([0-9]*[0-9]*\).\([0-9]*[0-9]*\).\([0-9]*[0-9]*\)\(-[a-zA-Z][a-zA-Z]*\)\{0,1\}.*$/\1.\2\4/' <<< '${{ github.event.release.tag_name }}'` \
                 --tag koalati/app-caddy:`sed 's/^v\([0-9]*[0-9]*\).\([0-9]*[0-9]*\).\([0-9]*[0-9]*\)\(-[a-zA-Z][a-zA-Z]*\)\{0,1\}.*$/\1.\2.\3\4/' <<< '${{ github.event.release.tag_name }}'` \
                 --platform linux/amd64,linux/arm/v7,linux/arm64/v8 .
