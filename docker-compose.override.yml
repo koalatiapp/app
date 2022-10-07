@@ -41,11 +41,17 @@ services:
       - SYS_NICE  # CAP_SYS_NICE
     volumes:
       - db-data:/var/lib/mysql:rw
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 3s
+      timeout: 3s
+      retries: 10
 
   tools-service:
     image: koalati/tools-service
     depends_on:
-        - tools-service-database
+        database:
+            condition: service_healthy
     environment:
       PORT: 3000
       MOCK_API: 0
@@ -53,32 +59,21 @@ services:
       WEBHOOK_PATH: /webhook/test-result
       JWT_SECRET: ${TOOLS_API_JWT_SECRET:-ChangeMe123}
       AUTH_ACCESS_TOKEN: ${TOOLS_API_AUTH_ACCESS_TOKEN:-ChangeMe123}
-      PGHOST: tools-service-database
-      PGUSER: ${TOOLS_API_PGUSER:-postgres}
-      PGPASSWORD: ${TOOLS_API_PGPASSWORD:-ChangeMe123}
-      PGDATABASE: ${TOOLS_API_PGDATABASE:-postgres}
+      DATABASE_HOST: ${TOOLS_API_DATABASE_HOST:-database}
+      DATABASE_NAME: ${TOOLS_API_DATABASE_NAME:-app}
+      DATABASE_USER: ${TOOLS_API_DATABASE_USER:-symfony}
+      DATABASE_PASSWORD: ${TOOLS_API_DATABASE_PASSWORD:-ChangeMe}
+      DATABASE_REJECT_UNAUTHORIZED: 0
       PGPORT: 5432
+    restart: unless-stopped
     ports:
     - 3000:3000
 
-  tools-service-database:
-    image: postgres:${TOOLS_API_PGVERSION:-13}
-    restart: always
-    environment:
-      POSTGRES_USER: ${TOOLS_API_PGUSER:-postgres}
-      POSTGRES_PASSWORD: ${TOOLS_API_PGPASSWORD:-ChangeMe123}
-      POSTGRES_DB: ${TOOLS_API_PGDATABASE:-postgres}
-    volumes:
-      - tools-service-db-data:/var/lib/postgresql:rw
-    ports:
-      - 5432:5432
-
   adminer:
     image: adminer
-    restart: always
+    restart: unless-stopped
     ports:
       - ${ADMINER_PORT:-8080}:8080
 
 volumes:
-  tools-service-db-data:
   db-data:
