@@ -11,6 +11,7 @@ use League\Flysystem\Local\LocalFilesystemAdapter;
 class FilesystemManager
 {
 	private FilesystemOperator $filesystem;
+	private bool $isLocalFilesystem = false;
 
 	public function __construct(
 		FilesystemAdapter $mainFilesystemAdapter,
@@ -24,10 +25,16 @@ class FilesystemManager
 		}
 
 		$this->filesystem = new Filesystem($adapter);
+		$this->isLocalFilesystem = $adapter instanceof LocalFilesystemAdapter;
 	}
 
 	public function getFilesystem(): FilesystemOperator
 	{
 		return $this->filesystem;
+	}
+
+	public function isLocalFilesystem(): bool
+	{
+		return $this->isLocalFilesystem;
 	}
 }

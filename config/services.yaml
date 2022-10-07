@@ -102,7 +102,7 @@ services:
     # Local filesystem adapter for self-hosting
     League\Flysystem\Local\LocalFilesystemAdapter:
         arguments:
-            - '%kernel.project_dir%/var/storage/'
+            - '%kernel.project_dir%/public/storage/'
 
     Aws\S3\S3ClientInterface:
         class: Aws\S3\S3Client
@@ -118,6 +118,7 @@ services:
     App\Storage\AbstractStorage:
         arguments:
             - '%env(STORAGE_CDN_URL)%'
+            - '@Symfony\Component\Asset\Packages'
             - '@App\Storage\FilesystemManager'
 
     App\Storage\ProjectStorage:
