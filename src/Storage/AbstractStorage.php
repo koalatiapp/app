@@ -3,6 +3,7 @@
 namespace App\Storage;
 
 use League\Flysystem\Filesystem;
+use League\Flysystem\FilesystemOperator;
 
 /**
  * Storage service that acts as a base for all storage operations.
@@ -11,10 +12,13 @@ use League\Flysystem\Filesystem;
  */
 abstract class AbstractStorage
 {
+	protected FilesystemOperator $filesystem;
+
 	public function __construct(
-		protected Filesystem $filesystem,
 		protected string $cdnBaseUrl,
+		FilesystemManager $filesystemManager,
 	) {
+		$this->filesystem = $filesystemManager->getFilesystem();
 	}
 
 	/**

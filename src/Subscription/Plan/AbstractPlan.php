@@ -7,7 +7,7 @@ use App\Util\SelfHosting;
 abstract class AbstractPlan implements PlanInterface
 {
 	public function __construct(
-		private SelfHosting $selfHosting
+		private ?SelfHosting $selfHosting = null
 	) {
 	}
 
@@ -24,7 +24,7 @@ abstract class AbstractPlan implements PlanInterface
 	 */
 	public function getPaddleId(): string
 	{
-		if ($this->selfHosting->isSelfHosted()) {
+		if ($this->selfHosting?->isSelfHosted()) {
 			return '';
 		}
 
@@ -36,7 +36,7 @@ abstract class AbstractPlan implements PlanInterface
 	 */
 	public function getMaxActivePagesPerProject(): int
 	{
-		if ($this->selfHosting->isSelfHosted()) {
+		if ($this->selfHosting?->isSelfHosted()) {
 			return PHP_INT_MAX;
 		}
 
@@ -48,7 +48,7 @@ abstract class AbstractPlan implements PlanInterface
 	 */
 	public function getMaxTeamOwned(): int
 	{
-		if ($this->selfHosting->isSelfHosted()) {
+		if ($this->selfHosting?->isSelfHosted()) {
 			return PHP_INT_MAX;
 		}
 
@@ -60,7 +60,7 @@ abstract class AbstractPlan implements PlanInterface
 	 */
 	public function getMaxProjectMembers(): int
 	{
-		if ($this->selfHosting->isSelfHosted()) {
+		if ($this->selfHosting?->isSelfHosted()) {
 			return PHP_INT_MAX;
 		}
 
@@ -72,7 +72,7 @@ abstract class AbstractPlan implements PlanInterface
 	 */
 	public function hasChecklistAccess(): bool
 	{
-		if ($this->selfHosting->isSelfHosted()) {
+		if ($this->selfHosting?->isSelfHosted()) {
 			return true;
 		}
 
@@ -84,7 +84,7 @@ abstract class AbstractPlan implements PlanInterface
 	 */
 	public function hasTestingAccess(): bool
 	{
-		if ($this->selfHosting->isSelfHosted()) {
+		if ($this->selfHosting?->isSelfHosted()) {
 			return true;
 		}
 
@@ -96,7 +96,7 @@ abstract class AbstractPlan implements PlanInterface
 	 */
 	public function hasMonitoringAccess(): bool
 	{
-		if ($this->selfHosting->isSelfHosted()) {
+		if ($this->selfHosting?->isSelfHosted()) {
 			return true;
 		}
 
@@ -131,7 +131,7 @@ abstract class AbstractPlan implements PlanInterface
 
 	public function isPaidPlan(): bool
 	{
-		if ($this->selfHosting->isSelfHosted()) {
+		if ($this->selfHosting?->isSelfHosted()) {
 			return false;
 		}
 
