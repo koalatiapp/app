@@ -32,7 +32,23 @@ Koalati instance is protected via some other security measure (VPN, .htpasswd,
 etc.), you may disable this mode.
 
 
+## Self-hosting specific changes
+
+### File storage
+In self-hosting mode, file storage is handled locally instead of relying on an
+external storage service (ex.: S3).
+
+Files are stored and served from the `public/storage` directory, which means 
+they are also accessible publically. 
+
+## Project screenshots
+In self-hosting mode, project thumbnails use the site's `og:image` instead of a 
+screenshot of the homepage.
+
+This change is done to simplify the installation and maintenance of self-hosted
+Koalati environments.
+
 ## Useful commands
 
 - The [`CreateUserCommand`](/src/Command/Security/CreateUserCommand.php) can be 
-  used to create a user via the command line. This is especially 
+  used to create a user via the command line. 
