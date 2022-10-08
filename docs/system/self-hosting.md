@@ -41,7 +41,7 @@ external storage service (ex.: S3).
 Files are stored and served from the `public/storage` directory, which means 
 they are also accessible publically. 
 
-## Project screenshots
+### Project screenshots
 In self-hosting mode, project thumbnails use the site's `og:image` instead of a 
 screenshot of the homepage.
 
