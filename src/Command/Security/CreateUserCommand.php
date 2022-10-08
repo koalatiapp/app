@@ -83,7 +83,7 @@ class CreateUserCommand extends Command
 
 		$user = new User();
 		$user
-			->setSubscriptionPlan(BusinessPlan::class)
+			->setSubscriptionPlan(BusinessPlan::UNIQUE_NAME)
 			->setEmail($email)
 			->setFirstName($firstName)
 			->setPassword($this->passwordHasher->hashPassword($user, $plainPassword));
