@@ -650,7 +650,7 @@ organization:
         member_leave_no_admins: You must make another member administrator before leaving the team.
         member_left_successfully: You have left the %organization% team.
         invitation_sent: Your invitation has been sent to %name%!
-        invitation_already_sent: This user alrady has an invitation pending.
+        invitation_already_sent: This user already has an invitation pending.
     first:
         title: It looks like you don't have a team yet...
         join_existing:
