@@ -2,7 +2,7 @@ framework:
     mailer:
         dsn: '%env(MAILER_DSN)%'
         envelope:
-            sender: 'noreply@koalati.com'
+            sender: '%env(MAILER_FROM_ADDRESS)%'
         headers:
-            from: 'Koalati <noreply@koalati.com>'
+            from: 'Koalati <%env(MAILER_FROM_ADDRESS)%>'
             X-Auto-Response-Suppress: 'OOF, DR, RN, NRN, AutoReply'
