@@ -98,7 +98,10 @@
 			<footer>
 				<a href="https://www.koalati.com/terms-of-use">{% trans %}footer.terms_of_service{% endtrans %}</a>
 				<a href="https://www.koalati.com/privacy-policy">{% trans %}footer.privacy_policy{% endtrans %}</a>
-				<a href="https://github.com/koalatiapp/app/tree/{{ release_version }}">v. {{ release_version|slice(0, 7) }}</a>
+				<a href="https://github.com/koalatiapp/app/tree/{{ release_version }}">
+					{{ self_hosting_mode ? ("generic.self_hosted"|trans) : "" }}
+					v. {{ release_version|slice(0, 7) }}
+				</a>
 			</footer>
         </div>
 

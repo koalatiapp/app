@@ -65,7 +65,12 @@
 		<div class="wave-section">
 			<div class="container center column">
 				<strong class="text-large">{% trans %}login.no_account{% endtrans %}</strong>
-				<nb-button href="{{ path('registration') }}" color="white">{% trans %}login.register{% endtrans %}</nb-button>
+
+				{% if not signup_allowed %}
+					{% trans %}login.ask_for_an_invite{% endtrans %}
+				{% else %}
+					<nb-button href="{{ path('registration') }}" color="white">{% trans %}login.register{% endtrans %}</nb-button>
+				{% endif %}
 			</div>
 		</div>
 	</div>

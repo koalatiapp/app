@@ -9,6 +9,7 @@ use App\Security\LoginFormAuthenticator;
 use App\Subscription\Plan\NoPlan;
 use App\Subscription\Plan\TrialPlan;
 use App\Util\Analytics\AnalyticsInterface;
+use App\Util\SelfHosting;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -33,7 +34,7 @@ class RegistrationController extends AbstractController
 	/**
 	 * @Route("/sign-up", name="registration")
 	 */
-	public function signUp(Request $request, UserAuthenticatorInterface $authenticator, LoginFormAuthenticator $loginFormAuthenticator, MailerInterface $mailer, EntityManagerInterface $entityManager): Response
+	public function signUp(Request $request, UserAuthenticatorInterface $authenticator, LoginFormAuthenticator $loginFormAuthenticator, MailerInterface $mailer, EntityManagerInterface $entityManager, SelfHosting $selfHosting): Response
 	{
 		$user = new User();
 		$form = $this->createForm(UserRegistrationType::class, $user);
@@ -53,9 +54,11 @@ class RegistrationController extends AbstractController
 				$user->setPassword($hashedPassword);
 
 				// Start users on a 14 day trial
-				$user->setSubscriptionPlan(TrialPlan::UNIQUE_NAME)
-					->setSubscriptionChangeDate(new DateTime('+14 days'))
-					->setUpcomingSubscriptionPlan(NoPlan::UNIQUE_NAME);
+				$user->setSubscriptionPlan(TrialPlan::UNIQUE_NAME);
+				if (!$selfHosting->isSelfHosted()) {
+					$user->setSubscriptionChangeDate(new DateTime('+14 days'))
+						->setUpcomingSubscriptionPlan(NoPlan::UNIQUE_NAME);
+				}
 
 				$email = (new TemplatedEmail())
 					->to(new Address($user->getEmail(), $user->getFirstName()))

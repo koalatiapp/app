@@ -49,7 +49,7 @@ class PlanManager
 		$planUniqueName = $user->getSubscriptionPlan();
 
 		if (!$planUniqueName) {
-			return new NoPlan();
+			$planUniqueName = NoPlan::UNIQUE_NAME;
 		}
 
 		return $this->getPlanFromUniqueName($planUniqueName);

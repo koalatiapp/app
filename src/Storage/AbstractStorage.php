@@ -2,7 +2,8 @@
 
 namespace App\Storage;
 
-use League\Flysystem\Filesystem;
+use League\Flysystem\FilesystemOperator;
+use Symfony\Component\Asset\Packages;
 
 /**
  * Storage service that acts as a base for all storage operations.
@@ -11,10 +12,14 @@ use League\Flysystem\Filesystem;
  */
 abstract class AbstractStorage
 {
+	protected FilesystemOperator $filesystem;
+
 	public function __construct(
-		protected Filesystem $filesystem,
 		protected string $cdnBaseUrl,
+		protected Packages $packages,
+		protected FilesystemManager $filesystemManager,
 	) {
+		$this->filesystem = $filesystemManager->getFilesystem();
 	}
 
 	/**
@@ -26,6 +31,10 @@ abstract class AbstractStorage
 	{
 		if ($returnNullWhenMissing && !$this->filesystem->fileExists($path)) {
 			return null;
+		}
+
+		if ($this->filesystemManager->isLocalFilesystem()) {
+			return $this->packages->getUrl("storage/".ltrim($path, '/'));
 		}
 
 		return rtrim($this->cdnBaseUrl, '/').'/'.ltrim($path, '/');

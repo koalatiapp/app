@@ -37,6 +37,13 @@ class Metadata
 		$this->siteName = $siteName;
 		$this->title = $title;
 		$this->description = $description;
-		$this->imageUrl = $imageUrl;
+		$this->imageUrl = $imageUrl ?: $this->getPlaceholderImageUrl($url);
+	}
+
+	private function getPlaceholderImageUrl(string $url): string
+	{
+		$hostname = parse_url($url, PHP_URL_HOST);
+
+		return "https://via.placeholder.com/600x315/DAE1FB/102984.png?text=$hostname";
 	}
 }

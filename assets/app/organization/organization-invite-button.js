@@ -87,8 +87,6 @@ export class OrganizationInviteButton extends NbButton {
 		const formData = new FormData(form);
 
 		ApiClient.post("api_organization_members_invite", formData).then(response => {
-			modal.toggleLoading(false);
-
 			if (typeof response == "undefined") {
 				return;
 			}
@@ -97,6 +95,8 @@ export class OrganizationInviteButton extends NbButton {
 			window.Flash.show("success", Translator.trans("organization.flash.invitation_sent", { name: formData.get("first_name") }));
 
 			window.plausible("Organization usage", { props: { action: "Invited new member" } });
+		}).finally(() => {
+			modal.toggleLoading(false);
 		});
 	}
 }

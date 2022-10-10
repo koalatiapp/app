@@ -4,12 +4,10 @@ services:
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
     App\Util\Meta\MetaDriverInterface:
-        alias: App\Util\Meta\Driver\MockMetaDriver
+        alias: App\Util\Meta\Driver\BasicHttp
 
     League\Flysystem\FilesystemAdapter:
-        class: League\Flysystem\Local\LocalFilesystemAdapter
-        arguments:
-            - '%kernel.project_dir%/var/storage/'
+        alias: League\Flysystem\Local\LocalFilesystemAdapter
 
     App\Util\Screenshot\Driver\ScreenshotDriverInterface:
         alias: App\Util\Screenshot\Driver\BlankScreenshotDriver

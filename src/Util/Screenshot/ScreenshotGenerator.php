@@ -8,13 +8,6 @@ use App\Util\Url;
 class ScreenshotGenerator implements ScreenshotGeneratorInterface
 {
 	/**
-	 * Screenshot generation driver.
-	 */
-	private ScreenshotDriverInterface $driver;
-
-	private Url $urlHelper;
-
-	/**
 	 * The width of the images to generate, in pixel.
 	 * If `null`, the viewport's size is used.
 	 */
@@ -26,10 +19,10 @@ class ScreenshotGenerator implements ScreenshotGeneratorInterface
 	 */
 	private int $renderScale = 1;
 
-	public function __construct(ScreenshotDriverInterface $driver, Url $urlHelper)
-	{
-		$this->driver = $driver;
-		$this->urlHelper = $urlHelper;
+	public function __construct(
+		private ScreenshotDriverInterface $driver,
+		private Url $urlHelper,
+	) {
 	}
 
 	public function allowCache(): self

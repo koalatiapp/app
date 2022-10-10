@@ -2,3 +2,4 @@ framework:
     assets:
         version: '%env(KOALATI_RELEASE_VERSION)%'
         # json_manifest_path: '%kernel.project_dir%/public/build/manifest.json'
+        base_url: '%env(BASE_URL)%'

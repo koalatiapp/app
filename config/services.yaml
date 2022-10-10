@@ -10,6 +10,8 @@ imports:
 parameters:
     test_stub_dir: '%kernel.project_dir%/tests/stub'
     paddle_public_key: '%env(PADDLE_PUBLIC_KEY)%'
+    self_hosting_mode: '%env(bool:SELF_HOSTING)%'
+    invite_only_registration_mode: '%env(bool:INVITE_ONLY_REGISTRATION_MODE)%'
 
 services:
     # default configuration for services in *this* file
@@ -90,16 +92,17 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    League\Flysystem\FilesystemOperator:
-        class: League\Flysystem\Filesystem
-        arguments:
-            - '@League\Flysystem\FilesystemAdapter'
-
+    # Main filesystem adapter for hosted service
     League\Flysystem\FilesystemAdapter:
         class: League\Flysystem\AwsS3V3\AwsS3V3Adapter
         arguments:
             - '@Aws\S3\S3ClientInterface'
             - '%env(STORAGE_BUCKET)%'
+
+    # Local filesystem adapter for self-hosting
+    League\Flysystem\Local\LocalFilesystemAdapter:
+        arguments:
+            - '%kernel.project_dir%/public/storage/'
 
     Aws\S3\S3ClientInterface:
         class: Aws\S3\S3Client
@@ -114,8 +117,9 @@ services:
 
     App\Storage\AbstractStorage:
         arguments:
-            - '@League\Flysystem\FilesystemOperator'
             - '%env(STORAGE_CDN_URL)%'
+            - '@Symfony\Component\Asset\Packages'
+            - '@App\Storage\FilesystemManager'
 
     App\Storage\ProjectStorage:
         parent:  App\Storage\AbstractStorage
@@ -151,7 +155,7 @@ services:
             - '%env(OPENGRAPHIO_API_KEY)%'
 
     App\Util\Meta\MetaDriverInterface:
-        alias: App\Util\Meta\Driver\InternalMetaApi
+        alias: App\Util\Meta\Driver\BasicHttp
 
     App\Util\Favicon\FaviconFetcherInterface:
         alias: App\Util\Favicon\FaviconFetcher

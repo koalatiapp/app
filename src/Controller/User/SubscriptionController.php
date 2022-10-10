@@ -10,8 +10,10 @@ use App\Subscription\Plan\SmallTeamPlan;
 use App\Subscription\Plan\SoloAnnualPlan;
 use App\Subscription\Plan\SoloPlan;
 use App\Subscription\PlanManager;
+use App\Util\SelfHosting;
 use DateTime;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 class SubscriptionController extends AbstractController
@@ -21,7 +23,11 @@ class SubscriptionController extends AbstractController
 	 */
 	public function __construct(
 		private PlanManager $planManager,
+		SelfHosting $selfHosting,
 	) {
+		if ($selfHosting->isSelfHosted()) {
+			throw new NotFoundHttpException("Subscriptions are not available on a self-hosted version of Koalati.");
+		}
 	}
 
 	/**
@@ -32,12 +38,12 @@ class SubscriptionController extends AbstractController
 		$user = $this->getUser();
 		$plan = $this->planManager->getPlanFromEntity($user);
 		$plans = [
-			new SoloPlan(),
-			new SmallTeamPlan(),
-			new BusinessPlan(),
-			new SoloAnnualPlan(),
-			new SmallTeamAnnualPlan(),
-			new BusinessAnnualPlan(),
+			$this->planManager->getPlanFromUniqueName(SoloPlan::UNIQUE_NAME),
+			$this->planManager->getPlanFromUniqueName(SmallTeamPlan::UNIQUE_NAME),
+			$this->planManager->getPlanFromUniqueName(BusinessPlan::UNIQUE_NAME),
+			$this->planManager->getPlanFromUniqueName(SoloAnnualPlan::UNIQUE_NAME),
+			$this->planManager->getPlanFromUniqueName(SmallTeamAnnualPlan::UNIQUE_NAME),
+			$this->planManager->getPlanFromUniqueName(BusinessAnnualPlan::UNIQUE_NAME),
 		];
 
 		$upcomingPlan = null;

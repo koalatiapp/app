@@ -6,6 +6,7 @@ use App\Controller\AbstractController;
 use App\Controller\Trait\ApiControllerTrait;
 use App\Controller\Trait\PreventDirectAccessTrait;
 use App\Subscription\SubscriptionUpdater;
+use App\Util\SelfHosting;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,6 +18,14 @@ class SubscriptionController extends AbstractController
 {
 	use ApiControllerTrait;
 	use PreventDirectAccessTrait;
+
+	public function __construct(
+		SelfHosting $selfHosting,
+	) {
+		if ($selfHosting->isSelfHosted()) {
+			$this->apiError("Subscriptions are not available on a self-hosted version of Koalati.", 404);
+		}
+	}
 
 	/**
 	 * @Route("/change", methods={"POST","PUT"}, name="change_plan", options={"expose": true})
