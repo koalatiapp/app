@@ -44,8 +44,9 @@ body { padding: 45px 60px; padding-left: calc(var(--sidebar-width) + 60px); font
 #page-tabs li.active a { color: var(--color-black); border-bottom: 2px solid; }
 /* Layout: top bar: global actions */
 #global-actions { display: flex; align-items: center; }
-#global-actions > * { display: inline-block; padding: 10px 12px; margin-left: 20px; font-size: 20px; color: var(--color-gray); cursor: pointer; transition: color .25s ease; position: relative; }
-#global-actions > *:hover { color: var(--color-black); }
+#global-actions > * { display: inline-block; padding: 10px 12px; margin-left: 20px; font-size: 20px; color: var(--color-gray-darker); cursor: pointer; transition: color .25s ease; position: relative; }
+#global-actions > *:not(div) { border-radius: 1rem; transition: all .15s ease-in-out; }
+#global-actions > *:not(div):hover { color: var(--color-blue); background-color: var(--color-blue-10); }
 #global-actions > #profile-toggle { padding: 0; padding-left: 12px; font-size: 0; line-height: 0; }
 #global-actions > #profile-toggle img { width: 34px; height: 34px; object-fit: cover; object-position: center; border-radius: 50%; }
 #global-actions > #profile-toggle ul { font-size: .9rem; line-height: 1.3; color: var(--color-black); top: 100%; right: -5px; }
@@ -54,12 +55,12 @@ body { padding: 45px 60px; padding-left: calc(var(--sidebar-width) + 60px); font
 #page-wrapper { margin-top: 40px; }
 #page-content { min-height: calc(100vh - 300px); margin-top: 20px; }
 #page-wrapper footer { display: flex; margin-top: 45px; justify-content: flex-end; gap: 1.5rem; text-align: right; font-size: .75rem; }
-#page-wrapper footer a { color: var(--color-gray); }
+#page-wrapper footer a { color: var(--color-gray-darker); }
 #page-wrapper footer a:hover { text-decoration: underline; }
 
 /* Page header */
 #page-header { display: flex; justify-content: space-between; align-items: flex-end; }
-#section-title { margin-bottom: 0; margin-top: -1em; font-size: 13px; font-weight: 400; line-height: 1; color: var(--color-gray); }
+#section-title { margin-bottom: 0; margin-top: -1em; font-size: 13px; font-weight: 400; line-height: 1; color: var(--color-gray-dark); }
 #section-title::after { content: '\f054'; margin-left: 5px; font-family: var(--fa-style-family); font-size: .7em; font-weight: 400; line-height: 1; position: relative; top: -1px; }
 #section-title a:hover { text-decoration: underline; }
 #page-actions { display: grid; grid-auto-flow: column; align-items: center; gap: 20px; }

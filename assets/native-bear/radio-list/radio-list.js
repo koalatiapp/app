@@ -19,10 +19,11 @@ export class NbRadioList extends LitElement {
 				:host([required]) legend::after { content: ' *'; color: var(--color-red); font-size: .85em; vertical-align: top; }
 				.option-wrapper { margin-top: .5rem; }
 				label { font-size: 1rem; font-weight: 400; color: var(--color-gray-darker); cursor: pointer; }
-				input { display: inline-block; width: 1rem; height: 1rem; margin: 0.2rem .2rem 0 .2rem; vertical-align: top; background-color: var(--color-gray-lighter); box-shadow: 0 0 0px 1px var(--color-blue-80); border-radius: 50%; outline: none; -webkit-appearance: none; appearance: none; transition: box-shadow .15s ease-in-out; }
-				input:hover { box-shadow: 0 0 0px 1px var(--color-blue-80), 0 2px 10px 0 rgba(var(--shadow-rgb), .15); }
+				input { display: inline-block; width: 1rem; height: 1rem; margin: 0.2rem .2rem 0 .2rem; vertical-align: top; background-color: var(--color-gray-lighter); box-shadow: 0 0 0px 2px var(--color-blue-20); border-radius: 50%; outline: none; -webkit-appearance: none; appearance: none; transition: box-shadow .15s ease-in-out; }
+				input:hover { box-shadow: 0 0 0px 2px var(--color-blue-80), 0 2px 10px 0 rgba(var(--shadow-rgb), .15); }
 				input:focus { box-shadow: 0 0 0px 2px var(--color-blue-80), 0 2px 10px 0 rgba(var(--shadow-rgb), .15); }
-				input:checked { background-color: var(--color-blue-80); border: 3px solid var(--color-gray-lighter); }
+				input:focus-visible + label { text-decoration: underline 2px solid var(--color-blue-50); }
+				input:checked { background-color: var(--color-blue-80); border: 3px solid var(--color-gray-lighter); box-shadow: 0 0 0px 2px var(--color-blue-80); }
 				input:checked:hover + label { cursor: default; }
 				input:not(:checked):hover + label { color: var(--color-blue-80); }
 
