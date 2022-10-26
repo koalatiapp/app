@@ -156,7 +156,7 @@ registration:
             firstName: First name
             email: Email address
             password: Password
-            termsOfService: By creating a Koalati account, you're agreeing to accept the <a href="https://www.koalati.com/terms-of-use">Koalati terms of use</a>.
+            termsOfService: By creating an account, you are indicating that you accept <a href="https://www.koalati.com/terms-of-use">Koalati's terms of use</a>.
             privacyPolicy: Ethics and privacy are paramount at Koalati. To see what type of data we collect and how we handle it, take a look at the <a href="https://www.koalati.com/privacy-policy">Koalati privacy policy</a>.
         error:
             email_failed: It looks like the email address you provided is invalid. Please make sure it is valid.
@@ -269,7 +269,7 @@ global_actions:
 
 quick_actions:
     add_team_member: Add a team member
-    create_project: Create a project
+    create_project: New project
 
 search:
     button_label: Open the search bar
@@ -437,7 +437,7 @@ dashboard:
         title: News and updates
 
 project_creation:
-    title: Create a project
+    title: New project
     form:
         title: Website information
         submit_label: Create project
