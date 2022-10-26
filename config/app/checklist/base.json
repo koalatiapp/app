@@ -3,7 +3,7 @@
 		"title": "Basics",
 		"items": [
 			{
-				"title": "Every page loads correctly and in a reasonable amount of time.",
+				"title": "Every page loads correctly without any error.",
 				"description": "If a page won't load or displays an error message, the problem needs to be remedied as soon as possible.\n\nIf you don't know what is causing the problem, try typing the error message in a search engine. If that doesn't pan out, you might want to start looking at logs on your web server or web hosting management panel.",
 				"resourceUrls": []
 			},
