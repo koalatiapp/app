@@ -6,7 +6,7 @@ test("creates, edits and deletes a project", async ({ page }) => {
 
 	// Go to project creation page through quick actions
 	await page.hover("#quick-actions .toggle");
-	await page.click("text=Create a project");
+	await page.click("text=New project");
 	await page.waitForSelector("text=Give your project a name");
 
 	// Fill in the project creation form
@@ -15,7 +15,7 @@ test("creates, edits and deletes a project", async ({ page }) => {
 	await page.click("nb-button:has-text('Create project')");
 
 	// Wait for confirmation message
-	await page.waitForSelector("text=has been created successfully")
+	await page.waitForSelector("text=has been created successfully");
 	expect(await page.evaluate(() => window.location.pathname)).toMatch(/^\/project\/[a-zA-Z0-9]+\//);
 
 	// Go to project settings
