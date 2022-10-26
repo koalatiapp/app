@@ -103,27 +103,27 @@
 	<hr class="spacer small">
 
 	<div class="grid cols-4">
-		<a href="{{ path('project_checklist', {id: project.id|hashids_encode}) }}" class="clickable-thumbnail">
+		<a href="{{ path('project_checklist', {id: project.id|hashids_encode}) }}" class="clickable-thumbnail icon">
 			<div class="thumbnail">
-				<img src="{{ asset('media/feature-thumbnail/checklist.png') }}" alt="" loading="lazy">
+				<i class="fad fa-list-check"></i>
 			</div>
 			<div class="info">
 				<div class="name">{% trans %}project_dashboard.links.checklist{% endtrans %}</div>
 				<i class="far fa-angle-right"></i>
 			</div>
 		</a>
-		<a href="{{ path('project_testing', {id: project.id|hashids_encode}) }}" class="clickable-thumbnail">
+		<a href="{{ path('project_testing', {id: project.id|hashids_encode}) }}" class="clickable-thumbnail icon">
 			<div class="thumbnail">
-				<img src="{{ asset('media/feature-thumbnail/recommendations.png') }}" alt="" loading="lazy">
+				<i class="fad fa-wand-magic-sparkles"></i>
 			</div>
 			<div class="info">
 				<div class="name">{% trans %}project_dashboard.links.recommendations{% endtrans %}</div>
 				<i class="far fa-angle-right"></i>
 			</div>
 		</a>
-		<a href="{{ path('project_settings', {id: project.id|hashids_encode}) }}" class="clickable-thumbnail">
+		<a href="{{ path('project_settings', {id: project.id|hashids_encode}) }}" class="clickable-thumbnail icon light">
 			<div class="thumbnail">
-				<img src="{{ asset('media/feature-thumbnail/settings.png') }}" alt="" loading="lazy">
+				<i class="fad fa-gears"></i>
 			</div>
 			<div class="info">
 				<div class="name">{% trans %}project_dashboard.links.settings{% endtrans %}</div>

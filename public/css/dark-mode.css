@@ -91,6 +91,9 @@ a.text-link { color: var(--color-blue-darker); }
 /* Component: Thumbnail */
 .clickable-thumbnail .thumbnail::after { background-color: black; }
 .clickable-thumbnail .thumbnail img { filter: brightness(.75); }
+.clickable-thumbnail.icon .thumbnail i { color: var(--color-black); background-color: var(--color-blue-lighter); }
+.clickable-thumbnail.icon.light .thumbnail i { color: var(--color-black); background-color: var(--color-gray-lighter); }
+.clickable-thumbnail.icon:hover .thumbnail i { color: var(--color-black); background-color: var(--color-blue-80); }
 
 /* Lists */
 .list-headings { color: var(--color-gray); }

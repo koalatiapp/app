@@ -1,5 +1,5 @@
 /*!
- * Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com
+ * Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com
  * License - https://fontawesome.com/license (Commercial License)
  * Copyright 2022 Fonticons, Inc.
  */
@@ -8,6 +8,8 @@
   font-weight: var(--fa-style, 900); }
 
 .fa,
+.fa-classic,
+.fa-sharp,
 .fas,
 .fa-solid,
 .far,
@@ -18,6 +20,8 @@
 .fa-thin,
 .fad,
 .fa-duotone,
+.fass,
+.fa-sharp-solid,
 .fab,
 .fa-brands {
   -moz-osx-font-smoothing: grayscale;
@@ -27,6 +31,31 @@
   font-variant: normal;
   line-height: 1;
   text-rendering: auto; }
+
+.fas,
+.fa-classic,
+.fa-solid,
+.far,
+.fa-regular,
+.fal,
+.fa-light,
+.fat,
+.fa-thin {
+  font-family: 'Font Awesome 6 Pro'; }
+
+.fab,
+.fa-brands {
+  font-family: 'Font Awesome 6 Brands'; }
+
+.fad,
+.fa-classic.fa-duotone,
+.fa-duotone {
+  font-family: 'Font Awesome 6 Duotone'; }
+
+.fass,
+.fa-sharp {
+  font-family: 'Font Awesome 6 Sharp';
+  font-weight: 900; }
 
 .fa-1x {
   font-size: 1em; }
@@ -124,8 +153,8 @@
 .fa-beat {
   -webkit-animation-name: fa-beat;
           animation-name: fa-beat;
-  -webkit-animation-delay: var(--fa-animation-delay, 0);
-          animation-delay: var(--fa-animation-delay, 0);
+  -webkit-animation-delay: var(--fa-animation-delay, 0s);
+          animation-delay: var(--fa-animation-delay, 0s);
   -webkit-animation-direction: var(--fa-animation-direction, normal);
           animation-direction: var(--fa-animation-direction, normal);
   -webkit-animation-duration: var(--fa-animation-duration, 1s);
@@ -138,8 +167,8 @@
 .fa-bounce {
   -webkit-animation-name: fa-bounce;
           animation-name: fa-bounce;
-  -webkit-animation-delay: var(--fa-animation-delay, 0);
-          animation-delay: var(--fa-animation-delay, 0);
+  -webkit-animation-delay: var(--fa-animation-delay, 0s);
+          animation-delay: var(--fa-animation-delay, 0s);
   -webkit-animation-direction: var(--fa-animation-direction, normal);
           animation-direction: var(--fa-animation-direction, normal);
   -webkit-animation-duration: var(--fa-animation-duration, 1s);
@@ -152,8 +181,8 @@
 .fa-fade {
   -webkit-animation-name: fa-fade;
           animation-name: fa-fade;
-  -webkit-animation-delay: var(--fa-animation-delay, 0);
-          animation-delay: var(--fa-animation-delay, 0);
+  -webkit-animation-delay: var(--fa-animation-delay, 0s);
+          animation-delay: var(--fa-animation-delay, 0s);
   -webkit-animation-direction: var(--fa-animation-direction, normal);
           animation-direction: var(--fa-animation-direction, normal);
   -webkit-animation-duration: var(--fa-animation-duration, 1s);
@@ -166,8 +195,8 @@
 .fa-beat-fade {
   -webkit-animation-name: fa-beat-fade;
           animation-name: fa-beat-fade;
-  -webkit-animation-delay: var(--fa-animation-delay, 0);
-          animation-delay: var(--fa-animation-delay, 0);
+  -webkit-animation-delay: var(--fa-animation-delay, 0s);
+          animation-delay: var(--fa-animation-delay, 0s);
   -webkit-animation-direction: var(--fa-animation-direction, normal);
           animation-direction: var(--fa-animation-direction, normal);
   -webkit-animation-duration: var(--fa-animation-duration, 1s);
@@ -180,8 +209,8 @@
 .fa-flip {
   -webkit-animation-name: fa-flip;
           animation-name: fa-flip;
-  -webkit-animation-delay: var(--fa-animation-delay, 0);
-          animation-delay: var(--fa-animation-delay, 0);
+  -webkit-animation-delay: var(--fa-animation-delay, 0s);
+          animation-delay: var(--fa-animation-delay, 0s);
   -webkit-animation-direction: var(--fa-animation-direction, normal);
           animation-direction: var(--fa-animation-direction, normal);
   -webkit-animation-duration: var(--fa-animation-duration, 1s);
@@ -194,8 +223,8 @@
 .fa-shake {
   -webkit-animation-name: fa-shake;
           animation-name: fa-shake;
-  -webkit-animation-delay: var(--fa-animation-delay, 0);
-          animation-delay: var(--fa-animation-delay, 0);
+  -webkit-animation-delay: var(--fa-animation-delay, 0s);
+          animation-delay: var(--fa-animation-delay, 0s);
   -webkit-animation-direction: var(--fa-animation-direction, normal);
           animation-direction: var(--fa-animation-direction, normal);
   -webkit-animation-duration: var(--fa-animation-duration, 1s);
@@ -208,8 +237,8 @@
 .fa-spin {
   -webkit-animation-name: fa-spin;
           animation-name: fa-spin;
-  -webkit-animation-delay: var(--fa-animation-delay, 0);
-          animation-delay: var(--fa-animation-delay, 0);
+  -webkit-animation-delay: var(--fa-animation-delay, 0s);
+          animation-delay: var(--fa-animation-delay, 0s);
   -webkit-animation-direction: var(--fa-animation-direction, normal);
           animation-direction: var(--fa-animation-direction, normal);
   -webkit-animation-duration: var(--fa-animation-duration, 2s);
@@ -251,10 +280,8 @@
             animation-duration: 1ms;
     -webkit-animation-iteration-count: 1;
             animation-iteration-count: 1;
-    -webkit-transition-delay: 0s;
-            transition-delay: 0s;
-    -webkit-transition-duration: 0s;
-            transition-duration: 0s; } }
+    transition-delay: 0s;
+    transition-duration: 0s; } }
 
 @-webkit-keyframes fa-beat {
   0%, 90% {
@@ -486,17 +513,44 @@
 
 /* Font Awesome uses the Unicode Private Use Area (PUA) to ensure screen
 readers do not read off random characters that represent icons */
-.fa-angle-down::before {
-  content: "\f107"; }
+.fa-circle-notch::before {
+  content: "\f1ce"; }
+
+.fa-bars::before {
+  content: "\f0c9"; }
+
+.fa-navicon::before {
+  content: "\f0c9"; }
+
+.fa-circle-exclamation::before {
+  content: "\f06a"; }
+
+.fa-exclamation-circle::before {
+  content: "\f06a"; }
+
+.fa-users::before {
+  content: "\f0c0"; }
+
+.fa-eye-slash::before {
+  content: "\f070"; }
 
 .fa-angle-right::before {
   content: "\f105"; }
 
-.fa-arrow-up-right-from-square::before {
-  content: "\f08e"; }
+.fa-wand-magic-sparkles::before {
+  content: "\e2ca"; }
 
-.fa-external-link::before {
-  content: "\f08e"; }
+.fa-magic-wand-sparkles::before {
+  content: "\e2ca"; }
+
+.fa-user::before {
+  content: "\f007"; }
+
+.fa-circle-check::before {
+  content: "\f058"; }
+
+.fa-check-circle::before {
+  content: "\f058"; }
 
 .fa-arrows-rotate::before {
   content: "\f021"; }
@@ -507,41 +561,11 @@ readers do not read off random characters that represent icons */
 .fa-sync::before {
   content: "\f021"; }
 
-.fa-bars::before {
-  content: "\f0c9"; }
+.fa-arrow-up-right-from-square::before {
+  content: "\f08e"; }
 
-.fa-navicon::before {
-  content: "\f0c9"; }
-
-.fa-bell::before {
-  content: "\f0f3"; }
-
-.fa-check::before {
-  content: "\f00c"; }
-
-.fa-chevron-right::before {
-  content: "\f054"; }
-
-.fa-circle-check::before {
-  content: "\f058"; }
-
-.fa-check-circle::before {
-  content: "\f058"; }
-
-.fa-circle-exclamation::before {
-  content: "\f06a"; }
-
-.fa-exclamation-circle::before {
-  content: "\f06a"; }
-
-.fa-circle-info::before {
-  content: "\f05a"; }
-
-.fa-info-circle::before {
-  content: "\f05a"; }
-
-.fa-circle-notch::before {
-  content: "\f1ce"; }
+.fa-external-link::before {
+  content: "\f08e"; }
 
 .fa-circle-question::before {
   content: "\f059"; }
@@ -549,17 +573,8 @@ readers do not read off random characters that represent icons */
 .fa-question-circle::before {
   content: "\f059"; }
 
-.fa-circle-xmark::before {
-  content: "\f057"; }
-
-.fa-times-circle::before {
-  content: "\f057"; }
-
-.fa-xmark-circle::before {
-  content: "\f057"; }
-
-.fa-comment::before {
-  content: "\f075"; }
+.fa-eye::before {
+  content: "\f06e"; }
 
 .fa-comment-dots::before {
   content: "\f4ad"; }
@@ -567,14 +582,23 @@ readers do not read off random characters that represent icons */
 .fa-commenting::before {
   content: "\f4ad"; }
 
+.fa-laptop-mobile::before {
+  content: "\f87a"; }
+
+.fa-phone-laptop::before {
+  content: "\f87a"; }
+
+.fa-comment::before {
+  content: "\f075"; }
+
 .fa-envelope::before {
   content: "\f0e0"; }
 
-.fa-eye::before {
-  content: "\f06e"; }
+.fa-circle-info::before {
+  content: "\f05a"; }
 
-.fa-eye-slash::before {
-  content: "\f070"; }
+.fa-info-circle::before {
+  content: "\f05a"; }
 
 .fa-gear::before {
   content: "\f013"; }
@@ -582,14 +606,14 @@ readers do not read off random characters that represent icons */
 .fa-cog::before {
   content: "\f013"; }
 
-.fa-grid-2::before {
-  content: "\e196"; }
+.fa-angle-down::before {
+  content: "\f107"; }
 
-.fa-laptop-mobile::before {
-  content: "\f87a"; }
+.fa-toolbox::before {
+  content: "\f552"; }
 
-.fa-phone-laptop::before {
-  content: "\f87a"; }
+.fa-bell::before {
+  content: "\f0f3"; }
 
 .fa-magnifying-glass::before {
   content: "\f002"; }
@@ -597,32 +621,17 @@ readers do not read off random characters that represent icons */
 .fa-search::before {
   content: "\f002"; }
 
-.fa-notdef::before {
-  content: "\e1fe"; }
+.fa-list-check::before {
+  content: "\f0ae"; }
+
+.fa-tasks::before {
+  content: "\f0ae"; }
 
 .fa-plus::before {
   content: "\2b"; }
 
 .fa-add::before {
   content: "\2b"; }
-
-.fa-rotate::before {
-  content: "\f2f1"; }
-
-.fa-sync-alt::before {
-  content: "\f2f1"; }
-
-.fa-toolbox::before {
-  content: "\f552"; }
-
-.fa-user::before {
-  content: "\f007"; }
-
-.fa-user-plus::before {
-  content: "\f234"; }
-
-.fa-users::before {
-  content: "\f0c0"; }
 
 .fa-xmark::before {
   content: "\f00d"; }
@@ -638,6 +647,42 @@ readers do not read off random characters that represent icons */
 
 .fa-times::before {
   content: "\f00d"; }
+
+.fa-chevron-right::before {
+  content: "\f054"; }
+
+.fa-rotate::before {
+  content: "\f2f1"; }
+
+.fa-sync-alt::before {
+  content: "\f2f1"; }
+
+.fa-gears::before {
+  content: "\f085"; }
+
+.fa-cogs::before {
+  content: "\f085"; }
+
+.fa-user-plus::before {
+  content: "\f234"; }
+
+.fa-check::before {
+  content: "\f00c"; }
+
+.fa-circle-xmark::before {
+  content: "\f057"; }
+
+.fa-times-circle::before {
+  content: "\f057"; }
+
+.fa-xmark-circle::before {
+  content: "\f057"; }
+
+.fa-grid-2::before {
+  content: "\e196"; }
+
+.fa-notdef::before {
+  content: "\e1fe"; }
 
 .sr-only,
 .fa-sr-only {

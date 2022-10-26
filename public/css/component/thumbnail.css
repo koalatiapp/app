@@ -6,3 +6,8 @@
 .clickable-thumbnail .info .name { font-size: .95rem; font-weight: 600; }
 .clickable-thumbnail:hover { box-shadow: 0 6px 20px 0 rgba(var(--shadow-rgb), .2); transform: translateY(-3px); }
 .clickable-thumbnail:hover .thumbnail::after { opacity: 0; }
+
+.clickable-thumbnail.icon .thumbnail i { display: flex; width: 100%; height: 100%; justify-content: center; align-items: center; font-size: 2.5rem; color: var(--color-blue-dark); background-color: var(--color-blue-20); position: absolute; top: 0; left: 0; transition: color .15s ease, background-color .15s ease; }
+.clickable-thumbnail.icon .thumbnail::after { display: none; }
+.clickable-thumbnail.icon.light .thumbnail i { color: var(--color-blue-dark); background-color: var(--color-gray-light); }
+.clickable-thumbnail.icon:hover .thumbnail i { color: var(--color-white); background-color: var(--color-blue-80); }
