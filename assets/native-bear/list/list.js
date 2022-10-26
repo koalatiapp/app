@@ -128,6 +128,10 @@ export class NbList extends LitElement {
 		}
 
 		this._searchQuery = query;
+
+		// Ensure page is reset to 1 when the search query changes
+		this.page = 1;
+
 		this.requestUpdate();
 	}
 
