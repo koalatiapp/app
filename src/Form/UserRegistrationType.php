@@ -35,6 +35,7 @@ class UserRegistrationType extends AbstractType
 			])
 			->add('submit', SubmitType::class, [
 				'label' => 'registration.form.submit_label',
+				'row_attr' => ['class' => 'fullwidth'],
 			])
 			->add('spacer', SpacerType::class, [
 				'attr' => ['class' => 'spacer small'],

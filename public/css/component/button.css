@@ -4,3 +4,5 @@
 .button-container.left { justify-content: flex-start; }
 .button-container.right { justify-content: flex-end; }
 .button-container.margin-top { margin-top: 1.5rem; }
+.button-container.fullwidth { flex-wrap: nowrap; justify-content: stretch; }
+.button-container.fullwidth > * { width: 100%; }
