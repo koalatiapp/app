@@ -26,7 +26,7 @@ export class NbList extends LitElement {
 				.nb--list-item-column { min-width: 0; }
 				.nb--list-item-column[nb-column="actions"]:last-child { text-align: right; }
 				.nb--list-item-column-placeholder { margin: .15em 0; font-size: .75rem; background-color: #f5f5f5; border-radius: 4px; }
-				.nb--list-empty-state { padding: 10px 15px; font-size: 1rem; color: var(--color-gray); }
+				.nb--list-empty-state { padding: 10px 15px; font-size: 1rem; color: var(--color-gray-dark); }
 				nb-pagination { margin-top: 30px; }
 
 				/* Light background mode */
@@ -128,6 +128,10 @@ export class NbList extends LitElement {
 		}
 
 		this._searchQuery = query;
+
+		// Ensure page is reset to 1 when the search query changes
+		this.page = 1;
+
 		this.requestUpdate();
 	}
 

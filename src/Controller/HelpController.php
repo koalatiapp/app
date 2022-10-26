@@ -14,4 +14,12 @@ class HelpController extends AbstractController
 	{
 		return $this->render('app/help.html.twig');
 	}
+
+	/**
+	 * @Route("/onboarding", name="onboarding")
+	 */
+	public function onboarding(): Response
+	{
+		return $this->render('app/onboarding.html.twig');
+	}
 }

@@ -16,7 +16,7 @@ const login = async (page: Page, email: string = "name@email.com", password: str
 const createProject = async (page: Page, name: string = "Sample website", url: string = "https://sample.koalati.com") => {
 	// Go to project creation page through quick actions
 	await page.hover("#quick-actions .toggle");
-	await page.click("text=Create a project");
+	await page.click("text=New project");
 	await page.waitForSelector("text=Give your project a name");
 
 	// Fill in the project creation form

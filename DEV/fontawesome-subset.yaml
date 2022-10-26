@@ -1,5 +1,5 @@
 projectName: fontawesome-subset
-version: 6.1.1
+version: 6.2.0
 icons:
   - circle-check:
       - solid
@@ -68,3 +68,9 @@ icons:
       - regular
   - grid-2:
       - regular
+  - wand-magic-sparkles:
+      - duotone
+  - gears:
+      - duotone
+  - list-check:
+      - duotone

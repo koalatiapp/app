@@ -13,7 +13,7 @@
 
 {% block body %}
     <div class="grid small-fill">
-        <div class="card">
+        <section class="card">
             <h2>{% trans %}help.contact{% endtrans %}</h2>
 			<ul id="contact-list">
 				<li>
@@ -25,8 +25,8 @@
 					<div>Send us an email at <a href="mailto:info@koalati.com" class="blue-link link-blue">info@koalati.com</a></div>
 				</li>
 			</ul>
-        </div>
-        <div class="card">
+        </section>
+        <section class="card">
             <h2>{% trans %}help.feedback.title{% endtrans %}</h2>
 			<p>{% trans %}help.feedback.content{% endtrans %}</p>
 			<hr>
@@ -35,6 +35,59 @@
 					<nb-button>{% trans %}help.feedback.button{% endtrans %}</nb-button>
 				</feedback-form-toggle>
 			</div>
-        </div>
+        </section>
     </div>
+	<section class="card">
+		<h2>{% trans %}help.faq.title{% endtrans %}</h2>
+		{# @TODO: Replace this hardcoded FAQ by a CMS-managed FAQ that can be used in both the marketing site and the app #}
+
+		<h3>Onboarding</h3>
+
+		<nb-accordion>
+			<div slot="summary">I skipped the initial onboarding, can I see it again?</div>
+			<p>Yes, you can! <a href="{{ path('onboarding') }}" class="text-link">View the onboarding again</a>.</p>
+		</nb-accordion>
+
+		<nb-accordion>
+			<div slot="summary">How do I test my website with Koalati?</div>
+			<p>Create a project, then let the <strong>Checklist</strong> feature guide you through the manual testing process.</p>
+			<p>Once you've done the manual tests, you can optimize the site some more by using the <strong>Recommendations</strong> feature and following its suggestions.</p>
+		</nb-accordion>
+
+		<hr class="spacer small">
+		<h3>Projects</h3>
+
+		<nb-accordion>
+			<div slot="summary">How many projects can I have?</div>
+			<p>As many as you like!</p>
+			<p>There is no limit to the number of projects you can have; only active projects are counted towards your monthly quota.</p>
+			<p>This allows you to keep an archive of your status and progress in the quality control process, and to pick up where you left off whenever you want.</p>
+		</nb-accordion>
+
+		<hr class="spacer small">
+		<h3>Teams</h3>
+
+		<nb-accordion>
+			<div slot="summary">Can I join a team as a free user?</div>
+			<p>Yes! Every user can join teams.</p>
+			<p>Joining a team will give you access to the features and quotas of that team, but only for team projects.</p>
+			<p>Your personal projects will still be limited to your plan's quotas and feature set.</p>
+		</nb-accordion>
+
+		<nb-accordion>
+			<div slot="summary">How many teams can I create?</div>
+			<p>Each account with team creation privilege can create one team.</p>
+			<p>If you need to create more than one team for your business, we recommend creating multiple accounts (or reaching out to let us know you'd want that - we might just add that feature for you!).</p>
+		</nb-accordion>
+
+		<hr class="spacer small">
+		<h3>Trial</h3>
+
+		<nb-accordion>
+			<div slot="summary">What happens when my trial ends?</div>
+			<p>Your trial ends after 14 days if you haven't upgraded to a paid plan.</p>
+			<p>Once that 14-day period is over, you won't have access to your projects anymore until you subscribe to a paid plan.</p>
+			<p>If you have created a team, neither you or your team's members will be able to access the team's projects until you subscribe to the Small Team or Business plan, or until you transfer ownership of the team to a user who is on one of these plans. To transfer a team's ownership, please contact us.</p>
+		</nb-accordion>
+	</section>
 {% endblock %}

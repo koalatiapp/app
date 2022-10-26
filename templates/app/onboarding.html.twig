@@ -1,0 +1,14 @@
+{% extends 'app_base.html.twig' %}
+
+{% block title %}{% trans %}onboarding.title{% endtrans %}{% endblock %}
+
+{% block body %}
+	{# Show onboarding when there's are no projects #}
+	<div class="card medium">
+		{% trans %}onboarding.content{% endtrans %}
+
+		<hr class="spacer small">
+
+		<nb-button href="{{ path('project_creation') }}">{% trans %}onboarding.actions.new_project{% endtrans %}</nb-button>
+	</div>
+{% endblock %}

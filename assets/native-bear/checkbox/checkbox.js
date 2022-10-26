@@ -17,7 +17,7 @@ export class NbCheckbox extends LitElement {
 				:host([required]) label::after { content: " *"; color: var(--color-red); font-size: 0.85em; vertical-align: top; }
 
 				.input-wrapper { position: relative; line-height: 0; }
-				input { display: inline-block; width: 1.375rem; height: 1.375rem; flex: 0 0 1.375rem; padding: 0; background-color: var(--color-white); border: 2px solid var(--color-gray-light); border-radius: 3px; box-shadow: 0 1px 8px 0 rgba(var(--shadow-rgb), .05); -webkit-appearance: none; appearance: none; cursor: pointer; }
+				input { display: inline-block; width: 1.375rem; height: 1.375rem; flex: 0 0 1.375rem; padding: 0; background-color: var(--color-white); border: 2px solid var(--color-gray-light);; border-radius: 3px; box-shadow: 0 1px 8px 0 rgba(var(--shadow-rgb), .05); -webkit-appearance: none; appearance: none; cursor: pointer; }
 				input:checked { background-color: var(--color-gray-light); border-color: var(--color-blue-light); }
 				input:hover { box-shadow: 0 2px 10px 0 rgba(var(--shadow-rgb), .15); }
 				input:focus-visible { border-color: var(--color-blue); box-shadow: 0 2px 10px 0 rgba(var(--shadow-rgb), .25); }

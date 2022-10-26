@@ -181,7 +181,7 @@
 
 {%- block button_row -%}
 	{% set row_attr = row_attr|merge({'class': 'button-container' ~ (row_attr.class is defined ? ' ' ~ row_attr.class : '')}) %}
-	<hr>
+	<hr class="spacer small">
     <div{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %}>
         {{- form_widget(form) -}}
     </div>
