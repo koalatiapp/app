@@ -31,6 +31,10 @@ class DashboardController extends AbstractController
 	{
 		$projects = $this->getUser()->getAllProjects();
 
+		if ($projects->isEmpty()) {
+			return $this->redirectToRoute("onboarding");
+		}
+
 		return $this->render('app/dashboard/projects.html.twig', [
 			'projects' => $projects,
 		]);

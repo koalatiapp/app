@@ -436,6 +436,25 @@ dashboard:
     news:
         title: News and updates
 
+onboarding:
+    title: Welcome to Koalati!
+    content: >
+        <h2>Before you get started...</h2>
+        <p>Testing websites with Koalati comes in two stages:</p>
+        <ol>
+            <li><strong>Manual testing</strong>: follow our checklist to test your site manually.</li>
+            <li><strong>Automated testing</strong>: follow our automated recommendations to further optimize your site.</li>
+        </ol>
+        <p>We highly recommend you test your site in this order because:</p>
+        <ol>
+            <li>Manual testing is very important, as most issues can't be detected automatically.</li>
+            <li>Automated recommendations can take a bit of time to generate. But as you work you way through the checklist, our system will start generating them automatically in the background.</li>
+        </ol>
+        <p>Now that this is out the way...</p>
+        <p>Ready to start testing your first website?</p>
+    actions:
+        new_project: Create your first project
+
 project_creation:
     title: New project
     form:
@@ -729,6 +748,8 @@ help:
             <p>We're working hard to make Koalati the best quality control platform for you.</p>
             <p>If you would like to tell us what you think of the platform and what you think we should improve, you can reach out to us on social media or send us feedback by clicking on the button below.</p>
         button: I have some feedback for Koalati
+    faq:
+        title: Frequently asked questions
 
 subscription:
     active_project_quota_already_reached: You have exceeded your plan's quota for the amount of active projects! We won't limit you now, but if you plan on exceeding your quota again, you should upgrade your plan.
