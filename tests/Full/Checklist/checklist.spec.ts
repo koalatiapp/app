@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { login, createProject, deleteProject } from "../utilities";
 
-const firstItemText = "Every page loads correctly and in a reasonable amount of time.";
+const firstItemText = "Every page loads correctly without any error.";
 let projectId;
 
 test.describe("checklist", () => {
@@ -18,10 +18,10 @@ test.describe("checklist", () => {
 		await page.waitForSelector(`checklist-item-list >> text=${firstItemText}`);
 
 		// Get the first checklist item
-		const firstItemGroup = page.locator('checklist-item-list').first();
+		const firstItemGroup = page.locator("checklist-item-list").first();
 		const firstGroupTitle = page.locator("h2").first();
 		const progressionIndicator = firstGroupTitle.locator(".progression");
-		const checklistItems = firstItemGroup.locator('.nb--list-item');
+		const checklistItems = firstItemGroup.locator(".nb--list-item");
 		const itemCount = await checklistItems.count();
 
 		await checklistItems.first().locator("nb-checkbox").click({ timeout: 1000 });
