@@ -33,6 +33,7 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/(login|logout|sign-up|reset-password(/.+)?|translations)$ }
+        - { path: ^/verify-email }
         - { path: ^/api/public/ }
         - { path: ^/webhook/ }
         - { path: ^/free-checklist }

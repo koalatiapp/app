@@ -161,6 +161,19 @@ registration:
         error:
             email_failed: It looks like the email address you provided is invalid. Please make sure it is valid.
             invalid_name: This name is invalid. Please enter a valid name.
+    flash:
+        email_confirmed: Your email address has been confirmed! Thanks! 😊
+
+email_confirmation_pending:
+    page_title: Confirm your email
+    heading: Confirm your email  📨
+    explanation: >
+        <p>You're almost there! ✨</p>
+        <p>We sent you a confirmation link by email.</p>
+        <p>To activate your account, check your email inbox and click on that confirmation link.</p>
+    spam_notice: Make sure to check your spam folder, just in case! If you find it there, make sure to mark it as "Not Junk".
+    return_to_login: Back to login
+
 
 password_reset:
     email_form:
@@ -367,7 +380,7 @@ user_settings:
                 current_password: Current password
                 submit_label: Change email address
             flash:
-                success: Your email address has been updated!
+                confirm_email: Check your inbox to confirm your new email address.
         delete_account:
             title: Delete your account
             explanation: >
@@ -774,6 +787,16 @@ comment:
         submitted: Your comment has been sent!
 
 email:
+    email_validation:
+        subject: Confirm your email address
+        introduction: >
+            <h1>Confirm your email 📨</h1>
+            <p>To get started with Koalati, please validate your email address by clicking on the button below:</p>
+        confirm_email: Confirm my email
+        expiry_notice: >
+            <p>Please note that this link will expire in %expirationDate%.</p>
+            <p>If you did not sign up for Koalati, you may ignore this email or let us know about the unwanted signup by emailing <a href="mailto:info@koalati.com">info@koalati.com</a>.</p>
+
     welcome:
         subject: Welcome to Koalati!
         introduction: >

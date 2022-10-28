@@ -23,4 +23,5 @@ return [
 	Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle::class => ['all' => true],
 	Roukmoute\HashidsBundle\RoukmouteHashidsBundle::class => ['all' => true],
 	HtmlSanitizer\Bundle\HtmlSanitizerBundle::class => ['all' => true],
+	SymfonyCasts\Bundle\VerifyEmail\SymfonyCastsVerifyEmailBundle::class => ['all' => true],
 ];

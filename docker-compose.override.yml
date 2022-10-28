@@ -75,5 +75,13 @@ services:
     ports:
       - ${ADMINER_PORT:-8080}:8080
 
+###> symfony/mailer ###
+  mailer:
+    image: schickling/mailcatcher
+    ports:
+      - 1025:1025
+      - 1080:1080
+###< symfony/mailer ###
+
 volumes:
   db-data:

@@ -758,6 +758,9 @@
             "config/packages/reset_password.yaml"
         ]
     },
+    "symfonycasts/verify-email-bundle": {
+        "version": "v1.12.0"
+    },
     "tgalopin/html-sanitizer": {
         "version": "1.5.0"
     },

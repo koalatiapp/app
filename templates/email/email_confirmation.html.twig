@@ -1,0 +1,35 @@
+{% extends "email/_base.html.twig" %}
+
+{% block body %}
+	<spacer size="20"></spacer>
+
+	<row>
+		<columns>
+			{% trans with {
+				"%firstName%": user.firstName,
+			} %}email.email_validation.introduction{% endtrans %}
+		</columns>
+	</row>
+
+	<row>
+		<columns>
+			<center>
+				<button href="{{ signedUrl }}" size="large">
+					{% trans %}email.email_validation.confirm_email{% endtrans %}
+				</button>
+			</center>
+		</columns>
+	</row>
+
+	<row>
+		<columns>
+			<hr>
+		</columns>
+	</row>
+
+	<row>
+		<columns>
+			{% trans with {"%expirationDate%": expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle')} %}email.email_validation.expiry_notice{% endtrans %}
+		</columns>
+	</row>
+{% endblock %}
