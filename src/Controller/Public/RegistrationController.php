@@ -12,9 +12,13 @@ use App\Util\Analytics\AnalyticsInterface;
 use App\Util\SelfHosting;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -30,7 +34,7 @@ class RegistrationController extends AbstractController
 	/**
 	 * @Route("/sign-up", name="registration")
 	 */
-	public function signUp(Request $request, EntityManagerInterface $entityManager, SelfHosting $selfHosting): Response
+	public function signUp(Request $request, EntityManagerInterface $entityManager, SelfHosting $selfHosting, MailerInterface $mailer): Response
 	{
 		$user = new User();
 		$form = $this->createForm(UserRegistrationType::class, $user);
@@ -61,6 +65,20 @@ class RegistrationController extends AbstractController
 
 				// Request that the users validates their email address
 				$this->emailVerifier->sendEmailConfirmation($user);
+
+				// Send Welcome email
+				try {
+					$email = (new TemplatedEmail())
+						->to(new Address($user->getEmail(), $user->getFirstName()))
+						->subject($this->translator->trans('email.welcome.subject'))
+						->htmlTemplate('email/welcome.html.twig')
+						->context([
+							'user' => $user,
+						]);
+					$mailer->send($email);
+				} catch (Exception $exception) {
+					$this->logger->warning($exception->getMessage(), $exception->getTrace());
+				}
 
 				$this->analytics->trackEvent("Sign up");
 

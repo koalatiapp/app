@@ -6,39 +6,23 @@ use App\Controller\AbstractController;
 use App\Form\User\UserChangeEmailType;
 use App\Form\User\UserChangePasswordType;
 use App\Form\User\UserDeleteAccountType;
-use App\Security\LoginFormAuthenticator;
+use App\Security\EmailVerifier;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
 class SecuritySettingsController extends AbstractController
 {
-	private UserPasswordHasherInterface $passwordHasher;
-	private UserAuthenticatorInterface $authenticator;
-	private LoginFormAuthenticator $loginFormAuthenticator;
-	private TokenStorageInterface $tokenStorage;
-
-	/**
-	 * @required
-	 */
-	public function setPasswordHasher(UserPasswordHasherInterface $passwordHasher): void
-	{
-		$this->passwordHasher = $passwordHasher;
-	}
-
-	/**
-	 * @required
-	 */
-	public function setAuthenticators(UserAuthenticatorInterface $authenticator, LoginFormAuthenticator $loginFormAuthenticator, TokenStorageInterface $tokenStorage): void
-	{
-		$this->authenticator = $authenticator;
-		$this->loginFormAuthenticator = $loginFormAuthenticator;
-		$this->tokenStorage = $tokenStorage;
+	public function __construct(
+		private UserPasswordHasherInterface $passwordHasher,
+		private TokenStorageInterface $tokenStorage,
+		private EntityManagerInterface $entityManager,
+		private EmailVerifier $emailVerifier,
+	) {
 	}
 
 	/**
@@ -46,13 +30,14 @@ class SecuritySettingsController extends AbstractController
 	 */
 	public function securitySettings(Request $request): Response
 	{
-		$passwordForm = $this->processPasswordForm($request);
-		$emailForm = $this->processEmailForm($request);
 		$deletionForm = $this->processDeletionForm($request);
 
 		if ($deletionForm instanceof Response) {
 			return $deletionForm;
 		}
+
+		$passwordForm = $this->processPasswordForm($request);
+		$emailForm = $this->processEmailForm($request);
 
 		if ($emailForm instanceof Response) {
 			return $emailForm;
@@ -76,9 +61,8 @@ class SecuritySettingsController extends AbstractController
 			$hashedPassword = $this->passwordHasher->hashPassword($this->getUser(), $newPassword);
 			$user->setPassword($hashedPassword);
 
-			$em = $this->getDoctrine()->getManager();
-			$em->persist($user);
-			$em->flush();
+			$this->entityManager->persist($user);
+			$this->entityManager->flush();
 
 			$this->addFlash('success', $this->translator->trans('user_settings.security.password.flash.success'));
 		}
@@ -93,18 +77,18 @@ class SecuritySettingsController extends AbstractController
 		$emailForm->handleRequest($request);
 
 		if ($emailForm->isSubmitted() && $emailForm->isValid()) {
-			$em = $this->getDoctrine()->getManager();
-			$em->persist($user);
-			$em->flush();
+			// Force the user to verify the new email address
+			$user->setIsVerified(false);
 
-			$token = new AnonymousToken('default', 'anon.');
-			$this->tokenStorage->setToken($token);
+			$this->entityManager->persist($user);
+			$this->entityManager->flush();
+
+			$this->tokenStorage->setToken(null);
 			$request->getSession()->invalidate();
 
-			$authenticatorReponse = $this->authenticator->authenticateUser($user, $this->loginFormAuthenticator, $request);
-			$this->addFlash('success', $this->translator->trans('user_settings.security.email.flash.success'));
+			$this->emailVerifier->sendEmailConfirmation($user);
 
-			return $authenticatorReponse;
+			return $this->redirectToRoute("verify_email_pending");
 		}
 
 		return $emailForm;
@@ -117,17 +101,14 @@ class SecuritySettingsController extends AbstractController
 		$deletionForm->handleRequest($request);
 
 		if ($deletionForm->isSubmitted() && $deletionForm->isValid()) {
-			$em = $this->getDoctrine()->getManager();
-
 			if ($user->getOwnedOrganization()) {
-				$em->remove($user->getOwnedOrganization());
+				$this->entityManager->remove($user->getOwnedOrganization());
 			}
 
-			$em->remove($user);
-			$em->flush();
+			$this->entityManager->remove($user);
+			$this->entityManager->flush();
 
-			$token = new AnonymousToken('default', 'anon.');
-			$this->tokenStorage->setToken($token);
+			$this->tokenStorage->setToken(null);
 			$request->getSession()->invalidate();
 
 			return $this->redirectToRoute('login');

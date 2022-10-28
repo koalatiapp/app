@@ -19,7 +19,7 @@ final class Version20221028154326 extends AbstractMigration
 
 	public function up(Schema $schema): void
 	{
-		$this->addSql('ALTER TABLE user ADD is_verified TINYINT(1) NOT NULL');
+		$this->addSql('ALTER TABLE user ADD is_verified TINYINT(1) NOT NULL DEFAULT 1');
 	}
 
 	public function down(Schema $schema): void

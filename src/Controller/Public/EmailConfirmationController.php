@@ -7,12 +7,8 @@ use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
 use App\Security\LoginFormAuthenticator;
 use App\Util\Analytics\AnalyticsInterface;
-use Exception;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
@@ -36,7 +32,7 @@ class EmailConfirmationController extends AbstractController
 	/**
 	 * @Route("/verify-email/check", name="verify_email")
 	 */
-	public function verifyUserEmail(Request $request, UserRepository $userRepository, MailerInterface $mailer, UserAuthenticatorInterface $authenticator, LoginFormAuthenticator $loginFormAuthenticator): Response
+	public function verifyUserEmail(Request $request, UserRepository $userRepository, UserAuthenticatorInterface $authenticator, LoginFormAuthenticator $loginFormAuthenticator): Response
 	{
 		if ($this->getUser()) {
 			return $this->redirectToRoute("dashboard");
@@ -64,21 +60,6 @@ class EmailConfirmationController extends AbstractController
 		}
 
 		$this->analytics->trackEvent("Validated email address");
-
-		// Send Welcome email
-		try {
-			$email = (new TemplatedEmail())
-				->to(new Address($user->getEmail(), $user->getFirstName()))
-				->subject($this->translator->trans('email.welcome.subject'))
-				->htmlTemplate('email/welcome.html.twig')
-				->context([
-					'user' => $user,
-				]);
-			$mailer->send($email);
-		} catch (Exception $exception) {
-			$this->logger->warning($exception->getMessage(), $exception->getTrace());
-		}
-
 		$this->addFlash('success', $this->translator->trans('registration.flash.email_confirmed'));
 
 		$authenticator->authenticateUser($user, $loginFormAuthenticator, $request);

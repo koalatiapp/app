@@ -380,7 +380,7 @@ user_settings:
                 current_password: Current password
                 submit_label: Change email address
             flash:
-                success: Your email address has been updated!
+                confirm_email: Check your inbox to confirm your new email address.
         delete_account:
             title: Delete your account
             explanation: >
