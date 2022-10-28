@@ -15,7 +15,6 @@ test.describe("registration flow", () => {
 		await page.fill("text=email", `test+${randomSuffix}@koalati.com`);
 		await page.fill("text=password", "123456");
 		await page.click("text=Create my account");
-		await page.waitForNavigation();
 
 		// At this point, the user should be on the "Confirm your email" page
 		expect(await page.locator("h1").textContent()).toContain("Confirm your email");
