@@ -4,13 +4,20 @@ import { login } from "../utilities";
 test.describe("login flow", () => {
 	test("redirects to login page when no session is active", async ({ page }) => {
 		await page.goto("https://localhost/");
-		expect(await page.evaluate(() => window.location.pathname)).toBe("/login")
+		expect(await page.evaluate(() => window.location.pathname)).toBe("/login");
 	});
 
 	test("prevents login from inexistant account", async ({ page }) => {
 		await login(page, "bad@email.com", "notapassword");
 		await page.waitForSelector("form .error");
-		expect(await (await page.$(".error")).textContent()).toBe("The email address or password you entered was invalid.");
+
+		expect(await page.locator(".error").textContent()).toBe("The email address or password you entered was invalid.");
+	});
+
+	test("prevents login from account with unverified email ", async ({ page }) => {
+		await login(page, "unverified@email.com", "123456");
+
+		expect(await page.locator("h1").textContent()).toContain("Confirm your email");
 	});
 
 	test("allows login from regular account", async ({ page }) => {
@@ -23,6 +30,6 @@ test.describe("login flow", () => {
 		await page.waitForSelector("a[href='/logout']", { state: "attached" });
 		await page.hover("#profile-toggle");
 		await Promise.all([page.waitForNavigation(), page.click("a[href='/logout']")]);
-		expect(await page.evaluate(() => window.location.pathname)).toBe("/login")
+		expect(await page.evaluate(() => window.location.pathname)).toBe("/login");
 	});
 });

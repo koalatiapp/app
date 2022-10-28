@@ -7,6 +7,7 @@ use App\Subscription\Plan\BusinessPlan;
 use App\Subscription\Plan\NoPlan;
 use App\Subscription\Plan\SmallTeamPlan;
 use App\Subscription\Plan\SoloPlan;
+use App\Subscription\Plan\TrialPlan;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -31,6 +32,7 @@ class UserFixtures extends Fixture
 			->setFirstName('Test')
 			->setLastName('User')
 			->setSubscriptionPlan(SmallTeamPlan::UNIQUE_NAME)
+			->setIsVerified(true)
 			->setPassword($this->passwordHasher->hashPassword(
 				$user,
 				'123456'
@@ -43,6 +45,7 @@ class UserFixtures extends Fixture
 			->setFirstName('Jimmy "Free"')
 			->setLastName('Will')
 			->setSubscriptionPlan(NoPlan::UNIQUE_NAME)
+			->setIsVerified(true)
 			->setPassword($this->passwordHasher->hashPassword(
 				$user,
 				'123456'
@@ -55,6 +58,7 @@ class UserFixtures extends Fixture
 			->setFirstName('Solomon "Solo"')
 			->setLastName('Jackson')
 			->setSubscriptionPlan(SoloPlan::UNIQUE_NAME)
+			->setIsVerified(true)
 			->setPassword($this->passwordHasher->hashPassword(
 				$user,
 				'123456'
@@ -67,18 +71,33 @@ class UserFixtures extends Fixture
 			->setFirstName('Stan "Small Team"')
 			->setLastName('Thomas')
 			->setSubscriptionPlan(SmallTeamPlan::UNIQUE_NAME)
+			->setIsVerified(true)
 			->setPassword($this->passwordHasher->hashPassword(
 				$user,
 				'123456'
 			));
 		$manager->persist($user);
 
-		// User with "Solo" plan
+		// User with "Business" plan
 		$user = new User();
 		$user->setEmail('business@plan.com')
 			->setFirstName('Boris "The Business"')
 			->setLastName('Morrison')
 			->setSubscriptionPlan(BusinessPlan::UNIQUE_NAME)
+			->setIsVerified(true)
+			->setPassword($this->passwordHasher->hashPassword(
+				$user,
+				'123456'
+			));
+		$manager->persist($user);
+
+		// Non-verified user
+		$user = new User();
+		$user->setEmail('unverified@email.com')
+			->setFirstName('John "Shady"')
+			->setLastName('Doe')
+			->setSubscriptionPlan(TrialPlan::UNIQUE_NAME)
+			->setIsVerified(false)
 			->setPassword($this->passwordHasher->hashPassword(
 				$user,
 				'123456'

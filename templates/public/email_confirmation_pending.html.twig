@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% trans %}email_confirmation_pending.page_title{% endtrans %}{% endblock %}
+
+{% block body %}
+	<section>
+		<div class="container center column">
+			<img id="big-branding" src="{{ asset("media/brand/koalati-logo-v.svg") }}" alt="Koalati" width="250" loading="lazy">
+
+			<div class="card small">
+				<h1>{% trans %}email_confirmation_pending.heading{% endtrans %}</h1>
+
+				{% trans %}email_confirmation_pending.explanation{% endtrans %}
+
+				<hr class="spacer small">
+
+				<p class="notice warning">
+					{% trans %}email_confirmation_pending.spam_notice{% endtrans %}
+				</p>
+			</div>
+
+			<a href="{{ path("login") }}" class="text-link">
+				{% trans %}email_confirmation_pending.return_to_login{% endtrans %}
+			</a>
+		</div>
+	</section>
+{% endblock %}
+

@@ -86,7 +86,8 @@ class CreateUserCommand extends Command
 			->setSubscriptionPlan(BusinessPlan::UNIQUE_NAME)
 			->setEmail($email)
 			->setFirstName($firstName)
-			->setPassword($this->passwordHasher->hashPassword($user, $plainPassword));
+			->setPassword($this->passwordHasher->hashPassword($user, $plainPassword))
+			->setIsVerified(true);
 
 		$this->entityManager->persist($user);
 		$this->entityManager->flush();

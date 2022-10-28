@@ -26,6 +26,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * })
  * @UniqueEntity(fields="email", message="user.error.unique_email")
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -122,6 +123,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	 * @var \Doctrine\Common\Collections\Collection<int, UserMetadata>
 	 */
 	protected Collection $metadata;
+
+	/**
+	 * @ORM\Column(type="boolean")
+	 */
+	private bool $isVerified = false;
 
 	public function __construct()
 	{
@@ -460,5 +466,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	public function __toString()
 	{
 		return (string) $this->getId();
+	}
+
+	public function isVerified(): bool
+	{
+		return $this->isVerified;
+	}
+
+	public function setIsVerified(bool $isVerified): self
+	{
+		$this->isVerified = $isVerified;
+
+		return $this;
 	}
 }

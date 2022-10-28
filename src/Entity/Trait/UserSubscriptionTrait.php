@@ -49,7 +49,7 @@ trait UserSubscriptionTrait
 		return $this->paddleUserId;
 	}
 
-	public function setPaddleUserId(?string $paddleUserId): self
+	public function setPaddleUserId(?string $paddleUserId): static
 	{
 		$this->paddleUserId = $paddleUserId;
 
@@ -61,7 +61,7 @@ trait UserSubscriptionTrait
 		return $this->paddleSubscriptionId;
 	}
 
-	public function setPaddleSubscriptionId(?string $paddleSubscriptionId): self
+	public function setPaddleSubscriptionId(?string $paddleSubscriptionId): static
 	{
 		$this->paddleSubscriptionId = $paddleSubscriptionId;
 
@@ -78,7 +78,7 @@ trait UserSubscriptionTrait
 		return $this->subscriptionPlan;
 	}
 
-	public function setSubscriptionPlan(?string $subscriptionPlan): self
+	public function setSubscriptionPlan(?string $subscriptionPlan): static
 	{
 		$this->subscriptionPlan = $subscriptionPlan;
 
@@ -90,7 +90,7 @@ trait UserSubscriptionTrait
 		return $this->upcomingSubscriptionPlan;
 	}
 
-	public function setUpcomingSubscriptionPlan(?string $upcomingSubscriptionPlan): self
+	public function setUpcomingSubscriptionPlan(?string $upcomingSubscriptionPlan): static
 	{
 		$this->upcomingSubscriptionPlan = $upcomingSubscriptionPlan;
 
@@ -102,7 +102,7 @@ trait UserSubscriptionTrait
 		return $this->subscriptionChangeDate;
 	}
 
-	public function setSubscriptionChangeDate(?DateTimeInterface $subscriptionChangeDate): self
+	public function setSubscriptionChangeDate(?DateTimeInterface $subscriptionChangeDate): static
 	{
 		$this->subscriptionChangeDate = $subscriptionChangeDate;
 
@@ -114,7 +114,7 @@ trait UserSubscriptionTrait
 		return $this->subscriptionRenewalDate;
 	}
 
-	public function setSubscriptionRenewalDate(?DateTimeInterface $subscriptionRenewalDate): self
+	public function setSubscriptionRenewalDate(?DateTimeInterface $subscriptionRenewalDate): static
 	{
 		$this->subscriptionRenewalDate = $subscriptionRenewalDate;
 

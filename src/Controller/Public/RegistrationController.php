@@ -5,36 +5,32 @@ namespace App\Controller\Public;
 use App\Controller\AbstractController;
 use App\Entity\User;
 use App\Form\UserRegistrationType;
-use App\Security\LoginFormAuthenticator;
+use App\Security\EmailVerifier;
 use App\Subscription\Plan\NoPlan;
 use App\Subscription\Plan\TrialPlan;
 use App\Util\Analytics\AnalyticsInterface;
 use App\Util\SelfHosting;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Messenger\Exception\HandlerFailedException;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
 class RegistrationController extends AbstractController
 {
 	public function __construct(
 		private UserPasswordHasherInterface $passwordHasher,
 		private AnalyticsInterface $analytics,
+		private EmailVerifier $emailVerifier,
 	) {
 	}
 
 	/**
 	 * @Route("/sign-up", name="registration")
 	 */
-	public function signUp(Request $request, UserAuthenticatorInterface $authenticator, LoginFormAuthenticator $loginFormAuthenticator, MailerInterface $mailer, EntityManagerInterface $entityManager, SelfHosting $selfHosting): Response
+	public function signUp(Request $request, EntityManagerInterface $entityManager, SelfHosting $selfHosting): Response
 	{
 		$user = new User();
 		$form = $this->createForm(UserRegistrationType::class, $user);
@@ -60,32 +56,15 @@ class RegistrationController extends AbstractController
 						->setUpcomingSubscriptionPlan(NoPlan::UNIQUE_NAME);
 				}
 
-				$email = (new TemplatedEmail())
-					->to(new Address($user->getEmail(), $user->getFirstName()))
-					->subject($this->translator->trans('email.welcome.subject'))
-					->htmlTemplate('email/welcome.html.twig')
-					->context([
-						'user' => $user,
-					]);
+				$entityManager->persist($user);
+				$entityManager->flush();
 
-				$mailSent = false;
+				// Request that the users validates their email address
+				$this->emailVerifier->sendEmailConfirmation($user);
 
-				try {
-					$mailer->send($email);
-					$mailSent = true;
-				} catch (HandlerFailedException $e) {
-					$form->get('email')->addError(new FormError($this->translator->trans('registration.form.error.email_failed')));
-					$this->logger->error($e);
-				}
+				$this->analytics->trackEvent("Sign up");
 
-				if ($mailSent) {
-					$entityManager->persist($user);
-					$entityManager->flush();
-
-					$this->analytics->trackEvent("Sign up");
-
-					return $authenticator->authenticateUser($user, $loginFormAuthenticator, $request);
-				}
+				return $this->redirectToRoute("verify_email_pending");
 			}
 		}
 
