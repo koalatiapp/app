@@ -23,6 +23,7 @@ framework:
             # Route your messages to the transports
             'App\Message\SitemapRequest': async_priority_high
             'App\Message\TestingRequest': async_priority_high
+            'App\Message\TestingResultRequest': async_priority_high
             'App\Message\TestingStatusRequest': async_priority_low
             'App\Message\ScreenshotRequest': async_priority_high
             'App\Message\FaviconRequest': async_priority_high
