@@ -46,7 +46,7 @@
 						</fieldset>
 
 						<fieldset class="checkbox">
-							<nb-checkbox name="_remember_me" label="{% trans %}login.form.field.remember_me{% endtrans %}"></nb-checkbox>
+							<nb-checkbox name="_remember_me" value="1" label="{% trans %}login.form.field.remember_me{% endtrans %}"></nb-checkbox>
 						</fieldset>
 
 						<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
