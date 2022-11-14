@@ -8,6 +8,7 @@
 log
 
 route {
+    header X-Frame-Options "SAMEORIGIN"
     root * /srv/app/public
     mercure {
         # Transport to use (default to Bolt)
