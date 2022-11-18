@@ -3,7 +3,7 @@
 .clickable-thumbnail .thumbnail img { width: 100%; height: 100%; object-fit: cover; object-position: center top; position: absolute; top: 0; left: 0; }
 .clickable-thumbnail .thumbnail::after { content: ' '; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: white; opacity: .25; transition: opacity .25s ease; }
 .clickable-thumbnail .info { display: flex; padding: 15px; justify-content: space-between; align-items: center; box-shadow: 0 0 10px rgb(0 0 0 / 5%); position: relative; }
-.clickable-thumbnail .info .name { font-size: .95rem; font-weight: 600; }
+.clickable-thumbnail .info .name { max-width: calc(100% - 2ch); font-size: .95rem; font-weight: 600; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
 .clickable-thumbnail:hover { box-shadow: 0 6px 20px 0 rgba(var(--shadow-rgb), .2); transform: translateY(-3px); }
 .clickable-thumbnail:hover .thumbnail::after { opacity: 0; }
 
