@@ -47,6 +47,7 @@ Here is a detailed list of all the environment variables, why they are needed, a
 |---------------------------|-------------------------------------|-------------------------------------------------------------------------------------------------|
 | TOOLS_API_FUNCTIONS_URL          | Tools service API (recommendations) | Define the URL at which the tool service serverless functions, which may be used to lighten the load on the worker(s), are reachable. |
 | TOOLS_API_FUNCTIONS_BEARER_TOKEN | Tools service API (recommendations) | https://github.com/koalatiapp/tools-service-functions
+| FAVICONKIT_API_HOSTNAME   | Favicon fetching                    | Create an account on [FaviconKit](https://my.faviconkit.com/) and enter your custom hostname here.              |
 
 
 ## Production specific
