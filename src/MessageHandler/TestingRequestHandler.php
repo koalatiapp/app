@@ -2,7 +2,6 @@
 
 namespace App\MessageHandler;
 
-use App\ApiClient\Endpoint\ToolsEndpoint;
 use App\Entity\Page;
 use App\Entity\Project;
 use App\Entity\ProjectActivityRecord;
@@ -10,6 +9,7 @@ use App\Message\TestingRequest;
 use App\Message\TestingStatusRequest;
 use App\Repository\ProjectRepository;
 use App\Subscription\PlanManager;
+use App\ToolsService\Endpoint\ToolsEndpoint;
 use App\Util\Testing\AvailableToolsFetcher;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;

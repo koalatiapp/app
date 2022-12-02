@@ -1,9 +1,9 @@
 <?php
 
-namespace App\ApiClient;
+namespace App\ToolsService;
 
-use App\ApiClient\Exception\ServerlessClientNotConfiguredException;
-use App\ApiClient\Exception\ToolsApiBadResponseException;
+use App\ToolsService\Exception\ServerlessClientNotConfiguredException;
+use App\ToolsService\Exception\ToolsApiBadResponseException;
 use Exception;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;

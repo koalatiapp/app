@@ -2,13 +2,13 @@
 
 namespace App\MessageHandler;
 
-use App\ApiClient\Endpoint\StatusEndpoint;
 use App\Entity\Project;
 use App\Mercure\UpdateDispatcher;
 use App\Mercure\UpdateType;
 use App\Message\TestingStatusRequest;
 use App\Repository\ProjectRepository;
 use App\Subscription\PlanManager;
+use App\ToolsService\Endpoint\StatusEndpoint;
 use App\Util\Testing\TestingStatus;
 use Symfony\Component\Cache\Adapter\ApcuAdapter;
 use Symfony\Component\Cache\CacheItem;

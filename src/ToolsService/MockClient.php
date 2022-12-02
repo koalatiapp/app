@@ -1,6 +1,6 @@
 <?php
 
-namespace App\ApiClient;
+namespace App\ToolsService;
 
 use App\Util\Url;
 use Symfony\Component\HttpClient\MockHttpClient;

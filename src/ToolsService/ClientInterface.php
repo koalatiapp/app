@@ -1,6 +1,6 @@
 <?php
 
-namespace App\ApiClient;
+namespace App\ToolsService;
 
 interface ClientInterface
 {

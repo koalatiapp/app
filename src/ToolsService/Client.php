@@ -1,9 +1,9 @@
 <?php
 
-namespace App\ApiClient;
+namespace App\ToolsService;
 
-use App\ApiClient\Exception\ToolsApiBadResponseException;
-use App\ApiClient\Exception\ToolsApiConfigurationException;
+use App\ToolsService\Exception\ToolsApiBadResponseException;
+use App\ToolsService\Exception\ToolsApiConfigurationException;
 use Exception;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;

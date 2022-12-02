@@ -1,6 +1,6 @@
 <?php
 
-namespace App\ApiClient\Endpoint;
+namespace App\ToolsService\Endpoint;
 
 use App\Entity\Project;
 use Exception;

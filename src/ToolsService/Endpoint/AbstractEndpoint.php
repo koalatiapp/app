@@ -1,9 +1,9 @@
 <?php
 
-namespace App\ApiClient\Endpoint;
+namespace App\ToolsService\Endpoint;
 
-use App\ApiClient\ClientInterface;
-use App\ApiClient\ServerlessClient;
+use App\ToolsService\ClientInterface;
+use App\ToolsService\ServerlessClient;
 use Psr\Log\LoggerInterface;
 
 abstract class AbstractEndpoint

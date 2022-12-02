@@ -1,6 +1,6 @@
 <?php
 
-namespace App\ApiClient\Endpoint;
+namespace App\ToolsService\Endpoint;
 
 final class MetasEndpoint extends AbstractEndpoint
 {

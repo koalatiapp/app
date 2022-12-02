@@ -2,13 +2,13 @@
 
 namespace App\Controller\Api\Testing;
 
-use App\ApiClient\Endpoint\StatusEndpoint;
 use App\Controller\AbstractController;
 use App\Controller\Trait\ApiControllerTrait;
 use App\Controller\Trait\PreventDirectAccessTrait;
 use App\Message\TestingRequest;
 use App\MessageHandler\TestingRequestHandler;
 use App\Security\ProjectVoter;
+use App\ToolsService\Endpoint\StatusEndpoint;
 use App\Util\Testing\TestingStatus;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\ApiClient\Exception;
+namespace App\ToolsService\Exception;
 
 final class ToolsApiBadResponseException extends \Exception
 {

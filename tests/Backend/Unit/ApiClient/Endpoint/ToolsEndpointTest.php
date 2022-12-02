@@ -2,9 +2,9 @@
 
 namespace App\Tests\Unit\ApiClient\Endpoint;
 
-use App\ApiClient\Endpoint\ToolsEndpoint;
-use App\ApiClient\MockClient;
-use App\ApiClient\MockServerlessClient;
+use App\ToolsService\Endpoint\ToolsEndpoint;
+use App\ToolsService\MockClient;
+use App\ToolsService\MockServerlessClient;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
