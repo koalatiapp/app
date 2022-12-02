@@ -79,7 +79,7 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 		}
 
 		if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
-			if (!str_contains($targetPath, "/api/")) {
+			if (!str_contains($targetPath, "/internal-api/")) {
 				return new RedirectResponse($targetPath);
 			}
 		}

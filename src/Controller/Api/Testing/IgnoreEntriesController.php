@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/api/testing/ignore-entries", name="api_testing_ignore_entry_")
+ * @Route("/internal-api/testing/ignore-entries", name="api_testing_ignore_entry_")
  */
 class IgnoreEntriesController extends AbstractController
 {

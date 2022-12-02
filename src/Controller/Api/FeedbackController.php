@@ -13,7 +13,7 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/api/feedback", name="api_feedback_")
+ * @Route("/internal-api/feedback", name="api_feedback_")
  */
 class FeedbackController extends AbstractController
 {

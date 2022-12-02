@@ -26,36 +26,36 @@ class ApiAvailabilityTest extends AbstractAppTestCase
 
 	public function urlProvider()
 	{
-		yield ['/api/checklist/items', 'GET'];
-		yield ['/api/public/link-metas?url=https://koalati.com', 'GET'];
-		yield ['/api/organization/members', 'GET'];
-		yield ['/api/organization/ew8BEeB2PO', 'GET'];
-		yield ['/api/project/automated-testing-settings/tools', 'GET'];
-		yield ['/api/projects', 'GET'];
-		yield ['/api/testing/ignore-entries', 'GET'];
-		yield ['/api/testing/ignore-entries/ew8BEeB2PO', 'GET'];
-		yield ['/api/testing/recommendations/groups', 'GET'];
-		yield ['/api/testing/recommendations/groups/ew8BEeB2PO', 'GET'];
-		yield ['/api/testing/recommendations', 'GET'];
-		yield ['/api/testing/recommendations/ew8BEeB2PO', 'GET'];
-		yield ['/api/user/current', 'GET'];
+		yield ['/internal-api/checklist/items', 'GET'];
+		yield ['/internal-api/public/link-metas?url=https://koalati.com', 'GET'];
+		yield ['/internal-api/organization/members', 'GET'];
+		yield ['/internal-api/organization/ew8BEeB2PO', 'GET'];
+		yield ['/internal-api/project/automated-testing-settings/tools', 'GET'];
+		yield ['/internal-api/projects', 'GET'];
+		yield ['/internal-api/testing/ignore-entries', 'GET'];
+		yield ['/internal-api/testing/ignore-entries/ew8BEeB2PO', 'GET'];
+		yield ['/internal-api/testing/recommendations/groups', 'GET'];
+		yield ['/internal-api/testing/recommendations/groups/ew8BEeB2PO', 'GET'];
+		yield ['/internal-api/testing/recommendations', 'GET'];
+		yield ['/internal-api/testing/recommendations/ew8BEeB2PO', 'GET'];
+		yield ['/internal-api/user/current', 'GET'];
 
 		// @TODO: Add smoke testing for project testing status
-		// yield ['/api/testing/request/project-status/ew8BEeB2PO', 'GET'];
+		// yield ['/internal-api/testing/request/project-status/ew8BEeB2PO', 'GET'];
 
 		/*
 		// @TODO: Add smoke test for POST/PUT/DELETE API routes
-		yield ["/api/testing/request/create", "POST"];
-		yield ["/api/testing/recommendations/groups/{id}/complete", "PUT"];
-		yield ["/api/testing/ignore-entries/{id}", "DELETE"];
-		yield ["/api/testing/ignore-entries", "POST"];
-		yield ["/api/search", "POST"];
-		yield ["/api/project/automated-testing-settings/tools", "POST"];
-		yield ["/api/checklist/items/{id}/toggle", "POST"];
-		yield ["/api/feedback/submit", "POST"];
-		yield ["/api/organization/members/ew8BEeB2PO", "DELETE"];
-		yield ["/api/organization/members/ew8BEeB2PO/role", "POST"];
-		yield ["/api/organization/members/ew8BEeB2PO/invitation", "POST"];
+		yield ["/internal-api/testing/request/create", "POST"];
+		yield ["/internal-api/testing/recommendations/groups/{id}/complete", "PUT"];
+		yield ["/internal-api/testing/ignore-entries/{id}", "DELETE"];
+		yield ["/internal-api/testing/ignore-entries", "POST"];
+		yield ["/internal-api/search", "POST"];
+		yield ["/internal-api/project/automated-testing-settings/tools", "POST"];
+		yield ["/internal-api/checklist/items/{id}/toggle", "POST"];
+		yield ["/internal-api/feedback/submit", "POST"];
+		yield ["/internal-api/organization/members/ew8BEeB2PO", "DELETE"];
+		yield ["/internal-api/organization/members/ew8BEeB2PO/role", "POST"];
+		yield ["/internal-api/organization/members/ew8BEeB2PO/invitation", "POST"];
 		*/
 	}
 }

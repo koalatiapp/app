@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * @Route("/api/organization/members", name="api_organization_members_")
+ * @Route("/internal-api/organization/members", name="api_organization_members_")
  */
 class MembersController extends AbstractController
 {

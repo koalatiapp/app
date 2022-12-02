@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/api/testing/request", name="api_testing_request_")
+ * @Route("/internal-api/testing/request", name="api_testing_request_")
  */
 class TestingController extends AbstractController
 {

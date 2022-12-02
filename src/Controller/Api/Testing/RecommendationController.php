@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/api/testing/recommendations", name="api_testing_recommendation_")
+ * @Route("/internal-api/testing/recommendations", name="api_testing_recommendation_")
  */
 class RecommendationController extends AbstractController
 {

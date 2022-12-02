@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/api/user", name="api_user_")
+ * @Route("/internal-api/user", name="api_user_")
  */
 class UserController extends AbstractController
 {

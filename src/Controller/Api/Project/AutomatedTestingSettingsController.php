@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/api/project/automated-testing-settings", name="api_project_automated_testing_settings_")
+ * @Route("/internal-api/project/automated-testing-settings", name="api_project_automated_testing_settings_")
  */
 class AutomatedTestingSettingsController extends AbstractController
 {

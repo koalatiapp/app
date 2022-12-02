@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/api/checklist/items", name="api_checklist_item_")
+ * @Route("/internal-api/checklist/items", name="api_checklist_item_")
  */
 class ItemController extends AbstractController
 {

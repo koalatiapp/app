@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/api/comments", name="api_comments_")
+ * @Route("/internal-api/comments", name="api_comments_")
  */
 class CommentController extends AbstractController
 {

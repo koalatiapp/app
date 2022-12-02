@@ -34,7 +34,7 @@ security:
     access_control:
         - { path: ^/(login|logout|sign-up|reset-password(/.+)?|translations)$ }
         - { path: ^/verify-email }
-        - { path: ^/api/public/ }
+        - { path: ^/internal-api/public/ }
         - { path: ^/webhook/ }
         - { path: ^/free-checklist }
         - { path: ^/, roles: ROLE_USER }

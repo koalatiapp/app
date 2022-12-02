@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Cache\ItemInterface;
 
 /**
- * @Route("/api/public/link-metas", name="api_link_metas")
+ * @Route("/internal-api/public/link-metas", name="api_link_metas")
  */
 class LinkMetasController extends AbstractController
 {

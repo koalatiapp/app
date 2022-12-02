@@ -18,7 +18,7 @@ class TinyMceUploadController extends AbstractController
 	public const MAX_FILESIZE = 20000000; // 20 MB
 
 	/**
-	 * @Route("/api/tinymce-upload/image", name="api_tinymce_upload_image", options={"expose": true})
+	 * @Route("/internal-api/tinymce-upload/image", name="api_tinymce_upload_image", options={"expose": true})
 	 */
 	public function upload(Request $request, UserUploadStorage $userUploadStorage): Response
 	{

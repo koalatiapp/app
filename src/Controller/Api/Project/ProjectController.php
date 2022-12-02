@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/api/projects", name="api_projects_")
+ * @Route("/internal-api/projects", name="api_projects_")
  */
 class ProjectController extends AbstractController
 {

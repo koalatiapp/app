@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/api/checklist/groups", name="api_checklist_group_")
+ * @Route("/internal-api/checklist/groups", name="api_checklist_group_")
  */
 class GroupController extends AbstractController
 {

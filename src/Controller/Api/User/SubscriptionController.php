@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/api/user/subscription", name="api_user_subscription_")
+ * @Route("/internal-api/user/subscription", name="api_user_subscription_")
  */
 class SubscriptionController extends AbstractController
 {

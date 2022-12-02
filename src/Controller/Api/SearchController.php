@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/api/search", name="api_search")
+ * @Route("/internal-api/search", name="api_search")
  */
 class SearchController extends AbstractController
 {

@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/api/project/pages", name="api_project_pages_")
+ * @Route("/internal-api/project/pages", name="api_project_pages_")
  */
 class PageController extends AbstractController
 {
