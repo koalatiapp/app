@@ -127,13 +127,13 @@ services:
     App\Storage\UserUploadStorage:
         parent:  App\Storage\AbstractStorage
 
-    App\ApiClient\ClientInterface:
-        class: 'App\ApiClient\Client'
+    App\ToolsService\ClientInterface:
+        class: 'App\ToolsService\Client'
         arguments:
             - '%env(TOOLS_API_WORKER_URL)%'
             - '%env(TOOLS_API_WORKER_BEARER_TOKEN)%'
 
-    App\ApiClient\ServerlessClient:
+    App\ToolsService\ServerlessClient:
         arguments:
             - '%env(TOOLS_API_FUNCTIONS_URL)%'
             - '%env(TOOLS_API_FUNCTIONS_BEARER_TOKEN)%'
