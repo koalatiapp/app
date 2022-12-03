@@ -5,13 +5,16 @@ namespace App\Repository;
 use App\Entity\Organization;
 use App\Entity\ProjectActivityRecord;
 use App\Entity\User;
-use DateTime;
-use DateTimeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<ProjectActivityRecord>
+ *
+ * @method ProjectActivityRecord|null find($id, $lockMode = null, $lockVersion = null)
+ * @method ProjectActivityRecord|null findOneBy(array $criteria, array $orderBy = null)
+ * @method ProjectActivityRecord[]    findAll()
+ * @method ProjectActivityRecord[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class ProjectActivityRecordRepository extends ServiceEntityRepository
 {
@@ -20,18 +23,18 @@ class ProjectActivityRecordRepository extends ServiceEntityRepository
 		parent::__construct($registry, ProjectActivityRecord::class);
 	}
 
-	public function getActiveProjectCount(User|Organization $entity, DateTimeInterface|string|null $fromDate = null, DateTimeInterface|string|null $toDate = null): int
+	public function getActiveProjectCount(User|Organization $entity, \DateTimeInterface|string|null $fromDate = null, \DateTimeInterface|string|null $toDate = null): int
 	{
 		if (!$fromDate) {
-			$fromDate = new DateTime('first day of this month midnight');
+			$fromDate = new \DateTime('first day of this month midnight');
 		} elseif (is_string($fromDate)) {
-			$fromDate = new DateTime($fromDate);
+			$fromDate = new \DateTime($fromDate);
 		}
 
 		if (!$toDate) {
-			$toDate = new DateTime('first day of next month midnight');
+			$toDate = new \DateTime('first day of next month midnight');
 		} elseif (is_string($toDate)) {
-			$toDate = new DateTime($toDate);
+			$toDate = new \DateTime($toDate);
 		}
 
 		$em = $this->getEntityManager();

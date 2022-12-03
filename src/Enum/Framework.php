@@ -4,13 +4,13 @@ namespace App\Enum;
 
 class Framework
 {
-	public const WEBFLOW = 'webflow';
-	public const WORDPRESS = 'wordpress';
-	public const SHOPIFY = 'shopify';
-	public const MANGETO = 'mangeto';
-	public const PRESTASHOP = 'prestashop';
-	public const JOOMLA = 'joomla';
-	public const DRUPAL = 'drupal';
-	public const OCTOBER = 'october';
-	public const DJANGO = 'django';
+	final public const WEBFLOW = 'webflow';
+	final public const WORDPRESS = 'wordpress';
+	final public const SHOPIFY = 'shopify';
+	final public const MANGETO = 'mangeto';
+	final public const PRESTASHOP = 'prestashop';
+	final public const JOOMLA = 'joomla';
+	final public const DRUPAL = 'drupal';
+	final public const OCTOBER = 'october';
+	final public const DJANGO = 'django';
 }

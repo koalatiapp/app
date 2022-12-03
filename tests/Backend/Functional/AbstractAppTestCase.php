@@ -4,7 +4,6 @@ namespace App\Tests\Backend\Functional;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
-use Exception;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -44,7 +43,7 @@ abstract class AbstractAppTestCase extends WebTestCase
 		};
 
 		if (!$userEmail) {
-			throw new Exception('Invalid user key: no user is defined in AbstractAppTestCase for key '.$key);
+			throw new \Exception('Invalid user key: no user is defined in AbstractAppTestCase for key '.$key);
 		}
 
 		$user = $userRepository->findOneByEmail($userEmail);

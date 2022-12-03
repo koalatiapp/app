@@ -8,36 +8,26 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 class TestingStatus implements MercureEntityInterface
 {
-	/**
-	 * @Groups({"default"})
-	 */
-	private bool $pending;
+	#[Groups(['default'])]
+	private readonly bool $pending;
 
-	/**
-	 * @Groups({"default"})
-	 */
-	private ?int $requestCount;
+	#[Groups(['default'])]
+	private readonly ?int $requestCount;
 
-	/**
-	 * @Groups({"default"})
-	 */
-	private ?int $timeEstimate;
+	#[Groups(['default'])]
+	private readonly ?int $timeEstimate;
 
-	/**
-	 * @Groups({"default"})
-	 */
-	private int $pageCount;
+	#[Groups(['default'])]
+	private readonly int $pageCount;
 
-	/**
-	 * @Groups({"default"})
-	 */
-	private int $activePageCount;
+	#[Groups(['default'])]
+	private readonly int $activePageCount;
 
 	/**
 	 * @param array<string,mixed> $data
 	 */
 	public function __construct(
-		private Project $project,
+		private readonly Project $project,
 		array $data
 	) {
 		$this->pending = $data["pending"];

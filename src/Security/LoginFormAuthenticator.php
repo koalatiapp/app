@@ -3,7 +3,6 @@
 namespace App\Security;
 
 use App\Entity\User;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,13 +23,13 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 {
 	use TargetPathTrait;
 
-	public const LOGIN_ROUTE = 'login';
+	final public const LOGIN_ROUTE = 'login';
 
 	public function __construct(
-		private UrlGeneratorInterface $urlGenerator,
-		private EntityManagerInterface $entityManager,
-		private EmailVerifier $emailVerifier,
-		private TokenStorageInterface $tokenStorage,
+		private readonly UrlGeneratorInterface $urlGenerator,
+		private readonly EntityManagerInterface $entityManager,
+		private readonly EmailVerifier $emailVerifier,
+		private readonly TokenStorageInterface $tokenStorage,
 	) {
 	}
 
@@ -60,14 +59,14 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 		if ($user instanceof User) {
 			$dateLastLoggedIn = $user->getDateLastLoggedIn();
 
-			$user->setDateLastLoggedIn(new DateTime());
+			$user->setDateLastLoggedIn(new \DateTime());
 			$this->entityManager->persist($user);
 			$this->entityManager->flush();
 
 			// Check if email has been verified before logging in the user...
 			if (!$user->isVerified()) {
 				// Send a new confirmation link to the user if the last one expired
-				if ($dateLastLoggedIn < new DateTime("-1 hour")) {
+				if ($dateLastLoggedIn < new \DateTime("-1 hour")) {
 					$this->emailVerifier->sendEmailConfirmation($user);
 				}
 

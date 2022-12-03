@@ -15,17 +15,13 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/internal-api/testing/ignore-entries", name="api_testing_ignore_entry_")
- */
+#[Route(path: '/internal-api/testing/ignore-entries', name: 'api_testing_ignore_entry_')]
 class IgnoreEntriesController extends AbstractController
 {
 	use ApiControllerTrait;
 	use PreventDirectAccessTrait;
 
-	/**
-	 * @Route("", methods={"GET","HEAD"}, name="list", options={"expose": true})
-	 */
+	#[Route(path: '', methods: ['GET', 'HEAD'], name: 'list', options: ['expose' => true])]
 	public function list(Request $request): JsonResponse
 	{
 		$projectId = $request->query->get('project_id');
@@ -44,9 +40,7 @@ class IgnoreEntriesController extends AbstractController
 		return $this->apiSuccess($ignoreEntries);
 	}
 
-	/**
-	 * @Route("", methods={"POST","PUT"}, name="create", options={"expose": true})
-	 */
+	#[Route(path: '', methods: ['POST', 'PUT'], name: 'create', options: ['expose' => true])]
 	public function create(Request $request, RecommendationRepository $recommendationRepository): JsonResponse
 	{
 		$em = $this->getDoctrine()->getManager();
@@ -100,9 +94,7 @@ class IgnoreEntriesController extends AbstractController
 		return $this->apiSuccess($ignoreEntry);
 	}
 
-	/**
-	 * @Route("/{id}", methods={"GET","HEAD"}, name="details", options={"expose": true})
-	 */
+	#[Route(path: '/{id}', methods: ['GET', 'HEAD'], name: 'details', options: ['expose' => true])]
 	public function details(int $id, IgnoreEntryRepository $ignoreEntryRepository): JsonResponse
 	{
 		$entry = $ignoreEntryRepository->find($id);
@@ -114,9 +106,7 @@ class IgnoreEntriesController extends AbstractController
 		return $this->apiSuccess($entry);
 	}
 
-	/**
-	 * @Route("/{id}", methods={"DELETE"}, name="delete", options={"expose": true})
-	 */
+	#[Route(path: '/{id}', methods: ['DELETE'], name: 'delete', options: ['expose' => true])]
 	public function delete(int $id, IgnoreEntryRepository $ignoreEntryRepository): JsonResponse
 	{
 		$entry = $ignoreEntryRepository->find($id);

@@ -22,13 +22,13 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class SitemapRequestHandler implements MessageHandlerInterface
 {
 	public function __construct(
-		private ProjectRepository $projectRepository,
-		private Builder $sitemapBuilder,
-		private Url $urlHelper,
-		private EntityManagerInterface $em,
-		private MessageBusInterface $bus,
-		private HttpClientInterface $httpClient,
-		private PlanManager $planManager,
+		private readonly ProjectRepository $projectRepository,
+		private readonly Builder $sitemapBuilder,
+		private readonly Url $urlHelper,
+		private readonly EntityManagerInterface $em,
+		private readonly MessageBusInterface $bus,
+		private readonly HttpClientInterface $httpClient,
+		private readonly PlanManager $planManager,
 	) {
 	}
 
@@ -49,7 +49,6 @@ class SitemapRequestHandler implements MessageHandlerInterface
 		$supportsSsl = $this->websiteSupportsSsl($project);
 		// Crawl website and sitemap, creating/updating pages everytime a page is found
 		$websiteUrl = $this->urlHelper->standardize($project->getUrl(), $supportsSsl);
-		/** @var array<string,Page> */
 		$pagesByUrl = [];
 
 		foreach ($project->getPages() as $page) {
@@ -110,7 +109,7 @@ class SitemapRequestHandler implements MessageHandlerInterface
 			}
 
 			$pageIds = array_slice($pageIds, 0, max(0, $pageLimit - count($pageIdsSentForTest)));
-			$pageIdsSentForTest = array_merge($pageIdsSentForTest, $pageIds);
+			$pageIdsSentForTest = [...$pageIdsSentForTest, ...$pageIds];
 
 			// Dispatch a testing request to start the testing on new pages
 			if ($pageIds) {
@@ -130,7 +129,7 @@ class SitemapRequestHandler implements MessageHandlerInterface
 	{
 		try {
 			$this->em->flush();
-		} catch (Exception $exception) {
+		} catch (\Exception $exception) {
 			// Exception types can vary for integrity constraint errors
 			// But they only mean one thing in this context: the project no longer exists!
 			if (str_contains($exception->getMessage(), "SQLSTATE[23000]")) {

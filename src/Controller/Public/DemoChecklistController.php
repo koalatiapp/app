@@ -10,16 +10,14 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DemoChecklistController extends AbstractController
 {
-	/**
-	 * @Route("/free-checklist", name="checklist_demo")
-	 */
+	#[Route(path: '/free-checklist', name: 'checklist_demo')]
 	public function checklistDemo(Generator $checklistGenerator, ClientMessageSerializer $serializer): Response
 	{
 		$checklist = $checklistGenerator->generateChecklist(null);
 		$serializedItemGroups = $serializer->serialize($checklist->getItemGroups());
 
 		return $this->render('public/checklist_demo.html.twig', [
-			"serializedItemGroups" => $serializedItemGroups,
-		]);
+				"serializedItemGroups" => $serializedItemGroups,
+			]);
 	}
 }

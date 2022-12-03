@@ -7,9 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DashboardController extends AbstractController
 {
-	/**
-	 * @Route("/", name="dashboard")
-	 */
+	#[Route(path: '/', name: 'dashboard')]
 	public function overview(): Response
 	{
 		return $this->redirectToRoute('projects');
@@ -24,9 +22,7 @@ class DashboardController extends AbstractController
 		*/
 	}
 
-	/**
-	 * @Route("/projects", name="projects")
-	 */
+	#[Route(path: '/projects', name: 'projects')]
 	public function projects(): Response
 	{
 		$projects = $this->getUser()->getAllProjects();
@@ -36,25 +32,21 @@ class DashboardController extends AbstractController
 		}
 
 		return $this->render('app/dashboard/projects.html.twig', [
-			'projects' => $projects,
-		]);
+				'projects' => $projects,
+			]);
 	}
 
-	/**
-	 * @Route("/inbox", name="inbox")
-	 */
+	#[Route(path: '/inbox', name: 'inbox')]
 	public function inbox(): Response
 	{
 		return $this->render('app/dashboard/index.html.twig', [
-		]);
+			]);
 	}
 
-	/**
-	 * @Route("/whats-new", name="koalati_news")
-	 */
+	#[Route(path: '/whats-new', name: 'koalati_news')]
 	public function whatsNew(): Response
 	{
 		return $this->render('app/dashboard/index.html.twig', [
-		]);
+			]);
 	}
 }

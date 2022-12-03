@@ -10,20 +10,8 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
  */
 class Url
 {
-	/**
-	 * @var \App\Util\Config|null;
-	 */
-	private $config;
-
-	/**
-	 * @var \Symfony\Contracts\HttpClient\HttpClientInterface|null;
-	 */
-	private $client;
-
-	public function __construct(?Config $config = null, ?HttpClientInterface $client = null)
+	public function __construct(private readonly ?Config $config = null, private readonly ?HttpClientInterface $client = null)
 	{
-		$this->config = $config;
-		$this->client = $client;
 	}
 
 	/**
@@ -35,7 +23,7 @@ class Url
 			$response = $this->client->request('GET', $url);
 			$code = (string) $response->getStatusCode();
 			$response->cancel();
-		} catch (TransportException $exception) {
+		} catch (TransportException) {
 			$code = '404';
 		}
 
@@ -51,7 +39,7 @@ class Url
 			$response = $this->client->request('GET', $url);
 			$type = $response->getHeaders()['content-type'][0] ?? '';
 			$response->cancel();
-		} catch (TransportException $exception) {
+		} catch (TransportException) {
 			return false;
 		}
 
@@ -67,7 +55,7 @@ class Url
 			$response = $this->client->request('GET', $url);
 			$type = $response->getHeaders()['content-type'][0] ?? '';
 			$response->cancel();
-		} catch (TransportException $exception) {
+		} catch (TransportException) {
 			$type = '';
 		}
 

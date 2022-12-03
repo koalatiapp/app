@@ -12,10 +12,10 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 class FaviconRequestHandler implements MessageHandlerInterface
 {
 	public function __construct(
-		private ProjectRepository $projectRepository,
-		private FaviconFetcherInterface $faviconFetcher,
-		private ProjectStorage $projectStorage,
-		private Url $urlHelper,
+		private readonly ProjectRepository $projectRepository,
+		private readonly FaviconFetcherInterface $faviconFetcher,
+		private readonly ProjectStorage $projectStorage,
+		private readonly Url $urlHelper,
 	) {
 	}
 

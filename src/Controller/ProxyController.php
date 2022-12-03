@@ -9,9 +9,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class ProxyController extends AbstractController
 {
-	/**
-	 * @Route("/image-proxy", name="image_proxy")
-	 */
+	#[Route(path: '/image-proxy', name: 'image_proxy')]
 	public function overview(Request $request, HttpClientInterface $httpClient): Response
 	{
 		$url = $request->query->get("url");
@@ -23,12 +21,12 @@ class ProxyController extends AbstractController
 		$url = urldecode($url);
 
 		$sourceResponse = $httpClient->request("GET", $url, [
-			"timeout" => 2.5,
-			"max_redirects" => 10,
-			"headers" => [
-				"Accept" => "application/json",
-			],
-		]);
+				"timeout" => 2.5,
+				"max_redirects" => 10,
+				"headers" => [
+					"Accept" => "application/json",
+				],
+			]);
 		$statusCode = $sourceResponse->getStatusCode();
 
 		if ($statusCode < 200 || $statusCode >= 300) {

@@ -10,22 +10,17 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<Project>
+ *
+ * @method Project|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Project|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Project[]    findAll()
+ * @method Project[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class ProjectRepository extends ServiceEntityRepository
 {
 	public function __construct(ManagerRegistry $registry)
 	{
 		parent::__construct($registry, Project::class);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @return Project|null
-	 */
-	public function find($id, $lockMode = null, $lockVersion = null)
-	{
-		return parent::find($id, $lockMode, $lockVersion);
 	}
 
 	/**
@@ -46,7 +41,7 @@ class ProjectRepository extends ServiceEntityRepository
 
 		if ($requestingUser) {
 			// Add project accessibility check (looks for direct ownership or shared team project)
-			$accessibleOrganizations = $requestingUser->getOrganizationLinks()->map(fn (OrganizationMember $link) => $link->getOrganization());
+			$accessibleOrganizations = $requestingUser->getOrganizationLinks()->map(fn (OrganizationMember $link = null) => $link->getOrganization());
 
 			$userMatchExpression = $queryBuilder->expr()->orX();
 			$userMatchExpression->add($queryBuilder->expr()->eq('p.ownerUser', ':user'));

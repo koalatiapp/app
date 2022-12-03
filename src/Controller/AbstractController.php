@@ -17,38 +17,28 @@ abstract class AbstractController extends DefaultAbstractController
 	protected LoggerInterface $logger;
 	protected HashidsInterface $idHasher;
 
-	/**
-	 * @required
-	 */
+	#[\Symfony\Contracts\Service\Attribute\Required]
 	public function setTranslator(TranslatorInterface $translator): void
 	{
 		$this->translator = $translator;
 	}
 
-	/**
-	 * @required
-	 */
+	#[\Symfony\Contracts\Service\Attribute\Required]
 	public function setLogger(LoggerInterface $logger): void
 	{
 		$this->logger = $logger;
 	}
 
-	/**
-	 * @required
-	 */
+	#[\Symfony\Contracts\Service\Attribute\Required]
 	public function setIdHasher(HashidsInterface $idHasher): void
 	{
 		$this->idHasher = $idHasher;
 	}
 
 	/**
-	 * Get a user from the Security Token Storage.
+	 * {@inheritDoc}
 	 *
 	 * @return User|null
-	 *
-	 * @throws \LogicException If SecurityBundle is not available
-	 *
-	 * @see TokenInterface::getUser()
 	 */
 	protected function getUser()
 	{

@@ -17,7 +17,7 @@ class TestingFixtures extends Fixture implements DependentFixtureInterface
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	public function __construct(
-		private UserRepository $userRepository,
+		private readonly UserRepository $userRepository,
 	) {
 	}
 

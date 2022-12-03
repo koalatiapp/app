@@ -5,21 +5,20 @@ namespace App\Security;
 use App\Entity\OrganizationMember;
 use App\Entity\Testing\IgnoreEntry;
 use App\Entity\User;
-use Exception;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
 
 class IgnoreEntryVoter extends Voter
 {
-	public const VIEW = 'view';
-	public const DELETE = 'delete';
+	final public const VIEW = 'view';
+	final public const DELETE = 'delete';
 
 	/**
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.security)
 	 */
 	public function __construct(
-		private Security $security
+		private readonly Security $security
 	) {
 	}
 
@@ -44,28 +43,21 @@ class IgnoreEntryVoter extends Voter
 			return false;
 		}
 
-		switch ($entry->getScopeType()) {
-			case 'project':
-			case 'page':
-				return $this->checkProjectPrivileges($entry, $attribute);
-
-			case 'organization':
-				return $this->checkOrganizationPrivileges($entry, $user);
-
-			case 'user':
-				return $user == $entry->getTargetUser();
-		}
-
-		return false;
+		return match ($entry->getScopeType()) {
+			'project', 'page' => $this->checkProjectPrivileges($entry, $attribute),
+			'organization' => $this->checkOrganizationPrivileges($entry, $user),
+			'user' => $user == $entry->getTargetUser(),
+			default => false,
+		};
 	}
 
 	/**
-	 * @throws Exception
+	 * @throws \Exception
 	 */
 	private function validateAttribute(string $attribute): void
 	{
 		if (!in_array($attribute, [self::VIEW, self::DELETE])) {
-			throw new Exception("Undefined project voter attribute: $attribute");
+			throw new \Exception("Undefined project voter attribute: $attribute");
 		}
 	}
 

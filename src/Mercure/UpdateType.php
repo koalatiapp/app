@@ -4,7 +4,7 @@ namespace App\Mercure;
 
 class UpdateType
 {
-	public const CREATE = "create";
-	public const UPDATE = "update";
-	public const DELETE = "delete";
+	final public const CREATE = "create";
+	final public const UPDATE = "update";
+	final public const DELETE = "delete";
 }

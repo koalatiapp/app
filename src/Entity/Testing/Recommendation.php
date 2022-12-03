@@ -6,112 +6,84 @@ use App\Entity\Page;
 use App\Entity\Project;
 use App\Entity\User;
 use App\Repository\Testing\RecommendationRepository;
-use DateTime;
-use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Exception;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
 
-/**
- * @ORM\Entity(repositoryClass=RecommendationRepository::class)
- */
+#[ORM\Entity(repositoryClass: RecommendationRepository::class)]
 class Recommendation
 {
-	public const TYPE_ISSUE = 'ISSUE';
-	public const TYPE_ESSENTIAL = 'ESSENTIAL';
-	public const TYPE_OPTIMIZATION = 'OPTIMIZATION';
-	public const TYPE_PRIORITIES = [
+	final public const TYPE_ISSUE = 'ISSUE';
+	final public const TYPE_ESSENTIAL = 'ESSENTIAL';
+	final public const TYPE_OPTIMIZATION = 'OPTIMIZATION';
+	final public const TYPE_PRIORITIES = [
 		Recommendation::TYPE_ISSUE => 5,
 		Recommendation::TYPE_ESSENTIAL => 10,
 		Recommendation::TYPE_OPTIMIZATION => 20,
 	];
 
-	/**
-	 * @ORM\Id
-	 * @ORM\GeneratedValue
-	 * @ORM\Column(type="integer")
-	 * @Groups({"default"})
-	 */
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[ORM\Column(type: 'integer')]
+	#[Groups(['default'])]
 	private ?int $id = null;
 
-	/**
-	 * @ORM\Column(type="text")
-	 * @Groups({"default"})
-	 */
+	#[ORM\Column(type: 'text')]
+	#[Groups(['default'])]
 	private string $template;
 
 	/**
-	 * @ORM\Column(type="json", nullable=true)
-	 * @Groups({"default"})
-	 *
 	 * @var array<mixed,mixed>
 	 */
+	#[ORM\Column(type: 'json', nullable: true)]
+	#[Groups(['default'])]
 	private ?array $parameters = [];
 
-	/**
-	 * @ORM\ManyToOne(targetEntity=Page::class, inversedBy="recommendations")
-	 * @ORM\JoinColumn(name="page_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
-	 * @Groups({"recommendation"})
-	 * @MaxDepth(1)
-	 */
+	#[ORM\ManyToOne(targetEntity: Page::class, inversedBy: 'recommendations')]
+	#[ORM\JoinColumn(name: 'page_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
+	#[Groups(['recommendation'])]
+	#[MaxDepth(1)]
 	private Page $relatedPage;
 
-	/**
-	 * @ORM\Column(type="string", length=255)
-	 * @Groups({"default"})
-	 */
+	#[ORM\Column(type: 'string', length: 255)]
+	#[Groups(['default'])]
 	private string $type;
 
-	/**
-	 * @ORM\Column(type="string", length=255)
-	 * @Groups({"default"})
-	 */
+	#[ORM\Column(type: 'string', length: 255)]
+	#[Groups(['default'])]
 	private string $uniqueName;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity=TestResult::class, inversedBy="recommendations")
-	 * @ORM\JoinColumn(name="parent_result_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
-	 * @Groups({"recommendation"})
-	 * @MaxDepth(1)
-	 */
+	#[ORM\ManyToOne(targetEntity: TestResult::class, inversedBy: 'recommendations')]
+	#[ORM\JoinColumn(name: 'parent_result_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
+	#[Groups(['recommendation'])]
+	#[MaxDepth(1)]
 	private TestResult $parentResult;
 
-	/**
-	 * @ORM\Column(type="datetime")
-	 * @Groups({"default"})
-	 */
-	private DateTimeInterface $dateCreated;
+	#[ORM\Column(type: 'datetime')]
+	#[Groups(['default'])]
+	private \DateTimeInterface $dateCreated;
 
-	/**
-	 * @ORM\Column(type="datetime")
-	 * @Groups({"default"})
-	 */
-	private DateTimeInterface $dateLastOccured;
+	#[ORM\Column(type: 'datetime')]
+	#[Groups(['default'])]
+	private \DateTimeInterface $dateLastOccured;
 
-	/**
-	 * @ORM\Column(type="datetime", nullable=true)
-	 * @Groups({"default"})
-	 */
-	private ?DatetimeInterface $dateCompleted;
+	#[ORM\Column(type: 'datetime', nullable: true)]
+	#[Groups(['default'])]
+	private ?\DatetimeInterface $dateCompleted;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity=User::class)
-	 * @Groups({"default"})
-	 */
-	private ?User $completedBy;
+	#[ORM\ManyToOne(targetEntity: User::class)]
+	#[Groups(['default'])]
+	private ?User $completedBy = null;
 
-	/**
-	 * @ORM\Column(type="boolean")
-	 * @Groups({"default"})
-	 */
+	#[ORM\Column(type: 'boolean')]
+	#[Groups(['default'])]
 	private bool $isCompleted = false;
 
 	public function __construct()
 	{
-		$this->dateCreated = new DateTime();
-		$this->dateLastOccured = new DateTime();
+		$this->dateCreated = new \DateTime();
+		$this->dateLastOccured = new \DateTime();
 		$this->dateCompleted = null;
 	}
 
@@ -150,17 +122,13 @@ class Recommendation
 		return $this;
 	}
 
-	/**
-	 * @Groups({"default"})
-	 */
+	#[Groups(['default'])]
 	public function getTitle(): string
 	{
 		return strtr($this->getTemplate(), $this->getParameters());
 	}
 
-	/**
-	 * @Groups({"default"})
-	 */
+	#[Groups(['default'])]
 	public function getHtmlTitle(): string
 	{
 		$htmlTemplate = $this->getTemplate();
@@ -194,7 +162,7 @@ class Recommendation
 		$allowedTypes = array_keys(static::TYPE_PRIORITIES);
 
 		if (!in_array($type, $allowedTypes)) {
-			throw new Exception(sprintf('%s is not a valid recommendation type. Accecpted types are %s', $type, implode(', ', $allowedTypes)));
+			throw new \Exception(sprintf('%s is not a valid recommendation type. Accecpted types are %s', $type, implode(', ', $allowedTypes)));
 		}
 
 		$this->type = $type;
@@ -226,36 +194,36 @@ class Recommendation
 		return $this;
 	}
 
-	public function getDateCreated(): ?DatetimeInterface
+	public function getDateCreated(): ?\DatetimeInterface
 	{
 		return $this->dateCreated;
 	}
 
-	public function setDateCreated(DatetimeInterface $dateCreated): self
+	public function setDateCreated(\DatetimeInterface $dateCreated): self
 	{
 		$this->dateCreated = $dateCreated;
 
 		return $this;
 	}
 
-	public function getDateLastOccured(): ?DatetimeInterface
+	public function getDateLastOccured(): ?\DatetimeInterface
 	{
 		return $this->dateLastOccured;
 	}
 
-	public function setDateLastOccured(DatetimeInterface $dateLastOccured): self
+	public function setDateLastOccured(\DatetimeInterface $dateLastOccured): self
 	{
 		$this->dateLastOccured = $dateLastOccured;
 
 		return $this;
 	}
 
-	public function getDateCompleted(): ?DatetimeInterface
+	public function getDateCompleted(): ?\DatetimeInterface
 	{
 		return $this->dateCompleted;
 	}
 
-	public function setDateCompleted(?DatetimeInterface $dateCompleted): self
+	public function setDateCompleted(?\DatetimeInterface $dateCompleted): self
 	{
 		$this->dateCompleted = $dateCompleted;
 
@@ -289,15 +257,15 @@ class Recommendation
 	public function isIgnored(): ?bool
 	{
 		$ignoreEntries = new ArrayCollection(
-			array_merge(
-				$this->getRelatedPage()->getIgnoreEntries()->toArray(),
-				$this->getRelatedPage()->getProject()->getIgnoreEntries()->toArray(),
-				$this->getRelatedPage()->getProject()->getOwner()->getIgnoreEntries()->toArray()
-				)
-			);
+			[
+				...$this->getRelatedPage()->getIgnoreEntries()->toArray(),
+				...$this->getRelatedPage()->getProject()->getIgnoreEntries()->toArray(),
+				...$this->getRelatedPage()->getProject()->getOwner()->getIgnoreEntries()->toArray(),
+			]
+		);
 
 		$recommendation = $this;
-		$matchingIgnoreEntries = $ignoreEntries->filter(function (IgnoreEntry $entry) use ($recommendation) {
+		$matchingIgnoreEntries = $ignoreEntries->filter(function (IgnoreEntry $entry = null) use ($recommendation) {
 			return $entry->getRecommendationUniqueName() == $recommendation->getUniqueName()
 				&& $entry->getTest() == $recommendation->getParentResult()->getUniqueName()
 				&& $entry->getTool() == $recommendation->getParentResult()->getParentResponse()->getTool();
@@ -352,7 +320,7 @@ class Recommendation
 	public function complete(User $user): static
 	{
 		$this->setCompletedBy($user)
-			->setDateCompleted(new DateTime())
+			->setDateCompleted(new \DateTime())
 			->setIsCompleted(true);
 
 		return $this;

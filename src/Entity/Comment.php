@@ -5,102 +5,75 @@ namespace App\Entity;
 use App\Entity\Checklist\Item;
 use App\Mercure\MercureEntityInterface;
 use App\Repository\CommentRepository;
-use DateTime;
-use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
 
-/**
- * @ORM\Entity(repositoryClass=CommentRepository::class)
- */
+#[ORM\Entity(repositoryClass: CommentRepository::class)]
 class Comment implements MercureEntityInterface
 {
-	/**
-	 * @ORM\Id
-	 * @ORM\GeneratedValue
-	 * @Groups({"default"})
-	 * @ORM\Column(type="integer")
-	 */
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[Groups(['default'])]
+	#[ORM\Column(type: 'integer')]
 	private ?int $id = null;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity=User::class)
-	 * @ORM\JoinColumn(onDelete="CASCADE")
-	 * @Groups({"default"})
-	 */
+	#[ORM\ManyToOne(targetEntity: User::class)]
+	#[ORM\JoinColumn(onDelete: 'CASCADE')]
+	#[Groups(['default'])]
 	private ?User $author = null;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity=Project::class, inversedBy="comments")
-	 * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
-	 * @Groups({"default"})
-	 * @MaxDepth(1)
-	 */
+	#[ORM\ManyToOne(targetEntity: Project::class, inversedBy: 'comments')]
+	#[ORM\JoinColumn(onDelete: 'CASCADE', nullable: false)]
+	#[Groups(['default'])]
+	#[MaxDepth(1)]
 	private Project $project;
 
-	/**
-	 * @ORM\Column(type="text")
-	 * @Groups({"default"})
-	 */
+	#[ORM\Column(type: 'text')]
+	#[Groups(['default'])]
 	private string $content;
 
-	/**
-	 * @ORM\Column(type="text")
-	 */
+	#[ORM\Column(type: 'text')]
 	private string $textContent;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity=Comment::class, inversedBy="replies")
-	 * @ORM\JoinColumn(onDelete="CASCADE")
-	 * @Groups({"default"})
-	 */
+	#[ORM\ManyToOne(targetEntity: Comment::class, inversedBy: 'replies')]
+	#[ORM\JoinColumn(onDelete: 'CASCADE')]
+	#[Groups(['default'])]
 	private ?Comment $thread = null;
 
 	/**
-	 * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="thread")
-	 * @ORM\OrderBy({"isResolved" = "ASC"}, {"dateCreated" = "ASC"})
-	 * @Groups({"default"})
-	 *
 	 * @var Collection<int,self>
 	 */
+	#[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'thread')]
+	#[ORM\OrderBy(['isResolved' => 'ASC', 'dateCreated' => 'ASC'])]
+	#[Groups(['default'])]
 	private Collection $replies;
 
-	/**
-	 * @ORM\Column(type="datetime")
-	 * @Groups({"default"})
-	 */
-	private DateTimeInterface $dateCreated;
+	#[ORM\Column(type: 'datetime')]
+	#[Groups(['default'])]
+	private \DateTimeInterface $dateCreated;
 
-	/**
-	 * @ORM\Column(type="string", length=255, nullable=true)
-	 * @Groups({"default"})
-	 */
+	#[ORM\Column(type: 'string', length: 255, nullable: true)]
+	#[Groups(['default'])]
 	private ?string $authorName = null;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity=Item::class, inversedBy="comments")
-	 * @ORM\JoinColumn(onDelete="CASCADE")
-	 * @Groups({"default"})
-	 */
+	#[ORM\ManyToOne(targetEntity: Item::class, inversedBy: 'comments')]
+	#[ORM\JoinColumn(onDelete: 'CASCADE')]
+	#[Groups(['default'])]
 	private ?Item $checklistItem = null;
 
-	/**
-	 * @ORM\Column(type="boolean")
-	 * @Groups({"default"})
-	 */
+	#[ORM\Column(type: 'boolean')]
+	#[Groups(['default'])]
 	private bool $isResolved = false;
 
-	/**
-	 * @ORM\Column(type="boolean")
-	 */
+	#[ORM\Column(type: 'boolean')]
 	private bool $isDeleted = false;
 
 	public function __construct()
 	{
-		$this->dateCreated = new DateTime();
+		$this->dateCreated = new \DateTime();
 		$this->replies = new ArrayCollection();
 	}
 
@@ -196,12 +169,12 @@ class Comment implements MercureEntityInterface
 		return $this;
 	}
 
-	public function getDateCreated(): ?DateTimeInterface
+	public function getDateCreated(): ?\DateTimeInterface
 	{
 		return $this->dateCreated;
 	}
 
-	public function setDateCreated(DateTimeInterface $dateCreated): self
+	public function setDateCreated(\DateTimeInterface $dateCreated): self
 	{
 		$this->dateCreated = $dateCreated;
 

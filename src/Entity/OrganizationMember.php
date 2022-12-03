@@ -3,59 +3,48 @@
 namespace App\Entity;
 
 use App\Repository\OrganizationMemberRepository;
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-/**
- * @ORM\Entity(repositoryClass=OrganizationMemberRepository::class)
- */
+#[ORM\Entity(repositoryClass: OrganizationMemberRepository::class)]
 class OrganizationMember
 {
-	public const ROLE_OWNER = 'ROLE_OWNER';
-	public const ROLE_ADMIN = 'ROLE_ADMIN';
-	public const ROLE_MEMBER = 'ROLE_MEMBER';
-	public const ROLE_VISITOR = 'ROLE_VISITOR';
-	public const ROLE_VALUES = [
+	final public const ROLE_OWNER = 'ROLE_OWNER';
+	final public const ROLE_ADMIN = 'ROLE_ADMIN';
+	final public const ROLE_MEMBER = 'ROLE_MEMBER';
+	final public const ROLE_VISITOR = 'ROLE_VISITOR';
+	final public const ROLE_VALUES = [
 		self::ROLE_OWNER => 1000,
 		self::ROLE_ADMIN => 100,
 		self::ROLE_MEMBER => 10,
 		self::ROLE_VISITOR => 1,
 	];
 
-	/**
-	 * @ORM\Id
-	 * @ORM\GeneratedValue
-	 * @ORM\Column(type="integer")
-	 * @Groups({"default"})
-	 */
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[ORM\Column(type: 'integer')]
+	#[Groups(['default'])]
 	private ?int $id = null;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity=Organization::class, inversedBy="members")
-	 * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
-	 * @Groups({"default"})
-	 */
+	#[ORM\ManyToOne(targetEntity: Organization::class, inversedBy: 'members')]
+	#[ORM\JoinColumn(name: 'organization_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
+	#[Groups(['default'])]
 	private ?Organization $organization;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity=User::class, inversedBy="organizationLinks")
-	 * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
-	 * @Groups({"default"})
-	 */
+	#[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'organizationLinks')]
+	#[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
+	#[Groups(['default'])]
 	private ?User $user;
 
 	/**
 	 * @var array<string>
-	 * @ORM\Column(type="json")
-	 * @Groups({"default"})
 	 */
+	#[ORM\Column(type: 'json')]
+	#[Groups(['default'])]
 	private array $roles = [];
 
-	/**
-	 * @ORM\Column(type="datetime")
-	 * @Groups({"default"})
-	 */
+	#[ORM\Column(type: 'datetime')]
+	#[Groups(['default'])]
 	private \DateTimeInterface $dateCreated;
 
 	/**
@@ -66,7 +55,7 @@ class OrganizationMember
 		$this->setOrganization($organization);
 		$this->setUser($user);
 		$this->setRoles((array) $roles);
-		$this->setDateCreated(new DateTime());
+		$this->setDateCreated(new \DateTime());
 	}
 
 	public function getId(): ?int
@@ -109,15 +98,13 @@ class OrganizationMember
 	/**
 	 * Defines the role of the member within the organization.
 	 * Allowed array values are the following \App\Entity\OrganizationMember constants:
-	 * `ROLE_ADMIN`, `ROLE_MEMBER`, `ROLE_VISITOR`.
+	 * `ROLE_OWNER, `ROLE_ADMIN`, `ROLE_MEMBER`, `ROLE_VISITOR`.
 	 *
 	 * @param string[] $roles
 	 */
 	public function setRoles(array $roles): self
 	{
-		$this->roles = array_filter($roles, function ($role) {
-			return in_array($role, [self::ROLE_OWNER, self::ROLE_ADMIN, self::ROLE_MEMBER, self::ROLE_VISITOR]);
-		});
+		$this->roles = array_filter($roles, fn ($role) => in_array($role, [self::ROLE_OWNER, self::ROLE_ADMIN, self::ROLE_MEMBER, self::ROLE_VISITOR]));
 
 		return $this;
 	}
@@ -150,9 +137,7 @@ class OrganizationMember
 		return $this;
 	}
 
-	/**
-	 * @Groups({"default"})
-	 */
+	#[Groups(['default'])]
 	public function getHighestRole(): ?string
 	{
 		$highestValue = 0;

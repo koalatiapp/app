@@ -33,7 +33,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 	public function upgradePassword(UserInterface $user, string $newEncodedPassword): void
 	{
 		if (!$user instanceof User) {
-			throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', \get_class($user)));
+			throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', $user::class));
 		}
 
 		$user->setPassword($newEncodedPassword);
@@ -70,7 +70,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 	 */
 	public function findAllTrialsExpiringSoon(string $soonDateModifier): array
 	{
-		$expireBeforeDate = new DateTime($soonDateModifier);
+		$expireBeforeDate = new \DateTime($soonDateModifier);
 
 		return $this->createQueryBuilder('u')
 			->andWhere('u.subscriptionPlan = :trialPlan')
@@ -79,7 +79,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 			->andWhere('u.subscriptionChangeDate <= :expireBeforeDate')
 			->setParameter('trialPlan', TrialPlan::UNIQUE_NAME)
 			->setParameter('NoPlan', NoPlan::UNIQUE_NAME)
-			->setParameter('now', new DateTime())
+			->setParameter('now', new \DateTime())
 			->setParameter('expireBeforeDate', $expireBeforeDate)
 			->getQuery()
 			->getResult()

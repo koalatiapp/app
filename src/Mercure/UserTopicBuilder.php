@@ -11,7 +11,7 @@ class UserTopicBuilder
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.idHasher)
 	 */
 	public function __construct(
-		private HashidsInterface $idHasher
+		private readonly HashidsInterface $idHasher
 	) {
 	}
 

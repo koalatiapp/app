@@ -16,22 +16,18 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 class EmailConfirmationController extends AbstractController
 {
 	public function __construct(
-		private EmailVerifier $emailVerifier,
-		private AnalyticsInterface $analytics,
+		private readonly EmailVerifier $emailVerifier,
+		private readonly AnalyticsInterface $analytics,
 	) {
 	}
 
-	/**
-	 * @Route("/verify-email/pending", name="verify_email_pending")
-	 */
+	#[Route(path: '/verify-email/pending', name: 'verify_email_pending')]
 	public function verifyEmailPending(): Response
 	{
 		return $this->render("public/email_confirmation_pending.html.twig");
 	}
 
-	/**
-	 * @Route("/verify-email/check", name="verify_email")
-	 */
+	#[Route(path: '/verify-email/check', name: 'verify_email')]
 	public function verifyUserEmail(Request $request, UserRepository $userRepository, UserAuthenticatorInterface $authenticator, LoginFormAuthenticator $loginFormAuthenticator): Response
 	{
 		if ($this->getUser()) {

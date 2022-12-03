@@ -12,9 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class TestResultController extends AbstractController
 {
-	/**
-	 * @Route("/webhook/test-result", name="webhook_test_result")
-	 */
+	#[Route(path: '/webhook/test-result', name: 'webhook_test_result')]
 	public function testResult(Request $request, MessageBusInterface $bus): Response
 	{
 		$payload = $this->getPayload($request);
@@ -32,7 +30,7 @@ class TestResultController extends AbstractController
 	 */
 	private function getPayload(Request $request): array
 	{
-		$payload = json_decode($request->request->get('payload'), true);
+		$payload = json_decode($request->request->get('payload'), true, 512, JSON_THROW_ON_ERROR);
 
 		if (!$payload) {
 			throw new WebhookException('An invalid payload was sent to the test results webhook.');
@@ -52,22 +50,20 @@ class TestResultController extends AbstractController
 	{
 		switch ($payload['type']) {
 			case 'developerError':
-				$this->logDeveloperError($payload);
+				$this->logDeveloperError();
 
-			// no break
+				// no break
 			case 'toolError':
-				$this->logToolError($payload);
+				$this->logToolError();
 		}
 	}
 
 	/**
 	 * Logs an error for the Koalati developers to handle.
 	 *
-	 * @param array<mixed> $payload
-	 *
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
-	private function logDeveloperError(array $payload): void
+	private function logDeveloperError(): void
 	{
 		// @TODO: Handle developerError in tools result webhook (submit bug to Koalati developers)
 	}
@@ -75,11 +71,9 @@ class TestResultController extends AbstractController
 	/**
 	 * Logs an error for the tool developers to handle.
 	 *
-	 * @param array<mixed> $payload
-	 *
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
-	private function logToolError(array $payload): void
+	private function logToolError(): void
 	{
 		// @TODO: Handle toolError in tools result webhook (submit bug to tool developer)
 	}

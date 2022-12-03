@@ -8,7 +8,7 @@ class TestingResultRequest
 	 * @param array<string,mixed> $payload
 	 */
 	public function __construct(
-		private array $payload,
+		private readonly array $payload,
 	) {
 	}
 

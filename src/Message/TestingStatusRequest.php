@@ -8,7 +8,7 @@ class TestingStatusRequest
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	public function __construct(
-		private int $projectId
+		private readonly int $projectId
 	) {
 	}
 

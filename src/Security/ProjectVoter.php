@@ -2,27 +2,28 @@
 
 namespace App\Security;
 
+use App\Entity\OrganizationMember;
 use App\Entity\Project;
+use App\Entity\ProjectMember;
 use App\Entity\User;
 use App\Subscription\Plan\NoPlan;
 use App\Subscription\PlanManager;
-use Exception;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 class ProjectVoter extends Voter
 {
-	public const VIEW = 'view';
-	public const PARTICIPATE = 'participate';
-	public const MANAGE = 'manage';
-	public const CHECKLIST = 'checklist';
-	public const TESTING = 'testing';
+	final public const VIEW = 'view';
+	final public const PARTICIPATE = 'participate';
+	final public const MANAGE = 'manage';
+	final public const CHECKLIST = 'checklist';
+	final public const TESTING = 'testing';
 
 	/**
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.security)
 	 */
 	public function __construct(
-		private PlanManager $planManager
+		private readonly PlanManager $planManager
 	) {
 	}
 
@@ -43,12 +44,12 @@ class ProjectVoter extends Voter
 	protected function voteOnAttribute(string $attribute, mixed $project, TokenInterface $token): bool
 	{
 		if (!in_array($attribute, [self::VIEW, self::PARTICIPATE, self::MANAGE, self::CHECKLIST, self::TESTING])) {
-			throw new Exception("Undefined project voter attribute: $attribute");
+			throw new \Exception("Undefined project voter attribute: $attribute");
 		}
 
 		$plan = $this->planManager->getPlanFromEntity($project->getOwner());
 
-		if (get_class($plan) == NoPlan::class && $attribute != self::VIEW) {
+		if ($plan::class == NoPlan::class && $attribute != self::VIEW) {
 			return false;
 		}
 
@@ -68,7 +69,7 @@ class ProjectVoter extends Voter
 		}
 
 		// Project has the user in its team
-		if ($project->getTeamMembers()->map(fn ($member) => $member->getUser())->contains($user)) {
+		if ($project->getTeamMembers()->map(fn (ProjectMember $member = null) => $member->getUser())->contains($user)) {
 			return true;
 		}
 
@@ -79,7 +80,7 @@ class ProjectVoter extends Voter
 
 		// Project belongs to the user's organization
 		if ($project->getOwnerOrganization() &&
-			$project->getOwnerOrganization()->getMembers()->map(fn ($member) => $member->getUser())->contains($user)) {
+			$project->getOwnerOrganization()->getMembers()->map(fn (OrganizationMember $member = null) => $member->getUser())->contains($user)) {
 			return true;
 		}
 

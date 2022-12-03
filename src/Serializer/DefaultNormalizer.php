@@ -8,6 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\ContextAwareNormalizerInterface;
 use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Hashes IDs to obfuscate the numerical values.
@@ -18,9 +19,9 @@ class DefaultNormalizer implements ContextAwareNormalizerInterface
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	public function __construct(
-		private ContainerInterface $container,
-		private Serializer $simpleSerializer,
-		private HashidsInterface $idHasher
+		private readonly ContainerInterface $container,
+		private readonly Serializer $simpleSerializer,
+		private readonly HashidsInterface $idHasher
 	) {
 	}
 
@@ -33,19 +34,17 @@ class DefaultNormalizer implements ContextAwareNormalizerInterface
 			return $data;
 		}
 
-		if (is_array($data) || $data instanceof \Traversable) {
+		if (is_iterable($data)) {
 			if (($context[AbstractObjectNormalizer::PRESERVE_EMPTY_OBJECTS] ?? false) === true && $data instanceof \Countable && $data->count() === 0) {
 				return $data;
 			}
 
 			$normalized = [];
 			foreach ($data as $key => $value) {
-				$normalized[$key] = $this->container->get("Symfony\Component\Serializer\SerializerInterface")->normalize($value, $format, $context);
+				$normalized[$key] = $this->container->get(SerializerInterface::class)->normalize($value, $format, $context);
 			}
 
-			$normalized = $this->hashIdsInData($normalized);
-
-			return $normalized;
+			return $this->hashIdsInData($normalized);
 		}
 
 		$data = $this->simpleSerializer->normalize($data, $format, $context);
@@ -60,7 +59,7 @@ class DefaultNormalizer implements ContextAwareNormalizerInterface
 	 */
 	private function hashIdsInData($data)
 	{
-		if (is_array($data) || $data instanceof \Traversable) {
+		if (is_iterable($data)) {
 			$normalized = [];
 
 			foreach ($data as $key => $value) {
@@ -68,7 +67,7 @@ class DefaultNormalizer implements ContextAwareNormalizerInterface
 
 				if (preg_match('/.*[iI]d$/', $key) && is_numeric($value)) {
 					$normalized[$key] = $this->idHasher->encode($value);
-				} elseif (is_array($value) || $value instanceof \Traversable) {
+				} elseif (is_iterable($value)) {
 					$normalized[$key] = $this->hashIdsInData($value);
 				}
 			}

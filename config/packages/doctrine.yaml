@@ -19,9 +19,10 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Entity'
                 prefix: 'App\Entity'
                 alias: App
+                type: attribute
             App\Testing:
                 is_bundle: false
-                type: annotation
+                type: attribute
                 dir: '%kernel.project_dir%/src/Entity/Testing'
                 prefix: 'App\Entity\Testing'
                 alias: App\Testing

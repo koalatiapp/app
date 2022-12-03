@@ -12,9 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Cache\ItemInterface;
 
-/**
- * @Route("/internal-api/public/link-metas", name="api_link_metas")
- */
+#[Route(path: '/internal-api/public/link-metas', name: 'api_link_metas')]
 class LinkMetasController extends AbstractController
 {
 	use ApiControllerTrait;
@@ -28,9 +26,8 @@ class LinkMetasController extends AbstractController
 	 * Query parameters:
 	 * - `url` (string): URL of the page to get metadata from.
 	 * - `cache` (bool): Whether cache is allowed or not. (defaults to `true`)
-	 *
-	 * @Route("", methods={"GET"}, name="", options={"expose": true})
 	 */
+	#[Route(path: '', methods: ['GET'], name: '', options: ['expose' => true])]
 	public function getMetas(Request $request, MetaFetcher $metaFetcher): JsonResponse
 	{
 		$url = $request->query->get('url');
@@ -54,6 +51,6 @@ class LinkMetasController extends AbstractController
 		});
 
 		return $this->enableResponseCache(3600 * 24 * LinkMetasController::CACHE_DURATION_IN_DAYS)
-			->apiSuccess($metas);
+				->apiSuccess($metas);
 	}
 }

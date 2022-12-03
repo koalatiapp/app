@@ -10,9 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/internal-api/checklist/groups", name="api_checklist_group_")
- */
+#[Route(path: '/internal-api/checklist/groups', name: 'api_checklist_group_')]
 class GroupController extends AbstractController
 {
 	use ApiControllerTrait;
@@ -23,9 +21,8 @@ class GroupController extends AbstractController
 	 *
 	 * Available query parameters:
 	 * - `project_id` - `int` (required)
-	 *
-	 * @Route("", methods={"GET","HEAD"}, name="list", options={"expose": true})
 	 */
+	#[Route(path: '', methods: ['GET', 'HEAD'], name: 'list', options: ['expose' => true])]
 	public function list(Request $request): JsonResponse
 	{
 		$projectId = $request->query->get('project_id');

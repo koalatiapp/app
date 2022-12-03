@@ -17,17 +17,13 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/internal-api/comments", name="api_comments_")
- */
+#[Route(path: '/internal-api/comments', name: 'api_comments_')]
 class CommentController extends AbstractController
 {
 	use ApiControllerTrait;
 	use PreventDirectAccessTrait;
 
-	/**
-	 * @Route("", methods={"GET","HEAD"}, name="list", options={"expose": true})
-	 */
+	#[Route(path: '', methods: ['GET', 'HEAD'], name: 'list', options: ['expose' => true])]
 	public function list(Request $request, ItemRepository $itemRepository, HashidsInterface $idHasher): JsonResponse
 	{
 		$projectId = $request->query->get('project_id');
@@ -52,9 +48,7 @@ class CommentController extends AbstractController
 		return $this->apiSuccess($comments);
 	}
 
-	/**
-	 * @Route("", methods={"POST","PUT"}, name="submit", options={"expose": true})
-	 */
+	#[Route(path: '', methods: ['POST', 'PUT'], name: 'submit', options: ['expose' => true])]
 	public function submit(Request $request, CommentRepository $commentRepository, ItemRepository $itemRepository, EntityManagerInterface $entityManager, HtmlSanitizer $htmlSanitizer): JsonResponse
 	{
 		$projectId = $request->request->get('project_id');
@@ -70,9 +64,9 @@ class CommentController extends AbstractController
 		$sanitizedContent = $htmlSanitizer->sanitize($content);
 
 		$comment = (new Comment())
-			->setAuthor($this->getUser())
-			->setProject($project)
-			->setContent($sanitizedContent)
+				->setAuthor($this->getUser())
+				->setProject($project)
+				->setContent($sanitizedContent)
 		;
 
 		if ($itemId) {
@@ -115,12 +109,9 @@ class CommentController extends AbstractController
 		return $this->apiSuccess($comment);
 	}
 
-	/**
-	 * @Route("/{id}", methods={"GET","HEAD"}, name="details", options={"expose": true})
-	 */
+	#[Route(path: '/{id}', methods: ['GET', 'HEAD'], name: 'details', options: ['expose' => true])]
 	public function details(int $id, CommentRepository $commentRepository): JsonResponse
 	{
-		/** @var Comment|null */
 		$comment = $commentRepository->find($id);
 
 		if (!$comment) {
@@ -134,12 +125,9 @@ class CommentController extends AbstractController
 		return $this->apiSuccess($comment);
 	}
 
-	/**
-	 * @Route("/{id}/resolve", methods={"PATCH"}, name="resolve", options={"expose": true})
-	 */
+	#[Route(path: '/{id}/resolve', methods: ['PATCH'], name: 'resolve', options: ['expose' => true])]
 	public function resolve(int $id, CommentRepository $commentRepository, EntityManagerInterface $entityManager): JsonResponse
 	{
-		/** @var Comment|null */
 		$comment = $commentRepository->find($id);
 
 		if (!$comment) {

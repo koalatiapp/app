@@ -13,9 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/internal-api/checklist/items", name="api_checklist_item_")
- */
+#[Route(path: '/internal-api/checklist/items', name: 'api_checklist_item_')]
 class ItemController extends AbstractController
 {
 	use ApiControllerTrait;
@@ -27,9 +25,8 @@ class ItemController extends AbstractController
 	 * Available query parameters:
 	 * - `project_id` - `int` (required)
 	 * - `group_id` - `int` (optional)
-	 *
-	 * @Route("", methods={"GET","HEAD"}, name="list", options={"expose": true})
 	 */
+	#[Route(path: '', methods: ['GET', 'HEAD'], name: 'list', options: ['expose' => true])]
 	public function list(Request $request): JsonResponse
 	{
 		$projectId = $request->query->get('project_id');
@@ -53,7 +50,7 @@ class ItemController extends AbstractController
 			}
 
 			/** @var ItemGroup */
-			$group = $checklist->getItemGroups()->filter(fn ($group) => $group->getId() == $groupId)->first();
+			$group = $checklist->getItemGroups()->filter(fn (ItemGroup $group = null) => $group->getId() == $groupId)->first();
 
 			return $this->apiSuccess($group->getItems());
 		}
@@ -63,9 +60,8 @@ class ItemController extends AbstractController
 
 	/**
 	 * Toggles an item's completion state.
-	 *
-	 * @Route("/{id}/toggle", methods={"PUT", "POST"}, name="toggle", options={"expose": true})
 	 */
+	#[Route(path: '/{id}/toggle', methods: ['PUT', 'POST'], name: 'toggle', options: ['expose' => true])]
 	public function toggleItemCompletion(int $id, Request $request, ItemRepository $itemRepository): JsonResponse
 	{
 		$item = $itemRepository->find($id);

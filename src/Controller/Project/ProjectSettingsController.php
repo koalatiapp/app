@@ -21,9 +21,7 @@ class ProjectSettingsController extends AbstractProjectController
 {
 	use SuggestUpgradeControllerTrait;
 
-	/**
-	 * @Route("/project/{id}/settings/team", name="project_settings_team")
-	 */
+	#[Route(path: '/project/{id}/settings/team', name: 'project_settings_team')]
 	public function teamSettings(int $id): Response
 	{
 		$project = $this->getProject($id);
@@ -35,9 +33,7 @@ class ProjectSettingsController extends AbstractProjectController
 		return $this->render('app/project/settings/team.html.twig', ['project' => $project]);
 	}
 
-	/**
-	 * @Route("/project/{id}/settings/checklist", name="project_settings_checklist")
-	 */
+	#[Route(path: '/project/{id}/settings/checklist', name: 'project_settings_checklist')]
 	public function checklistSettings(int $id): Response
 	{
 		$project = $this->getProject($id);
@@ -49,9 +45,7 @@ class ProjectSettingsController extends AbstractProjectController
 		return $this->render('app/project/settings/checklist.html.twig', ['project' => $project]);
 	}
 
-	/**
-	 * @Route("/project/{id}/settings/automated-testing", name="project_settings_automated_testing")
-	 */
+	#[Route(path: '/project/{id}/settings/automated-testing', name: 'project_settings_automated_testing')]
 	public function automatedTestingSettings(int $id, AvailableToolsFetcher $availableToolsFetcher): Response
 	{
 		$project = $this->getProject($id);
@@ -63,9 +57,7 @@ class ProjectSettingsController extends AbstractProjectController
 		return $this->render('app/project/settings/automated-testing.html.twig', ['project' => $project, 'tools' => $availableToolsFetcher->getTools()]);
 	}
 
-	/**
-	 * @Route("/project/{id}/settings", name="project_settings")
-	 */
+	#[Route(path: '/project/{id}/settings', name: 'project_settings')]
 	public function projectSettings(int $id, Request $request, Url $urlHelper): Response
 	{
 		$project = $this->getProject($id);
@@ -104,9 +96,9 @@ class ProjectSettingsController extends AbstractProjectController
 		}
 
 		return $this->render('app/project/settings/project.html.twig', [
-			'project' => $project,
-			'form' => $form->createView(),
-		]);
+				'project' => $project,
+				'form' => $form->createView(),
+			]);
 	}
 
 	private function processChanges(Form $form, Project $project, Project $originalProject, Url $urlHelper): void

@@ -4,59 +4,45 @@ namespace App\Entity\Checklist;
 
 use App\Entity\Project;
 use App\Repository\Checklist\ChecklistRepository;
-use DateTime;
-use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=ChecklistRepository::class)
- */
+#[ORM\Entity(repositoryClass: ChecklistRepository::class)]
 class Checklist
 {
-	/**
-	 * @ORM\Id
-	 * @ORM\GeneratedValue
-	 * @ORM\Column(type="integer")
-	 */
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[ORM\Column(type: 'integer')]
 	private ?int $id = null;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity=ChecklistTemplate::class, inversedBy="childChecklists")
-	 */
-	private ?ChecklistTemplate $template;
+	#[ORM\ManyToOne(targetEntity: ChecklistTemplate::class, inversedBy: 'childChecklists')]
+	private ?ChecklistTemplate $template = null;
+
+	#[ORM\OneToOne(targetEntity: Project::class, inversedBy: 'checklist', cascade: ['persist', 'remove'])]
+	#[ORM\JoinColumn(name: 'project_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
+	private ?Project $project = null;
+
+	#[ORM\Column(type: 'datetime')]
+	private ?\DateTimeInterface $dateUpdated;
 
 	/**
-	 * @ORM\OneToOne(targetEntity=Project::class, inversedBy="checklist", cascade={"persist", "remove"})
-	 * @ORM\JoinColumn(name="project_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
-	 */
-	private ?Project $project;
-
-	/**
-	 * @ORM\Column(type="datetime")
-	 */
-	private ?DateTimeInterface $dateUpdated;
-
-	/**
-	 * @ORM\OneToMany(targetEntity=ItemGroup::class, mappedBy="checklist", cascade={"persist", "remove"})
-	 *
 	 * @var Collection<int,ItemGroup>
 	 */
+	#[ORM\OneToMany(targetEntity: ItemGroup::class, mappedBy: 'checklist', cascade: ['persist', 'remove'])]
 	private Collection $itemGroups;
 
 	/**
-	 * @ORM\OneToMany(targetEntity=Item::class, mappedBy="checklist", cascade={"persist", "remove"})
-	 *
 	 * @var Collection<int,Item>
 	 */
+	#[ORM\OneToMany(targetEntity: Item::class, mappedBy: 'checklist', cascade: ['persist', 'remove'])]
 	private Collection $items;
 
 	public function __construct()
 	{
 		$this->itemGroups = new ArrayCollection();
 		$this->items = new ArrayCollection();
-		$this->dateUpdated = new DateTime();
+		$this->dateUpdated = new \DateTime();
 	}
 
 	public function getId(): ?int
@@ -88,12 +74,12 @@ class Checklist
 		return $this;
 	}
 
-	public function getDateUpdated(): ?DateTimeInterface
+	public function getDateUpdated(): ?\DateTimeInterface
 	{
 		return $this->dateUpdated;
 	}
 
-	public function setDateUpdated(DateTimeInterface $dateUpdated): self
+	public function setDateUpdated(\DateTimeInterface $dateUpdated): self
 	{
 		$this->dateUpdated = $dateUpdated;
 
@@ -165,7 +151,7 @@ class Checklist
 	 */
 	public function getCompletedItems(): Collection
 	{
-		return $this->getItems()->filter(fn (Item $item) => $item->getIsCompleted());
+		return $this->getItems()->filter(fn (Item $item = null) => $item->getIsCompleted());
 	}
 
 	public function getCompletionPercentage(): float
@@ -178,6 +164,6 @@ class Checklist
 
 	public function isCompleted(): bool
 	{
-		return !$this->getItems()->filter(fn (Item $item) => !$item->getIsCompleted())->count();
+		return !$this->getItems()->filter(fn (Item $item = null) => !$item->getIsCompleted())->count();
 	}
 }

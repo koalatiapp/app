@@ -16,8 +16,8 @@ class ProjectNormalizer implements ContextAwareNormalizerInterface
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	public function __construct(
-		private ContainerInterface $container,
-		private ProjectStorage $projectStorage
+		private readonly ContainerInterface $container,
+		private readonly ProjectStorage $projectStorage
 	) {
 	}
 

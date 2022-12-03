@@ -12,7 +12,7 @@ use App\Util\Config;
 class Generator
 {
 	public function __construct(
-		private Config $config,
+		private readonly Config $config,
 	) {
 	}
 

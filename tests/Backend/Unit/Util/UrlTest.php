@@ -20,8 +20,8 @@ class UrlTest extends WebTestCase
 	public function setup(): void
 	{
 		self::bootKernel();
-		$this->urlHelper = self::$container->get('App\\Util\\Url');
-		$this->configHelper = self::$container->get('App\\Util\\Config');
+		$this->urlHelper = self::$container->get(Url::class);
+		$this->configHelper = self::$container->get(Config::class);
 		$this->stubsDir = self::$container->getParameter('test_stub_dir');
 	}
 
@@ -77,6 +77,7 @@ class UrlTest extends WebTestCase
 	 * Standardizes an URL, ensuring the "https(s)://" protocol is defined.
 	 *
 	 * @param bool $forceHttps when $forceHttps is set to true, the URL will be changed to use HTTPS
+	 *
 	 * @covers \Url::standardize
 	 */
 	public function testStandardize()

@@ -4,7 +4,6 @@ namespace App\ToolsService;
 
 use App\ToolsService\Exception\ToolsApiBadResponseException;
 use App\ToolsService\Exception\ToolsApiConfigurationException;
-use Exception;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -50,12 +49,12 @@ class Client implements ClientInterface
 	 * @param string       $endpoint API endpoint to query
 	 * @param array<mixed> $body     Body of the request
 	 *
+	 * @return array<mixed>
+	 *
 	 * @throws ToolsApiBadResponseException
 	 * @throws AccessDeniedHttpException
 	 * @throws NotFoundHttpException
-	 * @throws Exception
-	 *
-	 * @return array<mixed>
+	 * @throws \Exception
 	 */
 	public function request(string $method, string $endpoint, array $body = []): array
 	{
@@ -84,7 +83,7 @@ class Client implements ClientInterface
 	}
 
 	/**
-	 * @throws Exception
+	 * @throws \Exception
 	 * @throws UnauthorizedHttpException
 	 * @throws NotFoundHttpException
 	 * @throws ToolsApiBadResponseException
@@ -98,7 +97,7 @@ class Client implements ClientInterface
 		} elseif ($statusCode == 404) {
 			throw new NotFoundHttpException(sprintf('The tools API endpoint "%s" could not be found. Make sure to provide a valid API URL.', $endpoint));
 		} elseif ($statusCode != 200) {
-			throw new Exception(sprintf('An unknown error (code %s) occured in a request to the tools API endpoint "%s".', $statusCode, $endpoint), $statusCode);
+			throw new \Exception(sprintf('An unknown error (code %s) occured in a request to the tools API endpoint "%s".', $statusCode, $endpoint), $statusCode);
 		}
 
 		$decodedResponse = $response->toArray();

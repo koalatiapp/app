@@ -16,9 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ProjectCreationController extends AbstractProjectController
 {
-	/**
-	 * @Route("/project/create", name="project_creation")
-	 */
+	#[Route(path: '/project/create', name: 'project_creation')]
 	public function projectCreation(Url $urlHelper, Request $request, StackDetector $stackDetector): Response
 	{
 		$project = new Project();
@@ -26,8 +24,8 @@ class ProjectCreationController extends AbstractProjectController
 		$availableOrganizationsById = [];
 
 		$formOptions = [
-			'available_owners' => NewProjectType::getDefaultAvailableOwners(),
-		];
+				'available_owners' => NewProjectType::getDefaultAvailableOwners(),
+			];
 
 		foreach ($this->getUser()->getOrganizationLinks() as $organizationLink) {
 			$organization = $organizationLink->getOrganization();
@@ -78,7 +76,7 @@ class ProjectCreationController extends AbstractProjectController
 		}
 
 		return $this->render('app/project/creation.html.twig', [
-			'form' => $form->createView(),
-		]);
+				'form' => $form->createView(),
+			]);
 	}
 }

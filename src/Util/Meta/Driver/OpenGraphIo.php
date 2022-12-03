@@ -14,8 +14,8 @@ class OpenGraphIo implements MetaDriverInterface
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	public function __construct(
-		private string $apiKey,
-		private HttpClientInterface $httpClient
+		private readonly string $apiKey,
+		private readonly HttpClientInterface $httpClient
 	) {
 	}
 

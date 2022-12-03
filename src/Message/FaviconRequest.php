@@ -4,14 +4,8 @@ namespace App\Message;
 
 class FaviconRequest
 {
-	/**
-	 * @var int
-	 */
-	private $projectId;
-
-	public function __construct(int $projectId)
+	public function __construct(private readonly int $projectId)
 	{
-		$this->projectId = $projectId;
 	}
 
 	public function getProjectId(): ?int

@@ -5,7 +5,6 @@ namespace App\Mercure;
 use App\Util\ClientMessageSerializer;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\Proxy;
-use Exception;
 use Hashids\HashidsInterface;
 use Symfony\Component\Mercure\Update;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -35,11 +34,11 @@ class UpdateDispatcher
 	 */
 	public function __construct(
 		iterable $entityHandlers,
-		private ClientMessageSerializer $serializer,
-		private MessageBusInterface $bus,
-		private HashidsInterface $idHasher,
-		private UserTopicBuilder $topicBuilder,
-		private EntityManagerInterface $entityManager,
+		private readonly ClientMessageSerializer $serializer,
+		private readonly MessageBusInterface $bus,
+		private readonly HashidsInterface $idHasher,
+		private readonly UserTopicBuilder $topicBuilder,
+		private readonly EntityManagerInterface $entityManager,
 	) {
 		foreach ($entityHandlers as $entityHandler) {
 			$this->entityHandlers[$entityHandler->getSupportedEntity()] = $entityHandler;
@@ -129,7 +128,7 @@ class UpdateDispatcher
 			"data" => $this->serializer->serialize($entity),
 			"id" => is_numeric($entityId) ? $this->idHasher->encode($entityId) : $entityId,
 		];
-		$jsonData = json_encode($data);
+		$jsonData = json_encode($data, JSON_THROW_ON_ERROR);
 
 		$affectedUsers = $handler->getAffectedUsers($entity);
 
@@ -150,7 +149,7 @@ class UpdateDispatcher
 			UpdateType::CREATE => "create",
 			UpdateType::UPDATE => "update",
 			UpdateType::DELETE => "delete",
-			default => throw new Exception("Invalid update type"),
+			default => throw new \Exception("Invalid update type"),
 		};
 	}
 }

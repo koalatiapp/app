@@ -8,7 +8,6 @@ use App\Entity\Testing\Recommendation;
 use App\Mercure\MercureEntityInterface;
 use App\Repository\ProjectRepository;
 use App\Util\Testing\RecommendationGroup;
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
@@ -18,122 +17,100 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass=ProjectRepository::class)
  * @SuppressWarnings("ExcessiveClassComplexity")
  */
+#[ORM\Entity(repositoryClass: ProjectRepository::class)]
 class Project implements MercureEntityInterface
 {
-	public const STATUS_NEW = 'NEW';
-	public const STATUS_IN_PROGRESS = 'IN_PROGRESS';
-	public const STATUS_MAINTENANCE = 'MAINTENANCE';
-	public const STATUS_COMPLETED = 'COMPLETED';
+	final public const STATUS_NEW = 'NEW';
+	final public const STATUS_IN_PROGRESS = 'IN_PROGRESS';
+	final public const STATUS_MAINTENANCE = 'MAINTENANCE';
+	final public const STATUS_COMPLETED = 'COMPLETED';
 
-	public const ROLE_ADMIN = 'ROLE_ADMIN';
-	public const ROLE_MANAGE = 'ROLE_MANAGE';
-	public const ROLE_USER = 'ROLE_USER';
-	public const ROLE_INVITED = 'ROLE_INVITED';
+	final public const ROLE_ADMIN = 'ROLE_ADMIN';
+	final public const ROLE_MANAGE = 'ROLE_MANAGE';
+	final public const ROLE_USER = 'ROLE_USER';
+	final public const ROLE_INVITED = 'ROLE_INVITED';
 
-	/**
-	 * @var int
-	 * @ORM\Id
-	 * @ORM\GeneratedValue
-	 * @ORM\Column(type="integer")
-	 * @Groups({"default"})
-	 */
-	private $id = null;
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[ORM\Column(type: 'integer')]
+	#[Groups(['default'])]
+	private ?int $id = null;
 
-	/**
-	 * @var string
-	 * @Assert\NotBlank
-	 * @Assert\Length(max = 255)
-	 * @ORM\Column(type="string", length=255)
-	 * @Groups({"default"})
-	 */
-	private $name;
+	#[Assert\NotBlank]
+	#[Assert\Length(max: 255)]
+	#[ORM\Column(type: 'string', length: 255)]
+	#[Groups(['default'])]
+	private ?string $name = null;
 
-	/**
-	 * @var \DateTimeInterface
-	 * @ORM\Column(type="datetime")
-	 * @Groups({"default"})
-	 */
-	private $dateCreated;
+	#[ORM\Column(type: 'datetime')]
+	#[Groups(['default'])]
+	private \DateTimeInterface $dateCreated;
 
-	/**
-	 * @var string
-	 * @Assert\NotBlank
-	 * @Assert\Url(relativeProtocol = true)
-	 * @ORM\Column(type="string", length=512)
-	 * @Groups({"default"})
-	 */
-	private $url;
+	#[Assert\NotBlank]
+	#[Assert\Url(relativeProtocol: true)]
+	#[ORM\Column(type: 'string', length: 512)]
+	#[Groups(['default'])]
+	private ?string $url = null;
 
 	/**
 	 * @var Collection<int, Page>
-	 * @ORM\OneToMany(targetEntity=Page::class, mappedBy="project")
-	 * @Groups({"project"})
-	 * @MaxDepth(1)
 	 */
-	private $pages;
+	#[ORM\OneToMany(targetEntity: Page::class, mappedBy: 'project')]
+	#[Groups(['project'])]
+	#[MaxDepth(1)]
+	private Collection $pages;
 
 	/**
 	 * @var Collection<int, ProjectMember>
-	 * @ORM\OneToMany(targetEntity=ProjectMember::class, mappedBy="project")
-	 * @Groups({"default"})
-	 * @MaxDepth(1)
 	 */
-	private $teamMembers;
+	#[ORM\OneToMany(targetEntity: ProjectMember::class, mappedBy: 'project')]
+	#[Groups(['default'])]
+	#[MaxDepth(1)]
+	private Collection $teamMembers;
 
 	/**
-	 * @ORM\OneToMany(targetEntity=IgnoreEntry::class, mappedBy="targetProject")
-	 *
-	 * @var \Doctrine\Common\Collections\Collection<int, IgnoreEntry>
+	 * @var Collection<int, IgnoreEntry>
 	 */
-	private $ignoreEntries;
+	#[ORM\OneToMany(targetEntity: IgnoreEntry::class, mappedBy: 'targetProject')]
+	private Collection $ignoreEntries;
 
 	/**
-	 * @ORM\Column(type="array", nullable=true)
-	 *
 	 * @var array<int,string>|null
 	 */
+	#[ORM\Column(type: 'array', nullable: true)]
 	private ?array $disabledTools = [];
 
-	/**
-	 * @ORM\OneToOne(targetEntity=Checklist::class, mappedBy="project", cascade={"persist", "remove"})
-	 */
-	private ?Checklist $checklist;
+	#[ORM\OneToOne(targetEntity: Checklist::class, mappedBy: 'project', cascade: ['persist', 'remove'])]
+	private ?Checklist $checklist = null;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity=User::class, inversedBy="personalProjects")
-	 * @ORM\JoinColumn(name="owner_user_id", referencedColumnName="id", onDelete="CASCADE")
-	 * @Groups({"default"})
-	 */
+	#[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'personalProjects')]
+	#[ORM\JoinColumn(name: 'owner_user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+	#[Groups(['default'])]
 	private ?User $ownerUser = null;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity=Organization::class, inversedBy="projects")
-	 * @ORM\JoinColumn(name="owner_organization_id", referencedColumnName="id", onDelete="CASCADE")
-	 * @Groups({"default"})
-	 */
+	#[ORM\ManyToOne(targetEntity: Organization::class, inversedBy: 'projects')]
+	#[ORM\JoinColumn(name: 'owner_organization_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+	#[Groups(['default'])]
 	private ?Organization $ownerOrganization = null;
 	/**
-	 * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="project")
-	 * @ORM\OrderBy({"isResolved" = "ASC"}, {"dateCreated" = "ASC"})
-	 * @Groups({"comments"})
-	 *
 	 * @var Collection<int,Comment>
 	 */
+	#[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'project')]
+	#[ORM\OrderBy(['isResolved' => 'ASC', 'dateCreated' => 'ASC'])]
+	#[Groups(['comments'])]
 	private Collection $comments;
 
 	/**
-	 * @ORM\Column(type="array", nullable=true)
-	 *
 	 * @var array<int,string>
 	 */
+	#[ORM\Column(type: 'array', nullable: true)]
 	private ?array $tags = [];
 
 	public function __construct()
 	{
-		$this->dateCreated = new DateTime();
+		$this->dateCreated = new \DateTime();
 		$this->pages = new ArrayCollection();
 		$this->teamMembers = new ArrayCollection();
 		$this->ignoreEntries = new ArrayCollection();
@@ -327,11 +304,11 @@ class Project implements MercureEntityInterface
 	 */
 	public function getActiveRecommendations(): ArrayCollection
 	{
-		return $this->getSortedRecommendations()->filter(function ($recommendation) {
-			return !$recommendation->getIsCompleted()
-							   && !$recommendation->isIgnored()
-							   && !$recommendation->getRelatedPage()->getIsIgnored();
-		});
+		return $this->getSortedRecommendations()->filter(
+			fn (Recommendation $recommendation = null) => !$recommendation->getIsCompleted()
+				&& !$recommendation->isIgnored()
+				&& !$recommendation->getRelatedPage()->getIsIgnored()
+		);
 	}
 
 	/**
@@ -398,9 +375,7 @@ class Project implements MercureEntityInterface
 
 	public function enableTool(string $tool): self
 	{
-		$this->disabledTools = array_filter($this->getDisabledTools(), function ($disabledTool) use ($tool) {
-			return strcasecmp($tool, $disabledTool) != 0;
-		});
+		$this->disabledTools = array_filter($this->getDisabledTools(), fn ($disabledTool) => strcasecmp($tool, $disabledTool) != 0);
 
 		return $this;
 	}
@@ -468,34 +443,25 @@ class Project implements MercureEntityInterface
 	 */
 	public function getComments(): Collection
 	{
-		return $this->comments->filter(function (Comment $comment) {
-			return !$comment->getThread();
-		});
+		return $this->comments->filter(fn (Comment $comment = null) => !$comment->getThread());
 	}
 
-	/**
-	 * @Groups({"default"})
-	 */
+	#[Groups(['default'])]
 	public function getCommentCount(): int
 	{
 		return $this->comments->count();
 	}
 
-	/**
-	 * @Groups({"default"})
-	 */
+	#[Groups(['default'])]
 	public function getUnresolvedCommentCount(): int
 	{
-		return $this->comments->filter(function (Comment $comment) {
-			return !$comment->isResolved() && !$comment->getThread();
-		})->count();
+		return $this->comments->filter(fn (Comment $comment = null) => !$comment->isResolved() && !$comment->getThread())->count();
 	}
 
 	/**
-	 * @Groups({"default"})
-	 *
 	 * @return array<int,string>
 	 */
+	#[Groups(['default'])]
 	public function getTags(): array
 	{
 		return $this->tags ?? [];

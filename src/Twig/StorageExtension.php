@@ -9,21 +9,15 @@ use Twig\TwigFilter;
 
 class StorageExtension extends AbstractExtension
 {
-	/**
-	 * @var \App\Storage\ProjectStorage
-	 */
-	private $projectStorage;
-
-	public function __construct(ProjectStorage $projectStorage)
+	public function __construct(private readonly ProjectStorage $projectStorage)
 	{
-		$this->projectStorage = $projectStorage;
 	}
 
 	public function getFilters(): array
 	{
 		return [
-			new TwigFilter('favicon', [$this, 'projectFavicon']),
-			new TwigFilter('thumbnail', [$this, 'projectThumbnail']),
+			new TwigFilter('favicon', $this->projectFavicon(...)),
+			new TwigFilter('thumbnail', $this->projectThumbnail(...)),
 		];
 	}
 

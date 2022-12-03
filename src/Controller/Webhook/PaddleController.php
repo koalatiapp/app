@@ -7,10 +7,7 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Subscription\Plan\NoPlan;
 use App\Subscription\PlanManager;
-use DateTime;
-use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Paddle\API as PaddleAPI;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,21 +25,19 @@ class PaddleController extends AbstractController
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	public function __construct(
-		private PaddleAPI $paddleApi,
-		private PlanManager $planManager,
-		private UserRepository $userRepository,
-		private EntityManagerInterface $entityManager,
-		private MailerInterface $mailer,
+		private readonly PaddleAPI $paddleApi,
+		private readonly PlanManager $planManager,
+		private readonly UserRepository $userRepository,
+		private readonly EntityManagerInterface $entityManager,
+		private readonly MailerInterface $mailer,
 	) {
 	}
 
-	/**
-	 * @Route("/webhook/paddle", name="webhook_paddle")
-	 */
+	#[Route(path: '/webhook/paddle', name: 'webhook_paddle')]
 	public function receiveAlert(Request $request): Response
 	{
 		if (!$this->verifySignature($request)) {
-			throw new Exception('Paddle webhook has failed security verification', 401);
+			throw new \Exception('Paddle webhook has failed security verification', 401);
 		}
 
 		$alertType = $request->request->get('alert_name');
@@ -52,18 +47,11 @@ class PaddleController extends AbstractController
 			$alertType = 'subscription_paused';
 		}
 
-		switch ($alertType) {
-			case 'subscription_created':
-			case 'subscription_updated':
-				return $this->updateUserSubscription($request);
-				// @TODO: Add subscription change email (ex.: THANK YOU)
-			case 'subscription_paused':
-			case 'subscription_cancelled':
-				return $this->cancelUserSubscription($request);
-				// @TODO: Add subscription cancellation/pause email (ex.: SORRY TO SEE YOU GO)
-		}
-
-		throw new Exception(sprintf('The "%s" Paddle alert is not handled by the application at the moment.', $alertType));
+		return match ($alertType) {
+			'subscription_created', 'subscription_updated' => $this->updateUserSubscription($request),
+			'subscription_paused', 'subscription_cancelled' => $this->cancelUserSubscription($request),
+			default => throw new \Exception(sprintf('The "%s" Paddle alert is not handled by the application at the moment.', $alertType)),
+		};
 	}
 
 	/**
@@ -81,7 +69,7 @@ class PaddleController extends AbstractController
 		$user->setPaddleUserId((string) $paddleUserId)
 			->setPaddleSubscriptionId($paddleSubscriptionId);
 		$paddleUser = $this->paddleApi->subscription()->listUsers($paddleSubscriptionId)[0] ?? null;
-		$nextPaymentDate = new DateTimeImmutable($paddleUser['next_payment']['date']);
+		$nextPaymentDate = new \DateTimeImmutable($paddleUser['next_payment']['date']);
 
 		if ($newPlan->isDowngradeComparedTo($originalPlan)) {
 			/*
@@ -116,7 +104,7 @@ class PaddleController extends AbstractController
 		$endDateString = $request->request->get('cancellation_effective_date');
 
 		$user->setUpcomingSubscriptionPlan(NoPlan::UNIQUE_NAME)
-			->setSubscriptionChangeDate(new DateTime($endDateString))
+			->setSubscriptionChangeDate(new \DateTime($endDateString))
 			->setSubscriptionRenewalDate(null)
 			->setPaddleSubscriptionId(null);
 		$this->handleDowngradeSideEffects($user);
@@ -159,7 +147,7 @@ class PaddleController extends AbstractController
 			$user = $this->userRepository->findOneByEmail($email);
 
 			if (!$user) {
-				throw new Exception('No user was found for the provided Paddle ID and email address.');
+				throw new \Exception('No user was found for the provided Paddle ID and email address.');
 			}
 		}
 

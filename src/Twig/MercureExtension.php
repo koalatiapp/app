@@ -4,22 +4,21 @@ namespace App\Twig;
 
 use App\Entity\User;
 use App\Mercure\UserTopicBuilder;
-use DateTimeImmutable;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 class MercureExtension extends AbstractExtension
 {
 	public function __construct(
-		private UserTopicBuilder $userTopicBuilder,
+		private readonly UserTopicBuilder $userTopicBuilder,
 	) {
 	}
 
 	public function getFunctions(): array
 	{
 		return [
-			new TwigFunction('mercure_topic', [$this, 'getMercureTopic']),
-			new TwigFunction('mercure_config', [$this, 'getMercureConfig']),
+			new TwigFunction('mercure_topic', $this->getMercureTopic(...)),
+			new TwigFunction('mercure_config', $this->getMercureConfig(...)),
 		];
 	}
 
@@ -36,7 +35,7 @@ class MercureExtension extends AbstractExtension
 		return [
 			"subscribe" => $this->getMercureTopic($user),
 			"additionalClaims" => [
-				"exp" => new DateTimeImmutable("+1 day"),
+				"exp" => new \DateTimeImmutable("+1 day"),
 			],
 		];
 	}

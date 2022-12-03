@@ -18,16 +18,14 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 class SecuritySettingsController extends AbstractController
 {
 	public function __construct(
-		private UserPasswordHasherInterface $passwordHasher,
-		private TokenStorageInterface $tokenStorage,
-		private EntityManagerInterface $entityManager,
-		private EmailVerifier $emailVerifier,
+		private readonly UserPasswordHasherInterface $passwordHasher,
+		private readonly TokenStorageInterface $tokenStorage,
+		private readonly EntityManagerInterface $entityManager,
+		private readonly EmailVerifier $emailVerifier,
 	) {
 	}
 
-	/**
-	 * @Route("/account/security", name="manage_account_security")
-	 */
+	#[Route(path: '/account/security', name: 'manage_account_security')]
 	public function securitySettings(Request $request): Response
 	{
 		$deletionForm = $this->processDeletionForm($request);
@@ -44,10 +42,10 @@ class SecuritySettingsController extends AbstractController
 		}
 
 		return $this->render('app/user/security.html.twig', [
-			'passwordForm' => $passwordForm->createView(),
-			'emailForm' => $emailForm->createView(),
-			'deletionForm' => $deletionForm->createView(),
-		]);
+				'passwordForm' => $passwordForm->createView(),
+				'emailForm' => $emailForm->createView(),
+				'deletionForm' => $deletionForm->createView(),
+			]);
 	}
 
 	private function processPasswordForm(Request $request): FormInterface

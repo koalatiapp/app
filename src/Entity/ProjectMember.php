@@ -6,36 +6,24 @@ use App\Repository\ProjectMemberRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-/**
- * @ORM\Entity(repositoryClass=ProjectMemberRepository::class)
- */
+#[ORM\Entity(repositoryClass: ProjectMemberRepository::class)]
 class ProjectMember
 {
-	/**
-	 * @ORM\Id
-	 * @ORM\GeneratedValue
-	 * @ORM\Column(type="integer")
-	 * @Groups({"default"})
-	 */
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[ORM\Column(type: 'integer')]
+	#[Groups(['default'])]
 	private ?int $id = null;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity=Project::class, inversedBy="teamMembers")
-	 * @ORM\JoinColumn(name="project_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
-	 * @Groups({"default"})
-	 */
-	private ?Project $project;
+	#[ORM\ManyToOne(targetEntity: Project::class, inversedBy: 'teamMembers')]
+	#[ORM\JoinColumn(name: 'project_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
+	#[Groups(['default'])]
+	private ?Project $project = null;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity=User::class, inversedBy="projectLinks")
-	 * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
-	 * @Groups({"default"})
-	 */
-	private ?User $user;
-
-	public function __construct()
-	{
-	}
+	#[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'projectLinks')]
+	#[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
+	#[Groups(['default'])]
+	private ?User $user = null;
 
 	public function getId(): ?int
 	{

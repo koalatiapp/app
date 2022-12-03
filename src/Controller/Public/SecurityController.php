@@ -11,9 +11,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
-	/**
-	 * @Route("/login", name="login")
-	 */
+	#[Route(path: '/login', name: 'login')]
 	public function login(AuthenticationUtils $authenticationUtils, SelfHosting $selfHosting, InvitationValidator $invitationValidator): Response
 	{
 		if ($this->getUser()) {
@@ -38,15 +36,13 @@ class SecurityController extends AbstractController
 		$lastUsername = $authenticationUtils->getLastUsername();
 
 		return $this->render('public/security/login.html.twig', [
-			'last_username' => $lastUsername,
-			'error' => $error,
-			'signup_allowed' => $signupAllowed,
-		]);
+				'last_username' => $lastUsername,
+				'error' => $error,
+				'signup_allowed' => $signupAllowed,
+			]);
 	}
 
-	/**
-	 * @Route("/logout", name="logout")
-	 */
+	#[Route(path: '/logout', name: 'logout')]
 	public function logout(): void
 	{
 	}

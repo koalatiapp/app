@@ -31,9 +31,7 @@ class ProjectSearchTest extends TestCase
 
 		$this->mockRouter = $this->createMock(RouterInterface::class);
 		$this->mockRouter->method('generate')->willReturnCallback(
-			function ($route, $parameters) {
-				return 'https://app.koalati.com/project/'.$parameters['id'];
-			}
+			fn ($route, $parameters) => 'https://app.koalati.com/project/'.$parameters['id']
 		);
 	}
 

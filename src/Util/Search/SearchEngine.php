@@ -10,9 +10,9 @@ class SearchEngine
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	public function __construct(
-		private ProjectSearch $projectSearch,
-		private OrganizationSearch $organizationSearch,
-		private CommentSearch $commentSearch,
+		private readonly ProjectSearch $projectSearch,
+		private readonly OrganizationSearch $organizationSearch,
+		private readonly CommentSearch $commentSearch,
 	) {
 	}
 

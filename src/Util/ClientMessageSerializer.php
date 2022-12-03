@@ -13,8 +13,8 @@ class ClientMessageSerializer
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.serializer)
 	 */
 	public function __construct(
-		private SerializerInterface $serializer,
-		private HashidsInterface $idHasher,
+		private readonly SerializerInterface $serializer,
+		private readonly HashidsInterface $idHasher,
 	) {
 	}
 
@@ -30,11 +30,9 @@ class ClientMessageSerializer
 		$idHasher = $this->idHasher;
 
 		return json_decode($this->serializer->serialize($data, 'json', [
-			AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object) use ($idHasher) {
-				return $idHasher->encode($object->getId());
-			},
-			AbstractNormalizer::GROUPS => array_merge(['default'], $groups),
+			AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => fn ($object) => $idHasher->encode($object->getId()),
+			AbstractNormalizer::GROUPS => ['default', ...$groups],
 			AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true,
-		 ]), true);
+		 ]), true, 512, JSON_THROW_ON_ERROR);
 	}
 }

@@ -6,22 +6,21 @@ use App\Entity\Organization;
 use App\Entity\OrganizationMember;
 use App\Entity\User;
 use App\Subscription\PlanManager;
-use Exception;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 class OrganizationVoter extends Voter
 {
-	public const VIEW = 'view';
-	public const PARTICIPATE = 'participate';
-	public const MANAGE = 'manage';
-	public const OWN_ORGANIZATION = 'own_organization';
+	final public const VIEW = 'view';
+	final public const PARTICIPATE = 'participate';
+	final public const MANAGE = 'manage';
+	final public const OWN_ORGANIZATION = 'own_organization';
 
 	/**
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	public function __construct(
-		private PlanManager $planManager,
+		private readonly PlanManager $planManager,
 	) {
 	}
 
@@ -40,7 +39,7 @@ class OrganizationVoter extends Voter
 	protected function voteOnAttribute(string $attribute, mixed $organization, TokenInterface $token): bool
 	{
 		if (!in_array($attribute, [self::VIEW, self::PARTICIPATE, self::MANAGE, self::OWN_ORGANIZATION])) {
-			throw new Exception("Undefined organization voter attribute: $attribute");
+			throw new \Exception("Undefined organization voter attribute: $attribute");
 		}
 
 		$user = $token->getUser();

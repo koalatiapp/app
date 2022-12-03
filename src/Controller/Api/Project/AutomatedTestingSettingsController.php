@@ -10,17 +10,13 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/internal-api/project/automated-testing-settings", name="api_project_automated_testing_settings_")
- */
+#[Route(path: '/internal-api/project/automated-testing-settings', name: 'api_project_automated_testing_settings_')]
 class AutomatedTestingSettingsController extends AbstractController
 {
 	use ApiControllerTrait;
 	use PreventDirectAccessTrait;
 
-	/**
-	 * @Route("/tools", methods={"GET","HEAD"}, name="tools_list", options={"expose": true})
-	 */
+	#[Route(path: '/tools', methods: ['GET', 'HEAD'], name: 'tools_list', options: ['expose' => true])]
 	public function listTools(Request $request, AvailableToolsFetcher $availableToolsFetcher): JsonResponse
 	{
 		$projectId = $request->query->get('project_id');
@@ -35,18 +31,16 @@ class AutomatedTestingSettingsController extends AbstractController
 
 		foreach ($availableTools as $tool) {
 			$list[] = [
-				'id' => $tool->name,
-				'enabled' => $project->hasToolEnabled($tool->name),
-				'tool' => $tool,
-			];
+					'id' => $tool->name,
+					'enabled' => $project->hasToolEnabled($tool->name),
+					'tool' => $tool,
+				];
 		}
 
 		return $this->apiSuccess($list);
 	}
 
-	/**
-	 * @Route("/tools", methods={"POST", "PUT"}, name="tools_toggle", options={"expose": true})
-	 */
+	#[Route(path: '/tools', methods: ['POST', 'PUT'], name: 'tools_toggle', options: ['expose' => true])]
 	public function toggleTool(Request $request): JsonResponse
 	{
 		$projectId = $request->request->get('project_id');
@@ -78,8 +72,8 @@ class AutomatedTestingSettingsController extends AbstractController
 		$em->flush();
 
 		return $this->apiSuccess([
-			'tool' => $toolName,
-			'enabled' => $project->hasToolEnabled($toolName),
-		]);
+				'tool' => $toolName,
+				'enabled' => $project->hasToolEnabled($toolName),
+			]);
 	}
 }

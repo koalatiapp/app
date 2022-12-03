@@ -4,11 +4,8 @@ namespace App\Message;
 
 class SitemapRequest
 {
-	private int $projectId;
-
-	public function __construct(int $projectId)
+	public function __construct(private readonly int $projectId)
 	{
-		$this->projectId = $projectId;
 	}
 
 	public function getProjectId(): int

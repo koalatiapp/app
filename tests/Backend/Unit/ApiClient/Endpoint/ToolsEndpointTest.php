@@ -13,10 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  */
 class ToolsEndpointTest extends WebTestCase
 {
-	/**
-	 * @var ToolsEndpoint
-	 */
-	private $toolsEndpoint;
+	private ToolsEndpoint $toolsEndpoint;
 
 	public function setup(): void
 	{

@@ -11,7 +11,6 @@ use App\Subscription\Plan\SoloAnnualPlan;
 use App\Subscription\Plan\SoloPlan;
 use App\Subscription\PlanManager;
 use App\Util\SelfHosting;
-use DateTime;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,7 +21,7 @@ class SubscriptionController extends AbstractController
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	public function __construct(
-		private PlanManager $planManager,
+		private readonly PlanManager $planManager,
 		SelfHosting $selfHosting,
 	) {
 		if ($selfHosting->isSelfHosted()) {
@@ -30,35 +29,33 @@ class SubscriptionController extends AbstractController
 		}
 	}
 
-	/**
-	 * @Route("/account/subscription", name="manage_subscription")
-	 */
+	#[Route(path: '/account/subscription', name: 'manage_subscription')]
 	public function manageSubscription(): Response
 	{
 		$user = $this->getUser();
 		$plan = $this->planManager->getPlanFromEntity($user);
 		$plans = [
-			$this->planManager->getPlanFromUniqueName(SoloPlan::UNIQUE_NAME),
-			$this->planManager->getPlanFromUniqueName(SmallTeamPlan::UNIQUE_NAME),
-			$this->planManager->getPlanFromUniqueName(BusinessPlan::UNIQUE_NAME),
-			$this->planManager->getPlanFromUniqueName(SoloAnnualPlan::UNIQUE_NAME),
-			$this->planManager->getPlanFromUniqueName(SmallTeamAnnualPlan::UNIQUE_NAME),
-			$this->planManager->getPlanFromUniqueName(BusinessAnnualPlan::UNIQUE_NAME),
-		];
+				$this->planManager->getPlanFromUniqueName(SoloPlan::UNIQUE_NAME),
+				$this->planManager->getPlanFromUniqueName(SmallTeamPlan::UNIQUE_NAME),
+				$this->planManager->getPlanFromUniqueName(BusinessPlan::UNIQUE_NAME),
+				$this->planManager->getPlanFromUniqueName(SoloAnnualPlan::UNIQUE_NAME),
+				$this->planManager->getPlanFromUniqueName(SmallTeamAnnualPlan::UNIQUE_NAME),
+				$this->planManager->getPlanFromUniqueName(BusinessAnnualPlan::UNIQUE_NAME),
+			];
 
 		$upcomingPlan = null;
 
 		if ($user->getUpcomingSubscriptionPlan() &&
-			$user->getSubscriptionPlan() != $user->getUpcomingSubscriptionPlan() &&
-			$user->getSubscriptionChangeDate() >= new DateTime()) {
+				$user->getSubscriptionPlan() != $user->getUpcomingSubscriptionPlan() &&
+				$user->getSubscriptionChangeDate() >= new \DateTime()) {
 			$upcomingPlan = $this->planManager->getPlanFromUniqueName($user->getUpcomingSubscriptionPlan());
 		}
 
 		return $this->render('app/user/subscription.html.twig', [
-			'currentPlan' => $plan,
-			'upcomingPlan' => $upcomingPlan,
-			'upcomingPlanChangeDate' => $user->getSubscriptionChangeDate(),
-			'plans' => $plans,
-		]);
+				'currentPlan' => $plan,
+				'upcomingPlan' => $upcomingPlan,
+				'upcomingPlanChangeDate' => $user->getSubscriptionChangeDate(),
+				'plans' => $plans,
+			]);
 	}
 }

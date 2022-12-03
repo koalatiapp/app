@@ -16,10 +16,10 @@ class CommentSearch implements EntitySearchInterface
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	public function __construct(
-		private UrlGeneratorInterface $router,
-		private CommentRepository $commentRepository,
-		private TranslatorInterface $translator,
-		private HashidsInterface $idHasher
+		private readonly UrlGeneratorInterface $router,
+		private readonly CommentRepository $commentRepository,
+		private readonly TranslatorInterface $translator,
+		private readonly HashidsInterface $idHasher
 	) {
 	}
 

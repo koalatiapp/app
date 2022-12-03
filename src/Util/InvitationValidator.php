@@ -16,10 +16,10 @@ use Symfony\Component\Routing\RouterInterface;
 class InvitationValidator
 {
 	public function __construct(
-		private SessionInterface $session,
-		private RouterInterface $router,
-		private OrganizationInvitationRepository $invitationRepository,
-		private HashidsInterface $idHasher,
+		private readonly SessionInterface $session,
+		private readonly RouterInterface $router,
+		private readonly OrganizationInvitationRepository $invitationRepository,
+		private readonly HashidsInterface $idHasher,
 	) {
 	}
 
@@ -35,7 +35,7 @@ class InvitationValidator
 
 		try {
 			$route = $this->router->match($targetRequest->getPathInfo());
-		} catch (Exception $e) {
+		} catch (Exception) {
 			return false;
 		}
 

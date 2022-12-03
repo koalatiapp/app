@@ -19,9 +19,7 @@ trait ProjectControllerTrait
 	 */
 	protected function getProject(int $id): ?Project
 	{
-		/**
-		 * @var \App\Repository\ProjectRepository
-		 */
+		/** @var \App\Repository\ProjectRepository */
 		$repository = $this->getDoctrine()->getRepository(Project::class);
 		$project = $repository->find($id);
 

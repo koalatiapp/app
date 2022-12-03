@@ -23,10 +23,10 @@ class SendTrialNoticesCommand extends Command
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	public function __construct(
-		private UserRepository $userRepository,
-		private EntityManagerInterface $entityManager,
-		private MailerInterface $mailer,
-		private TranslatorInterface $translator,
+		private readonly UserRepository $userRepository,
+		private readonly EntityManagerInterface $entityManager,
+		private readonly MailerInterface $mailer,
+		private readonly TranslatorInterface $translator,
 	) {
 		parent::__construct();
 	}

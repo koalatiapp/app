@@ -6,20 +6,14 @@ use App\Entity\Project;
 use App\Entity\Testing\Recommendation;
 use App\Entity\User;
 use App\Mercure\MercureEntityInterface;
-use Countable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * A group of recommendations of the same type.
  */
-class RecommendationGroup implements Countable, MercureEntityInterface
+class RecommendationGroup implements \Countable, MercureEntityInterface
 {
-	/**
-	 * @var ArrayCollection<int, Recommendation>
-	 */
-	private ArrayCollection $recommendations;
-
 	/**
 	 * Indicates whether the recommendation collection is sorted by priority or not.
 	 */
@@ -28,16 +22,14 @@ class RecommendationGroup implements Countable, MercureEntityInterface
 	/**
 	 * @param ArrayCollection<int, Recommendation> $recommendations
 	 */
-	public function __construct(ArrayCollection $recommendations)
+	public function __construct(private ArrayCollection $recommendations)
 	{
-		$this->recommendations = $recommendations;
 	}
 
 	/**
-	 * @Groups({"recommendation_group"})
-	 *
 	 * @return ArrayCollection<int, Recommendation>
 	 */
+	#[Groups(['recommendation_group'])]
 	public function getRecommendations(): ArrayCollection
 	{
 		return $this->recommendations;
@@ -51,17 +43,13 @@ class RecommendationGroup implements Countable, MercureEntityInterface
 		return $this;
 	}
 
-	/**
-	 * @Groups({"default"})
-	 */
+	#[Groups(['default'])]
 	public function getSampleId(): ?int
 	{
 		return $this->getSample()?->getId() ?: null;
 	}
 
-	/**
-	 * @Groups({"recommendation_group"})
-	 */
+	#[Groups(['recommendation_group'])]
 	public function getSample(): ?Recommendation
 	{
 		if (!$this->isSorted) {
@@ -71,9 +59,7 @@ class RecommendationGroup implements Countable, MercureEntityInterface
 		return $this->getRecommendations()->first() ?: null;
 	}
 
-	/**
-	 * @Groups({"default"})
-	 */
+	#[Groups(['default'])]
 	public function getProjectId(): ?int
 	{
 		return $this->getSample()?->getProject()->getId();
@@ -84,49 +70,37 @@ class RecommendationGroup implements Countable, MercureEntityInterface
 		return $this->getSample()?->getProject();
 	}
 
-	/**
-	 * @Groups({"default"})
-	 */
+	#[Groups(['default'])]
 	public function getType(): ?string
 	{
 		return $this->getSample()?->getType();
 	}
 
-	/**
-	 * @Groups({"default"})
-	 */
+	#[Groups(['default'])]
 	public function getUniqueName(): ?string
 	{
 		return $this->getSample()?->getUniqueName();
 	}
 
-	/**
-	 * @Groups({"default"})
-	 */
+	#[Groups(['default'])]
 	public function getTemplate(): ?string
 	{
 		return $this->getSample()?->getTemplate();
 	}
 
-	/**
-	 * @Groups({"default"})
-	 */
+	#[Groups(['default'])]
 	public function getTitle(): ?string
 	{
 		return $this->getSample()?->getTitle();
 	}
 
-	/**
-	 * @Groups({"default"})
-	 */
+	#[Groups(['default'])]
 	public function getHtmlTitle(): ?string
 	{
 		return $this->getSample()?->getHtmlTitle();
 	}
 
-	/**
-	 * @Groups({"default"})
-	 */
+	#[Groups(['default'])]
 	public function getProjectOwnerType(): ?string
 	{
 		$projectOwner = $this->getSample()?->getProject()->getOwner();
@@ -138,9 +112,7 @@ class RecommendationGroup implements Countable, MercureEntityInterface
 		return 'organization';
 	}
 
-	/**
-	 * @Groups({"default"})
-	 */
+	#[Groups(['default'])]
 	public function getProjectOwnerId(): ?int
 	{
 		$projectOwner = $this->getSample()?->getProject()->getOwner();
@@ -148,9 +120,7 @@ class RecommendationGroup implements Countable, MercureEntityInterface
 		return $projectOwner->getId();
 	}
 
-	/**
-	 * @Groups({"default"})
-	 */
+	#[Groups(['default'])]
 	public function getTool(): ?string
 	{
 		return $this->getSample()?->getParentResult()?->getParentResponse()?->getTool();
@@ -161,9 +131,7 @@ class RecommendationGroup implements Countable, MercureEntityInterface
 		return $this->recommendations->count();
 	}
 
-	/**
-	 * @Groups({"default"})
-	 */
+	#[Groups(['default'])]
 	public function getCount(): int
 	{
 		return $this->count();
@@ -224,9 +192,7 @@ class RecommendationGroup implements Countable, MercureEntityInterface
 		return $groups;
 	}
 
-	/**
-	 * @Groups({"default"})
-	 */
+	#[Groups(['default'])]
 	public function getId(): string
 	{
 		return $this->getUniqueMatchingIdentifier();

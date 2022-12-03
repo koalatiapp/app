@@ -26,7 +26,7 @@ trait ApiControllerTrait
 	 */
 	private int $cacheDuration = 0;
 
-	/** @required */
+	#[\Symfony\Contracts\Service\Attribute\Required]
 	public function setDependencies(
 		UpdateDispatcher $updateDispatcher,
 		ClientMessageSerializer $serializer,
@@ -52,9 +52,7 @@ trait ApiControllerTrait
 			$id = $this->idHasher->decode($id)[0];
 		}
 
-		/**
-		 * @var \App\Repository\ProjectRepository
-		 */
+		/** @var \App\Repository\ProjectRepository */
 		$repository = $this->getDoctrine()->getRepository(Project::class);
 		$project = $repository->find($id);
 
@@ -88,9 +86,7 @@ trait ApiControllerTrait
 			$id = $this->idHasher->decode($id)[0];
 		}
 
-		/**
-		 * @var \App\Repository\OrganizationRepository
-		 */
+		/** @var \App\Repository\OrganizationRepository */
 		$repository = $this->getDoctrine()->getRepository(Organization::class);
 		$organization = $repository->find($id);
 
@@ -112,13 +108,11 @@ trait ApiControllerTrait
 	 */
 	protected function apiError(string $message, int $code = 400): JsonResponse
 	{
-		$response = new JsonResponse([
+		return new JsonResponse([
 			'status' => "error",
 			'code' => $code,
 			'message' => $message,
 		]);
-
-		return $response;
 	}
 
 	/**

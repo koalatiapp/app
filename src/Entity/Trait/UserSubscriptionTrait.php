@@ -2,8 +2,6 @@
 
 namespace App\Entity\Trait;
 
-use DateTime;
-use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -13,36 +11,24 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 trait UserSubscriptionTrait
 {
-	/**
-	 * @ORM\Column(type="string", nullable=true)
-	 */
+	#[ORM\Column(type: 'string', nullable: true)]
 	private ?string $paddleUserId = null;
 
-	/**
-	 * @ORM\Column(type="string", nullable=true)
-	 */
+	#[ORM\Column(type: 'string', nullable: true)]
 	private ?string $paddleSubscriptionId = null;
 
-	/**
-	 * @ORM\Column(type="string", length=255, nullable=true)
-	 * @Groups({"self"})
-	 */
+	#[ORM\Column(type: 'string', length: 255, nullable: true)]
+	#[Groups(['self'])]
 	private ?string $subscriptionPlan = null;
 
-	/**
-	 * @ORM\Column(type="string", length=255, nullable=true)
-	 */
+	#[ORM\Column(type: 'string', length: 255, nullable: true)]
 	private ?string $upcomingSubscriptionPlan = null;
 
-	/**
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	private ?DateTimeInterface $subscriptionChangeDate = null;
+	#[ORM\Column(type: 'datetime', nullable: true)]
+	private ?\DateTimeInterface $subscriptionChangeDate = null;
 
-	/**
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	private ?DateTimeInterface $subscriptionRenewalDate = null;
+	#[ORM\Column(type: 'datetime', nullable: true)]
+	private ?\DateTimeInterface $subscriptionRenewalDate = null;
 
 	public function getPaddleUserId(): ?string
 	{
@@ -71,7 +57,7 @@ trait UserSubscriptionTrait
 	public function getSubscriptionPlan(): ?string
 	{
 		// If the subscription change date is past, the user is now on the upcoming plan.
-		if ($this->getsubscriptionChangeDate() && $this->getsubscriptionChangeDate() < new DateTime()) {
+		if ($this->getsubscriptionChangeDate() && $this->getsubscriptionChangeDate() < new \DateTime()) {
 			return $this->getUpcomingSubscriptionPlan();
 		}
 
@@ -97,24 +83,24 @@ trait UserSubscriptionTrait
 		return $this;
 	}
 
-	public function getSubscriptionChangeDate(): ?DateTimeInterface
+	public function getSubscriptionChangeDate(): ?\DateTimeInterface
 	{
 		return $this->subscriptionChangeDate;
 	}
 
-	public function setSubscriptionChangeDate(?DateTimeInterface $subscriptionChangeDate): static
+	public function setSubscriptionChangeDate(?\DateTimeInterface $subscriptionChangeDate): static
 	{
 		$this->subscriptionChangeDate = $subscriptionChangeDate;
 
 		return $this;
 	}
 
-	public function getSubscriptionRenewalDate(): ?DateTimeInterface
+	public function getSubscriptionRenewalDate(): ?\DateTimeInterface
 	{
 		return $this->subscriptionRenewalDate;
 	}
 
-	public function setSubscriptionRenewalDate(?DateTimeInterface $subscriptionRenewalDate): static
+	public function setSubscriptionRenewalDate(?\DateTimeInterface $subscriptionRenewalDate): static
 	{
 		$this->subscriptionRenewalDate = $subscriptionRenewalDate;
 

@@ -14,9 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/internal-api/testing/recommendations", name="api_testing_recommendation_")
- */
+#[Route(path: '/internal-api/testing/recommendations', name: 'api_testing_recommendation_')]
 class RecommendationController extends AbstractController
 {
 	use ApiControllerTrait;
@@ -27,9 +25,8 @@ class RecommendationController extends AbstractController
 	 *
 	 * Available query parameters:
 	 * - `project_id` - `int` (required)
-	 *
-	 * @Route("/groups", methods={"GET","HEAD"}, name="group_list", options={"expose": true})
 	 */
+	#[Route(path: '/groups', methods: ['GET', 'HEAD'], name: 'group_list', options: ['expose' => true])]
 	public function listGroups(Request $request): JsonResponse
 	{
 		$projectId = $request->query->get('project_id');
@@ -46,9 +43,8 @@ class RecommendationController extends AbstractController
 
 	/**
 	 * Return the detailed record of a recommendation group.
-	 *
-	 * @Route("/groups/{id}", methods={"GET","HEAD"}, name="group_details", options={"expose": true})
 	 */
+	#[Route(path: '/groups/{id}', methods: ['GET', 'HEAD'], name: 'group_details', options: ['expose' => true])]
 	public function detailsGroup(int $id, RecommendationRepository $recommendationRepository): JsonResponse
 	{
 		$recommendation = $recommendationRepository->find($id);
@@ -78,9 +74,8 @@ class RecommendationController extends AbstractController
 
 	/**
 	 * Marks all recommendations from a given group as completed.
-	 *
-	 * @Route("/groups/{id}/complete", methods={"PUT"}, name="group_complete", options={"expose": true})
 	 */
+	#[Route(path: '/groups/{id}/complete', methods: ['PUT'], name: 'group_complete', options: ['expose' => true])]
 	public function completeGroup(int $id, RecommendationRepository $recommendationRepository): JsonResponse
 	{
 		$recommendation = $recommendationRepository->find($id);
@@ -129,9 +124,8 @@ class RecommendationController extends AbstractController
 	 * Available query parameters:
 	 * - `project_id` - `int` (required)
 	 * - `show_completed` - `bool` (defaults to `false`) - Whether completed recommendations should be included
-	 *
-	 * @Route("", methods={"GET","HEAD"}, name="list", options={"expose": true})
 	 */
+	#[Route(path: '', methods: ['GET', 'HEAD'], name: 'list', options: ['expose' => true])]
 	public function list(Request $request): JsonResponse
 	{
 		$projectId = $request->query->get('project_id');
@@ -151,9 +145,8 @@ class RecommendationController extends AbstractController
 
 	/**
 	 * Returns the detailed record of a single recommmendation.
-	 *
-	 * @Route("/{id}", methods={"GET","HEAD"}, name="details", options={"expose": true})
 	 */
+	#[Route(path: '/{id}', methods: ['GET', 'HEAD'], name: 'details', options: ['expose' => true])]
 	public function details(int $id, RecommendationRepository $recommendationRepository): JsonResponse
 	{
 		$recommendation = $recommendationRepository->find($id);

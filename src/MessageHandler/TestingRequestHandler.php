@@ -24,12 +24,12 @@ class TestingRequestHandler implements MessageHandlerInterface
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	public function __construct(
-		private ProjectRepository $projectRepository,
-		private ToolsEndpoint $toolsEndpoint,
-		private AvailableToolsFetcher $availableToolsFetcher,
-		private EntityManagerInterface $entityManager,
-		private PlanManager $planManager,
-		private MessageBusInterface $bus,
+		private readonly ProjectRepository $projectRepository,
+		private readonly ToolsEndpoint $toolsEndpoint,
+		private readonly AvailableToolsFetcher $availableToolsFetcher,
+		private readonly EntityManagerInterface $entityManager,
+		private readonly PlanManager $planManager,
+		private readonly MessageBusInterface $bus,
 	) {
 	}
 
@@ -50,14 +50,12 @@ class TestingRequestHandler implements MessageHandlerInterface
 
 		$maxActivePageCount = $plan->getMaxActivePagesPerProject();
 		$pages = $this->getPagesToTest($message, $project);
-		$pageUrls = $pages->map(fn ($page) => $page->getUrl())->toArray();
+		$pageUrls = $pages->map(fn (Page $page = null) => $page->getUrl())->toArray();
 		$priority = $project->getPriority();
 		$tools = $this->getToolsToUse($message, $project);
 
 		// Remove invalid URLs
-		$pageUrls = array_filter($pageUrls, function ($url) {
-			return (bool) filter_var($url, FILTER_VALIDATE_URL);
-		});
+		$pageUrls = array_filter($pageUrls, fn ($url) => (bool) filter_var($url, FILTER_VALIDATE_URL));
 
 		// If there are no enable tools or active pages, the handling ends here.
 		if (!count($tools) || !count($pageUrls)) {
@@ -66,9 +64,7 @@ class TestingRequestHandler implements MessageHandlerInterface
 
 		// Sort URLs by length, with the shortests ones appearing first.
 		// Pages with shorter URLs are often more relevant for testing.
-		usort($pageUrls, function (string $urlA, string $urlB) {
-			return strlen(urldecode($urlA)) <=> strlen(urldecode($urlB));
-		});
+		usort($pageUrls, fn (string $urlA, string $urlB) => strlen(urldecode($urlA)) <=> strlen(urldecode($urlB)));
 
 		// Limit the number of URLs sent for testing to reduce load on server
 		if (count($pageUrls) > $maxActivePageCount) {
@@ -121,9 +117,7 @@ class TestingRequestHandler implements MessageHandlerInterface
 
 		// If the testing request specifies pages to test, filter pages using this specification
 		if ($message->getPageIds()) {
-			return $pages->filter(function ($page) use ($message) {
-				return in_array($page->getId(), $message->getPageIds());
-			});
+			return $pages->filter(fn (Page $page = null) => in_array($page->getId(), $message->getPageIds()));
 		}
 
 		return $pages;

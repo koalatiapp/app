@@ -10,25 +10,21 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/internal-api/search", name="api_search")
- */
+#[Route(path: '/internal-api/search', name: 'api_search')]
 class SearchController extends AbstractController
 {
 	use ApiControllerTrait;
 	use PreventDirectAccessTrait;
 
-	/**
-	 * @Route("", methods={"POST"}, name="", options={"expose": true})
-	 */
+	#[Route(path: '', methods: ['POST'], name: '', options: ['expose' => true])]
 	public function search(Request $request, SearchEngine $searchEngine): Response
 	{
 		$query = $request->request->get('query');
 		$results = $searchEngine->search($query, $this->getUser());
 
 		return $this->apiSuccess([
-			'query' => $query,
-			'results' => $results,
-		]);
+				'query' => $query,
+				'results' => $results,
+			]);
 	}
 }

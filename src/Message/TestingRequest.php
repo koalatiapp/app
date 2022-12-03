@@ -4,33 +4,23 @@ namespace App\Message;
 
 class TestingRequest
 {
-	private int $projectId;
-
-	/**
-	 * Tool(s) to run.
-	 *
-	 * @var string|array<mixed,string>|null
-	 */
-	private $tools;
-
-	/**
-	 * ID(s) of the pages on which to run the tools.
-	 *
-	 * @var int|array<mixed,int>|null
-	 */
-	private $pageIds = null;
-
 	/**
 	 * Undocumented function.
 	 *
 	 * @param string|array<mixed,string>|null $tools
 	 * @param int|array<mixed,int>|null       $pageIds
 	 */
-	public function __construct(int $projectId, mixed $tools = null, mixed $pageIds = null)
-	{
-		$this->projectId = $projectId;
-		$this->tools = $tools;
-		$this->pageIds = $pageIds;
+	public function __construct(
+		private readonly int $projectId,
+		/**
+		 * Tool(s) to run.
+		 */
+		private $tools = null,
+		/**
+		 * ID(s) of the pages on which to run the tools.
+		 */
+		private $pageIds = null
+	) {
 	}
 
 	public function getProjectId(): int

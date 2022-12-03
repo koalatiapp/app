@@ -7,10 +7,10 @@ class SmallTeamAnnualPlan extends SmallTeamPlan
 	/**
 	 * @var string UNIQUE_NAME Plan unique name
 	 */
-	public const UNIQUE_NAME = 'SmallTeamAnnual';
+	final public const UNIQUE_NAME = 'SmallTeamAnnual';
 
 	/**
 	 * @var string PADDLE_ID ID of this plan in Paddle
 	 */
-	public const PADDLE_ID = '781499';
+	final public const PADDLE_ID = '781499';
 }

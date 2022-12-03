@@ -12,7 +12,7 @@ class InternalMetaApi implements MetaDriverInterface
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	public function __construct(
-		private MetasEndpoint $metasEndpoint,
+		private readonly MetasEndpoint $metasEndpoint,
 	) {
 	}
 

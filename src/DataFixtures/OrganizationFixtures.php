@@ -9,18 +9,12 @@ use App\Repository\UserRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
-use ReflectionProperty;
 
 class OrganizationFixtures extends Fixture implements DependentFixtureInterface
 {
-	/**
-	 * @var UserRepository
-	 */
-	private $userRepository;
-
-	public function __construct(UserRepository $userRepository)
-	{
-		$this->userRepository = $userRepository;
+	public function __construct(
+		private readonly UserRepository $userRepository
+	) {
 	}
 
 	public function load(ObjectManager $manager): void
@@ -64,7 +58,7 @@ class OrganizationFixtures extends Fixture implements DependentFixtureInterface
 	 */
 	private function forceSetInvitationHash(OrganizationInvitation $invitation, string $hash): OrganizationInvitation
 	{
-		$reflectedHashProperty = new ReflectionProperty(OrganizationInvitation::class, 'hash');
+		$reflectedHashProperty = new \ReflectionProperty(OrganizationInvitation::class, 'hash');
 		$reflectedHashProperty->setAccessible(true);
 		$reflectedHashProperty->setValue($invitation, $hash);
 

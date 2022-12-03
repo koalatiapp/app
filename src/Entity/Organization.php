@@ -12,66 +12,55 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
 
-/**
- * @ORM\Entity(repositoryClass=OrganizationRepository::class)
- */
-class Organization implements MercureEntityInterface
+#[ORM\Entity(repositoryClass: OrganizationRepository::class)]
+class Organization implements MercureEntityInterface, \Stringable
 {
-	/**
-	 * @ORM\Id
-	 * @ORM\GeneratedValue
-	 * @ORM\Column(type="integer")
-	 * @Groups({"default"})
-	 */
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[ORM\Column(type: 'integer')]
+	#[Groups(['default'])]
 	private ?int $id = null;
 
-	/**
-	 * @ORM\Column(type="string", length=255)
-	 * @Groups({"default"})
-	 */
-	private ?string $name;
+	#[ORM\Column(type: 'string', length: 255)]
+	#[Groups(['default'])]
+	private ?string $name = null;
 
-	/**
-	 * @ORM\Column(type="string", length=255)
-	 * @Groups({"default"})
-	 */
-	private ?string $slug;
+	#[ORM\Column(type: 'string', length: 255)]
+	#[Groups(['default'])]
+	private ?string $slug = null;
 
 	/**
 	 * @var \Doctrine\Common\Collections\Collection<int, OrganizationMember>
-	 * @ORM\OneToMany(targetEntity=OrganizationMember::class, mappedBy="organization", orphanRemoval=true)
-	 * @Groups({"members"})
-	 * @MaxDepth(1)
 	 */
-	private $members;
+	#[ORM\OneToMany(targetEntity: OrganizationMember::class, mappedBy: 'organization', orphanRemoval: true)]
+	#[Groups(['members'])]
+	#[MaxDepth(1)]
+	private \Doctrine\Common\Collections\Collection $members;
 
 	/**
 	 * @var \Doctrine\Common\Collections\Collection<int, Project>
-	 * @ORM\OneToMany(targetEntity=Project::class, mappedBy="ownerOrganization")
-	 * @Groups({"projects"})
-	 * @MaxDepth(1)
 	 */
-	private $projects;
+	#[ORM\OneToMany(targetEntity: Project::class, mappedBy: 'ownerOrganization')]
+	#[Groups(['projects'])]
+	#[MaxDepth(1)]
+	private \Doctrine\Common\Collections\Collection $projects;
 
 	/**
-	 * @ORM\OneToMany(targetEntity=IgnoreEntry::class, mappedBy="targetOrganization")
-	 *
 	 * @var \Doctrine\Common\Collections\Collection<int, IgnoreEntry>
 	 */
+	#[ORM\OneToMany(targetEntity: IgnoreEntry::class, mappedBy: 'targetOrganization')]
 	private Collection $ignoreEntries;
 
 	/**
-	 * @ORM\OneToMany(targetEntity=OrganizationInvitation::class, mappedBy="organization", orphanRemoval=true)
-	 *
 	 * @var \Doctrine\Common\Collections\Collection<int, OrganizationInvitation>
 	 */
+	#[ORM\OneToMany(targetEntity: OrganizationInvitation::class, mappedBy: 'organization', orphanRemoval: true)]
 	private Collection $organizationInvitations;
 
 	/**
-	 * @ORM\OneToMany(targetEntity=ChecklistTemplate::class, mappedBy="ownerOrganization")
-	 *
 	 * @var \Doctrine\Common\Collections\Collection<int, ChecklistTemplate>
 	 */
+	#[ORM\OneToMany(targetEntity: ChecklistTemplate::class, mappedBy: 'ownerOrganization')]
 	private ?Collection $checklistTemplates;
 
 	public function __construct()
@@ -311,8 +300,8 @@ class Organization implements MercureEntityInterface
 		return null;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
-		return $this->getName();
+		return (string) $this->getName();
 	}
 }

@@ -12,9 +12,7 @@ class ProjectTestingController extends AbstractProjectController
 {
 	use SuggestUpgradeControllerTrait;
 
-	/**
-	 * @Route("/project/{id}/testing", name="project_testing")
-	 */
+	#[Route(path: '/project/{id}/testing', name: 'project_testing')]
 	public function projectTesting(int $id): Response
 	{
 		$project = $this->getProject($id);
@@ -28,7 +26,7 @@ class ProjectTestingController extends AbstractProjectController
 		}
 
 		return $this->render('app/project/testing/index.html.twig', [
-			'project' => $project,
-		]);
+				'project' => $project,
+			]);
 	}
 }

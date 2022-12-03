@@ -5,96 +5,74 @@ namespace App\Entity;
 use App\Entity\Testing\IgnoreEntry;
 use App\Entity\Testing\Recommendation;
 use App\Repository\PageRepository;
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
 
-/**
- * @ORM\Entity(repositoryClass=PageRepository::class)
- * @ORM\Table(indexes={
- * 		@ORM\Index(name="page_url_index", columns={"url"})
- * })
- */
+#[ORM\Table]
+#[ORM\Index(name: 'page_url_index', columns: ['url'])]
+#[ORM\Entity(repositoryClass: PageRepository::class)]
 class Page
 {
-	/**
-	 * @ORM\Id
-	 * @ORM\GeneratedValue
-	 * @ORM\Column(type="integer")
-	 * @Groups({"default"})
-	 */
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[ORM\Column(type: 'integer')]
+	#[Groups(['default'])]
 	private ?int $id = null;
 
-	/**
-	 * @ORM\Column(type="string", length=255, nullable=true)
-	 * @Groups({"default"})
-	 */
+	#[ORM\Column(type: 'string', length: 255, nullable: true)]
+	#[Groups(['default'])]
 	private ?string $title;
 
-	/**
-	 * @ORM\Column(type="string", length=510)
-	 * @Groups({"default"})
-	 */
+	#[ORM\Column(type: 'string', length: 510)]
+	#[Groups(['default'])]
 	private string $url;
 
-	/**
-	 * @ORM\Column(type="datetime")
-	 * @Groups({"default"})
-	 */
+	#[ORM\Column(type: 'datetime')]
+	#[Groups(['default'])]
 	private \DateTimeInterface $dateCreated;
 
-	/**
-	 * @ORM\Column(type="datetime")
-	 * @Groups({"default"})
-	 */
+	#[ORM\Column(type: 'datetime')]
+	#[Groups(['default'])]
 	private \DateTimeInterface $dateUpdated;
 
-	/**
-	 * @ORM\Column(type="integer", nullable=true)
-	 * @Groups({"default"})
-	 */
-	private ?int $httpCode;
+	#[ORM\Column(type: 'integer', nullable: true)]
+	#[Groups(['default'])]
+	private ?int $httpCode = null;
 
 	/**
-	 * @ORM\OneToMany(targetEntity=Recommendation::class, mappedBy="relatedPage", orphanRemoval=true)
-	 * @Groups({"page"})
-	 * @MaxDepth(1)
-	 *
 	 * @var Collection<int,Recommendation>
 	 */
+	#[ORM\OneToMany(targetEntity: Recommendation::class, mappedBy: 'relatedPage', orphanRemoval: true)]
+	#[Groups(['page'])]
+	#[MaxDepth(1)]
 	private Collection $recommendations;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity=Project::class, inversedBy="pages")
-	 * @ORM\JoinColumn(name="project_id", referencedColumnName="id", onDelete="CASCADE")
-	 * @Groups({"page"})
-	 * @MaxDepth(1)
-	 */
+	#[ORM\ManyToOne(targetEntity: Project::class, inversedBy: 'pages')]
+	#[ORM\JoinColumn(name: 'project_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+	#[Groups(['page'])]
+	#[MaxDepth(1)]
 	private Project $project;
 
-	/**
-	 * @ORM\Column(type="boolean")
-	 * @Groups({"default"})
-	 */
+	#[ORM\Column(type: 'boolean')]
+	#[Groups(['default'])]
 	private bool $isIgnored = false;
 
 	/**
-	 * @ORM\OneToMany(targetEntity=IgnoreEntry::class, mappedBy="targetPage")
-	 *
-	 * @var \Doctrine\Common\Collections\Collection<int, IgnoreEntry>
+	 * @var Collection<int, IgnoreEntry>
 	 */
-	private $ignoreEntries;
+	#[ORM\OneToMany(targetEntity: IgnoreEntry::class, mappedBy: 'targetPage')]
+	private Collection $ignoreEntries;
 
 	public function __construct(Project $project, string $url, ?string $title = null)
 	{
 		$this->setUrl($url);
 		$this->setTitle($title);
 		$this->setProject($project);
-		$this->dateCreated = new DateTime();
-		$this->dateUpdated = new DateTime();
+		$this->dateCreated = new \DateTime();
+		$this->dateUpdated = new \DateTime();
 		$this->recommendations = new ArrayCollection();
 		$this->ignoreEntries = new ArrayCollection();
 	}
@@ -112,7 +90,7 @@ class Page
 	public function setTitle(?string $title): self
 	{
 		$this->title = mb_substr($title ?: '', 0, 255);
-		$this->setDateUpdated(new DateTime());
+		$this->setDateUpdated(new \DateTime());
 
 		return $this;
 	}

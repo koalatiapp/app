@@ -6,7 +6,6 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Subscription\Plan\BusinessPlan;
 use Doctrine\ORM\EntityManagerInterface;
-use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -25,9 +24,9 @@ class CreateUserCommand extends Command
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	public function __construct(
-		private UserRepository $userRepository,
-		private EntityManagerInterface $entityManager,
-		private UserPasswordHasherInterface $passwordHasher,
+		private readonly UserRepository $userRepository,
+		private readonly EntityManagerInterface $entityManager,
+		private readonly UserPasswordHasherInterface $passwordHasher,
 	) {
 		parent::__construct();
 	}
@@ -48,17 +47,17 @@ class CreateUserCommand extends Command
 		$existingEmails = array_map(fn (User $user) => strtolower($user->getEmail()), $users);
 
 		$email = $input->getArgument("email");
-		$firstName = trim($input->getArgument("first_name"));
-		$plainPassword = trim($input->getArgument("password"));
+		$firstName = trim((string) $input->getArgument("first_name"));
+		$plainPassword = trim((string) $input->getArgument("password"));
 
 		if (!$email) {
 			$email = $io->ask("Email address", null, function (?string $email) use ($existingEmails) {
 				if (!$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-					throw new RuntimeException("Invalid email address");
+					throw new \RuntimeException("Invalid email address");
 				}
 
 				if (in_array($email, $existingEmails)) {
-					throw new RuntimeException("A user with this email address already exists.");
+					throw new \RuntimeException("A user with this email address already exists.");
 				}
 
 				return trim($email);
@@ -67,7 +66,7 @@ class CreateUserCommand extends Command
 
 		$requiredValidator = function (?string $value) {
 			if (!strlen(trim($value))) {
-				throw new RuntimeException("This field is required.");
+				throw new \RuntimeException("This field is required.");
 			}
 
 			return trim($value);

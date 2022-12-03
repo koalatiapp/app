@@ -259,9 +259,6 @@
     "phan/phan": {
         "version": "4.1.0"
     },
-    "php-cs-fixer/diff": {
-        "version": "v1.3.1"
-    },
     "php-http/client-common": {
         "version": "2.4.0"
     },
@@ -337,6 +334,9 @@
     "rayatomsk/paddle-api": {
         "version": "v0.5.0"
     },
+    "rector/rector": {
+        "version": "0.14.8"
+    },
     "roukmoute/hashids-bundle": {
         "version": "1.4",
         "recipe": {
@@ -351,6 +351,9 @@
     },
     "sabre/event": {
         "version": "5.1.4"
+    },
+    "sebastian/diff": {
+        "version": "4.0.4"
     },
     "sensio/framework-extra-bundle": {
         "version": "5.2",

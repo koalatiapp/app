@@ -4,10 +4,10 @@ namespace App\Subscription\Plan;
 
 use App\Util\SelfHosting;
 
-abstract class AbstractPlan implements PlanInterface
+abstract class AbstractPlan implements PlanInterface, \Stringable
 {
 	public function __construct(
-		private ?SelfHosting $selfHosting = null
+		private readonly ?SelfHosting $selfHosting = null
 	) {
 	}
 
@@ -110,7 +110,7 @@ abstract class AbstractPlan implements PlanInterface
 		}
 
 		if ($comparativePlan instanceof TrialPlan) {
-			return get_class($this) != NoPlan::class;
+			return $this::class != NoPlan::class;
 		}
 
 		return is_subclass_of($this, $comparativePlan::class);
@@ -123,7 +123,7 @@ abstract class AbstractPlan implements PlanInterface
 		}
 
 		if ($comparativePlan instanceof TrialPlan) {
-			return get_class($this) == NoPlan::class;
+			return $this::class == NoPlan::class;
 		}
 
 		return is_subclass_of($comparativePlan, $this::class);
@@ -143,7 +143,7 @@ abstract class AbstractPlan implements PlanInterface
 		return str_ends_with($this->getUniqueName(), "Annual");
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		return static::UNIQUE_NAME;
 	}

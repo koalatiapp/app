@@ -5,14 +5,13 @@ namespace App\Subscription;
 use App\Entity\User;
 use App\Subscription\Plan\NoPlan;
 use App\Subscription\Plan\TrialPlan;
-use Exception;
 use Paddle\API as PaddleAPI;
 
 class SubscriptionUpdater
 {
 	public function __construct(
-		private PaddleAPI $paddleApi,
-		private PlanManager $planManager
+		private readonly PaddleAPI $paddleApi,
+		private readonly PlanManager $planManager
 	) {
 	}
 
@@ -47,7 +46,7 @@ class SubscriptionUpdater
 	private function getSubscriptionId(User $user): string
 	{
 		if (!$user->getPaddleSubscriptionId()) {
-			throw new Exception("Cannot update the plan of a user who doesn't have an existing Paddle Subscription ID`.");
+			throw new \Exception("Cannot update the plan of a user who doesn't have an existing Paddle Subscription ID`.");
 		}
 
 		return $user->getPaddleSubscriptionId();

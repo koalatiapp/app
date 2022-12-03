@@ -12,9 +12,8 @@ trait PreventDirectAccessTrait
 	 *
 	 * This prevents users from clicking on API links from mischievous
 	 * people who might that might
-	 *
-	 * @required
 	 * */
+	#[\Symfony\Contracts\Service\Attribute\Required]
 	public function preventDirectAccess(RequestStack $requestStack): void
 	{
 		if (!$requestStack->getCurrentRequest()->isXmlHttpRequest()) {

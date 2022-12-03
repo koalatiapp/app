@@ -3,7 +3,6 @@
 namespace App\Controller\Project;
 
 use App\Controller\Trait\SuggestUpgradeControllerTrait;
-use App\Entity\Checklist\Checklist;
 use App\Entity\Project;
 use App\Security\ProjectVoter;
 use App\Util\Checklist\Generator;
@@ -16,8 +15,8 @@ class ProjectChecklistController extends AbstractProjectController
 	use SuggestUpgradeControllerTrait;
 
 	public function __construct(
-		private Generator $checklistGenerator,
-		private EntityManagerInterface $entityManager,
+		private readonly Generator $checklistGenerator,
+		private readonly EntityManagerInterface $entityManager,
 	) {
 	}
 
@@ -33,9 +32,7 @@ class ProjectChecklistController extends AbstractProjectController
 		$this->entityManager->flush();
 	}
 
-	/**
-	 * @Route("/project/{id}/checklist", name="project_checklist")
-	 */
+	#[Route(path: '/project/{id}/checklist', name: 'project_checklist')]
 	public function overview(int $id): Response
 	{
 		$project = $this->getProject($id);
@@ -49,13 +46,11 @@ class ProjectChecklistController extends AbstractProjectController
 		}
 
 		return $this->render('app/project/checklist/index.html.twig', [
-			'project' => $project,
-		]);
+				'project' => $project,
+			]);
 	}
 
-	/**
-	 * @Route("/project/{id}/checklist/step-by-step", name="project_checklist_detailed")
-	 */
+	#[Route(path: '/project/{id}/checklist/step-by-step', name: 'project_checklist_detailed')]
 	public function stepByStep(int $id): Response
 	{
 		$project = $this->getProject($id);
@@ -65,7 +60,7 @@ class ProjectChecklistController extends AbstractProjectController
 		}
 
 		return $this->render('app/project/checklist/index.html.twig', [
-			'project' => $project,
-		]);
+				'project' => $project,
+			]);
 	}
 }

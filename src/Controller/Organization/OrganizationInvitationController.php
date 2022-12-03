@@ -9,14 +9,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/team/invitation", name="organization_invitation_")
- */
+#[Route(path: '/team/invitation', name: 'organization_invitation_')]
 class OrganizationInvitationController extends AbstractController
 {
-	/**
-	 * @Route("/{id}/{hash}", name="accept")
-	 */
+	#[Route(path: '/{id}/{hash}', name: 'accept')]
 	public function acceptInvitation(int $id, string $hash, OrganizationInvitationRepository $invitationRepository): Response
 	{
 		$invitation = $invitationRepository->find($id);

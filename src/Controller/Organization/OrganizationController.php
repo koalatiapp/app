@@ -18,9 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
-/**
- * @Route("/team", name="organization_")
- */
+#[Route(path: '/team', name: 'organization_')]
 class OrganizationController extends AbstractController
 {
 	use SuggestUpgradeControllerTrait;
@@ -41,9 +39,7 @@ class OrganizationController extends AbstractController
 		return $organizationLink?->getOrganization();
 	}
 
-	/**
-	 * @Route("/create", name="create")
-	 */
+	#[Route(path: '/create', name: 'create')]
 	public function create(Request $request): Response
 	{
 		if (!$this->isGranted(OrganizationVoter::OWN_ORGANIZATION)) {
@@ -78,23 +74,19 @@ class OrganizationController extends AbstractController
 		return $this->render('app/organization/create.html.twig', ['form' => $form->createView()]);
 	}
 
-	/**
-	 * @Route("/{id}", name="dashboard", defaults={"id"=null})
-	 */
-	public function dashboard(int $id = null, OrganizationRepository $organizationRepository): Response
+	#[Route(path: '/{id}', name: 'dashboard', defaults: ['id' => null])]
+	public function dashboard(int $id = null): Response
 	{
 		if ($this->getUser()->getOrganizationLinks()->isEmpty()) {
 			return $this->redirectToRoute('organization_create');
 		}
 
 		return $this->render('app/organization/dashboard.html.twig', [
-			'organization' => $id ? $organizationRepository->find($id) : $this->getDefaultOrganization(),
-		]);
+				'organization' => $id ? $this->organizationRepository->find($id) : $this->getDefaultOrganization(),
+			]);
 	}
 
-	/**
-	 * @Route("/{id}/leave", name="leave")
-	 */
+	#[Route(path: '/{id}/leave', name: 'leave')]
 	public function leave(int $id, Request $request): Response
 	{
 		$organization = $this->organizationRepository->find($id);
@@ -133,14 +125,12 @@ class OrganizationController extends AbstractController
 		}
 
 		return $this->render('app/organization/leave.html.twig', [
-			'organization' => $organization,
-			'form' => $form->createView(),
-		]);
+				'organization' => $organization,
+				'form' => $form->createView(),
+			]);
 	}
 
-	/**
-	 * @Route("/{id}/settings", name="settings")
-	 */
+	#[Route(path: '/{id}/settings', name: 'settings')]
 	public function settings(int $id, Request $request): Response
 	{
 		$organization = $this->organizationRepository->find($id);
@@ -155,10 +145,10 @@ class OrganizationController extends AbstractController
 		$updateForm = $this->processUpdateForm($organization, $request);
 
 		return $this->render('app/organization/settings.html.twig', [
-			'organization' => $organization,
-			'form' => $updateForm->createView(),
-			'deletionForm' => $deletionForm->createView(),
-		]);
+				'organization' => $organization,
+				'form' => $updateForm->createView(),
+				'deletionForm' => $deletionForm->createView(),
+			]);
 	}
 
 	private function processDeletionForm(Organization $organization, Request $request): ?FormInterface

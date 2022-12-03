@@ -40,7 +40,7 @@ final class MockServerlessClient extends ServerlessClient
 				return new MockResponse('404', ['http_code' => 404]);
 			}
 
-			return new MockResponse(json_encode($body), ['response_headers' => ['Content-Type' => 'application/json']]);
+			return new MockResponse(json_encode($body, JSON_THROW_ON_ERROR), ['response_headers' => ['Content-Type' => 'application/json']]);
 		}, 'http://domain.com');
 	}
 }

@@ -4,7 +4,6 @@ namespace App\ToolsService;
 
 use App\ToolsService\Exception\ServerlessClientNotConfiguredException;
 use App\ToolsService\Exception\ToolsApiBadResponseException;
-use Exception;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -31,12 +30,12 @@ class ServerlessClient extends Client
 	 * @param string       $endpoint API endpoint to query
 	 * @param array<mixed> $body     Body of the request
 	 *
+	 * @return array<mixed>
+	 *
 	 * @throws ToolsApiBadResponseException
 	 * @throws AccessDeniedHttpException
 	 * @throws NotFoundHttpException
-	 * @throws Exception
-	 *
-	 * @return array<mixed>
+	 * @throws \Exception
 	 */
 	public function request(string $method, string $endpoint, array $body = []): array
 	{

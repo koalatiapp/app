@@ -16,10 +16,10 @@ class ProjectSearch implements EntitySearchInterface
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	public function __construct(
-		private UrlGeneratorInterface $router,
-		private ProjectRepository $projectRepository,
-		private TranslatorInterface $translator,
-		private HashidsInterface $idHasher
+		private readonly UrlGeneratorInterface $router,
+		private readonly ProjectRepository $projectRepository,
+		private readonly TranslatorInterface $translator,
+		private readonly HashidsInterface $idHasher
 	) {
 	}
 

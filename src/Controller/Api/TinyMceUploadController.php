@@ -15,11 +15,12 @@ class TinyMceUploadController extends AbstractController
 {
 	use ApiControllerTrait;
 
-	public const MAX_FILESIZE = 20000000; // 20 MB
-
 	/**
-	 * @Route("/internal-api/tinymce-upload/image", name="api_tinymce_upload_image", options={"expose": true})
+	 * Maximum filesize for uploaded files (20 MB).
 	 */
+	final public const MAX_FILESIZE = 20_000_000;
+
+	#[Route(path: '/internal-api/tinymce-upload/image', name: 'api_tinymce_upload_image', options: ['expose' => true])]
 	public function upload(Request $request, UserUploadStorage $userUploadStorage): Response
 	{
 		$allowedOrigins = ["https://localhost", "https://app.koalati.com"];
@@ -35,18 +36,21 @@ class TinyMceUploadController extends AbstractController
 			return new Response("", 200, ["Access-Control-Allow-Methods" => "POST, OPTIONS"]);
 		}
 
-		/** @var UploadedFile|null */
 		$file = $request->files->get("file");
 
 		if (!$file) {
 			return $this->badRequest("Missing file.");
 		}
 
-		if (!$file->isValid() || $file->getSize() > self::MAX_FILESIZE) {
-			return $this->badRequest("Your file is too big. Maximum size: ".(self::MAX_FILESIZE / 1000000)."MB");
+		if (!($file instanceof UploadedFile)) {
+			return $this->badRequest("The uploaded file was transmitted incorrectly.");
 		}
 
-		if (!str_starts_with($file->getMimeType(), "image/")) {
+		if (!$file->isValid() || $file->getSize() > self::MAX_FILESIZE) {
+			return $this->badRequest("Your file is too big. Maximum size: ".(self::MAX_FILESIZE / 1_000_000)."MB");
+		}
+
+		if (!str_starts_with((string) $file->getMimeType(), "image/")) {
 			return $this->badRequest("Provided file is not an image.");
 		}
 

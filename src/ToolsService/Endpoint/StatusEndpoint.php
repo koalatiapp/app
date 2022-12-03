@@ -3,7 +3,6 @@
 namespace App\ToolsService\Endpoint;
 
 use App\Entity\Project;
-use Exception;
 
 final class StatusEndpoint extends AbstractEndpoint
 {
@@ -85,7 +84,7 @@ final class StatusEndpoint extends AbstractEndpoint
 			$response = $this->serverlessClient->request('GET', '/project-status', [
 				'url' => $project->getUrl(),
 			]);
-		} catch (Exception $exception) {
+		} catch (\Exception $exception) {
 			$this->logger->error($exception->getMessage(), $exception->getTrace());
 
 			$response = $this->client->request('GET', '/status/project', [

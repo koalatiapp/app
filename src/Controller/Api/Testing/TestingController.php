@@ -14,9 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/internal-api/testing/request", name="api_testing_request_")
- */
+#[Route(path: '/internal-api/testing/request', name: 'api_testing_request_')]
 class TestingController extends AbstractController
 {
 	use ApiControllerTrait;
@@ -28,9 +26,8 @@ class TestingController extends AbstractController
 	 *
 	 * Available query parameters:
 	 * - `project_id` - `int` (required)
-	 *
-	 * @Route("/create", methods={"POST"}, name="create", options={"expose": true})
 	 */
+	#[Route(path: '/create', methods: ['POST'], name: 'create', options: ['expose' => true])]
 	public function create(Request $request, TestingRequestHandler $testingRequestHandler): JsonResponse
 	{
 		$projectId = $request->request->get('project_id');
@@ -56,9 +53,8 @@ class TestingController extends AbstractController
 	 *
 	 * Available query parameters:
 	 * - `project_id` - `int` (required)
-	 *
-	 * @Route("/project-status/{id}", methods={"GET"}, name="project_status", options={"expose": true})
 	 */
+	#[Route(path: '/project-status/{id}', methods: ['GET'], name: 'project_status', options: ['expose' => true])]
 	public function projectStatus(string $id, StatusEndpoint $statusApi): JsonResponse
 	{
 		$project = $this->getProject($id);

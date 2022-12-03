@@ -16,16 +16,16 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 class TestingStatusRequestHandler implements MessageHandlerInterface
 {
-	private ApcuAdapter $cache;
+	private readonly ApcuAdapter $cache;
 
 	/**
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	public function __construct(
-		private ProjectRepository $projectRepository,
-		private PlanManager $planManager,
-		private UpdateDispatcher $updateDispatcher,
-		private StatusEndpoint $statusApi,
+		private readonly ProjectRepository $projectRepository,
+		private readonly PlanManager $planManager,
+		private readonly UpdateDispatcher $updateDispatcher,
+		private readonly StatusEndpoint $statusApi,
 	) {
 		$this->cache = new ApcuAdapter('project_status', 30);
 	}
@@ -115,7 +115,7 @@ class TestingStatusRequestHandler implements MessageHandlerInterface
 	{
 		if (!isset($status['expected_end_timestamp'])) {
 			$expectedEndingTimestamp = time() + ((int) $status['timeEstimate'] / 1000);
-			$status = array_merge($status, ['expected_end_timestamp' => $expectedEndingTimestamp]);
+			$status = [...$status, ...['expected_end_timestamp' => $expectedEndingTimestamp]];
 		}
 
 		$previousStatusCache = $this->getCacheItem($project);

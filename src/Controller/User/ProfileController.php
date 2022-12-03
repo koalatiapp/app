@@ -10,9 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ProfileController extends AbstractController
 {
-	/**
-	 * @Route("/edit-profile", name="edit_profile")
-	 */
+	#[Route(path: '/edit-profile', name: 'edit_profile')]
 	public function editProfile(Request $request): Response
 	{
 		$user = $this->getUser();
@@ -31,7 +29,7 @@ class ProfileController extends AbstractController
 		}
 
 		return $this->render('app/user/profile.html.twig', [
-			'form' => $form->createView(),
-		]);
+				'form' => $form->createView(),
+			]);
 	}
 }

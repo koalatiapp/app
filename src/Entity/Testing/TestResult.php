@@ -9,77 +9,58 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
 
-/**
- * @ORM\Entity(repositoryClass=TestResultRepository::class)
- */
+#[ORM\Entity(repositoryClass: TestResultRepository::class)]
 class TestResult
 {
-	/**
-	 * @ORM\Id
-	 * @ORM\GeneratedValue
-	 * @ORM\Column(type="integer")
-	 * @Groups({"default"})
-	 */
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[ORM\Column(type: 'integer')]
+	#[Groups(['default'])]
 	private ?int $id = null;
 
-	/**
-	 * @ORM\Column(type="string", length=255)
-	 * @Groups({"default"})
-	 */
+	#[ORM\Column(type: 'string', length: 255)]
+	#[Groups(['default'])]
 	private string $uniqueName;
 
-	/**
-	 * @ORM\Column(type="string", length=512)
-	 * @Groups({"default"})
-	 */
+	#[ORM\Column(type: 'string', length: 512)]
+	#[Groups(['default'])]
 	private string $title;
 
-	/**
-	 * @ORM\Column(type="text")
-	 * @Groups({"default"})
-	 */
+	#[ORM\Column(type: 'text')]
+	#[Groups(['default'])]
 	private string $description;
 
-	/**
-	 * @ORM\Column(type="float", nullable=true)
-	 * @Groups({"default"})
-	 */
-	private ?float $weight;
+	#[ORM\Column(type: 'float', nullable: true)]
+	#[Groups(['default'])]
+	private ?float $weight = null;
 
-	/**
-	 * @ORM\Column(type="float")
-	 * @Groups({"default"})
-	 */
+	#[ORM\Column(type: 'float')]
+	#[Groups(['default'])]
 	private float $score;
 
 	/**
-	 * @ORM\Column(type="array", nullable=true)
-	 * @Groups({"default"})
-	 *
 	 * @var array<int,mixed>|null
 	 */
+	#[ORM\Column(type: 'array', nullable: true)]
+	#[Groups(['default'])]
 	private ?array $snippets = [];
 
 	/**
-	 * @ORM\Column(type="array", nullable=true)
-	 * @Groups({"default"})
-	 *
 	 * @var array<int,array<mixed,mixed>>
 	 */
+	#[ORM\Column(type: 'array', nullable: true)]
+	#[Groups(['default'])]
 	private ?array $dataTable = [];
 
-	/**
-	 * @ORM\ManyToOne(targetEntity=ToolResponse::class, inversedBy="testResults")
-	 * @ORM\JoinColumn(name="parent_response_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
-	 */
+	#[ORM\ManyToOne(targetEntity: ToolResponse::class, inversedBy: 'testResults')]
+	#[ORM\JoinColumn(name: 'parent_response_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
 	private ToolResponse $parentResponse;
 
 	/**
-	 * @ORM\OneToMany(targetEntity=Recommendation::class, mappedBy="parentResult")
-	 * @MaxDepth(1)
-	 *
 	 * @var Collection<int,Recommendation>
 	 */
+	#[ORM\OneToMany(targetEntity: Recommendation::class, mappedBy: 'parentResult')]
+	#[MaxDepth(1)]
 	private Collection $recommendations;
 
 	public function __construct()

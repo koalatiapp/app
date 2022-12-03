@@ -17,17 +17,13 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * @Route("/internal-api/organization/members", name="api_organization_members_")
- */
+#[Route(path: '/internal-api/organization/members', name: 'api_organization_members_')]
 class MembersController extends AbstractController
 {
 	use ApiControllerTrait;
 	use PreventDirectAccessTrait;
 
-	/**
-	 * @Route("", methods={"GET","HEAD"}, name="list", options={"expose": true})
-	 */
+	#[Route(path: '', methods: ['GET', 'HEAD'], name: 'list', options: ['expose' => true])]
 	public function list(Request $request): JsonResponse
 	{
 		$organizationId = $request->query->get('organization_id');
@@ -41,9 +37,7 @@ class MembersController extends AbstractController
 		return $this->apiSuccess($organization->getMembersSortedByRole());
 	}
 
-	/**
-	 * @Route("/{id}", methods={"DELETE"}, name="delete", options={"expose": true})
-	 */
+	#[Route(path: '/{id}', methods: ['DELETE'], name: 'delete', options: ['expose' => true])]
 	public function delete(int $id, OrganizationMemberRepository $organizationMemberRepository): JsonResponse
 	{
 		$membership = $organizationMemberRepository->find($id);
@@ -56,8 +50,7 @@ class MembersController extends AbstractController
 			$hasOtherAdmins = false;
 
 			foreach ($membership->getOrganization()->getMembers() as $otherMember) {
-				if ($membership != $otherMember
-					&& in_array($otherMember->getHighestRole(), [OrganizationMember::ROLE_ADMIN, OrganizationMember::ROLE_OWNER])) {
+				if ($membership != $otherMember && in_array($otherMember->getHighestRole(), [OrganizationMember::ROLE_ADMIN, OrganizationMember::ROLE_OWNER])) {
 					$hasOtherAdmins = true;
 					break;
 				}
@@ -75,17 +68,15 @@ class MembersController extends AbstractController
 		$em->flush();
 
 		return $this->apiSuccess([
-			'message' => $this->translator->trans('organization.flash.member_removed_successfully', [
-				'%user%' => $membership->getUser()->getFullName(),
-				'%organization%' => $organizationName,
-			]),
-		]);
+				'message' => $this->translator->trans('organization.flash.member_removed_successfully', [
+					'%user%' => $membership->getUser()->getFullName(),
+					'%organization%' => $organizationName,
+				]),
+			]);
 	}
 
-	/**
-	 * @Route("/{id}/role", methods={"POST", "PUT"}, name="role", options={"expose": true})
-	 */
-	public function updateRole(Request $request, int $id, OrganizationMemberRepository $organizationMemberRepository): JsonResponse
+	#[Route(path: '/{id}/role', methods: ['POST', 'PUT'], name: 'role', options: ['expose' => true])]
+	public function updateRole(int $id, Request $request, OrganizationMemberRepository $organizationMemberRepository): JsonResponse
 	{
 		$membership = $organizationMemberRepository->find($id);
 		$newRole = $request->request->get('role');
@@ -105,16 +96,14 @@ class MembersController extends AbstractController
 		$em->flush();
 
 		return $this->apiSuccess([
-			'message' => $this->translator->trans('organization.flash.member_role_updated_successfully', [
-				'%name%' => $membership->getUser()->getFullName(),
-				'%role%' => $this->translator->trans('roles.'.$newRole),
-			]),
-		]);
+				'message' => $this->translator->trans('organization.flash.member_role_updated_successfully', [
+					'%name%' => $membership->getUser()->getFullName(),
+					'%role%' => $this->translator->trans('roles.'.$newRole),
+				]),
+			]);
 	}
 
-	/**
-	 * @Route("/{id}/invitation", methods={"POST", "PUT"}, name="invite", options={"expose": true})
-	 */
+	#[Route(path: '/{id}/invitation', methods: ['POST', 'PUT'], name: 'invite', options: ['expose' => true])]
 	public function sendInvitation(int $id, Request $request, MailerInterface $mailer, TranslatorInterface $translator): JsonResponse
 	{
 		$organization = $this->getOrganization($id, OrganizationVoter::MANAGE);
@@ -142,12 +131,12 @@ class MembersController extends AbstractController
 		$em->flush();
 
 		$email = (new TemplatedEmail())
-			->to(new Address($email, $firstName))
-			->subject($translator->trans('email.organization_invitation.subject', ['%inviter%' => $this->getUser()->getFullName(), '%organization%' => $organization]))
-			->htmlTemplate('email/organization_invitation.html.twig')
-			->context([
-				'invitation' => $invitation,
-			]);
+				->to(new Address($email, $firstName))
+				->subject($translator->trans('email.organization_invitation.subject', ['%inviter%' => $this->getUser()->getFullName(), '%organization%' => $organization]))
+				->htmlTemplate('email/organization_invitation.html.twig')
+				->context([
+					'invitation' => $invitation,
+				]);
 		$mailer->send($email);
 
 		return $this->apiSuccess();

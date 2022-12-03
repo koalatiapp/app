@@ -10,17 +10,13 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/internal-api/project/pages", name="api_project_pages_")
- */
+#[Route(path: '/internal-api/project/pages', name: 'api_project_pages_')]
 class PageController extends AbstractController
 {
 	use ApiControllerTrait;
 	use PreventDirectAccessTrait;
 
-	/**
-	 * @Route("", methods={"GET","HEAD"}, name="list", options={"expose": true})
-	 */
+	#[Route(path: '', methods: ['GET', 'HEAD'], name: 'list', options: ['expose' => true])]
 	public function list(Request $request): JsonResponse
 	{
 		$projectId = $request->query->get('project_id');
@@ -33,16 +29,12 @@ class PageController extends AbstractController
 		$pages = $project->getPages()->toArray();
 
 		// Sort pages by relevance (shortest URLs first)
-		usort($pages, function (Page $pageA, Page $pageB) {
-			return strlen($pageA->getUrl()) <=> strlen($pageB->getUrl());
-		});
+		usort($pages, fn (Page $pageA, Page $pageB) => strlen($pageA->getUrl()) <=> strlen($pageB->getUrl()));
 
 		return $this->apiSuccess($pages);
 	}
 
-	/**
-	 * @Route("", methods={"POST", "PUT"}, name="toggle", options={"expose": true})
-	 */
+	#[Route(path: '', methods: ['POST', 'PUT'], name: 'toggle', options: ['expose' => true])]
 	public function togglePage(Request $request): JsonResponse
 	{
 		$projectId = $request->request->get('project_id');
@@ -78,8 +70,8 @@ class PageController extends AbstractController
 		$em->flush();
 
 		return $this->apiSuccess([
-			'enabled' => !$page->getIsIgnored(),
-		]);
+				'enabled' => !$page->getIsIgnored(),
+			]);
 	}
 
 	private function getPage(int|string $projectId, int|string $pageId): ?Page
@@ -91,9 +83,7 @@ class PageController extends AbstractController
 		}
 
 		/** @var Page|null */
-		$page = $project->getPages()->filter(function (Page $page) use ($pageId) {
-			return $page->getId() == $pageId;
-		})->first();
+		$page = $project->getPages()->filter(fn (Page $page = null) => $page->getId() == $pageId)->first();
 
 		return $page ?: null;
 	}

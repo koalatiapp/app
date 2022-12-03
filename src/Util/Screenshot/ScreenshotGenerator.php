@@ -20,8 +20,8 @@ class ScreenshotGenerator implements ScreenshotGeneratorInterface
 	private int $renderScale = 1;
 
 	public function __construct(
-		private ScreenshotDriverInterface $driver,
-		private Url $urlHelper,
+		private readonly ScreenshotDriverInterface $driver,
+		private readonly Url $urlHelper,
 	) {
 	}
 

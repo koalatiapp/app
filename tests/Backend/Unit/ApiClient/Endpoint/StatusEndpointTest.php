@@ -13,10 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  */
 class StatusEndpointTest extends WebTestCase
 {
-	/**
-	 * @var StatusEndpoint
-	 */
-	private $statusEndpoint;
+	private StatusEndpoint $statusEndpoint;
 
 	public function setup(): void
 	{

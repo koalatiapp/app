@@ -10,9 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ContactPreferencesController extends AbstractController
 {
-	/**
-	 * @Route("/account/contact-preferences", name="manage_contact_preferences")
-	 */
+	#[Route(path: '/account/contact-preferences', name: 'manage_contact_preferences')]
 	public function contactPreferences(Request $request): Response
 	{
 		$user = $this->getUser();
@@ -31,7 +29,7 @@ class ContactPreferencesController extends AbstractController
 		}
 
 		return $this->render('app/user/profile.html.twig', [
-			'form' => $form->createView(),
-		]);
+				'form' => $form->createView(),
+			]);
 	}
 }

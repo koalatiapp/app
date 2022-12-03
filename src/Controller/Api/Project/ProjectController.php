@@ -9,17 +9,13 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/internal-api/projects", name="api_projects_")
- */
+#[Route(path: '/internal-api/projects', name: 'api_projects_')]
 class ProjectController extends AbstractController
 {
 	use ApiControllerTrait;
 	use PreventDirectAccessTrait;
 
-	/**
-	 * @Route("", methods={"GET","HEAD"}, name="list", options={"expose": true})
-	 */
+	#[Route(path: '', methods: ['GET', 'HEAD'], name: 'list', options: ['expose' => true])]
 	public function list(Request $request): JsonResponse
 	{
 		$ownerType = $request->query->get('owner_type');
