@@ -528,12 +528,12 @@
         "version": "v0.4.1"
     },
     "symfony/mercure-bundle": {
-        "version": "0.2",
+        "version": "0.3",
         "recipe": {
             "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "0.2",
-            "ref": "a37d3438e4bd4f9f924c516996bc29e25f66b07e"
+            "branch": "main",
+            "version": "0.3",
+            "ref": "7c7e63c36530052a174f28a6be4e451c4709be83"
         },
         "files": [
             "config/packages/mercure.yaml"
