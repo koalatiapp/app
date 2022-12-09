@@ -5,12 +5,12 @@ namespace App\Serializer;
 use App\Entity\Project;
 use App\Storage\ProjectStorage;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Serializer\Normalizer\ContextAwareNormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**
  * Adds favicon and thumbnail URLs to the data using the `ProjectStorage`.
  */
-class ProjectNormalizer implements ContextAwareNormalizerInterface
+class ProjectNormalizer implements NormalizerInterface
 {
 	/**
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -43,7 +43,7 @@ class ProjectNormalizer implements ContextAwareNormalizerInterface
 	/**
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
-	public function supportsNormalization($data, string $format = null, array $context = []): bool
+	public function supportsNormalization($data, string $format = null): bool
 	{
 		return $data instanceof Project;
 	}

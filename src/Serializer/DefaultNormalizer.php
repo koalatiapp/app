@@ -6,14 +6,14 @@ use App\Entity\Project;
 use Hashids\HashidsInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
-use Symfony\Component\Serializer\Normalizer\ContextAwareNormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Hashes IDs to obfuscate the numerical values.
  */
-class DefaultNormalizer implements ContextAwareNormalizerInterface
+class DefaultNormalizer implements NormalizerInterface
 {
 	/**
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -81,7 +81,7 @@ class DefaultNormalizer implements ContextAwareNormalizerInterface
 	/**
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
-	public function supportsNormalization($data, string $format = null, array $context = []): bool
+	public function supportsNormalization($data, string $format = null): bool
 	{
 		return !($data instanceof Project);
 	}
