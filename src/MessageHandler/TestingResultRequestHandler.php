@@ -16,10 +16,11 @@ use App\Repository\Testing\RecommendationRepository;
 use App\Util\Testing\RecommendationGroup;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-class TestingResultRequestHandler implements MessageHandlerInterface
+#[AsMessageHandler]
+class TestingResultRequestHandler
 {
 	/**
 	 * @var array<int,Project>

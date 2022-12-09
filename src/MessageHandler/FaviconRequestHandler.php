@@ -7,9 +7,10 @@ use App\Repository\ProjectRepository;
 use App\Storage\ProjectStorage;
 use App\Util\Favicon\FaviconFetcherInterface;
 use App\Util\Url;
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-class FaviconRequestHandler implements MessageHandlerInterface
+#[AsMessageHandler]
+class FaviconRequestHandler
 {
 	public function __construct(
 		private readonly ProjectRepository $projectRepository,

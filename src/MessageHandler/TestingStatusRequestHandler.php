@@ -12,9 +12,10 @@ use App\ToolsService\Endpoint\StatusEndpoint;
 use App\Util\Testing\TestingStatus;
 use Symfony\Component\Cache\Adapter\ApcuAdapter;
 use Symfony\Component\Cache\CacheItem;
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-class TestingStatusRequestHandler implements MessageHandlerInterface
+#[AsMessageHandler]
+class TestingStatusRequestHandler
 {
 	private readonly ApcuAdapter $cache;
 

@@ -14,11 +14,12 @@ use App\Util\Testing\AvailableToolsFetcher;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpClient\Exception\TransportException;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\Exception\RecoverableMessageHandlingException;
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-class TestingRequestHandler implements MessageHandlerInterface
+#[AsMessageHandler]
+class TestingRequestHandler
 {
 	/**
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)

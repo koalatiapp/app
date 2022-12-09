@@ -12,14 +12,14 @@ use App\Util\Sitemap\Builder;
 use App\Util\Sitemap\Location;
 use App\Util\Url;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Symfony\Component\HttpClient\Exception\TransportException;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\Exception\UnrecoverableMessageHandlingException;
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class SitemapRequestHandler implements MessageHandlerInterface
+#[AsMessageHandler]
+class SitemapRequestHandler
 {
 	public function __construct(
 		private readonly ProjectRepository $projectRepository,
