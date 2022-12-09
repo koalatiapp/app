@@ -12,6 +12,7 @@ use App\Util\Testing\RecommendationGroup;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route(path: '/internal-api/testing/recommendations', name: 'api_testing_recommendation_')]
@@ -76,7 +77,7 @@ class RecommendationController extends AbstractController
 	 * Marks all recommendations from a given group as completed.
 	 */
 	#[Route(path: '/groups/{id}/complete', methods: ['PUT'], name: 'group_complete', options: ['expose' => true])]
-	public function completeGroup(int $id, RecommendationRepository $recommendationRepository): JsonResponse
+	public function completeGroup(int $id, RecommendationRepository $recommendationRepository, MessageBusInterface $bus): JsonResponse
 	{
 		$recommendation = $recommendationRepository->find($id);
 
@@ -112,7 +113,7 @@ class RecommendationController extends AbstractController
 			$project->getId(),
 			$recommendationGroup->getSample()->getParentResult()->getParentResponse()->getTool()
 		);
-		$this->dispatchMessage($testingRequest);
+		$bus->dispatch($testingRequest);
 
 		return $this->apiSuccess($recommendationGroup);
 	}

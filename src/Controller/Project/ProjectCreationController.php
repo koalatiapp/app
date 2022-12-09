@@ -12,12 +12,13 @@ use App\Util\Url;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ProjectCreationController extends AbstractProjectController
 {
 	#[Route(path: '/project/create', name: 'project_creation')]
-	public function projectCreation(Url $urlHelper, Request $request, StackDetector $stackDetector): Response
+	public function projectCreation(Url $urlHelper, Request $request, StackDetector $stackDetector, MessageBusInterface $bus): Response
 	{
 		$project = new Project();
 		$project->setOwnerUser($this->getUser());
@@ -65,9 +66,9 @@ class ProjectCreationController extends AbstractProjectController
 				$this->entityManager->persist($project);
 				$this->entityManager->flush();
 
-				$this->dispatchMessage(new ScreenshotRequest($project->getId()));
-				$this->dispatchMessage(new FaviconRequest($project->getId()));
-				$this->dispatchMessage(new SitemapRequest($project->getId()));
+				$bus->dispatch(new ScreenshotRequest($project->getId()));
+				$bus->dispatch(new FaviconRequest($project->getId()));
+				$bus->dispatch(new SitemapRequest($project->getId()));
 				$this->addFlash('success', 'project_creation.flash.created_successfully', ['%name%' => $project->getName()]);
 
 				return $this->redirectToRoute('project_dashboard', ['id' => $this->idHasher->encode($project->getId())]);

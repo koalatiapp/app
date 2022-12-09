@@ -15,11 +15,17 @@ use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ProjectSettingsController extends AbstractProjectController
 {
 	use SuggestUpgradeControllerTrait;
+
+	public function __construct(
+		private readonly MessageBusInterface $bus,
+	) {
+	}
 
 	#[Route(path: '/project/{id}/settings/team', name: 'project_settings_team')]
 	public function teamSettings(int $id): Response
@@ -118,9 +124,9 @@ class ProjectSettingsController extends AbstractProjectController
 			$this->addFlash('success', 'project_settings.project.flash.updated_successfully', ['%name%' => $project->getName()]);
 
 			if ($urlHasChanged) {
-				$this->dispatchMessage(new ScreenshotRequest($project->getId()));
-				$this->dispatchMessage(new FaviconRequest($project->getId()));
-				$this->dispatchMessage(new SitemapRequest($project->getId()));
+				$this->bus->dispatch(new ScreenshotRequest($project->getId()));
+				$this->bus->dispatch(new FaviconRequest($project->getId()));
+				$this->bus->dispatch(new SitemapRequest($project->getId()));
 			}
 		}
 	}

@@ -6,6 +6,7 @@ use App\Controller\Trait\SuggestUpgradeControllerTrait;
 use App\Message\TestingRequest;
 use App\Security\ProjectVoter;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ProjectTestingController extends AbstractProjectController
@@ -13,7 +14,7 @@ class ProjectTestingController extends AbstractProjectController
 	use SuggestUpgradeControllerTrait;
 
 	#[Route(path: '/project/{id}/testing', name: 'project_testing')]
-	public function projectTesting(int $id): Response
+	public function projectTesting(int $id, MessageBusInterface $bus): Response
 	{
 		$project = $this->getProject($id);
 
@@ -22,7 +23,7 @@ class ProjectTestingController extends AbstractProjectController
 		}
 
 		if (!$project->getRecommendations()->count()) {
-			$this->dispatchMessage(new TestingRequest($id));
+			$bus->dispatch(new TestingRequest($id));
 		}
 
 		return $this->render('app/project/testing/index.html.twig', [
