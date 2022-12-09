@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "02f7de443764c1d0e73996dafeff4714",
+    "content-hash": "be4bd36314c58534fec3c1387f256ddb",
     "packages": [
         {
             "name": "api-platform/core",
@@ -2287,16 +2287,16 @@
         },
         {
             "name": "friendsofsymfony/jsrouting-bundle",
-            "version": "3.1.1",
+            "version": "3.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSJsRoutingBundle.git",
-                "reference": "396b0711a585e7687e50bf80cb8b5ca659246bf0"
+                "reference": "fb188bfe352ccd7ecff06c08eca05fed47f30de4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSJsRoutingBundle/zipball/396b0711a585e7687e50bf80cb8b5ca659246bf0",
-                "reference": "396b0711a585e7687e50bf80cb8b5ca659246bf0",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSJsRoutingBundle/zipball/fb188bfe352ccd7ecff06c08eca05fed47f30de4",
+                "reference": "fb188bfe352ccd7ecff06c08eca05fed47f30de4",
                 "shasum": ""
             },
             "require": {
@@ -2347,9 +2347,9 @@
             ],
             "support": {
                 "issues": "https://github.com/FriendsOfSymfony/FOSJsRoutingBundle/issues",
-                "source": "https://github.com/FriendsOfSymfony/FOSJsRoutingBundle/tree/3.1.1"
+                "source": "https://github.com/FriendsOfSymfony/FOSJsRoutingBundle/tree/3.2.1"
             },
-            "time": "2022-03-02T16:49:12+00:00"
+            "time": "2022-07-01T11:50:22+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -11188,35 +11188,35 @@
         },
         {
             "name": "symfonycasts/reset-password-bundle",
-            "version": "v1.13.0",
+            "version": "v1.16.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SymfonyCasts/reset-password-bundle.git",
-                "reference": "6e926da7fb2031ef38a385a994ea3a52b436dc8c"
+                "reference": "05216bfd80d4019a155d326501f00bf92b9cd439"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SymfonyCasts/reset-password-bundle/zipball/6e926da7fb2031ef38a385a994ea3a52b436dc8c",
-                "reference": "6e926da7fb2031ef38a385a994ea3a52b436dc8c",
+                "url": "https://api.github.com/repos/SymfonyCasts/reset-password-bundle/zipball/05216bfd80d4019a155d326501f00bf92b9cd439",
+                "reference": "05216bfd80d4019a155d326501f00bf92b9cd439",
                 "shasum": ""
             },
             "require": {
+                "ext-json": "*",
                 "php": ">=7.2.5",
-                "symfony/config": "^4.4 | ^5.0 | ^6.0",
-                "symfony/dependency-injection": "^4.4 | ^5.0 | ^6.0",
+                "symfony/config": "^5.4 | ^6.0",
+                "symfony/dependency-injection": "^5.4 | ^6.0",
                 "symfony/deprecation-contracts": "^2.2 | ^3.0",
-                "symfony/http-kernel": "^4.4 | ^5.0 | ^6.0"
+                "symfony/http-kernel": "^5.4 | ^6.0"
             },
             "conflict": {
                 "doctrine/orm": "<2.7",
-                "symfony/framework-bundle": "<4.4",
-                "symfony/http-foundation": "<4.4"
+                "php": ">=8.1 <8.1.10"
             },
             "require-dev": {
                 "doctrine/doctrine-bundle": "^2.0.3",
                 "doctrine/orm": "^2.7",
-                "symfony/framework-bundle": "^4.4 | ^5.0 | ^6.0",
-                "symfony/phpunit-bridge": "^5.0 | ^6.0",
+                "symfony/framework-bundle": "^5.4 | ^6.0",
+                "symfony/phpunit-bridge": "^5.4 | ^6.0",
                 "vimeo/psalm": "^4.3"
             },
             "type": "symfony-bundle",
@@ -11232,9 +11232,9 @@
             "description": "Symfony bundle that adds password reset functionality.",
             "support": {
                 "issues": "https://github.com/SymfonyCasts/reset-password-bundle/issues",
-                "source": "https://github.com/SymfonyCasts/reset-password-bundle/tree/v1.13.0"
+                "source": "https://github.com/SymfonyCasts/reset-password-bundle/tree/v1.16.0"
             },
-            "time": "2022-02-23T14:48:27+00:00"
+            "time": "2022-10-04T08:38:58+00:00"
         },
         {
             "name": "symfonycasts/verify-email-bundle",
