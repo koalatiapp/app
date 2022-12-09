@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Subscription\Plan\BusinessPlan;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -16,10 +17,9 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 /**
  * Enables creation of a user via the command line.
  */
+#[AsCommand(name: 'app:security:create-user')]
 class CreateUserCommand extends Command
 {
-	protected static $defaultName = 'app:security:create-user';
-
 	/**
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */

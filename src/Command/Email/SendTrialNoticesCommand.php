@@ -6,6 +6,7 @@ use App\Entity\UserMetadata;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -14,9 +15,9 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+#[AsCommand(name: 'app:email:trial-ending-notices')]
 class SendTrialNoticesCommand extends Command
 {
-	protected static $defaultName = 'app:email:trial-ending-notices';
 	protected const TIME_BEFORE_TRIAL_EXPIRES = '+2 days';
 
 	/**
