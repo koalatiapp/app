@@ -5,12 +5,11 @@ namespace App\Repository;
 use App\Entity\User;
 use App\Subscription\Plan\NoPlan;
 use App\Subscription\Plan\TrialPlan;
-use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @extends ServiceEntityRepository<User>
@@ -30,7 +29,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 	/**
 	 * Used to upgrade (rehash) the user's password automatically over time.
 	 */
-	public function upgradePassword(UserInterface $user, string $newEncodedPassword): void
+	public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newEncodedPassword): void
 	{
 		if (!$user instanceof User) {
 			throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', $user::class));

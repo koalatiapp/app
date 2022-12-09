@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Hashids\HashidsInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as DefaultAbstractController;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -48,7 +49,7 @@ abstract class AbstractController extends DefaultAbstractController
 	 *
 	 * @return User|null
 	 */
-	protected function getUser()
+	protected function getUser(): ?UserInterface
 	{
 		/** @var User|null */
 		$user = parent::getUser();
