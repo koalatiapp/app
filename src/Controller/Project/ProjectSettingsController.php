@@ -78,9 +78,8 @@ class ProjectSettingsController extends AbstractProjectController
 			if ($this->isRequestingDeletion($form, $request)) {
 				if ($form->get('deleteConfirmation')->getData() === true) {
 					$projectName = $project->getName();
-					$em = $this->getDoctrine()->getManager();
-					$em->remove($project);
-					$em->flush();
+					$this->entityManager->remove($project);
+					$this->entityManager->flush();
 
 					$this->addFlash('success', 'project_settings.project.flash.deleted_successfully', ['%name%' => $projectName]);
 
@@ -113,9 +112,8 @@ class ProjectSettingsController extends AbstractProjectController
 
 		if ($form->isValid()) {
 			$project->setUrl($websiteUrl);
-			$em = $this->getDoctrine()->getManager();
-			$em->persist($project);
-			$em->flush();
+			$this->entityManager->persist($project);
+			$this->entityManager->flush();
 
 			$this->addFlash('success', 'project_settings.project.flash.updated_successfully', ['%name%' => $project->getName()]);
 

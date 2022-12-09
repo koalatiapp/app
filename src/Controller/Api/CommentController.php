@@ -11,7 +11,6 @@ use App\Repository\Checklist\ItemRepository;
 use App\Repository\CommentRepository;
 use App\Security\ProjectVoter;
 use App\Util\HtmlSanitizer;
-use Doctrine\ORM\EntityManagerInterface;
 use Hashids\HashidsInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,7 +48,7 @@ class CommentController extends AbstractController
 	}
 
 	#[Route(path: '', methods: ['POST', 'PUT'], name: 'submit', options: ['expose' => true])]
-	public function submit(Request $request, CommentRepository $commentRepository, ItemRepository $itemRepository, EntityManagerInterface $entityManager, HtmlSanitizer $htmlSanitizer): JsonResponse
+	public function submit(Request $request, CommentRepository $commentRepository, ItemRepository $itemRepository, HtmlSanitizer $htmlSanitizer): JsonResponse
 	{
 		$projectId = $request->request->get('project_id');
 
@@ -97,8 +96,8 @@ class CommentController extends AbstractController
 			$comment->setThread($thread);
 		}
 
-		$entityManager->persist($comment);
-		$entityManager->flush();
+		$this->entityManager->persist($comment);
+		$this->entityManager->flush();
 
 		$this->updateDispatcher->dispatch($comment, UpdateType::CREATE);
 
@@ -126,7 +125,7 @@ class CommentController extends AbstractController
 	}
 
 	#[Route(path: '/{id}/resolve', methods: ['PATCH'], name: 'resolve', options: ['expose' => true])]
-	public function resolve(int $id, CommentRepository $commentRepository, EntityManagerInterface $entityManager): JsonResponse
+	public function resolve(int $id, CommentRepository $commentRepository): JsonResponse
 	{
 		$comment = $commentRepository->find($id);
 
@@ -139,8 +138,8 @@ class CommentController extends AbstractController
 		}
 
 		$comment->setIsResolved(true);
-		$entityManager->persist($comment);
-		$entityManager->flush();
+		$this->entityManager->persist($comment);
+		$this->entityManager->flush();
 
 		$this->updateDispatcher->dispatch($comment, UpdateType::UPDATE);
 

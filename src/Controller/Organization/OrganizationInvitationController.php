@@ -43,10 +43,9 @@ class OrganizationInvitationController extends AbstractController
 		// Everything looks good: add the user to the organization
 		$membership = new OrganizationMember($invitation->getOrganization(), $this->getUser(), OrganizationMember::ROLE_MEMBER);
 		$invitation->markAsUsed();
-		$em = $this->getDoctrine()->getManager();
-		$em->persist($invitation);
-		$em->persist($membership);
-		$em->flush();
+		$this->entityManager->persist($invitation);
+		$this->entityManager->persist($membership);
+		$this->entityManager->flush();
 
 		return $this->redirectToRoute('organization_dashboard', ['id' => $this->idHasher->encode($invitation->getOrganization()->getId())]);
 	}

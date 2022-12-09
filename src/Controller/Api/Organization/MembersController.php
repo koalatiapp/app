@@ -63,9 +63,8 @@ class MembersController extends AbstractController
 
 		$organizationName = $membership->getOrganization()->getName();
 
-		$em = $this->getDoctrine()->getManager();
-		$em->remove($membership);
-		$em->flush();
+		$this->entityManager->remove($membership);
+		$this->entityManager->flush();
 
 		return $this->apiSuccess([
 				'message' => $this->translator->trans('organization.flash.member_removed_successfully', [
@@ -91,9 +90,8 @@ class MembersController extends AbstractController
 
 		$membership->setHighestRole($newRole);
 
-		$em = $this->getDoctrine()->getManager();
-		$em->persist($membership);
-		$em->flush();
+		$this->entityManager->persist($membership);
+		$this->entityManager->flush();
 
 		return $this->apiSuccess([
 				'message' => $this->translator->trans('organization.flash.member_role_updated_successfully', [
@@ -126,9 +124,8 @@ class MembersController extends AbstractController
 
 		$invitation = new OrganizationInvitation($firstName, $email, $organization, $this->getUser());
 
-		$em = $this->getDoctrine()->getManager();
-		$em->persist($invitation);
-		$em->flush();
+		$this->entityManager->persist($invitation);
+		$this->entityManager->flush();
 
 		$email = (new TemplatedEmail())
 				->to(new Address($email, $firstName))

@@ -90,7 +90,6 @@ class RecommendationController extends AbstractController
 			return $this->accessDenied();
 		}
 
-		$em = $this->getDoctrine()->getManager();
 		$recommendationGroups = $project->getActiveRecommendationGroups();
 		$recommendationGroup = $recommendationGroups[$recommendation->getUniqueName()];
 
@@ -103,10 +102,10 @@ class RecommendationController extends AbstractController
 
 		foreach ($recommendationGroup->getRecommendations() as $recommendation) {
 			$recommendation->complete($this->getUser());
-			$em->persist($recommendation);
+			$this->entityManager->persist($recommendation);
 		}
 
-		$em->flush();
+		$this->entityManager->flush();
 
 		// Trigger a new testing request for this tool
 		$testingRequest = new TestingRequest(

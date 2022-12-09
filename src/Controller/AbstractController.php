@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
 use Hashids\HashidsInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as DefaultAbstractController;
@@ -16,6 +17,13 @@ abstract class AbstractController extends DefaultAbstractController
 	protected TranslatorInterface $translator;
 	protected LoggerInterface $logger;
 	protected HashidsInterface $idHasher;
+	protected EntityManagerInterface $entityManager;
+
+	#[\Symfony\Contracts\Service\Attribute\Required]
+	public function setEntityManager(EntityManagerInterface $entityManager): void
+	{
+		$this->entityManager = $entityManager;
+	}
 
 	#[\Symfony\Contracts\Service\Attribute\Required]
 	public function setTranslator(TranslatorInterface $translator): void

@@ -28,7 +28,7 @@ class DefaultNormalizer implements ContextAwareNormalizerInterface
 	/**
 	 * @return array<mixed,mixed>|string|int|float|bool|\ArrayObject<int|string,mixed>|null
 	 */
-	public function normalize(mixed $data, string $format = null, array $context = [])
+	public function normalize(mixed $data, string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
 	{
 		if ($data === null || is_scalar($data)) {
 			return $data;
@@ -81,7 +81,7 @@ class DefaultNormalizer implements ContextAwareNormalizerInterface
 	/**
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
-	public function supportsNormalization($data, string $format = null, array $context = [])
+	public function supportsNormalization($data, string $format = null, array $context = []): bool
 	{
 		return !($data instanceof Project);
 	}

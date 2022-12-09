@@ -7,7 +7,6 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Subscription\Plan\NoPlan;
 use App\Subscription\PlanManager;
-use Doctrine\ORM\EntityManagerInterface;
 use Paddle\API as PaddleAPI;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,7 +27,6 @@ class PaddleController extends AbstractController
 		private readonly PaddleAPI $paddleApi,
 		private readonly PlanManager $planManager,
 		private readonly UserRepository $userRepository,
-		private readonly EntityManagerInterface $entityManager,
 		private readonly MailerInterface $mailer,
 	) {
 	}

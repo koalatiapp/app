@@ -79,9 +79,8 @@ class ItemController extends AbstractController
 		$completed = $request->request->get('is_completed');
 		$item->setIsCompleted($completed);
 
-		$em = $this->getDoctrine()->getManager();
-		$em->persist($item);
-		$em->flush();
+		$this->entityManager->persist($item);
+		$this->entityManager->flush();
 
 		$this->updateDispatcher->dispatch($item, UpdateType::UPDATE);
 

@@ -7,7 +7,6 @@ use App\Form\User\UserChangeEmailType;
 use App\Form\User\UserChangePasswordType;
 use App\Form\User\UserDeleteAccountType;
 use App\Security\EmailVerifier;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +19,6 @@ class SecuritySettingsController extends AbstractController
 	public function __construct(
 		private readonly UserPasswordHasherInterface $passwordHasher,
 		private readonly TokenStorageInterface $tokenStorage,
-		private readonly EntityManagerInterface $entityManager,
 		private readonly EmailVerifier $emailVerifier,
 	) {
 	}

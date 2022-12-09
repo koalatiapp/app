@@ -23,8 +23,9 @@ class ProjectNormalizer implements ContextAwareNormalizerInterface
 
 	/**
 	 * @param Project $project
+	 * @return array<mixed>|string|int|float|bool|\ArrayObject<int|string,mixed>|null
 	 */
-	public function normalize($project, string $format = null, array $context = [])
+	public function normalize($project, string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
 	{
 		$data = $this->container->get('DefaultNormalizer')->normalize($project, $format, $context);
 
@@ -41,7 +42,7 @@ class ProjectNormalizer implements ContextAwareNormalizerInterface
 	/**
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
-	public function supportsNormalization($data, string $format = null, array $context = [])
+	public function supportsNormalization($data, string $format = null, array $context = []): bool
 	{
 		return $data instanceof Project;
 	}

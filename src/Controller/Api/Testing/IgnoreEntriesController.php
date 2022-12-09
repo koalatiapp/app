@@ -43,7 +43,6 @@ class IgnoreEntriesController extends AbstractController
 	#[Route(path: '', methods: ['POST', 'PUT'], name: 'create', options: ['expose' => true])]
 	public function create(Request $request, RecommendationRepository $recommendationRepository): JsonResponse
 	{
-		$em = $this->getDoctrine()->getManager();
 		$scope = $request->request->get('scope');
 		$encodedRecommendationId = $request->request->get('recommendation_id');
 		$recommendationId = $this->idHasher->decode($encodedRecommendationId)[0];
@@ -86,8 +85,8 @@ class IgnoreEntriesController extends AbstractController
 				break;
 		}
 
-		$em->persist($ignoreEntry);
-		$em->flush();
+		$this->entityManager->persist($ignoreEntry);
+		$this->entityManager->flush();
 
 		$this->updateDispatcher->dispatch($ignoreEntry, UpdateType::CREATE);
 
@@ -117,9 +116,8 @@ class IgnoreEntriesController extends AbstractController
 
 		$this->updateDispatcher->prepare($entry, UpdateType::DELETE);
 
-		$em = $this->getDoctrine()->getManager();
-		$em->remove($entry);
-		$em->flush();
+		$this->entityManager->remove($entry);
+		$this->entityManager->flush();
 
 		$this->updateDispatcher->dispatchPreparedUpdates();
 

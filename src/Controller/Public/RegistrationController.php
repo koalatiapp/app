@@ -10,7 +10,6 @@ use App\Subscription\Plan\NoPlan;
 use App\Subscription\Plan\TrialPlan;
 use App\Util\Analytics\AnalyticsInterface;
 use App\Util\SelfHosting;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,7 +29,7 @@ class RegistrationController extends AbstractController
 	}
 
 	#[Route(path: '/sign-up', name: 'registration')]
-	public function signUp(Request $request, EntityManagerInterface $entityManager, SelfHosting $selfHosting, MailerInterface $mailer): Response
+	public function signUp(Request $request, SelfHosting $selfHosting, MailerInterface $mailer): Response
 	{
 		$user = new User();
 		$form = $this->createForm(UserRegistrationType::class, $user);
@@ -56,8 +55,8 @@ class RegistrationController extends AbstractController
 							->setUpcomingSubscriptionPlan(NoPlan::UNIQUE_NAME);
 				}
 
-				$entityManager->persist($user);
-				$entityManager->flush();
+				$this->entityManager->persist($user);
+				$this->entityManager->flush();
 
 				// Request that the users validates their email address
 				$this->emailVerifier->sendEmailConfirmation($user);

@@ -55,11 +55,10 @@ class OrganizationController extends AbstractController
 			$organization->setSlug($slug);
 
 			if ($form->isValid()) {
-				$em = $this->getDoctrine()->getManager();
 				$membership = new OrganizationMember($organization, $this->getUser(), [OrganizationMember::ROLE_OWNER]);
-				$em->persist($organization);
-				$em->persist($membership);
-				$em->flush();
+				$this->entityManager->persist($organization);
+				$this->entityManager->persist($membership);
+				$this->entityManager->flush();
 
 				$this->addFlash('success', 'organization.flash.created_successfully', ['%name%' => $organization->getName()]);
 
@@ -115,9 +114,8 @@ class OrganizationController extends AbstractController
 				}
 			}
 
-			$em = $this->getDoctrine()->getManager();
-			$em->remove($membership);
-			$em->flush();
+			$this->entityManager->remove($membership);
+			$this->entityManager->flush();
 
 			$this->addFlash('success', 'organization.flash.member_left_successfully', ['%organization%' => $organization->getName()]);
 
@@ -157,18 +155,16 @@ class OrganizationController extends AbstractController
 		$deletionForm->handleRequest($request);
 
 		if ($deletionForm->isSubmitted() && $deletionForm->isValid()) {
-			$em = $this->getDoctrine()->getManager();
-
 			foreach ($organization->getMembers() as $member) {
-				$em->remove($member);
+				$this->entityManager->remove($member);
 			}
 
 			foreach ($organization->getProjects() as $project) {
-				$em->remove($project);
+				$this->entityManager->remove($project);
 			}
 
-			$em->remove($organization);
-			$em->flush();
+			$this->entityManager->remove($organization);
+			$this->entityManager->flush();
 
 			$this->addFlash('success', 'organization.flash.deleted_successfully', ['%name%' => $organization->getName()]);
 
@@ -188,9 +184,8 @@ class OrganizationController extends AbstractController
 			$organization->setSlug($slug);
 
 			if ($form->isValid()) {
-				$em = $this->getDoctrine()->getManager();
-				$em->persist($organization);
-				$em->flush();
+				$this->entityManager->persist($organization);
+				$this->entityManager->flush();
 
 				$this->addFlash('success', 'organization.flash.updated_successfully', ['%name%' => $organization->getName()]);
 			}

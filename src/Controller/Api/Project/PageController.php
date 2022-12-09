@@ -65,9 +65,8 @@ class PageController extends AbstractController
 			$page->setIsIgnored(true);
 		}
 
-		$em = $this->getDoctrine()->getManager();
-		$em->persist($page);
-		$em->flush();
+		$this->entityManager->persist($page);
+		$this->entityManager->flush();
 
 		return $this->apiSuccess([
 				'enabled' => !$page->getIsIgnored(),

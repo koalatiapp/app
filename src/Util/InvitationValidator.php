@@ -6,6 +6,7 @@ use App\Repository\OrganizationInvitationRepository;
 use Exception;
 use Hashids\HashidsInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -15,12 +16,15 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class InvitationValidator
 {
+	private SessionInterface $session;
+
 	public function __construct(
-		private readonly SessionInterface $session,
 		private readonly RouterInterface $router,
 		private readonly OrganizationInvitationRepository $invitationRepository,
 		private readonly HashidsInterface $idHasher,
+		RequestStack $requestStack,
 	) {
+		$this->session = $requestStack->getSession();
 	}
 
 	public function userWasReferedByValidInvitation(): bool

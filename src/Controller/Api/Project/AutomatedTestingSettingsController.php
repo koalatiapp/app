@@ -67,9 +67,8 @@ class AutomatedTestingSettingsController extends AbstractController
 			$project->disableTool($toolName);
 		}
 
-		$em = $this->getDoctrine()->getManager();
-		$em->persist($project);
-		$em->flush();
+		$this->entityManager->persist($project);
+		$this->entityManager->flush();
 
 		return $this->apiSuccess([
 				'tool' => $toolName,

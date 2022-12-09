@@ -62,9 +62,8 @@ class ProjectCreationController extends AbstractProjectController
 					$project->addTag($framework);
 				}
 
-				$em = $this->getDoctrine()->getManager();
-				$em->persist($project);
-				$em->flush();
+				$this->entityManager->persist($project);
+				$this->entityManager->flush();
 
 				$this->dispatchMessage(new ScreenshotRequest($project->getId()));
 				$this->dispatchMessage(new FaviconRequest($project->getId()));

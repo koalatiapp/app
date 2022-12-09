@@ -14,16 +14,12 @@ class ContactPreferencesController extends AbstractController
 	public function contactPreferences(Request $request): Response
 	{
 		$user = $this->getUser();
-		/**
-		 * @var \Symfony\Component\Form\Form $form
-		 */
 		$form = $this->createForm(UserProfileType::class, $user);
 		$form->handleRequest($request);
 
 		if ($form->isSubmitted() && $form->isValid()) {
-			$em = $this->getDoctrine()->getManager();
-			$em->persist($user);
-			$em->flush();
+			$this->entityManager->persist($user);
+			$this->entityManager->flush();
 
 			$this->addFlash('success', $this->translator->trans('user_settings.profile.flash.success'));
 		}
