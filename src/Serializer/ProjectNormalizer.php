@@ -23,6 +23,7 @@ class ProjectNormalizer implements ContextAwareNormalizerInterface
 
 	/**
 	 * @param Project $project
+	 *
 	 * @return array<mixed>|string|int|float|bool|\ArrayObject<int|string,mixed>|null
 	 */
 	public function normalize($project, string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
