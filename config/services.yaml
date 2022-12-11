@@ -187,6 +187,13 @@ services:
             - !tagged_iterator app.mercure_entity_handler
 
 
+    # API
+    ApiPlatform\State\ProviderInterface $doctrineCollectionProvider: '@api_platform.doctrine.orm.state.collection_provider'
+    ApiPlatform\State\ProviderInterface $doctrineItemProvider: '@api_platform.doctrine.orm.state.item_provider'
+    ApiPlatform\State\ProcessorInterface $persistProcessor: '@api_platform.doctrine.orm.state.persist_processor'
+    ApiPlatform\State\ProcessorInterface $removeProcessor: '@api_platform.doctrine.orm.state.remove_processor'
+
+
     ############################
     # Doctrine event listeners #
     ############################

@@ -1,0 +1,26 @@
+api_platform:
+    mapping:
+        paths: ['%kernel.project_dir%/src/Api/Model']
+    patch_formats:
+        json:     ['application/merge-patch+json', 'application/json']
+    formats:
+        jsonld:   ['application/ld+json']
+        jsonhal:  ['application/hal+json']
+        jsonapi:  ['application/vnd.api+json']
+        json:     ['application/json']
+        xml:      ['application/xml', 'text/xml']
+        yaml:     ['application/x-yaml']
+        csv:      ['text/csv']
+        html:     ['text/html']
+    defaults:
+        normalizationContext:
+            groups: ['read']
+        denormalizationContext:
+            groups: ['write']
+            allow_extra_attributes: false
+    exception_to_status:
+        Symfony\Component\Serializer\Exception\ExceptionInterface: 400 # Use a raw status code (recommended)
+        ApiPlatform\Exception\InvalidArgumentException: !php/const Symfony\Component\HttpFoundation\Response::HTTP_BAD_REQUEST
+        ApiPlatform\Exception\FilterValidationException: 400
+        Doctrine\ORM\OptimisticLockException: 409
+        Symfony\Component\Serializer\Exception\ExtraAttributesException: 400
