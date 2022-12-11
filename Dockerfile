@@ -13,6 +13,7 @@ FROM php:${PHP_VERSION}-fpm-alpine AS symfony_php
 # persistent / runtime deps
 RUN apk add --no-cache \
 		acl \
+		openssl \
 		fcgi \
 		file \
 		gettext \

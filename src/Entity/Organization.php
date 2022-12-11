@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use App\Api\State\OrganizationProcessor;
 use App\Entity\Checklist\ChecklistTemplate;
 use App\Entity\Testing\IgnoreEntry;
 use App\Mercure\MercureEntityInterface;
@@ -11,54 +13,58 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 
+#[ApiResource(
+	processor: OrganizationProcessor::class,
+)]
 #[ORM\Entity(repositoryClass: OrganizationRepository::class)]
 class Organization implements MercureEntityInterface, \Stringable
 {
 	#[ORM\Id]
 	#[ORM\GeneratedValue]
 	#[ORM\Column(type: 'integer')]
-	#[Groups(['default'])]
+	#[Groups(['read'])]
 	private ?int $id = null;
 
 	#[ORM\Column(type: 'string', length: 255)]
-	#[Groups(['default'])]
+	#[Groups(['read', 'write'])]
 	private ?string $name = null;
 
 	#[ORM\Column(type: 'string', length: 255)]
-	#[Groups(['default'])]
+	#[Groups(['read'])]
 	private ?string $slug = null;
 
 	/**
-	 * @var \Doctrine\Common\Collections\Collection<int, OrganizationMember>
+	 * @var Collection<int, OrganizationMember>
 	 */
 	#[ORM\OneToMany(targetEntity: OrganizationMember::class, mappedBy: 'organization', orphanRemoval: true)]
 	#[Groups(['members'])]
 	#[MaxDepth(1)]
-	private \Doctrine\Common\Collections\Collection $members;
+	private Collection $members;
 
 	/**
-	 * @var \Doctrine\Common\Collections\Collection<int, Project>
+	 * @var Collection<int, Project>
 	 */
 	#[ORM\OneToMany(targetEntity: Project::class, mappedBy: 'ownerOrganization')]
 	#[Groups(['projects'])]
 	#[MaxDepth(1)]
-	private \Doctrine\Common\Collections\Collection $projects;
+	private Collection $projects;
 
 	/**
-	 * @var \Doctrine\Common\Collections\Collection<int, IgnoreEntry>
+	 * @var Collection<int, IgnoreEntry>
 	 */
 	#[ORM\OneToMany(targetEntity: IgnoreEntry::class, mappedBy: 'targetOrganization')]
 	private Collection $ignoreEntries;
 
 	/**
-	 * @var \Doctrine\Common\Collections\Collection<int, OrganizationInvitation>
+	 * @var Collection<int, OrganizationInvitation>
 	 */
 	#[ORM\OneToMany(targetEntity: OrganizationInvitation::class, mappedBy: 'organization', orphanRemoval: true)]
 	private Collection $organizationInvitations;
 
 	/**
-	 * @var \Doctrine\Common\Collections\Collection<int, ChecklistTemplate>
+	 * @var Collection<int, ChecklistTemplate>
 	 */
 	#[ORM\OneToMany(targetEntity: ChecklistTemplate::class, mappedBy: 'ownerOrganization')]
 	private ?Collection $checklistTemplates;
@@ -84,7 +90,8 @@ class Organization implements MercureEntityInterface, \Stringable
 
 	public function setName(string $name): self
 	{
-		$this->name = strip_tags($name);
+		$this->name = trim(strip_tags($name));
+		$this->slug = strtolower((new AsciiSlugger())->slug($this->name));
 
 		return $this;
 	}
@@ -92,13 +99,6 @@ class Organization implements MercureEntityInterface, \Stringable
 	public function getSlug(): ?string
 	{
 		return $this->slug;
-	}
-
-	public function setSlug(string $slug): self
-	{
-		$this->slug = $slug;
-
-		return $this;
 	}
 
 	/**

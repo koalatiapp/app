@@ -10,7 +10,7 @@ use App\Entity\Organization;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\SecurityBundle\Security;
 
-class TeamQueryFilter implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
+class OrganizationQueryFilter implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
 {
 	public function __construct(
 		private Security $security

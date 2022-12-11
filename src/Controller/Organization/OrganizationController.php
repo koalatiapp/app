@@ -51,9 +51,6 @@ class OrganizationController extends AbstractController
 		$form->handleRequest($request);
 
 		if ($form->isSubmitted()) {
-			$slug = $this->slugger->slug($organization->getName());
-			$organization->setSlug($slug);
-
 			if ($form->isValid()) {
 				$membership = new OrganizationMember($organization, $this->getUser(), [OrganizationMember::ROLE_OWNER]);
 				$this->entityManager->persist($organization);
@@ -180,9 +177,6 @@ class OrganizationController extends AbstractController
 		$form->handleRequest($request);
 
 		if ($form->isSubmitted()) {
-			$slug = $this->slugger->slug(trim($organization->getName()));
-			$organization->setSlug($slug);
-
 			if ($form->isValid()) {
 				$this->entityManager->persist($organization);
 				$this->entityManager->flush();

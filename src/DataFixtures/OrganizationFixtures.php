@@ -20,8 +20,7 @@ class OrganizationFixtures extends Fixture implements DependentFixtureInterface
 	public function load(ObjectManager $manager): void
 	{
 		$organization = (new Organization())
-			->setName('Koalati Inc.')
-			->setSlug('koalati-inc');
+			->setName('Koalati Inc.');
 		$manager->persist($organization);
 
 		$users = $this->userRepository->findAll();
