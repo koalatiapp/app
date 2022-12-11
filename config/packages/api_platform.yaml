@@ -1,4 +1,8 @@
 api_platform:
+    title: 'Koalati API'
+    description: 'Use Koalati''s API to integrate website testing features in your favorite tools and platforms.'
+    version: '1.0.0'
+    show_webby: false
     mapping:
         paths: ['%kernel.project_dir%/src/Entity']
     patch_formats:
@@ -29,3 +33,13 @@ api_platform:
             JWT:
                 name: Authorization
                 type: header
+    openapi:
+        contact:
+            # The identifying name of the contact person/organization.
+            name: Technologies Koalati Inc.
+            # The URL pointing to the contact information. MUST be in the format of a URL.
+            url: https://www.koalati.com/help-center
+            # The email address of the contact person/organization. MUST be in the format of an email address.
+            email: info@koalati.com
+        # A URL to the Terms of Service for the API. MUST be in the format of a URL.
+        termsOfService: https://www.koalati.com/terms-of-use

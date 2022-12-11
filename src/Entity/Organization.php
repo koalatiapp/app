@@ -3,6 +3,12 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Api\State\OrganizationProcessor;
 use App\Entity\Checklist\ChecklistTemplate;
 use App\Entity\Testing\IgnoreEntry;
@@ -17,6 +23,14 @@ use Symfony\Component\String\Slugger\AsciiSlugger;
 
 #[ApiResource(
 	processor: OrganizationProcessor::class,
+	operations: [
+		new Get(),
+		new GetCollection(),
+		new Post(),
+		new Put(security: "is_granted('manage', object)"),
+		new Patch(security: "is_granted('manage', object)"),
+		new Delete(security: "is_granted('manage', object)"),
+	],
 )]
 #[ORM\Entity(repositoryClass: OrganizationRepository::class)]
 class Organization implements MercureEntityInterface, \Stringable
