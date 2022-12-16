@@ -21,7 +21,7 @@ RUN apk add --no-cache \
 		jq \
 	;
 
-ARG APCU_VERSION=5.1.19
+ARG APCU_VERSION=5.1.22
 RUN set -eux; \
 	apk add --no-cache --virtual .build-deps \
 		$PHPIZE_DEPS \
