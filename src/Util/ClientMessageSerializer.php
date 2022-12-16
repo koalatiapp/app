@@ -2,10 +2,10 @@
 
 namespace App\Util;
 
+use App\Serializer\JsonNormalizer;
 use Hashids\HashidsInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
-use Symfony\Component\Serializer\SerializerInterface;
 
 class ClientMessageSerializer
 {
@@ -13,7 +13,7 @@ class ClientMessageSerializer
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.serializer)
 	 */
 	public function __construct(
-		private readonly SerializerInterface $serializer,
+		private readonly JsonNormalizer $normalizer,
 		private readonly HashidsInterface $idHasher,
 	) {
 	}
@@ -27,12 +27,23 @@ class ClientMessageSerializer
 	 */
 	public function serialize(mixed $data, array $groups = []): mixed
 	{
-		$idHasher = $this->idHasher;
+		if (!is_iterable($data)) {
+			$context = [
+				AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => fn ($object) => $this->idHasher->encode($object->getId()),
+				AbstractNormalizer::GROUPS => ['default', ...$groups],
+				AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true,
+				'resource_class' => $data::class,
+			];
 
-		return json_decode($this->serializer->serialize($data, 'json', [
-			AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => fn ($object) => $idHasher->encode($object->getId()),
-			AbstractNormalizer::GROUPS => ['default', ...$groups],
-			AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true,
-		 ]), true, 512, JSON_THROW_ON_ERROR);
+			return $this->normalizer->normalize($data, 'json', $context);
+		}
+
+		$normalized = [];
+
+		foreach ($data as $key => $value) {
+			$normalized[$key] = $this->serialize($value, $groups);
+		}
+
+		return $normalized;
 	}
 }

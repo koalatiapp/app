@@ -146,7 +146,12 @@ services:
     App\Api\OpenApi\JwtDecorator:
         decorates: 'api_platform.openapi.factory'
         arguments: ['@.inner']
-
+    App\Api\Routing\EncryptedIriConverter:
+        decorates: 'api_platform.iri_converter'
+        arguments: ['@.inner']
+    App\Api\State\EncryptedIdsCallableProvider:
+        decorates: 'api_platform.state_provider.locator'
+        arguments: ['@.inner']
 
     ############################
     # Doctrine event listeners #
