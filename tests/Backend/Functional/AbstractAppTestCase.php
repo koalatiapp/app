@@ -42,6 +42,7 @@ abstract class AbstractAppTestCase extends WebTestCase
 
 	/**
 	 * @param string $key User key (see lass constants)
+	 *
 	 * @return array{email:string,password:string}
 	 */
 	protected function getUserCredentials(string $key): array

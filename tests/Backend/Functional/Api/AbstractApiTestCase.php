@@ -32,13 +32,13 @@ abstract class AbstractApiTestCase extends AbstractAppTestCase
 	 * Makes a request to the API and returns the response.
 	 * To authenticate automatically for the request, provide a `$userKey`.
 	 *
-	 * @param string $url Ex.: `/api/organizations`
-	 * @param string $method `GET`, `POST`, `PATCH`, `DELETE`, etc.
-	 * @param null|string $user Which user to authenticate as for the API call (see `USER_` class constants)
+	 * @param string      $url    Ex.: `/api/organizations`
+	 * @param string      $method `GET`, `POST`, `PATCH`, `DELETE`, etc
+	 * @param string|null $user   Which user to authenticate as for the API call (see `USER_` class constants)
 	 */
 	protected function apiRequest(string $url, string $method = "GET", ?array $payload = null, ?string $user = null): ApiResponse
 	{
-		$ch = curl_init("http://caddy/" . ltrim($url, "/"));
+		$ch = curl_init("http://caddy/".ltrim($url, "/"));
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
 		$headers = [
@@ -106,14 +106,14 @@ class ApiResponse
 		return $this->rawContent;
 	}
 
-    public function getStatusCode(): int
+	public function getStatusCode(): int
 	{
 		return $this->statusCode;
 	}
 
-    public function getReasonPhrase(): string
+	public function getReasonPhrase(): string
 	{
-		return match($this->statusCode) {
+		return match ($this->statusCode) {
 			100 => "Continue",
 			101 => "Switching Protocols",
 			102 => "Processing",
