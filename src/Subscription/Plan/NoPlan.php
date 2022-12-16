@@ -14,6 +14,11 @@ class NoPlan extends AbstractPlan
 	 */
 	public const PADDLE_ID = '738679';
 
+	public function hasApiAccess(): bool
+	{
+		return false;
+	}
+
 	public function isPaidPlan(): bool
 	{
 		return false;

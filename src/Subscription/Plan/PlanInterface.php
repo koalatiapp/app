@@ -84,6 +84,11 @@ interface PlanInterface
 	 */
 	public function hasMonitoringAccess(): bool;
 
+	/**
+	 * @return bool Whether the user has access to the Koalati API
+	 */
+	public function hasApiAccess(): bool;
+
 	public function isUpgradeComparedTo(PlanInterface $comparativePlan): bool;
 
 	public function isDowngradeComparedTo(PlanInterface $comparativePlan): bool;

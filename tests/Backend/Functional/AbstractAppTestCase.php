@@ -20,6 +20,7 @@ abstract class AbstractAppTestCase extends WebTestCase
 	protected const USER_SOLO_PLAN = 'user.plan.solo';
 	protected const USER_SMALL_TEAM_PLAN = 'user.plan.team';
 	protected const USER_BUSINESS_PLAN = 'user.plan.business';
+	protected const USER_UNVERIFIED_EMAIL = 'user.unverified';
 
 	protected KernelBrowser $client;
 	protected ?User $user = null;
@@ -53,6 +54,7 @@ abstract class AbstractAppTestCase extends WebTestCase
 			self::USER_SOLO_PLAN => 'solo@plan.com',
 			self::USER_SMALL_TEAM_PLAN => 'smallteam@plan.com',
 			self::USER_BUSINESS_PLAN => 'business@plan.com',
+			self::USER_UNVERIFIED_EMAIL => 'unverified@email.com',
 		};
 
 		if (!$userEmail) {

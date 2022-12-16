@@ -43,4 +43,9 @@ class SoloPlan extends NoPlan
 	{
 		return true;
 	}
+
+	public function hasApiAccess(): bool
+	{
+		return true;
+	}
 }
