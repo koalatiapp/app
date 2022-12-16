@@ -13,8 +13,8 @@ class OrganizationVoter extends Voter
 {
 	final public const VIEW = 'view';
 	final public const PARTICIPATE = 'participate';
-	final public const MANAGE = 'manage';
-	final public const OWN_ORGANIZATION = 'own_organization';
+	final public const EDIT = 'edit';
+	final public const CREATE = 'create';
 
 	/**
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -30,7 +30,7 @@ class OrganizationVoter extends Voter
 	protected function supports(string $attribute, mixed $subject): bool
 	{
 		return $subject instanceof Organization
-			|| $attribute == self::OWN_ORGANIZATION;
+			|| $attribute == self::CREATE;
 	}
 
 	/**
@@ -38,7 +38,7 @@ class OrganizationVoter extends Voter
 	 */
 	protected function voteOnAttribute(string $attribute, mixed $organization, TokenInterface $token): bool
 	{
-		if (!in_array($attribute, [self::VIEW, self::PARTICIPATE, self::MANAGE, self::OWN_ORGANIZATION])) {
+		if (!in_array($attribute, [self::VIEW, self::PARTICIPATE, self::EDIT, self::CREATE])) {
 			throw new \Exception("Undefined organization voter attribute: $attribute");
 		}
 
@@ -49,7 +49,7 @@ class OrganizationVoter extends Voter
 			return false;
 		}
 
-		if ($attribute == self::OWN_ORGANIZATION) {
+		if ($attribute == self::CREATE) {
 			return $this->canUserOwnOrganization($user);
 		}
 
@@ -69,7 +69,7 @@ class OrganizationVoter extends Voter
 		$requiredRoleValue = match ($attribute) {
 			self::VIEW => OrganizationMember::ROLE_VALUES[OrganizationMember::ROLE_VISITOR],
 			self::PARTICIPATE => OrganizationMember::ROLE_VALUES[OrganizationMember::ROLE_MEMBER],
-			self::MANAGE => OrganizationMember::ROLE_VALUES[OrganizationMember::ROLE_ADMIN],
+			self::EDIT => OrganizationMember::ROLE_VALUES[OrganizationMember::ROLE_ADMIN],
 			default => false
 		};
 

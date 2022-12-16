@@ -42,7 +42,7 @@ class MembersController extends AbstractController
 	{
 		$membership = $organizationMemberRepository->find($id);
 
-		if (!$this->isGranted(OrganizationVoter::MANAGE, $membership->getOrganization())) {
+		if (!$this->isGranted(OrganizationVoter::EDIT, $membership->getOrganization())) {
 			return $this->accessDenied();
 		}
 
@@ -80,7 +80,7 @@ class MembersController extends AbstractController
 		$membership = $organizationMemberRepository->find($id);
 		$newRole = $request->request->get('role');
 
-		if (!$this->isGranted(OrganizationVoter::MANAGE, $membership->getOrganization())) {
+		if (!$this->isGranted(OrganizationVoter::EDIT, $membership->getOrganization())) {
 			return $this->accessDenied();
 		}
 
@@ -104,7 +104,7 @@ class MembersController extends AbstractController
 	#[Route(path: '/{id}/invitation', methods: ['POST', 'PUT'], name: 'invite', options: ['expose' => true])]
 	public function sendInvitation(int $id, Request $request, MailerInterface $mailer, TranslatorInterface $translator): JsonResponse
 	{
-		$organization = $this->getOrganization($id, OrganizationVoter::MANAGE);
+		$organization = $this->getOrganization($id, OrganizationVoter::EDIT);
 		$firstName = trim($request->request->get('first_name'));
 		$email = strtolower(trim($request->request->get('email')));
 

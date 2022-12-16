@@ -23,7 +23,7 @@ class OrganizationTest extends AbstractApiTestCase
 	public function testUserCanAccessOrganizationItsAMemberOf()
 	{
 		$response = $this->apiRequest(
-			url: "/api/organizations/1",
+			url: "/api/organizations/ew8BEeB2PO",
 			user: self::USER_TEST,
 		);
 		$this->assertSame(200, $response->getStatusCode());
@@ -38,17 +38,17 @@ class OrganizationTest extends AbstractApiTestCase
 	public function testUserCannotAccessOrganizationItsNotAMemberOf()
 	{
 		$response = $this->apiRequest(
-			url: "/api/organizations/2",
+			url: "/api/organizations/0YpbRqXLl2",
 			user: self::USER_BUSINESS_PLAN,
 		);
-		$this->assertSame(404, $response->getStatusCode());
+		$this->assertSame(403, $response->getStatusCode());
 		$this->assertArrayNotHasKey("@id", $response->getContent());
 	}
 
 	public function testAdminMemberCanEditOrganization()
 	{
 		$response = $this->apiRequest(
-			url: "/api/organizations/1",
+			url: "/api/organizations/ew8BEeB2PO",
 			method: "PATCH",
 			payload: ["name" => "Koalati Inc.!"],
 			user: self::USER_TEST,
@@ -60,7 +60,7 @@ class OrganizationTest extends AbstractApiTestCase
 	public function testNonAdminMemberCannotEditOrganization()
 	{
 		$response = $this->apiRequest(
-			url: "/api/organizations/1",
+			url: "/api/organizations/ew8BEeB2PO",
 			method: "PATCH",
 			payload: ["name" => "Team I Don't Manage"],
 			user: self::USER_BUSINESS_PLAN,

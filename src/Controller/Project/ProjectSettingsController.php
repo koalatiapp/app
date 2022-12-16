@@ -32,7 +32,7 @@ class ProjectSettingsController extends AbstractProjectController
 	{
 		$project = $this->getProject($id);
 
-		if (!$this->isGranted(ProjectVoter::MANAGE, $project)) {
+		if (!$this->isGranted(ProjectVoter::EDIT, $project)) {
 			return $this->suggestPlanUpgrade('upgrade_suggestion.project');
 		}
 
@@ -44,7 +44,7 @@ class ProjectSettingsController extends AbstractProjectController
 	{
 		$project = $this->getProject($id);
 
-		if (!$this->isGranted(ProjectVoter::MANAGE, $project)) {
+		if (!$this->isGranted(ProjectVoter::EDIT, $project)) {
 			return $this->suggestPlanUpgrade('upgrade_suggestion.project');
 		}
 
@@ -56,7 +56,7 @@ class ProjectSettingsController extends AbstractProjectController
 	{
 		$project = $this->getProject($id);
 
-		if (!$this->isGranted(ProjectVoter::MANAGE, $project)) {
+		if (!$this->isGranted(ProjectVoter::EDIT, $project)) {
 			return $this->suggestPlanUpgrade('upgrade_suggestion.project');
 		}
 
@@ -69,7 +69,7 @@ class ProjectSettingsController extends AbstractProjectController
 		$project = $this->getProject($id);
 		$originalProject = clone $project;
 
-		if (!$this->isGranted(ProjectVoter::MANAGE, $project)) {
+		if (!$this->isGranted(ProjectVoter::EDIT, $project)) {
 			return $this->suggestPlanUpgrade('upgrade_suggestion.project');
 		}
 

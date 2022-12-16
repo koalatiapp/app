@@ -2,21 +2,15 @@
 
 namespace App\Api\Security;
 
-use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
-use ApiPlatform\Doctrine\Orm\Extension\QueryItemExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
 use App\Entity\Organization;
+use App\Entity\OrganizationMember;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Bundle\SecurityBundle\Security;
 
-class OrganizationQueryFilter implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
+class OrganizationQueryFilter extends AbstractQueryFilter
 {
-	public function __construct(
-		private Security $security
-	) {
-	}
-
 	/**
 	 * {@inheritDoc}
 	 *
@@ -29,10 +23,8 @@ class OrganizationQueryFilter implements QueryCollectionExtensionInterface, Quer
 		}
 
 		$rootAlias = $queryBuilder->getRootAliases()[0];
-		$membersAlias = $queryNameGenerator->generateJoinAlias("members");
-		$queryBuilder->join("$rootAlias.members", $membersAlias);
-		$queryBuilder->andWhere("$membersAlias.user = :user");
-		$queryBuilder->setParameter(':user', $this->security->getUser());
+		$queryBuilder->join(OrganizationMember::class, "current_member", Join::WITH, "current_member.organization = $rootAlias AND current_member.user = :user");
+		$queryBuilder->setParameter('user', $this->getUser());
 	}
 
 	/**
@@ -43,14 +35,6 @@ class OrganizationQueryFilter implements QueryCollectionExtensionInterface, Quer
 	 */
 	public function applyToItem(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, array $identifiers, Operation $operation = null, array $context = []): void
 	{
-		if ($resourceClass != Organization::class) {
-			return;
-		}
-
-		$rootAlias = $queryBuilder->getRootAliases()[0];
-		$membersAlias = $queryNameGenerator->generateJoinAlias("members");
-		$queryBuilder->join("$rootAlias.members", $membersAlias);
-		$queryBuilder->andWhere("$membersAlias.user = :user");
-		$queryBuilder->setParameter(':user', $this->security->getUser());
+		// Nothing here: security logic is handled by the voter for single items.
 	}
 }

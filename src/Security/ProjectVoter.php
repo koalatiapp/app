@@ -15,7 +15,7 @@ class ProjectVoter extends Voter
 {
 	final public const VIEW = 'view';
 	final public const PARTICIPATE = 'participate';
-	final public const MANAGE = 'manage';
+	final public const EDIT = 'edit';
 	final public const CHECKLIST = 'checklist';
 	final public const TESTING = 'testing';
 
@@ -43,7 +43,7 @@ class ProjectVoter extends Voter
 	 */
 	protected function voteOnAttribute(string $attribute, mixed $project, TokenInterface $token): bool
 	{
-		if (!in_array($attribute, [self::VIEW, self::PARTICIPATE, self::MANAGE, self::CHECKLIST, self::TESTING])) {
+		if (!in_array($attribute, [self::VIEW, self::PARTICIPATE, self::EDIT, self::CHECKLIST, self::TESTING])) {
 			throw new \Exception("Undefined project voter attribute: $attribute");
 		}
 

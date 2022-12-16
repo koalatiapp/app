@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
@@ -18,18 +17,18 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
 #[ApiResource(
 	processor: OrganizationProcessor::class,
+	normalizationContext: ["groups" => "organization.read"],
+	denormalizationContext: ["groups" => "organization.write"],
 	operations: [
-		new Get(),
-		new GetCollection(),
-		new Post(),
-		new Put(security: "is_granted('manage', object)"),
-		new Patch(security: "is_granted('manage', object)"),
-		new Delete(security: "is_granted('manage', object)"),
+		new Get(security: "is_granted('view', object)"),
+		new GetCollection(normalizationContext: ["groups" => "organization.list"]),
+		new Post(security: "is_granted('create', object)"),
+		new Put(security: "is_granted('edit', object)"),
+		new Patch(security: "is_granted('edit', object)"),
 	],
 )]
 #[ORM\Entity(repositoryClass: OrganizationRepository::class)]
@@ -38,23 +37,22 @@ class Organization implements MercureEntityInterface, \Stringable
 	#[ORM\Id]
 	#[ORM\GeneratedValue]
 	#[ORM\Column(type: 'integer')]
-	#[Groups(['read'])]
+	#[Groups(['organization.list', 'organization.read'])]
 	private ?int $id = null;
 
 	#[ORM\Column(type: 'string', length: 255)]
-	#[Groups(['read', 'write'])]
+	#[Groups(['organization.list', 'organization.read', 'organization.write'])]
 	private ?string $name = null;
 
 	#[ORM\Column(type: 'string', length: 255)]
-	#[Groups(['read'])]
+	#[Groups(['organization.list', 'organization.read'])]
 	private ?string $slug = null;
 
 	/**
 	 * @var Collection<int, OrganizationMember>
 	 */
 	#[ORM\OneToMany(targetEntity: OrganizationMember::class, mappedBy: 'organization', orphanRemoval: true)]
-	#[Groups(['members'])]
-	#[MaxDepth(1)]
+	#[Groups(['organization.read'])]
 	private Collection $members;
 
 	/**
@@ -62,7 +60,6 @@ class Organization implements MercureEntityInterface, \Stringable
 	 */
 	#[ORM\OneToMany(targetEntity: Project::class, mappedBy: 'ownerOrganization')]
 	#[Groups(['projects'])]
-	#[MaxDepth(1)]
 	private Collection $projects;
 
 	/**
@@ -303,6 +300,7 @@ class Organization implements MercureEntityInterface, \Stringable
 		return $this;
 	}
 
+	#[Groups(['organization.list', 'organization.read'])]
 	public function getOwner(): ?User
 	{
 		foreach ($this->getMembers() as $membership) {

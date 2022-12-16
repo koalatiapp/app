@@ -30,7 +30,7 @@ abstract class AbstractNormalizerDecorator implements NormalizerInterface, Denor
 		$this->decorated = $inner;
 	}
 
-	public function supportsNormalization($data, $format = null)
+	public function supportsNormalization($data, $format = null): bool
 	{
 		return $this->decorated->supportsNormalization($data, $format);
 	}
@@ -52,7 +52,7 @@ abstract class AbstractNormalizerDecorator implements NormalizerInterface, Denor
 		return $this->decorated->supportsDenormalization($data, $type, $format);
 	}
 
-	public function denormalize($data, string $type, string $format = null, array $context = []): bool
+	public function denormalize($data, string $type, string $format = null, array $context = []): mixed
 	{
 		return $this->decorated->denormalize($data, $type, $format, $context);
 	}
@@ -76,7 +76,7 @@ abstract class AbstractNormalizerDecorator implements NormalizerInterface, Denor
 	 *
 	 * @return array<mixed,mixed>|string|int|float|bool|null
 	 */
-	private function hashIdsInData($data)
+	private function hashIdsInData($data): array|string|int|float|bool|null
 	{
 		if (!is_array($data) && !($data instanceof \Traversable)) {
 			return $data;

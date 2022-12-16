@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
 use App\Entity\Checklist\ChecklistTemplate;
 use App\Entity\Testing\IgnoreEntry;
 use App\Entity\Trait\CollectionManagingEntity;
@@ -21,6 +23,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
+#[ApiResource(
+	normalizationContext: ["groups" => "user.read"],
+	operations: [
+		new Get(),
+	],
+)]
 #[ORM\Table(name: '`user`')]
 #[ORM\Index(name: 'user_paddle_user_id', columns: ['paddle_user_id'])]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -55,12 +63,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
 	protected string $password;
 
 	#[ORM\Column(type: 'string', length: 255)]
-	#[Groups(['default'])]
+	#[Groups(['user.read'])]
 	#[Assert\NotBlank]
 	protected ?string $firstName = null;
 
 	#[ORM\Column(type: 'string', length: 255, nullable: true)]
-	#[Groups(['default'])]
+	#[Groups(['user.read'])]
 	protected ?string $lastName = null;
 
 	#[ORM\Column(type: 'datetime', options: ['default' => 'CURRENT_TIMESTAMP'])]

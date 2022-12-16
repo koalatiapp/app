@@ -2,10 +2,31 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
+use ApiPlatform\Metadata\Patch;
 use App\Repository\OrganizationMemberRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
+#[ApiResource(
+	normalizationContext: ["groups" => "organization.read"],
+	uriTemplate: '/organizations/{organizationId}/members',
+	uriVariables: ['organizationId' => new Link(fromClass: Organization::class, fromProperty: 'members')],
+	operations: [new GetCollection()],
+)]
+#[ApiResource(
+	normalizationContext: ["groups" => "member.read"],
+	denormalizationContext: ["groups" => "member.write"],
+	operations: [
+		new Get(security: "is_granted('view', object)"),
+		new Patch(security: "is_granted('edit', object)"),
+		new Delete(security: "is_granted('edit', object)"),
+	],
+)]
 #[ORM\Entity(repositoryClass: OrganizationMemberRepository::class)]
 class OrganizationMember
 {
@@ -23,28 +44,28 @@ class OrganizationMember
 	#[ORM\Id]
 	#[ORM\GeneratedValue]
 	#[ORM\Column(type: 'integer')]
-	#[Groups(['default'])]
+	#[Groups(['member.read', 'organization.read'])]
 	private ?int $id = null;
 
 	#[ORM\ManyToOne(targetEntity: Organization::class, inversedBy: 'members')]
 	#[ORM\JoinColumn(name: 'organization_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
-	#[Groups(['default'])]
+	#[Groups(['member.read'])]
 	private ?Organization $organization;
 
 	#[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'organizationLinks')]
 	#[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
-	#[Groups(['default'])]
+	#[Groups(['member.read', 'organization.read'])]
 	private ?User $user;
 
 	/**
 	 * @var array<string>
 	 */
 	#[ORM\Column(type: 'json')]
-	#[Groups(['default'])]
+	#[Groups(['member.read', 'member.write', 'organization.read'])]
 	private array $roles = [];
 
 	#[ORM\Column(type: 'datetime')]
-	#[Groups(['default'])]
+	#[Groups(['member.read', 'organization.read'])]
 	private \DateTimeInterface $dateCreated;
 
 	/**
@@ -85,6 +106,18 @@ class OrganizationMember
 		$this->user = $user;
 
 		return $this;
+	}
+
+	#[Groups(['member.read', 'organization.read'])]
+	public function getFirstName(): string
+	{
+		return $this->getUser()->getFirstName();
+	}
+
+	#[Groups(['member.read', 'organization.read'])]
+	public function getLastName(): string
+	{
+		return $this->getUser()->getLastName();
 	}
 
 	/**

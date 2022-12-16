@@ -42,7 +42,7 @@ class OrganizationController extends AbstractController
 	#[Route(path: '/create', name: 'create')]
 	public function create(Request $request): Response
 	{
-		if (!$this->isGranted(OrganizationVoter::OWN_ORGANIZATION)) {
+		if (!$this->isGranted(OrganizationVoter::CREATE)) {
 			return $this->suggestPlanUpgrade('upgrade_suggestion.create_team');
 		}
 
@@ -129,7 +129,7 @@ class OrganizationController extends AbstractController
 	public function settings(int $id, Request $request): Response
 	{
 		$organization = $this->organizationRepository->find($id);
-		$this->denyAccessUnlessGranted(OrganizationVoter::MANAGE, $organization);
+		$this->denyAccessUnlessGranted(OrganizationVoter::EDIT, $organization);
 
 		$deletionForm = $this->processDeletionForm($organization, $request);
 

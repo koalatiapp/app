@@ -7,7 +7,7 @@ class OrganizationMemberTest extends AbstractApiTestCase
 	public function testUserCanListMembersOfOrganizationItsAMemberOf()
 	{
 		$response = $this->apiRequest(
-			url: "/api/organizations/1/members",
+			url: "/api/organizations/ew8BEeB2PO/members",
 			user: self::USER_SMALL_TEAM_PLAN
 		);
 		$responseContent = $response->getContent();
@@ -22,16 +22,16 @@ class OrganizationMemberTest extends AbstractApiTestCase
 	public function testUserCannotListMembersOfOrganizationItsNotAMemberOf()
 	{
 		$response = $this->apiRequest(
-			url: "/api/organizations/2/members",
+			url: "/api/organizations/0YpbRqXLl2/members",
 			user: self::USER_SMALL_TEAM_PLAN
 		);
-		$this->assertSame(404, $response->getStatusCode());
+		$this->assertSame(403, $response->getStatusCode());
 	}
 
 	public function testAdminCanEditMemberRole()
 	{
 		$response = $this->apiRequest(
-			url: "/api/organization_members/2",
+			url: "/api/organization_members/0YpbRqXLl2",
 			method: "PATCH",
 			payload: ["roles" => ["ROLE_VISITOR"]],
 			user: self::USER_TEST
@@ -42,7 +42,7 @@ class OrganizationMemberTest extends AbstractApiTestCase
 	public function testNonAdminCannotEditMemberRole()
 	{
 		$response = $this->apiRequest(
-			url: "/api/organization_members/1",
+			url: "/api/organization_members/ew8BEeB2PO",
 			method: "PATCH",
 			payload: ["roles" => ["ROLE_MEMBER"]],
 			user: self::USER_SMALL_TEAM_PLAN
@@ -53,7 +53,7 @@ class OrganizationMemberTest extends AbstractApiTestCase
 	public function testAdminCanPromoteOtherMemberToAdmin()
 	{
 		$response = $this->apiRequest(
-			url: "/api/organization_members/2",
+			url: "/api/organization_members/0YpbRqXLl2",
 			method: "PATCH",
 			payload: ["roles" => ["ROLE_ADMIN"]],
 			user: self::USER_TEST
@@ -64,17 +64,17 @@ class OrganizationMemberTest extends AbstractApiTestCase
 	public function testAdminCanRemoveTeamMember()
 	{
 		$response = $this->apiRequest(
-			url: "/api/organization_members/3",
+			url: "/api/organization_members/Zv2B8pBzrY",
 			method: "DELETE",
 			user: self::USER_TEST
 		);
-		$this->assertSame(403, $response->getStatusCode());
+		$this->assertSame(204, $response->getStatusCode());
 	}
 
 	public function testOwnerCanGiveTeamOwnershipToOtherMember()
 	{
 		$response = $this->apiRequest(
-			url: "/api/organization_members/2",
+			url: "/api/organization_members/0YpbRqXLl2",
 			method: "PATCH",
 			payload: ["roles" => ["ROLE_OWNER"]],
 			user: self::USER_TEST
@@ -85,7 +85,7 @@ class OrganizationMemberTest extends AbstractApiTestCase
 	public function testAdminCannotDemoteOwner()
 	{
 		$response = $this->apiRequest(
-			url: "/api/organization_members/2",
+			url: "/api/organization_members/0YpbRqXLl2",
 			method: "PATCH",
 			payload: ["roles" => ["ROLE_MEMBER"]],
 			user: self::USER_TEST

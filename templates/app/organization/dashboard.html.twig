@@ -26,7 +26,7 @@
 				<p class="text-gray">{% trans with {"%count%": organization.membersSortedByRole|length - 5} %}organization.dashboard.member_list.x_more{% endtrans %}</p>
 			{% endif %}
 
-			{% if is_granted("manage", organization) %}
+			{% if is_granted("edit", organization) %}
 				<hr>
 				<div class="text-center">
 					<nb-button href="{{ path("organization_settings", {id: organization.id|hashids_encode}) }}#members">

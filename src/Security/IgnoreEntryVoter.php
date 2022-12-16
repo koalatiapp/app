@@ -64,7 +64,7 @@ class IgnoreEntryVoter extends Voter
 	private function checkProjectPrivileges(IgnoreEntry $entry, string $attribute): bool
 	{
 		$project = $entry->getTargetProject() ?: $entry->getTargetPage()?->getProject();
-		$projectRole = $attribute == self::VIEW ? ProjectVoter::VIEW : ProjectVoter::MANAGE;
+		$projectRole = $attribute == self::VIEW ? ProjectVoter::VIEW : ProjectVoter::EDIT;
 
 		return $this->security->isGranted($projectRole, $project);
 	}
