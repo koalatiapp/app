@@ -32,8 +32,20 @@ abstract class AbstractAppTestCase extends WebTestCase
 
 	protected function loadUser(string $key)
 	{
+		$credentials = $this->getUserCredentials($key);
 		$userRepository = static::getContainer()->get(UserRepository::class);
+		$user = $userRepository->findOneByEmail($credentials['email']);
 
+		$this->user = $user;
+		$this->client->loginUser($user);
+	}
+
+	/**
+	 * @param string $key User key (see lass constants)
+	 * @return array{email:string,password:string}
+	 */
+	protected function getUserCredentials(string $key): array
+	{
 		$userEmail = match ($key) {
 			self::USER_TEST => 'name@email.com',
 			self::USER_NO_PLAN => 'no@plan.com',
@@ -46,9 +58,9 @@ abstract class AbstractAppTestCase extends WebTestCase
 			throw new \Exception('Invalid user key: no user is defined in AbstractAppTestCase for key '.$key);
 		}
 
-		$user = $userRepository->findOneByEmail($userEmail);
-
-		$this->user = $user;
-		$this->client->loginUser($user);
+		return [
+			"email" => $userEmail,
+			"password" => "123456",
+		];
 	}
 }

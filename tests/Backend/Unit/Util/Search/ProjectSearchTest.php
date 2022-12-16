@@ -27,7 +27,7 @@ class ProjectSearchTest extends TestCase
 		$this->mockIdHasher->method('encode')->willReturnArgument(0);
 
 		$this->mockTranslator = $this->createMock(TranslatorInterface::class);
-		$this->mockTranslator->method('trans')->willReturnArgument('Project');
+		$this->mockTranslator->method('trans')->willReturn('Project');
 
 		$this->mockRouter = $this->createMock(RouterInterface::class);
 		$this->mockRouter->method('generate')->willReturnCallback(
@@ -60,9 +60,9 @@ class ProjectSearchTest extends TestCase
 		$projectSearchEngine = new ProjectSearch($this->mockRouter, $mockProjectRepository, $this->mockTranslator, $this->mockIdHasher);
 		$this->assertEquals(
 			[
-				new SearchResult('https://app.koalati.com/project/1', 'Emile & Co', null),
-				new SearchResult('https://app.koalati.com/project/2', "Emile's Portfolio", null),
-				new SearchResult('https://app.koalati.com/project/3', 'Koalati', null),
+				new SearchResult('https://app.koalati.com/project/1', 'Emile & Co', "Project"),
+				new SearchResult('https://app.koalati.com/project/2', "Emile's Portfolio", "Project"),
+				new SearchResult('https://app.koalati.com/project/3', 'Koalati', "Project"),
 			],
 			$projectSearchEngine->search(['emile'], null)->toArray()
 		);

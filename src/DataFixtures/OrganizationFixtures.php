@@ -47,6 +47,13 @@ class OrganizationFixtures extends Fixture implements DependentFixtureInterface
 			$isFirstUser = false;
 		}
 
+
+		$secondOrganization = (new Organization())
+			->setName('The Lone Wolf Team');
+		$secondOrganizationMembership = new OrganizationMember($secondOrganization, $this->userRepository->find(1), OrganizationMember::ROLE_OWNER);
+		$manager->persist($secondOrganization);
+		$manager->persist($secondOrganizationMembership);
+
 		$manager->flush();
 	}
 

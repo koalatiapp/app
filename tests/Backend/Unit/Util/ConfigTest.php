@@ -15,7 +15,7 @@ class ConfigTest extends WebTestCase
 	public function setup(): void
 	{
 		self::bootKernel();
-		$this->configHelper = self::$container->get(Config::class);
+		$this->configHelper = self::getContainer()->get(Config::class);
 		$this->configHelper->setConfigDirectory('tests/stub/config');
 	}
 

@@ -5,7 +5,7 @@ namespace App\Tests\Backend\Functional;
 /**
  * Tests the availability of all of the internal API's routes.
  */
-class ApiAvailabilityTest extends AbstractAppTestCase
+class InternalApiAvailabilityTest extends AbstractAppTestCase
 {
 	public function setup(): void
 	{
