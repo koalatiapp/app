@@ -2,19 +2,23 @@
 
 namespace App\Api\Security;
 
+use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
 use App\Api\Routing\EncryptedIriConverter;
 use App\Entity\Organization;
 use App\Entity\OrganizationMember;
 use App\Security\OrganizationVoter;
+use App\Trait\SecurityAwareTrait;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Contracts\Service\Attribute\Required;
 
-class OrganizationMemberQueryFilter extends AbstractQueryFilter
+class OrganizationMemberQueryFilter implements QueryCollectionExtensionInterface
 {
+	use SecurityAwareTrait;
+
 	private EncryptedIriConverter $iriConverter;
 
 	#[Required]
@@ -48,16 +52,5 @@ class OrganizationMemberQueryFilter extends AbstractQueryFilter
 		$rootAlias = $queryBuilder->getRootAliases()[0];
 		$queryBuilder->join(Organization::class, "parent_organization", Join::WITH, "$rootAlias.organization = parent_organization AND parent_organization.id IN (:allowedOrganizationIds)");
 		$queryBuilder->setParameter("allowedOrganizationIds", $allowedOrganizationIds);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @param array<mixed> $context
-	 * @param array<mixed> $identifiers
-	 */
-	public function applyToItem(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, array $identifiers, Operation $operation = null, array $context = []): void
-	{
-		// Nothing here: security logic is handled by the voter for single items.
 	}
 }
