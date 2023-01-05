@@ -14,6 +14,7 @@ use Doctrine\ORM\QueryBuilder;
 class OrganizationQueryFilter implements QueryCollectionExtensionInterface
 {
 	use SecurityAwareTrait;
+
 	/**
 	 * {@inheritDoc}
 	 *

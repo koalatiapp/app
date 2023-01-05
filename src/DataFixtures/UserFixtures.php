@@ -99,6 +99,19 @@ class UserFixtures extends Fixture
 			));
 		$manager->persist($user);
 
+		// User without subscription plan AND without an organization
+		$user = new User();
+		$user->setEmail('no-organiation@plan.com')
+			->setFirstName('Jay "The Loner"')
+			->setLastName('Freeman')
+			->setSubscriptionPlan(NoPlan::UNIQUE_NAME)
+			->setIsVerified(true)
+			->setPassword($this->passwordHasher->hashPassword(
+				$user,
+				'123456'
+			));
+		$manager->persist($user);
+
 		$manager->flush();
 	}
 }

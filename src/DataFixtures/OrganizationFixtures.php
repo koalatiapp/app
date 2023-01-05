@@ -27,6 +27,10 @@ class OrganizationFixtures extends Fixture implements DependentFixtureInterface
 		$isFirstUser = true;
 
 		foreach ($users as $user) {
+			if ($user->getEmail() == "no-organiation@plan.com") {
+				continue;
+			}
+
 			$role = $isFirstUser ? OrganizationMember::ROLE_OWNER : OrganizationMember::ROLE_MEMBER;
 			$membership = new OrganizationMember($organization, $user, $role);
 			$organization->addMember($membership);
