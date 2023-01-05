@@ -58,6 +58,12 @@ class OrganizationMember
 	private ?User $user;
 
 	/**
+	 * Available roles are:
+	 * - `ROLE_OWNER`
+	 * - `ROLE_ADMIN`
+	 * - `ROLE_MEMBER`
+	 * - `ROLE_VISITOR`.
+	 *
 	 * @var array<string>
 	 */
 	#[ORM\Column(type: 'json')]

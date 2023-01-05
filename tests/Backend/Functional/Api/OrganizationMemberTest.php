@@ -84,12 +84,27 @@ class OrganizationMemberTest extends AbstractApiTestCase
 
 	public function testAdminCannotDemoteOwner()
 	{
+		// Make the "no-plan" user an admin
+		$this->apiRequest(
+			url: "/api/organization_members/0YpbRqXLl2",
+			method: "PATCH",
+			payload: ["roles" => ["ROLE_ADMIN"]],
+			user: self::USER_TEST
+		);
+		// Try to demote owner to member from the free user
 		$response = $this->apiRequest(
+			url: "/api/organization_members/ew8BEeB2PO",
+			method: "PATCH",
+			payload: ["roles" => ["ROLE_MEMBER"]],
+			user: self::USER_NO_PLAN
+		);
+		$this->assertSame(403, $response->getStatusCode());
+		// Revert the "no-plan" user to member
+		$this->apiRequest(
 			url: "/api/organization_members/0YpbRqXLl2",
 			method: "PATCH",
 			payload: ["roles" => ["ROLE_MEMBER"]],
 			user: self::USER_TEST
 		);
-		$this->assertSame(403, $response->getStatusCode());
 	}
 }

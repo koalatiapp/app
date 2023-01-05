@@ -3,6 +3,7 @@
 namespace App\Security;
 
 use App\Entity\OrganizationMember;
+use App\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
@@ -36,6 +37,24 @@ class OrganizationMemberVoter extends Voter
 			throw new \Exception("Undefined organization voter attribute: $attribute");
 		}
 
-		return $this->organizationVoter->voteOnAttribute($attribute, $member->getOrganization(), $token);
+		$organization = $member->getOrganization();
+
+		// Check for organization-level access first
+		if (!$this->organizationVoter->voteOnAttribute($attribute, $organization, $token)) {
+			return false;
+		}
+
+		// Esure that only the owner of the organization can edit its own member
+		if ($attribute == self::EDIT && $member->getHighestRole() == OrganizationMember::ROLE_OWNER) {
+			/** @var User */
+			$user = $token->getUser();
+			$currentUserMember = $organization->getMemberFromUser($user);
+
+			if ($currentUserMember->getHighestRole() != OrganizationMember::ROLE_OWNER) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 }
