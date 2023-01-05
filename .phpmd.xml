@@ -42,6 +42,7 @@
 			<exclude name="IfStatementAssignment" />
 			<exclude name="StaticAccess" />
 			<exclude name="MissingImport" />
+			<exclude name="ElseExpression" />
 		</rule>
 
 		<rule ref="rulesets/naming.xml">

@@ -2,8 +2,11 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Organization;
 use App\Entity\Page;
 use App\Entity\Project;
+use App\Entity\User;
+use App\Repository\OrganizationRepository;
 use App\Repository\UserRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -12,7 +15,8 @@ use Doctrine\Persistence\ObjectManager;
 class ProjectFixtures extends Fixture implements DependentFixtureInterface
 {
 	public function __construct(
-		private readonly UserRepository $userRepository
+		private readonly UserRepository $userRepository,
+		private readonly OrganizationRepository $organizationRepository,
 	) {
 	}
 
@@ -21,29 +25,46 @@ class ProjectFixtures extends Fixture implements DependentFixtureInterface
 		$users = $this->userRepository->findAll();
 
 		foreach ($users as $user) {
-			$project = new Project();
-			$project->setName('Koalati');
-			$project->setUrl('https://koalati.com');
-			$project->setOwnerUser($user);
+			$this->createProjectFixture($manager, $user);
+		}
 
-			$homePage = new Page($project, 'https://koalati.com', 'Homepage - Koalati');
-			$project->addPage($homePage);
-			$manager->persist($homePage);
-
-			$aboutPage = new Page($project, 'https://koalati.com/about', 'About - Koalati');
-			$project->addPage($aboutPage);
-			$manager->persist($aboutPage);
-
-			$manager->persist($project);
+		foreach ($this->organizationRepository->findAll() as $organization) {
+			$this->createProjectFixture($manager, $organization);
 		}
 
 		$manager->flush();
+	}
+
+	private function createProjectFixture(ObjectManager $manager, User|Organization $owner): Project
+	{
+		$project = new Project();
+		$project->setName('Koalati');
+		$project->setUrl('https://koalati.com');
+
+		if ($owner instanceof User) {
+			$project->setOwnerUser($owner);
+		} else {
+			$project->setOwnerOrganization($owner);
+		}
+
+		$homePage = new Page($project, 'https://koalati.com', 'Homepage - Koalati');
+		$project->addPage($homePage);
+		$manager->persist($homePage);
+
+		$aboutPage = new Page($project, 'https://koalati.com/about', 'About - Koalati');
+		$project->addPage($aboutPage);
+		$manager->persist($aboutPage);
+
+		$manager->persist($project);
+
+		return $project;
 	}
 
 	public function getDependencies()
 	{
 		return [
 			UserFixtures::class,
+			OrganizationFixtures::class,
 		];
 	}
 }

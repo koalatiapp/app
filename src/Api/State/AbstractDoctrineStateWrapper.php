@@ -9,6 +9,7 @@ use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Hashids\HashidsInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 
 /**
@@ -24,6 +25,7 @@ abstract class AbstractDoctrineStateWrapper implements ProcessorInterface
 	protected ProcessorInterface $removeProcessor;
 	protected EntityManagerInterface $entityManager;
 	protected HashidsInterface $idHasher;
+	protected MessageBusInterface $bus;
 
 	#[Required]
 	public function setDependencies(
@@ -32,12 +34,14 @@ abstract class AbstractDoctrineStateWrapper implements ProcessorInterface
 		ProcessorInterface $removeProcessor,
 		EntityManagerInterface $entityManager,
 		HashidsInterface $idHasher,
+		MessageBusInterface $bus,
 	): void {
 		$this->security = $security;
 		$this->persistProcessor = $persistProcessor;
 		$this->removeProcessor = $removeProcessor;
 		$this->entityManager = $entityManager;
 		$this->idHasher = $idHasher;
+		$this->bus = $bus;
 	}
 
 	/**
@@ -60,9 +64,10 @@ abstract class AbstractDoctrineStateWrapper implements ProcessorInterface
 			return null;
 		}
 
-		$this->prePersist($data);
+		$originalData = $this->entityManager->getUnitOfWork()->getOriginalEntityData($data);
+		$this->prePersist($data, $originalData);
 		$this->persistProcessor->process($data, $operation, $uriVariables, $context);
-		$this->postPersist($data);
+		$this->postPersist($data, $originalData);
 
 		return $data;
 	}
@@ -100,22 +105,24 @@ abstract class AbstractDoctrineStateWrapper implements ProcessorInterface
 	/**
 	 * Hook before the persistence of a resource in the database.
 	 *
-	 * @param T $data
+	 * @param T                   $data
+	 * @param array<string,mixed> $originalData
 	 *
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.data)
 	 */
-	protected function prePersist(object &$data): void
+	protected function prePersist(object &$data, ?array $originalData): void
 	{
 	}
 
 	/**
 	 * Hook after a resource has been persisted in the database.
 	 *
-	 * @param T $data
+	 * @param T                   $data
+	 * @param array<string,mixed> $originalData
 	 *
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.data)
 	 */
-	protected function postPersist(object &$data): void
+	protected function postPersist(object &$data, ?array $originalData): void
 	{
 	}
 }

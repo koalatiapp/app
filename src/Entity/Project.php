@@ -2,6 +2,14 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use App\Api\State\ProjectProcessor;
 use App\Entity\Checklist\Checklist;
 use App\Entity\Testing\IgnoreEntry;
 use App\Entity\Testing\Recommendation;
@@ -19,6 +27,19 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @SuppressWarnings("ExcessiveClassComplexity")
  */
+#[ApiResource(
+	processor: ProjectProcessor::class,
+	normalizationContext: ["groups" => "project.read"],
+	denormalizationContext: ["groups" => "project.write"],
+	operations: [
+		new Get(security: "is_granted('project_view', object)"),
+		new GetCollection(normalizationContext: ["groups" => "project.list"]),
+		new Post(security: "is_granted('project_edit', object)"),
+		new Put(security: "is_granted('project_edit', object)"),
+		new Patch(security: "is_granted('project_edit', object)"),
+		new Delete(security: "is_granted('project_edit', object)"),
+	],
+)]
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
 class Project implements MercureEntityInterface
 {
@@ -35,30 +56,30 @@ class Project implements MercureEntityInterface
 	#[ORM\Id]
 	#[ORM\GeneratedValue]
 	#[ORM\Column(type: 'integer')]
-	#[Groups(['default'])]
+	#[Groups(['project.list', 'project.read'])]
 	private ?int $id = null;
 
 	#[Assert\NotBlank]
 	#[Assert\Length(max: 255)]
 	#[ORM\Column(type: 'string', length: 255)]
-	#[Groups(['default'])]
+	#[Groups(['project.list', 'project.read', 'project.write'])]
 	private ?string $name = null;
 
 	#[ORM\Column(type: 'datetime')]
-	#[Groups(['default'])]
+	#[Groups(['project.list', 'project.read'])]
 	private \DateTimeInterface $dateCreated;
 
 	#[Assert\NotBlank]
 	#[Assert\Url(relativeProtocol: true)]
 	#[ORM\Column(type: 'string', length: 512)]
-	#[Groups(['default'])]
+	#[Groups(['project.list', 'project.read', 'project.write'])]
 	private ?string $url = null;
 
 	/**
 	 * @var Collection<int, Page>
 	 */
 	#[ORM\OneToMany(targetEntity: Page::class, mappedBy: 'project')]
-	#[Groups(['project'])]
+	#[Groups(['project.read'])]
 	#[MaxDepth(1)]
 	private Collection $pages;
 
@@ -66,7 +87,6 @@ class Project implements MercureEntityInterface
 	 * @var Collection<int, ProjectMember>
 	 */
 	#[ORM\OneToMany(targetEntity: ProjectMember::class, mappedBy: 'project')]
-	#[Groups(['default'])]
 	#[MaxDepth(1)]
 	private Collection $teamMembers;
 
@@ -80,6 +100,7 @@ class Project implements MercureEntityInterface
 	 * @var array<int,string>|null
 	 */
 	#[ORM\Column(type: 'array', nullable: true)]
+	#[Groups(['project.list', 'project.read', 'project.write'])]
 	private ?array $disabledTools = [];
 
 	#[ORM\OneToOne(targetEntity: Checklist::class, mappedBy: 'project', cascade: ['persist', 'remove'])]
@@ -87,13 +108,14 @@ class Project implements MercureEntityInterface
 
 	#[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'personalProjects')]
 	#[ORM\JoinColumn(name: 'owner_user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-	#[Groups(['default'])]
+	#[Groups(['project.list', 'project.read'])]
 	private ?User $ownerUser = null;
 
 	#[ORM\ManyToOne(targetEntity: Organization::class, inversedBy: 'projects')]
 	#[ORM\JoinColumn(name: 'owner_organization_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-	#[Groups(['default'])]
+	#[Groups(['project.list', 'project.read', 'project.write'])]
 	private ?Organization $ownerOrganization = null;
+
 	/**
 	 * @var Collection<int,Comment>
 	 */
@@ -106,6 +128,7 @@ class Project implements MercureEntityInterface
 	 * @var array<int,string>
 	 */
 	#[ORM\Column(type: 'array', nullable: true)]
+	#[Groups(['project.list', 'project.read'])]
 	private ?array $tags = [];
 
 	public function __construct()
@@ -230,7 +253,7 @@ class Project implements MercureEntityInterface
 		return $this;
 	}
 
-	public function getOwner(): Organization|User
+	public function getOwner(): Organization|User|null
 	{
 		return $this->getOwnerOrganization() ?: $this->getOwnerUser();
 	}

@@ -31,7 +31,7 @@ class OrganizationProcessor extends AbstractDoctrineStateWrapper
 	 *
 	 * @param Organization $organization
 	 */
-	protected function prePersist(object &$organization): void
+	protected function prePersist(object &$organization, ?array $originalData): void
 	{
 		if (!$organization->getId()) {
 			$member = new OrganizationMember($organization, $this->getUser(), OrganizationMember::ROLE_OWNER);

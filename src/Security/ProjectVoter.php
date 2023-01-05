@@ -13,15 +13,12 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 class ProjectVoter extends Voter
 {
-	final public const VIEW = 'view';
-	final public const PARTICIPATE = 'participate';
-	final public const EDIT = 'edit';
-	final public const CHECKLIST = 'checklist';
-	final public const TESTING = 'testing';
+	final public const VIEW = 'project_view';
+	final public const PARTICIPATE = 'project_participate';
+	final public const EDIT = 'project_edit';
+	final public const CHECKLIST = 'project_checklist';
+	final public const TESTING = 'project_testing';
 
-	/**
-	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.security)
-	 */
 	public function __construct(
 		private readonly PlanManager $planManager
 	) {
@@ -32,14 +29,15 @@ class ProjectVoter extends Voter
 	 */
 	protected function supports(string $attribute, mixed $subject): bool
 	{
-		return $subject instanceof Project;
+		return $subject instanceof Project || in_array($attribute, [self::VIEW, self::PARTICIPATE, self::EDIT, self::CHECKLIST, self::TESTING]);
 	}
 
 	/**
 	 * @SuppressWarnings(PHPMD.CyclomaticComplexity)
 	 * @SuppressWarnings(PHPMD.NPathComplexity)
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.key)
 	 *
-	 * @param Project $project
+	 * @param ?Project $project
 	 */
 	protected function voteOnAttribute(string $attribute, mixed $project, TokenInterface $token): bool
 	{
@@ -47,7 +45,19 @@ class ProjectVoter extends Voter
 			throw new \Exception("Undefined project voter attribute: $attribute");
 		}
 
-		$plan = $this->planManager->getPlanFromEntity($project->getOwner());
+		/** @var User */
+		$user = $token->getUser();
+		$owner = $project?->getOwner() ?: $user;
+		$plan = $this->planManager->getPlanFromEntity($owner);
+
+		// Allow user to create projects if they have a plan or are in an active organization
+		if (!$project) {
+			return $plan::class != NoPlan::class || $user->getOrganizationLinks()->exists(function (mixed $key, OrganizationMember $membership) {
+				$plan = $this->planManager->getPlanFromEntity($membership->getOrganization());
+
+				return $plan::class != NoPlan::class;
+			});
+		}
 
 		if ($plan::class == NoPlan::class && $attribute != self::VIEW) {
 			return false;

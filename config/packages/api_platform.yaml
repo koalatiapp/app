@@ -19,6 +19,7 @@ api_platform:
     defaults:
         normalizationContext:
             groups: ['read']
+            skip_null_values: false
         denormalizationContext:
             groups: ['write']
             allow_extra_attributes: false
