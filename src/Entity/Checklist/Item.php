@@ -2,6 +2,9 @@
 
 namespace App\Entity\Checklist;
 
+use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Doctrine\Orm\Filter\ExistsFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -37,6 +40,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 		),
 	],
 )]
+#[ApiFilter(BooleanFilter::class, properties: ['isCompleted'])]
 #[ORM\Entity(repositoryClass: ItemRepository::class)]
 class Item implements MercureEntityInterface
 {
