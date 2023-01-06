@@ -2,6 +2,16 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use App\Api\State\CommentProcessor;
 use App\Entity\Checklist\Item;
 use App\Mercure\MercureEntityInterface;
 use App\Repository\CommentRepository;
@@ -9,38 +19,63 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
 
+#[ApiResource(
+	openapiContext: ["tags" => ['Comment']],
+	normalizationContext: ["groups" => "comment.list"],
+	uriTemplate: '/projects/{projectId}/comments',
+	uriVariables: ['projectId' => new Link(fromClass: Project::class, fromProperty: 'comments')],
+	operations: [new GetCollection()],
+)]
+#[ApiResource(
+	openapiContext: ["tags" => ['Comment']],
+	normalizationContext: ["groups" => "comment.read"],
+	processor: CommentProcessor::class,
+	operations: [
+		new Get(
+			security: "is_granted('comment_view', object)",
+		),
+		new Post(
+			denormalizationContext: ["groups" => "comment.write"],
+		),
+		new Patch(
+			security: "is_granted('comment_resolve', object)",
+			denormalizationContext: ["groups" => "comment.resolve"],
+		),
+	],
+)]
+#[ApiFilter(SearchFilter::class, properties: ['checklistItem' => 'exact', 'author' => 'exact', 'authorName' => 'partial', 'content' => 'partial', 'textContent' => 'partial'])]
+#[ApiFilter(BooleanFilter::class, properties: ['isResolved'])]
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
 class Comment implements MercureEntityInterface
 {
 	#[ORM\Id]
 	#[ORM\GeneratedValue]
-	#[Groups(['default'])]
+	#[Groups(['comment.list', 'comment.read'])]
 	#[ORM\Column(type: 'integer')]
 	private ?int $id = null;
 
 	#[ORM\ManyToOne(targetEntity: User::class)]
 	#[ORM\JoinColumn(onDelete: 'CASCADE')]
-	#[Groups(['default'])]
+	#[Groups(['comment.list', 'comment.read'])]
 	private ?User $author = null;
 
 	#[ORM\ManyToOne(targetEntity: Project::class, inversedBy: 'comments')]
 	#[ORM\JoinColumn(onDelete: 'CASCADE', nullable: false)]
-	#[Groups(['default'])]
-	#[MaxDepth(1)]
-	private Project $project;
+	#[Groups(['comment.list', 'comment.read', 'comment.write'])]
+	private ?Project $project = null;
 
 	#[ORM\Column(type: 'text')]
-	#[Groups(['default'])]
+	#[Groups(['comment.list', 'comment.read', 'comment.write'])]
 	private string $content;
 
 	#[ORM\Column(type: 'text')]
+	#[Groups(['comment.list', 'comment.read'])]
 	private string $textContent;
 
 	#[ORM\ManyToOne(targetEntity: Comment::class, inversedBy: 'replies')]
 	#[ORM\JoinColumn(onDelete: 'CASCADE')]
-	#[Groups(['default'])]
+	#[Groups(['comment.list', 'comment.read', 'comment.write'])]
 	private ?Comment $thread = null;
 
 	/**
@@ -48,24 +83,24 @@ class Comment implements MercureEntityInterface
 	 */
 	#[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'thread')]
 	#[ORM\OrderBy(['isResolved' => 'ASC', 'dateCreated' => 'ASC'])]
-	#[Groups(['default'])]
+	#[Groups(['comment.read'])]
 	private Collection $replies;
 
 	#[ORM\Column(type: 'datetime')]
-	#[Groups(['default'])]
+	#[Groups(['comment.list', 'comment.read'])]
 	private \DateTimeInterface $dateCreated;
 
 	#[ORM\Column(type: 'string', length: 255, nullable: true)]
-	#[Groups(['default'])]
+	#[Groups(['comment.list', 'comment.read'])]
 	private ?string $authorName = null;
 
 	#[ORM\ManyToOne(targetEntity: Item::class, inversedBy: 'comments')]
 	#[ORM\JoinColumn(onDelete: 'CASCADE')]
-	#[Groups(['default'])]
+	#[Groups(['comment.list', 'comment.read', 'comment.write'])]
 	private ?Item $checklistItem = null;
 
 	#[ORM\Column(type: 'boolean')]
-	#[Groups(['default'])]
+	#[Groups(['comment.list', 'comment.read', 'comment.write', 'comment.resolve'])]
 	private bool $isResolved = false;
 
 	#[ORM\Column(type: 'boolean')]

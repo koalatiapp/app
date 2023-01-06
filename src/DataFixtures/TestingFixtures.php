@@ -86,7 +86,7 @@ class TestingFixtures extends Fixture implements DependentFixtureInterface
 	public function getDependencies()
 	{
 		return [
-			UserFixtures::class,
+			ProjectFixtures::class,
 		];
 	}
 }
