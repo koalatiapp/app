@@ -2,6 +2,9 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
@@ -40,6 +43,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 		new Delete(security: "is_granted('project_edit', object)"),
 	],
 )]
+#[ApiFilter(OrderFilter::class, properties: ['dateCreated', 'name'])]
+#[ApiFilter(SearchFilter::class, properties: ['ownerOrganization' => 'exact', 'ownerUser' => 'exact'])]
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
 class Project implements MercureEntityInterface
 {
