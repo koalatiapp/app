@@ -2,6 +2,9 @@ monolog:
     channels:
         - deprecation # Deprecations are logged in the dedicated "deprecation" channel when it exists
     handlers:
+        api_invalid_filters:
+            type: service
+            id: App\Api\Log\InvalidFilterLogHandler
         main:
             type: fingers_crossed
             action_level: error
@@ -27,6 +30,9 @@ monolog:
 when@prod:
     monolog:
         handlers:
+            api_invalid_filters:
+                type: service
+                id: App\Api\Log\InvalidFilterLogHandler
             deprecation:
                 type: stream
                 channels: [deprecation]
