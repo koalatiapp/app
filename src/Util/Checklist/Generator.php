@@ -66,6 +66,12 @@ class Generator
 		 */
 		static $existingItems = [];
 
+		// Reset state when generating a new checklist
+		if ($configFilename == "checklist/base") {
+			$existingGroups = [];
+			$existingItems = [];
+		}
+
 		$templateGroups = $this->config->get($configFilename);
 
 		foreach ($templateGroups as $groupData) {

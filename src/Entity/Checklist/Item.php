@@ -2,6 +2,11 @@
 
 namespace App\Entity\Checklist;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
+use ApiPlatform\Metadata\Patch;
 use App\Entity\Comment;
 use App\Mercure\MercureEntityInterface;
 use App\Repository\Checklist\ItemRepository;
@@ -10,12 +15,34 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
+#[ApiResource(
+	openapiContext: ["tags" => ['Checklist Item']],
+	normalizationContext: ["groups" => "checklist_item.list"],
+	uriTemplate: '/checklists/{checklistId}/items',
+	uriVariables: ['checklistId' => new Link(fromClass: Checklist::class, fromProperty: 'items')],
+	operations: [new GetCollection()],
+)]
+#[ApiResource(
+	openapiContext: ["tags" => ['Checklist Item']],
+	normalizationContext: ["groups" => "checklist_item.read"],
+	operations: [
+		new Get(
+			security: "is_granted('checklist_view', object.getChecklist())",
+			uriTemplate: '/checklist_items/{id}',
+		),
+		new Patch(
+			denormalizationContext: ["groups" => "checklist_item.write"],
+			security: "is_granted('checklist_view', object.getChecklist())",
+			uriTemplate: '/checklist_items/{id}',
+		),
+	],
+)]
 #[ORM\Entity(repositoryClass: ItemRepository::class)]
 class Item implements MercureEntityInterface
 {
 	#[ORM\Id]
 	#[ORM\GeneratedValue]
-	#[Groups(['default'])]
+	#[Groups(['checklist_item.list', 'checklist_item.read', 'checklist.read', 'checklist_item_group.read'])]
 	#[ORM\Column(type: 'integer')]
 	private ?int $id = null;
 
@@ -28,22 +55,22 @@ class Item implements MercureEntityInterface
 	private ?ItemGroup $parentGroup = null;
 
 	#[ORM\Column(type: 'text')]
-	#[Groups(['default'])]
+	#[Groups(['checklist_item.list', 'checklist_item.read', 'checklist.read', 'checklist_item_group.read'])]
 	private ?string $title = null;
 
 	#[ORM\Column(type: 'text')]
-	#[Groups(['default'])]
+	#[Groups(['checklist_item.list', 'checklist_item.read', 'checklist.read', 'checklist_item_group.read'])]
 	private ?string $description = null;
 
 	/**
 	 * @var array<int,string>
 	 */
 	#[ORM\Column(type: 'array', nullable: true)]
-	#[Groups(['default'])]
+	#[Groups(['checklist_item.list', 'checklist_item.read', 'checklist.read', 'checklist_item_group.read'])]
 	private ?array $resourceUrls = [];
 
 	#[ORM\Column(type: 'boolean')]
-	#[Groups(['default'])]
+	#[Groups(['checklist_item.list', 'checklist_item.read', 'checklist_item.write', 'checklist.read', 'checklist_item_group.read'])]
 	private ?bool $isCompleted = false;
 
 	/**
@@ -51,7 +78,7 @@ class Item implements MercureEntityInterface
 	 */
 	#[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'checklistItem', orphanRemoval: true)]
 	#[ORM\OrderBy(['isResolved' => 'ASC', 'dateCreated' => 'ASC'])]
-	#[Groups(['comments'])]
+	#[Groups(['checklist_item.read'])]
 	private Collection $comments;
 
 	public function __construct()
@@ -172,13 +199,13 @@ class Item implements MercureEntityInterface
 		return $this;
 	}
 
-	#[Groups(['default'])]
+	#[Groups(['checklist_item.list', 'checklist_item.read', 'checklist.read', 'checklist_item_group.read'])]
 	public function getCommentCount(): int
 	{
 		return $this->comments->count();
 	}
 
-	#[Groups(['default'])]
+	#[Groups(['checklist_item.list', 'checklist_item.read', 'checklist.read', 'checklist_item_group.read'])]
 	public function getUnresolvedCommentCount(): int
 	{
 		return $this->comments->filter(fn (Comment $comment = null) => !$comment->isResolved() && !$comment->getThread())->count();

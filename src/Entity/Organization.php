@@ -23,6 +23,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
 #[ApiResource(
+	openapiContext: ["tags" => ['Organization']],
 	processor: OrganizationProcessor::class,
 	normalizationContext: ["groups" => "organization.read"],
 	denormalizationContext: ["groups" => "organization.write"],

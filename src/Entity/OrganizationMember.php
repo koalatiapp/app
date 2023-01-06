@@ -16,12 +16,14 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(
+	openapiContext: ["tags" => ['Organization Member']],
 	normalizationContext: ["groups" => "organization.read"],
 	uriTemplate: '/organizations/{organizationId}/members',
 	uriVariables: ['organizationId' => new Link(fromClass: Organization::class, fromProperty: 'members')],
 	operations: [new GetCollection()],
 )]
 #[ApiResource(
+	openapiContext: ["tags" => ['Organization Member']],
 	normalizationContext: ["groups" => "member.read"],
 	denormalizationContext: ["groups" => "member.write"],
 	operations: [

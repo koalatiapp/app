@@ -9,6 +9,7 @@ use App\Entity\User;
 use App\Enum\Framework;
 use App\Repository\OrganizationRepository;
 use App\Repository\UserRepository;
+use App\Util\Checklist\Generator;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -18,6 +19,7 @@ class ProjectFixtures extends Fixture implements DependentFixtureInterface
 	public function __construct(
 		private readonly UserRepository $userRepository,
 		private readonly OrganizationRepository $organizationRepository,
+		private readonly Generator $checklistGenerator,
 	) {
 	}
 
@@ -56,6 +58,9 @@ class ProjectFixtures extends Fixture implements DependentFixtureInterface
 		$aboutPage = new Page($project, 'https://koalati.com/about', 'About - Koalati');
 		$project->addPage($aboutPage);
 		$manager->persist($aboutPage);
+
+		$checklist = $this->checklistGenerator->generateChecklist($project);
+		$manager->persist($checklist);
 
 		$manager->persist($project);
 

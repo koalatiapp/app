@@ -2,18 +2,37 @@
 
 namespace App\Entity\Checklist;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Link;
 use App\Entity\Project;
 use App\Repository\Checklist\ChecklistRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
+#[ApiResource(
+	openapiContext: ["tags" => ['Checklist']],
+	normalizationContext: ["groups" => "checklist.read"],
+	uriTemplate: '/projects/{projectId}/checklist',
+	uriVariables: ['projectId' => new Link(fromClass: Project::class, fromProperty: 'checklist')],
+	operations: [new Get(security: "is_granted('checklist_view', object)")],
+)]
+#[ApiResource(
+	openapiContext: ["tags" => ['Checklist']],
+	normalizationContext: ["groups" => "checklist.read"],
+	operations: [
+		new Get(security: "is_granted('checklist_view', object)"),
+	],
+)]
 #[ORM\Entity(repositoryClass: ChecklistRepository::class)]
 class Checklist
 {
 	#[ORM\Id]
 	#[ORM\GeneratedValue]
 	#[ORM\Column(type: 'integer')]
+	#[Groups(['checklist.read'])]
 	private ?int $id = null;
 
 	#[ORM\ManyToOne(targetEntity: ChecklistTemplate::class, inversedBy: 'childChecklists')]
@@ -21,14 +40,17 @@ class Checklist
 
 	#[ORM\OneToOne(targetEntity: Project::class, inversedBy: 'checklist', cascade: ['persist', 'remove'])]
 	#[ORM\JoinColumn(name: 'project_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
+	#[Groups(['checklist.read'])]
 	private ?Project $project = null;
 
 	#[ORM\Column(type: 'datetime')]
+	#[Groups(['checklist.read'])]
 	private ?\DateTimeInterface $dateUpdated;
 
 	/**
 	 * @var Collection<int,ItemGroup>
 	 */
+	#[Groups(['checklist.read'])]
 	#[ORM\OneToMany(targetEntity: ItemGroup::class, mappedBy: 'checklist', cascade: ['persist', 'remove'])]
 	private Collection $itemGroups;
 
@@ -154,6 +176,7 @@ class Checklist
 		return $this->getItems()->filter(fn (Item $item = null) => $item->getIsCompleted());
 	}
 
+	#[Groups(['checklist.read'])]
 	public function getCompletionPercentage(): float
 	{
 		$completedItems = $this->getCompletedItems();
@@ -162,6 +185,7 @@ class Checklist
 		return $completedItems->count() / max($items->count(), 1);
 	}
 
+	#[Groups(['checklist.read'])]
 	public function isCompleted(): bool
 	{
 		return !$this->getItems()->filter(fn (Item $item = null) => !$item->getIsCompleted())->count();

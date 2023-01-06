@@ -40,7 +40,7 @@ final class JwtDecorator implements OpenApiFactoryInterface
 	private function addTokenSchema(OpenApi $openApi): void
 	{
 		$schemas = $openApi->getComponents()->getSchemas();
-		$schemas['Token'] = new \ArrayObject([
+		$schemas['API Authentication (JWT)'] = new \ArrayObject([
 			'type' => 'object',
 			'properties' => [
 				'token' => [
@@ -92,7 +92,7 @@ final class JwtDecorator implements OpenApiFactoryInterface
 			ref: 'JWT Token',
 			post: new Model\Operation(
 				operationId: 'postCredentialsItem',
-				tags: ['Token'],
+				tags: ['API Authentication (JWT)'],
 				responses: [
 					'200' => [
 						'description' => 'Get JWT token',
@@ -128,7 +128,7 @@ final class JwtDecorator implements OpenApiFactoryInterface
 			ref: 'JWT Token',
 			post: new Model\Operation(
 				operationId: 'postRefreshTokenItem',
-				tags: ['Token'],
+				tags: ['API Authentication (JWT)'],
 				responses: [
 					'200' => [
 						'description' => 'Refresh JWT token',

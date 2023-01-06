@@ -68,8 +68,6 @@ class ProjectVoter extends Voter
 			return $plan->hasTestingAccess();
 		}
 
-		$user = $token->getUser();
-
 		// User must be logged in to access any project
 		if (!$user instanceof User) {
 			return false;

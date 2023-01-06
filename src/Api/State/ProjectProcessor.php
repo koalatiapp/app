@@ -7,6 +7,8 @@ use App\Message\FaviconRequest;
 use App\Message\ScreenshotRequest;
 use App\Message\SitemapRequest;
 use App\Security\ProjectVoter;
+use App\Util\Checklist\Generator;
+use App\Util\StackDetector;
 use App\Util\Url;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
@@ -17,6 +19,8 @@ class ProjectProcessor extends AbstractDoctrineStateWrapper
 {
 	public function __construct(
 		private Url $urlHelper,
+		private StackDetector $stackDetector,
+		private Generator $checklistGenerator,
 	) {
 	}
 
@@ -34,6 +38,12 @@ class ProjectProcessor extends AbstractDoctrineStateWrapper
 		if (($originalData['url'] ?? null) != $project->getUrl()) {
 			$websiteUrl = $this->urlHelper->standardize($project->getUrl(), false);
 			$project->setUrl($websiteUrl);
+
+			// Detect website framework / CMS
+			$framework = $this->stackDetector->detectFramework($websiteUrl);
+			if ($framework) {
+				$project->addTag($framework);
+			}
 		}
 
 		if (!($originalData['owner_organization'] ?? null)) {
@@ -56,6 +66,13 @@ class ProjectProcessor extends AbstractDoctrineStateWrapper
 	 */
 	protected function postPersist(object &$project, ?array $originalData): void
 	{
+		// Generate the checklist if the project has just been created
+		if (!$project->getChecklist()) {
+			$checklist = $this->checklistGenerator->generateChecklist($project);
+			$this->entityManager->persist($checklist);
+			$this->entityManager->flush();
+		}
+
 		if (($originalData['url'] ?? null) != $project->getUrl()) {
 			$this->bus->dispatch(new ScreenshotRequest($project->getId()));
 			$this->bus->dispatch(new FaviconRequest($project->getId()));
