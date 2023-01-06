@@ -5,7 +5,6 @@ namespace App\Api\Security;
 use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
-use App\Entity\OrganizationMember;
 use App\Entity\Project;
 use App\Trait\SecurityAwareTrait;
 use Doctrine\Common\Collections\Criteria;
@@ -26,12 +25,10 @@ class ProjectQueryFilter implements QueryCollectionExtensionInterface
 			return;
 		}
 
-		$allowedOrganizations = $this->getUser()->getOrganizationLinks()->map(fn (?OrganizationMember $membership = null) => $membership->getOrganization())->toArray();
-
 		$rootAlias = $queryBuilder->getRootAliases()[0];
 		$criteria = new Criteria();
 		$criteria->where(Criteria::expr()->eq("$rootAlias.ownerUser", $this->getUser()));
-		$criteria->orWhere(Criteria::expr()->in("$rootAlias.ownerOrganization", $allowedOrganizations));
+		$criteria->orWhere(Criteria::expr()->in("$rootAlias.ownerOrganization", $this->getUser()->getOrganizations()->toArray()));
 		$queryBuilder->addCriteria($criteria);
 	}
 }

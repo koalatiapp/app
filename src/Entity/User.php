@@ -465,4 +465,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
 
 		return $this;
 	}
+
+	/**
+	 * @return Collection<int,?Organization>
+	 */
+	public function getOrganizations(): Collection
+	{
+		return $this->getOrganizationLinks()->map(fn (?OrganizationMember $membership = null) => $membership->getOrganization());
+	}
 }

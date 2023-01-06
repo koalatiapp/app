@@ -24,9 +24,6 @@ class ProjectVoter extends Voter
 	) {
 	}
 
-	/**
-	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.attributes)
-	 */
 	protected function supports(string $attribute, mixed $subject): bool
 	{
 		return $subject instanceof Project || in_array($attribute, [self::VIEW, self::PARTICIPATE, self::EDIT, self::CHECKLIST, self::TESTING]);

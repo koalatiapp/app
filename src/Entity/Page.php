@@ -2,6 +2,16 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Doctrine\Orm\Filter\NumericFilter;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
+use ApiPlatform\Metadata\Patch;
 use App\Entity\Testing\IgnoreEntry;
 use App\Entity\Testing\Recommendation;
 use App\Repository\PageRepository;
@@ -9,9 +19,25 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
 
-#[ORM\Table]
+#[ApiResource(
+	normalizationContext: ["groups" => "page.list"],
+	uriTemplate: '/projects/{projectId}/pages',
+	uriVariables: ['projectId' => new Link(fromClass: Project::class, fromProperty: 'pages')],
+	operations: [new GetCollection()],
+)]
+#[ApiResource(
+	normalizationContext: ["groups" => "page.read"],
+	denormalizationContext: ["groups" => "page.write"],
+	operations: [
+		new Get(security: "is_granted('page_view', object)"),
+		new Patch(security: "is_granted('page_edit', object)"),
+	],
+)]
+#[ApiFilter(OrderFilter::class, properties: ['url', 'title', 'dateUpdated'])]
+#[ApiFilter(SearchFilter::class, properties: ['title' => 'partial', 'url' => 'partial', 'httpCode' => 'exact'])]
+#[ApiFilter(NumericFilter::class, properties: ['httpCode'])]
+#[ApiFilter(BooleanFilter::class, properties: ['isIgnored'])]
 #[ORM\Index(name: 'page_url_index', columns: ['url'])]
 #[ORM\Entity(repositoryClass: PageRepository::class)]
 class Page
@@ -19,45 +45,41 @@ class Page
 	#[ORM\Id]
 	#[ORM\GeneratedValue]
 	#[ORM\Column(type: 'integer')]
-	#[Groups(['default'])]
+	#[Groups(['page.list', 'page.read'])]
 	private ?int $id = null;
 
 	#[ORM\Column(type: 'string', length: 255, nullable: true)]
-	#[Groups(['default'])]
+	#[Groups(['page.list', 'page.read'])]
 	private ?string $title;
 
 	#[ORM\Column(type: 'string', length: 510)]
-	#[Groups(['default'])]
+	#[Groups(['page.list', 'page.read'])]
 	private string $url;
 
 	#[ORM\Column(type: 'datetime')]
-	#[Groups(['default'])]
 	private \DateTimeInterface $dateCreated;
 
 	#[ORM\Column(type: 'datetime')]
-	#[Groups(['default'])]
+	#[Groups(['page.list', 'page.read'])]
 	private \DateTimeInterface $dateUpdated;
 
 	#[ORM\Column(type: 'integer', nullable: true)]
-	#[Groups(['default'])]
+	#[Groups(['page.list', 'page.read'])]
 	private ?int $httpCode = null;
 
 	/**
 	 * @var Collection<int,Recommendation>
 	 */
 	#[ORM\OneToMany(targetEntity: Recommendation::class, mappedBy: 'relatedPage', orphanRemoval: true)]
-	#[Groups(['page'])]
-	#[MaxDepth(1)]
 	private Collection $recommendations;
 
 	#[ORM\ManyToOne(targetEntity: Project::class, inversedBy: 'pages')]
 	#[ORM\JoinColumn(name: 'project_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-	#[Groups(['page'])]
-	#[MaxDepth(1)]
+	#[Groups(['page.list', 'page.read'])]
 	private Project $project;
 
 	#[ORM\Column(type: 'boolean')]
-	#[Groups(['default'])]
+	#[Groups(['page.list', 'page.read', 'page.write'])]
 	private bool $isIgnored = false;
 
 	/**
