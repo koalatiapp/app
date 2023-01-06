@@ -6,6 +6,9 @@ use ApiPlatform\Metadata\DeleteOperationInterface;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use App\Entity\User;
+use App\Mercure\MercureEntityInterface;
+use App\Mercure\UpdateDispatcher;
+use App\Mercure\UpdateType;
 use Doctrine\ORM\EntityManagerInterface;
 use Hashids\HashidsInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -26,6 +29,7 @@ abstract class AbstractDoctrineStateWrapper implements ProcessorInterface
 	protected EntityManagerInterface $entityManager;
 	protected HashidsInterface $idHasher;
 	protected MessageBusInterface $bus;
+	protected UpdateDispatcher $mercureUpdateDispatcher;
 
 	#[Required]
 	public function setDependencies(
@@ -35,6 +39,7 @@ abstract class AbstractDoctrineStateWrapper implements ProcessorInterface
 		EntityManagerInterface $entityManager,
 		HashidsInterface $idHasher,
 		MessageBusInterface $bus,
+		UpdateDispatcher $mercureUpdateDispatcher,
 	): void {
 		$this->security = $security;
 		$this->persistProcessor = $persistProcessor;
@@ -42,6 +47,7 @@ abstract class AbstractDoctrineStateWrapper implements ProcessorInterface
 		$this->entityManager = $entityManager;
 		$this->idHasher = $idHasher;
 		$this->bus = $bus;
+		$this->mercureUpdateDispatcher = $mercureUpdateDispatcher;
 	}
 
 	/**
@@ -57,9 +63,17 @@ abstract class AbstractDoctrineStateWrapper implements ProcessorInterface
 	{
 		// DELETE: use Doctrine's removal processor on the entity
 		if ($operation instanceof DeleteOperationInterface) {
+			if ($data instanceof MercureEntityInterface) {
+				$this->mercureUpdateDispatcher->prepare($data, UpdateType::DELETE);
+			}
+
 			$this->preRemove($data);
 			$this->removeProcessor->process($data, $operation, $uriVariables, $context);
 			$this->postRemove($data);
+
+			if ($data instanceof MercureEntityInterface) {
+				$this->mercureUpdateDispatcher->dispatchPreparedUpdates();
+			}
 
 			return null;
 		}
@@ -68,6 +82,10 @@ abstract class AbstractDoctrineStateWrapper implements ProcessorInterface
 		$this->prePersist($data, $originalData);
 		$this->persistProcessor->process($data, $operation, $uriVariables, $context);
 		$this->postPersist($data, $originalData);
+
+		if ($data instanceof MercureEntityInterface) {
+			$this->mercureUpdateDispatcher->dispatch($data, ($originalData['id'] ?? null) ? UpdateType::UPDATE : UpdateType::CREATE);
+		}
 
 		return $data;
 	}

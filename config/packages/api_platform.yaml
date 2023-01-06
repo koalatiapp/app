@@ -17,6 +17,7 @@ api_platform:
         csv:      ['text/csv']
         html:     ['text/html']
     defaults:
+        processor: App\Api\State\DefaultProcessor
         normalizationContext:
             groups: ['read']
             skip_null_values: false
