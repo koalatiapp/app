@@ -2,6 +2,9 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -31,6 +34,8 @@ use Symfony\Component\String\Slugger\AsciiSlugger;
 		new Patch(security: "is_granted('edit', object)"),
 	],
 )]
+#[ApiFilter(OrderFilter::class, properties: ['name'])]
+#[ApiFilter(SearchFilter::class, properties: ['name' => 'partial'])]
 #[ORM\Entity(repositoryClass: OrganizationRepository::class)]
 class Organization implements MercureEntityInterface, \Stringable
 {

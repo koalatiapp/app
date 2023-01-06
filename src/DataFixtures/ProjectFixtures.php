@@ -6,6 +6,7 @@ use App\Entity\Organization;
 use App\Entity\Page;
 use App\Entity\Project;
 use App\Entity\User;
+use App\Enum\Framework;
 use App\Repository\OrganizationRepository;
 use App\Repository\UserRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -40,6 +41,7 @@ class ProjectFixtures extends Fixture implements DependentFixtureInterface
 		$project = new Project();
 		$project->setName('Koalati');
 		$project->setUrl('https://koalati.com');
+		$project->setTags([Framework::WEBFLOW]);
 
 		if ($owner instanceof User) {
 			$project->setOwnerUser($owner);

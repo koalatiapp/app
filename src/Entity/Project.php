@@ -44,7 +44,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 	],
 )]
 #[ApiFilter(OrderFilter::class, properties: ['dateCreated', 'name'])]
-#[ApiFilter(SearchFilter::class, properties: ['ownerOrganization' => 'exact', 'ownerUser' => 'exact'])]
+#[ApiFilter(SearchFilter::class, properties: ['ownerOrganization' => 'exact', 'ownerUser' => 'exact', 'tags' => 'partial'])]
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
 class Project implements MercureEntityInterface
 {
