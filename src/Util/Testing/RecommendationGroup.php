@@ -247,4 +247,9 @@ class RecommendationGroup implements \Countable, MercureEntityInterface
 			$recommendation->getUniqueName()
 		);
 	}
+
+	public function getMercureSerializationGroup(): string
+	{
+		return "recommendation_group.read";
+	}
 }

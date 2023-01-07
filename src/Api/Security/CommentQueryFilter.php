@@ -49,6 +49,7 @@ class CommentQueryFilter implements QueryCollectionExtensionInterface
 		$rootAlias = $queryBuilder->getRootAliases()[0];
 		$criteria = new Criteria();
 		$criteria->where(Criteria::expr()->in("$rootAlias.project", $this->getUser()->getAllProjects()->toArray()));
+		$criteria->andWhere(Criteria::expr()->isNull("$rootAlias.thread"));
 		$queryBuilder->addCriteria($criteria);
 	}
 }

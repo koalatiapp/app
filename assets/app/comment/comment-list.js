@@ -29,7 +29,7 @@ export class CommentList extends LitElement {
 	static get properties() {
 		return {
 			projectId: {type: String},
-			checklistItemId: {type: String},
+			checklistItemIri: {type: String},
 			threads: {type: Array},
 			_loaded: {state: true},
 		};
@@ -39,7 +39,7 @@ export class CommentList extends LitElement {
 	{
 		super();
 		this.projectId = null;
-		this.checklistItemId = null;
+		this.checklistItemIri = null;
 		this.threads = [];
 		this._loaded = false;
 	}
@@ -72,13 +72,13 @@ export class CommentList extends LitElement {
 				${repeat(
 					this.threads,
 					thread => thread.id,
-					thread => html`<li><user-comment .data=${thread} ?autoShowReplies=${!thread.isResolved}></user-comment></li>`
+					thread => html`<li><user-comment .data=${thread} ?autoShowReplies=${!thread.is_resolved}></user-comment></li>`
 				)}
 			</ol>
 
 			<br>
 
-			<comment-editor projectId=${this.projectId} checklistItemId=${this.checklistItemId}></comment-editor>
+			<comment-editor projectId=${this.projectId} checklistItemIri=${this.checklistItemIri}></comment-editor>
 	  	`;
 	}
 
@@ -95,16 +95,12 @@ export class CommentList extends LitElement {
 
 		const params = { };
 
-		if (this.checklistItemId) {
-			params.checklist_item_id = this.checklistItemId;
+		if (this.checklistItemIri) {
+			params.checklist_item = this.checklistItemIri;
 		}
 
-		if (this.projectId) {
-			params.project_id = this.projectId;
-		}
-
-		ApiClient.get("api_comments_list", params).then(response => {
-			this._loadData(response.data);
+		ApiClient.get(`/api/projects/${this.projectId}/comments`, params).then(response => {
+			this._loadData(response["hydra:member"]);
 		});
 	}
 
@@ -121,11 +117,11 @@ export class CommentList extends LitElement {
 	#initLiveUpdateListener()
 	{
 		this.#mercureUpdateCallback = (update) => {
-			if (this.projectId != update.data.project.id) {
+			if (this.projectId != update.data.project.split("/").pop()) {
 				return;
 			}
 
-			if (this.checklistItemId && this.checklistItemId != update.data.checklistItem?.id) {
+			if (this.checklistItemIri && this.checklistItemIri != update.data.checklist_item) {
 				return;
 			}
 

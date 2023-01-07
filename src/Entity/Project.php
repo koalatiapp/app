@@ -28,7 +28,8 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @SuppressWarnings("ExcessiveClassComplexity")
+ * @SuppressWarnings("PHPMD.ExcessiveClassComplexity")
+ * @SuppressWarnings("PHPMD.ExcessivePublicCount")
  */
 #[ApiResource(
 	processor: ProjectProcessor::class,
@@ -517,5 +518,10 @@ class Project implements MercureEntityInterface
 	public function hasTag(string $tag): bool
 	{
 		return in_array($tag, $this->getTags());
+	}
+
+	public function getMercureSerializationGroup(): string
+	{
+		return "project.read";
 	}
 }

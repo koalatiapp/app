@@ -83,7 +83,7 @@ class Comment implements MercureEntityInterface
 	 */
 	#[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'thread')]
 	#[ORM\OrderBy(['isResolved' => 'ASC', 'dateCreated' => 'ASC'])]
-	#[Groups(['comment.read'])]
+	#[Groups(['comment.list', 'comment.read'])]
 	private Collection $replies;
 
 	#[ORM\Column(type: 'datetime')]
@@ -271,5 +271,16 @@ class Comment implements MercureEntityInterface
 		$this->isDeleted = $isDeleted;
 
 		return $this;
+	}
+
+	#[Groups(['comment.list', 'comment.read'])]
+	public function getAuthorAvatar(): ?string
+	{
+		return $this->getAuthor()?->getAvatarUrl();
+	}
+
+	public function getMercureSerializationGroup(): string
+	{
+		return "comment.read";
 	}
 }

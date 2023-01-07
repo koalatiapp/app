@@ -240,4 +240,9 @@ class IgnoreEntry implements MercureEntityInterface
 
 		return $this;
 	}
+
+	public function getMercureSerializationGroup(): string
+	{
+		return "ignore_entry.read";
+	}
 }

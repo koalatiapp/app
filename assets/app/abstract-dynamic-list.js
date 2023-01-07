@@ -158,6 +158,7 @@ export class AbstractDynamicList extends NbList {
 
 	#processMercureUpdate(update)
 	{
+		console.log(update);
 		if (!this.supportedUpdateFilter(update)) {
 			// The component doesn't support that update.
 			return;

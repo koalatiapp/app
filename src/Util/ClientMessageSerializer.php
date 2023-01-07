@@ -2,10 +2,11 @@
 
 namespace App\Util;
 
-use App\Serializer\JsonNormalizer;
-use Hashids\HashidsInterface;
+use ApiPlatform\Api\IriConverterInterface;
+use App\Mercure\MercureEntityInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class ClientMessageSerializer
 {
@@ -13,8 +14,8 @@ class ClientMessageSerializer
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.serializer)
 	 */
 	public function __construct(
-		private readonly JsonNormalizer $normalizer,
-		private readonly HashidsInterface $idHasher,
+		private readonly SerializerInterface $serializer,
+		private readonly IriConverterInterface $iriConverter,
 	) {
 	}
 
@@ -27,23 +28,14 @@ class ClientMessageSerializer
 	 */
 	public function serialize(mixed $data, array $groups = []): mixed
 	{
-		if (!is_iterable($data)) {
-			$context = [
-				AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => fn ($object) => $this->idHasher->encode($object->getId()),
-				AbstractNormalizer::GROUPS => ['default', ...$groups],
-				AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true,
-				'resource_class' => $data::class,
-			];
-
-			return $this->normalizer->normalize($data, 'json', $context);
+		if ($data instanceof MercureEntityInterface) {
+			$groups[] = $data->getMercureSerializationGroup();
 		}
 
-		$normalized = [];
-
-		foreach ($data as $key => $value) {
-			$normalized[$key] = $this->serialize($value, $groups);
-		}
-
-		return $normalized;
+		return json_decode($this->serializer->serialize($data, "jsonld", [
+			AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => fn ($object) => $this->iriConverter->getIriFromResource($object),
+			AbstractNormalizer::GROUPS => $groups,
+			AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true,
+		]), true);
 	}
 }

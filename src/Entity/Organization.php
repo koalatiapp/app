@@ -322,4 +322,9 @@ class Organization implements MercureEntityInterface, \Stringable
 	{
 		return (string) $this->getName();
 	}
+
+	public function getMercureSerializationGroup(): string
+	{
+		return "organization.read";
+	}
 }

@@ -213,4 +213,9 @@ class Item implements MercureEntityInterface
 	{
 		return $this->comments->filter(fn (Comment $comment = null) => !$comment->isResolved() && !$comment->getThread())->count();
 	}
+
+	public function getMercureSerializationGroup(): string
+	{
+		return "checklist_item.read";
+	}
 }

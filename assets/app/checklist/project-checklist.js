@@ -36,13 +36,13 @@ export class ProjectChecklist extends LitElement
 		super.connectedCallback();
 
 		if (this.groups.length == 0) {
-			ApiClient.get("api_checklist_group_list", { project_id: this.projectId })
-				.then(response => this.groups = response.data);
+			ApiClient.get(`/api/projects/${this.projectId}/checklist`)
+				.then(response => this.groups = response.item_groups);
 		}
 
 		this.addEventListener("checklist-item-toggled", function(e) {
 			const item = e.detail.item;
-			ApiClient.post("api_checklist_item_toggle", { id: item.id, is_completed: item.isCompleted ? 1 : 0 }, null);
+			ApiClient.patch(item["@id"], { is_completed: item.is_completed }, null);
 		});
 	}
 

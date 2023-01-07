@@ -73,4 +73,9 @@ class TestingStatus implements MercureEntityInterface
 	{
 		return $this->activePageCount;
 	}
+
+	public function getMercureSerializationGroup(): string
+	{
+		return "testing_status.read";
+	}
 }
