@@ -264,6 +264,12 @@ class Project implements MercureEntityInterface
 		return $this->getOwnerOrganization() ?: $this->getOwnerUser();
 	}
 
+	#[Groups(['project.list', 'project.read'])]
+	public function getOwnerOrganizationName(): ?string
+	{
+		return $this->getOwnerOrganization()?->getName();
+	}
+
 	/**
 	 * @return Collection<int, ProjectMember>
 	 */
@@ -447,6 +453,7 @@ class Project implements MercureEntityInterface
 		return $this->getChecklist()?->getCompletionPercentage() ?: 0;
 	}
 
+	#[Groups(['project.list', 'project.read'])]
 	public function getStatus(): string
 	{
 		$checklist = $this->getChecklist();

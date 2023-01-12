@@ -166,7 +166,7 @@ export class ChecklistItemList extends AbstractDynamicList {
 
 	fetchListData()
 	{
-		super.fetchListData("api_checklist_item_list", { project_id: this.projectId, group_id: this.groupId });
+		super.fetchListData(`/api/checklist_item_groups/${this.groupId}`, null, "items");
 	}
 
 	/**

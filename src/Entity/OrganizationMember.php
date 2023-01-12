@@ -183,7 +183,7 @@ class OrganizationMember
 		return $this;
 	}
 
-	#[Groups(['default'])]
+	#[Groups(['member.read', 'organization.read'])]
 	public function getHighestRole(): ?string
 	{
 		$highestValue = 0;
@@ -204,5 +204,11 @@ class OrganizationMember
 		$highestRole = $this->getHighestRole();
 
 		return self::ROLE_VALUES[$highestRole];
+	}
+
+	#[Groups(['member.read', 'organization.read'])]
+	public function getUserAvatar(): ?string
+	{
+		return $this->getUser()->getAvatarUrl();
 	}
 }

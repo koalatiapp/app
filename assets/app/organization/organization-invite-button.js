@@ -47,12 +47,11 @@ export class OrganizationInviteButton extends NbButton {
 				resolve(this._organization);
 			}
 
-			ApiClient.get("api_organization_details", { id: this.organizationId }).then(response => {
-				this._organization = response.data;
+			ApiClient.get(`/api/organizations/${this.organizationId}`).then(response => {
+				this._organization = response;
 				resolve(this._organization);
 			});
 		});
-
 	}
 
 	openInviteModal()

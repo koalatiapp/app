@@ -30,7 +30,7 @@ export class OrganizationMembersList extends AbstractDynamicList {
 				key: "user",
 				label: "organization.settings.members.list.user",
 				render: (item) => html`
-					<member-list-item userName=${item.user.firstName + " " + (item.user.lastName || "")} userRole=${item.highestRole} avatarUrl=${item.user.avatarUrl}></member-list-item>
+					<member-list-item userName=${item.first_name + " " + (item.last_name || "")} userRole=${item.highest_role} avatarUrl=${item.user_avatar}></member-list-item>
 				`,
 				placeholder: html`
 					<div class="nb--list-item-column-placeholder" style="width: 8ch;">&nbsp;</div>
@@ -40,10 +40,10 @@ export class OrganizationMembersList extends AbstractDynamicList {
 				key: "role",
 				label: "organization.settings.members.list.role",
 				render: (item, list) => html`
-					${item.highestRole == "ROLE_OWNER" ? Translator.trans("roles.ROLE_OWNER") : html`
+					${item.highest_role == "ROLE_OWNER" ? Translator.trans("roles.ROLE_OWNER") : html`
 						<nb-dropdown reveal-on-hover color="lighter" .options=${list.availableRoleOptions}
-							.eventData=${{id: item.id, userId: item.user.id, originalRole: item.highestRole}} @select=${e => list.updateRoleCallback(e)}>
-							<span slot="toggle">${Translator.trans("roles." + item.highestRole)}</span>
+							.eventData=${{id: item.id, userId: item.user, originalRole: item.highest_role}} @select=${e => list.updateRoleCallback(e)}>
+							<span slot="toggle">${Translator.trans("roles." + item.highest_role)}</span>
 						</nb-dropdown>
 					`}
 				`,
@@ -93,7 +93,7 @@ export class OrganizationMembersList extends AbstractDynamicList {
 
 	fetchListData()
 	{
-		super.fetchListData("api_organization_members_list", { organization_id: this.organizationId });
+		super.fetchListData(`/api/organizations/${this.organizationId}/members`);
 	}
 
 	updateRoleCallback(e)
@@ -128,16 +128,19 @@ export class OrganizationMembersList extends AbstractDynamicList {
 				return;
 			}
 
-			ApiClient.post("api_organization_members_role", { id: membershipId, role }).then(response => {
-				if (typeof response == "undefined") {
-					const memberListItem = e.detail.dropdown.closest("li").querySelector("member-list-item");
-					const currentRole = memberListItem.userRole;
-					e.detail.dropdown.slottedToggleElement.innerHTML = Translator.trans("roles." + currentRole);
-				} else if (typeof response.data.message != "undefined") {
-					window.Flash.show("success", response.data.message);
+			ApiClient.patch(`/api/organization_members/${membershipId}`, { roles: [role] }).then(response => {
+				window.Flash.show("success", window.Translator.trans("organization.flash.member_role_updated_successfully", {
+					"name": `${response.first_name} ${response.last_name}`,
+					"role": window.Translator.trans(`roles.${response.highest_role}`),
+				}));
 
-					window.plausible("Organization usage", { props: { action: "Updated member role" } });
-				}
+				window.plausible("Organization usage", { props: { action: "Updated member role" } });
+			}).catch(error => {
+				console.error(error);
+
+				const memberListItem = e.detail.dropdown.closest("li").querySelector("member-list-item");
+				const currentRole = memberListItem.userRole;
+				e.detail.dropdown.slottedToggleElement.innerHTML = Translator.trans("roles." + currentRole);
 			});
 		});
 	}
@@ -145,13 +148,11 @@ export class OrganizationMembersList extends AbstractDynamicList {
 	removeMemberCallback(item)
 	{
 		if (confirm(Translator.trans("organization.settings.members.list.remove_confirm", { user: item.user.firstName + " " + item.user.lastName, organization: item.organization.name }))) {
-			ApiClient.delete("api_organization_members_delete", { id: item.id }).then(response => {
-				if (typeof response != "undefined") {
-					this.items = this.items.filter(existingItem => existingItem.id != item.id);
-					window.Flash.show("success", response.data.message);
+			ApiClient.delete(`/api/organization_members/${item.id}`).then(response => {
+				this.items = this.items.filter(existingItem => existingItem.id != item.id);
+				window.Flash.show("success", response.data.message);
 
-					window.plausible("Organization usage", { props: { action: "Removed member" } });
-				}
+				window.plausible("Organization usage", { props: { action: "Removed member" } });
 			});
 		}
 	}

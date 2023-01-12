@@ -2,8 +2,10 @@
 
 namespace App\Serializer;
 
+use App\Serializer\EntityExtension\EntityExtensionInterface;
 use Hashids\HashidsInterface;
 use Symfony\Component\DependencyInjection\Attribute\MapDecorated;
+use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -17,6 +19,10 @@ abstract class AbstractNormalizerDecorator implements NormalizerInterface, Denor
 
 	public function __construct(
 		private HashidsInterface $idHasher,
+		/**
+		 * @var iterable<EntityExtensionInterface>
+		 */
+		#[TaggedIterator('app.serializer.entity_extension')] private iterable $entityExtensions,
 		#[MapDecorated] NormalizerInterface $inner,
 	) {
 		if (!$inner instanceof DenormalizerInterface) {
@@ -43,6 +49,12 @@ abstract class AbstractNormalizerDecorator implements NormalizerInterface, Denor
 	public function normalize($object, $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
 	{
 		$data = $this->decorated->normalize($object, $format, $context);
+
+		foreach ($this->entityExtensions as $entityExtension) {
+			if ($entityExtension->supports($object)) {
+				$data = $entityExtension->extendNormalization($object, $data);
+			}
+		}
 
 		return $this->hashIdsInData($data);
 	}
