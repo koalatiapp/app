@@ -155,6 +155,7 @@ services:
     App\Api\Security\AuthenticationJwtListener:
         tags:
             - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJwtCreated }
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_decoded, method: onJwtDecoded }
 
     ############################
     # Doctrine event listeners #
