@@ -110,10 +110,15 @@ class ApiClient {
 			return await this.#request(method, endpoint, body, errorCallback, abortController);
 		}
 
-		let responseData;
+		let responseData = {};
 
 		try {
-			responseData = await response.json();
+			const responseText = await response.text();
+
+			// Sometimes the response may be empty, so we check for that before parsing it.
+			if (responseText) {
+				responseData = JSON.parse(responseText);
+			}
 		} catch (error) {
 			if (env.APP_ENV == "test") {
 				window.Flash.show("danger", JSON.stringify({ message: error.message, stack: error.stack }, null, 4));
