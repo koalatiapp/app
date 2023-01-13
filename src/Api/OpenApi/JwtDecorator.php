@@ -40,7 +40,7 @@ final class JwtDecorator implements OpenApiFactoryInterface
 	private function addTokenSchema(OpenApi $openApi): void
 	{
 		$schemas = $openApi->getComponents()->getSchemas();
-		$schemas['API Authentication (JWT)'] = new \ArrayObject([
+		$schemas['Token'] = new \ArrayObject([
 			'type' => 'object',
 			'properties' => [
 				'token' => [
