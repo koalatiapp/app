@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Api\Model;
+namespace App\Api\Dto;
 
 use ApiPlatform\Action\NotFoundAction;
 use ApiPlatform\Metadata\ApiResource;
@@ -11,6 +11,10 @@ use App\Entity\Page;
 use App\Entity\Project;
 use Symfony\Component\Serializer\Annotation\Groups;
 
+/**
+ * API-facing data-transfer object that allows API users to request for their
+ * website to be tested.
+ */
 #[ApiResource(operations: [
   new Get(controller: NotFoundAction::class, read: false, status: 404, openapi: false),
   new Post(messenger: true, output: false, status: 202, processor: TestingRequestProcessor::class),

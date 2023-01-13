@@ -137,9 +137,9 @@ export class RecommendationProgressIndicator extends LitElement {
 		this._isWaitingForServerResponse = true;
 		this._lastFetchTimestamp = Date.now();
 
-		ApiClient.get("api_testing_request_project_status", { id: this.projectId }, null)
+		ApiClient.get(`/api/projects/${this.projectId}/testing_status`, {}, null)
 			.then(response => {
-				this._handleStatusUpdate(response.data);
+				this._handleStatusUpdate(response);
 			})
 			.catch((error) => {
 				console.error(error);

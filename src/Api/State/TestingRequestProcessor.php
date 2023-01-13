@@ -4,7 +4,7 @@ namespace App\Api\State;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
-use App\Api\Model\TestingRequest;
+use App\Api\Dto\TestingRequest;
 use App\Entity\Page;
 use App\Message\TestingRequest as TestingRequestMessage;
 use App\Security\ProjectVoter;
