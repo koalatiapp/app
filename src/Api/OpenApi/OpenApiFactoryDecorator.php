@@ -6,7 +6,7 @@ use ApiPlatform\OpenApi\Factory\OpenApiFactoryInterface;
 use ApiPlatform\OpenApi\Model;
 use ApiPlatform\OpenApi\OpenApi;
 
-final class JwtDecorator implements OpenApiFactoryInterface
+final class OpenApiFactoryDecorator implements OpenApiFactoryInterface
 {
 	public function __construct(
 		private OpenApiFactoryInterface $decorated
@@ -24,8 +24,8 @@ final class JwtDecorator implements OpenApiFactoryInterface
 		$this->addRefreshTokenSchema($openApi);
 		$this->addCredentialsSchema($openApi);
 
-		$schemas = $openApi->getComponents()->getSecuritySchemes() ?? [];
-		$schemas['JWT'] = new \ArrayObject([
+		$securitySchemas = $openApi->getComponents()->getSecuritySchemes() ?? [];
+		$securitySchemas['JWT'] = new \ArrayObject([
 			'type' => 'http',
 			'scheme' => 'bearer',
 			'bearerFormat' => 'JWT',
@@ -33,6 +33,8 @@ final class JwtDecorator implements OpenApiFactoryInterface
 
 		$this->addAuthOperation($openApi);
 		$this->addTokenRefreshOperation($openApi);
+
+		$this->updateIdentifierTypesForHashIds($openApi);
 
 		return $openApi;
 	}
@@ -156,5 +158,20 @@ final class JwtDecorator implements OpenApiFactoryInterface
 			),
 		);
 		$openApi->getPaths()->addPath('/api/token/refresh', $pathItem);
+	}
+
+	/**
+	 * Updates schemas and request body formats to make sure all IDs
+	 * and entity references are documented as IRIs instead of numerical IDs.
+	 */
+	private function updateIdentifierTypesForHashIds(OpenApi $openApi): void
+	{
+		foreach ($openApi->getComponents()->getSchemas() as $component) {
+			foreach ($component["properties"] as $property => $definition) {
+				if ($property == "id" || str_ends_with($property, "_id")) {
+					$definition["type"] = "string";
+				}
+			}
+		}
 	}
 }

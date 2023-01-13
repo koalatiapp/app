@@ -143,7 +143,7 @@ services:
     # API
     ApiPlatform\State\ProcessorInterface $persistProcessor: '@api_platform.doctrine.orm.state.persist_processor'
     ApiPlatform\State\ProcessorInterface $removeProcessor: '@api_platform.doctrine.orm.state.remove_processor'
-    App\Api\OpenApi\JwtDecorator:
+    App\Api\OpenApi\OpenApiFactoryDecorator:
         decorates: 'api_platform.openapi.factory'
         arguments: ['@.inner']
     App\Api\Routing\EncryptedIriConverter:
