@@ -97,11 +97,16 @@ class Project implements MercureEntityInterface
 	private Collection $teamMembers;
 
 	/**
+	 * @var Collection<int,Recommendation>
+	 */
+	#[ORM\OneToMany(targetEntity: Recommendation::class, mappedBy: 'project')]
+	private Collection $recommendations;
+
+	/**
 	 * @var Collection<int, IgnoreEntry>
 	 */
 	#[ORM\OneToMany(targetEntity: IgnoreEntry::class, mappedBy: 'targetProject')]
 	private Collection $ignoreEntries;
-
 	/**
 	 * @var array<int,string>|null
 	 */
@@ -301,49 +306,55 @@ class Project implements MercureEntityInterface
 	}
 
 	/**
-	 * @return ArrayCollection<int,Recommendation>
+	 * @return Collection<int,Recommendation>
 	 */
-	public function getRecommendations(): ArrayCollection
+	public function getRecommendations(): Collection
 	{
-		$recommendations = new ArrayCollection();
-
-		foreach ($this->getActivePages() as $page) {
-			foreach ($page->getRecommendations() as $recommendation) {
-				$recommendations->add($recommendation);
-			}
-		}
-
-		return $recommendations;
+		return $this->recommendations;
 	}
 
 	/**
-	 * @return ArrayCollection<int,Recommendation>
+	 * @param Collection<int,Recommendation> $recommendations
 	 */
-	public function getSortedRecommendations(): ArrayCollection
+	public function setRecommendations(Collection $recommendations): self
 	{
-		/**
-		 * @var \ArrayIterator<int, Recommendation> $recommendationIterator
-		 */
-		$recommendationIterator = $this->getRecommendations()->getIterator();
-		$recommendationIterator->uasort(function ($a, $b) {
-			$priorities = Recommendation::TYPE_PRIORITIES;
+		$this->recommendations = $recommendations;
 
-			return $priorities[$a->getType()] > $priorities[$b->getType()] ? 1 : -1;
-		});
-
-		return new ArrayCollection(iterator_to_array($recommendationIterator));
+		return $this;
 	}
 
 	/**
+	 * Returns all recommendations that are linked to active pages,
+	 * that are not ignored and that are not completed.
+	 *
 	 * @return ArrayCollection<int,Recommendation>
 	 */
 	public function getActiveRecommendations(): ArrayCollection
 	{
-		return $this->getSortedRecommendations()->filter(
-			fn (Recommendation $recommendation = null) => !$recommendation->getIsCompleted()
-				&& !$recommendation->isIgnored()
-				&& !$recommendation->getRelatedPage()->getIsIgnored()
+		$recommendations = $this->recommendations->filter(
+			function (Recommendation $recommendation = null) {
+				return !$recommendation->getIsCompleted()
+					&& !$recommendation->isIgnored()
+					&& !$recommendation->getRelatedPage()->getIsIgnored();
+			}
 		);
+
+		// Sort the recommendations by priority level
+		/** @var \ArrayIterator<int, Recommendation> $recommendationIterator */
+		$recommendationIterator = $recommendations->getIterator();
+		$recommendationIterator->uasort(function (Recommendation $a, Recommendation $b) {
+			$priorities = Recommendation::TYPE_PRIORITIES;
+
+			if ($priorities[$a->getType()] > $priorities[$b->getType()]) {
+				return 1;
+			} elseif ($priorities[$a->getType()] < $priorities[$b->getType()]) {
+				return -1;
+			}
+
+			return strnatcasecmp($a->getTitle(), $b->getTitle());
+		});
+
+		return new ArrayCollection(iterator_to_array($recommendationIterator));
 	}
 
 	/**

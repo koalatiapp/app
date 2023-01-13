@@ -22,7 +22,7 @@ class ProjectTestingController extends AbstractProjectController
 			return $this->suggestPlanUpgrade('upgrade_suggestion.testing');
 		}
 
-		if (!$project->getRecommendations()->count()) {
+		if (!$project->getActiveRecommendations()->count()) {
 			$bus->dispatch(new TestingRequest($id));
 		}
 

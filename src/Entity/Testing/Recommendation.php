@@ -2,6 +2,15 @@
 
 namespace App\Entity\Testing;
 
+use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
+use ApiPlatform\Metadata\Patch;
+use App\Api\State\RecommendationProcessor;
 use App\Entity\Page;
 use App\Entity\Project;
 use App\Entity\User;
@@ -9,8 +18,30 @@ use App\Repository\Testing\RecommendationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
 
+#[ApiResource(
+	openapiContext: ["tags" => ['Recommendation']],
+	normalizationContext: ["groups" => "recommendation.list"],
+	uriTemplate: '/projects/{projectId}/recommendations',
+	uriVariables: ['projectId' => new Link(fromClass: Project::class, fromProperty: 'recommendations')],
+	operations: [new GetCollection()],
+)]
+#[ApiResource(
+	openapiContext: ["tags" => ['Recommendation']],
+	normalizationContext: ["groups" => "recommendation.read"],
+	processor: RecommendationProcessor::class,
+	operations: [
+		new Get(
+			security: "is_granted('project_view', object.getRelatedPage().getProject())",
+		),
+		new Patch(
+			security: "is_granted('project_participate', object.getRelatedPage().getProject())",
+			denormalizationContext: ["groups" => "recommendation.write"],
+		),
+	],
+)]
+#[ApiFilter(SearchFilter::class, properties: ['relatedPage' => 'exact', 'type' => 'exact', 'uniqueName' => 'partial', 'completedBy' => 'exact'])]
+#[ApiFilter(BooleanFilter::class, properties: ['isCompleted'])]
 #[ORM\Entity(repositoryClass: RecommendationRepository::class)]
 class Recommendation
 {
@@ -26,58 +57,60 @@ class Recommendation
 	#[ORM\Id]
 	#[ORM\GeneratedValue]
 	#[ORM\Column(type: 'integer')]
-	#[Groups(['default'])]
+	#[Groups(['recommendation.list', 'recommendation.read'])]
 	private ?int $id = null;
 
 	#[ORM\Column(type: 'text')]
-	#[Groups(['default'])]
+	#[Groups(['recommendation.list', 'recommendation.read'])]
 	private string $template;
 
 	/**
 	 * @var array<mixed,mixed>
 	 */
 	#[ORM\Column(type: 'json', nullable: true)]
-	#[Groups(['default'])]
+	#[Groups(['recommendation.list', 'recommendation.read'])]
 	private ?array $parameters = [];
 
 	#[ORM\ManyToOne(targetEntity: Page::class, inversedBy: 'recommendations')]
 	#[ORM\JoinColumn(name: 'page_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
-	#[Groups(['recommendation'])]
-	#[MaxDepth(1)]
+	#[Groups(['recommendation.list', 'recommendation.read'])]
 	private Page $relatedPage;
 
+	#[ORM\ManyToOne(targetEntity: Project::class, inversedBy: 'recommendations')]
+	#[Groups(['recommendation.list', 'recommendation.read'])]
+	private Project $project;
+
 	#[ORM\Column(type: 'string', length: 255)]
-	#[Groups(['default'])]
+	#[Groups(['recommendation.list', 'recommendation.read'])]
 	private string $type;
 
 	#[ORM\Column(type: 'string', length: 255)]
-	#[Groups(['default'])]
+	#[Groups(['recommendation.list', 'recommendation.read'])]
 	private string $uniqueName;
 
 	#[ORM\ManyToOne(targetEntity: TestResult::class, inversedBy: 'recommendations')]
 	#[ORM\JoinColumn(name: 'parent_result_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
-	#[Groups(['recommendation'])]
-	#[MaxDepth(1)]
+	#[Groups(['recommendation.read'])]
 	private TestResult $parentResult;
 
 	#[ORM\Column(type: 'datetime')]
-	#[Groups(['default'])]
+	#[Groups(['recommendation.list', 'recommendation.read'])]
 	private \DateTimeInterface $dateCreated;
 
 	#[ORM\Column(type: 'datetime')]
-	#[Groups(['default'])]
+	#[Groups(['recommendation.list', 'recommendation.read'])]
 	private \DateTimeInterface $dateLastOccured;
 
 	#[ORM\Column(type: 'datetime', nullable: true)]
-	#[Groups(['default'])]
+	#[Groups(['recommendation.list', 'recommendation.read'])]
 	private ?\DatetimeInterface $dateCompleted;
 
 	#[ORM\ManyToOne(targetEntity: User::class)]
-	#[Groups(['default'])]
+	#[Groups(['recommendation.list', 'recommendation.read'])]
 	private ?User $completedBy = null;
 
 	#[ORM\Column(type: 'boolean')]
-	#[Groups(['default'])]
+	#[Groups(['recommendation.list', 'recommendation.read', 'recommendation.write'])]
 	private bool $isCompleted = false;
 
 	public function __construct()
@@ -122,22 +155,10 @@ class Recommendation
 		return $this;
 	}
 
-	#[Groups(['default'])]
+	#[Groups(['recommendation.list', 'recommendation.read'])]
 	public function getTitle(): string
 	{
 		return strtr($this->getTemplate(), $this->getParameters());
-	}
-
-	#[Groups(['default'])]
-	public function getHtmlTitle(): string
-	{
-		$htmlTemplate = $this->getTemplate();
-
-		foreach (array_keys($this->getParameters()) as $key) {
-			$htmlTemplate = str_replace($key, "<span class='parameter'>$key</span>", $htmlTemplate);
-		}
-
-		return strtr($htmlTemplate, $this->getParameters());
 	}
 
 	public function getRelatedPage(): ?Page
@@ -148,6 +169,19 @@ class Recommendation
 	public function setRelatedPage(?Page $relatedPage): self
 	{
 		$this->relatedPage = $relatedPage;
+		$this->setProject($relatedPage->getProject());
+
+		return $this;
+	}
+
+	public function getProject(): ?Project
+	{
+		return $this->project;
+	}
+
+	public function setProject(?Project $project): self
+	{
+		$this->project = $project;
 
 		return $this;
 	}
@@ -254,6 +288,7 @@ class Recommendation
 		return $this;
 	}
 
+	#[Groups(['recommendation.list', 'recommendation.read'])]
 	public function isIgnored(): ?bool
 	{
 		$ignoreEntries = new ArrayCollection(
@@ -274,9 +309,16 @@ class Recommendation
 		return $matchingIgnoreEntries->count() > 0;
 	}
 
-	public function getProject(): Project
+	#[Groups(['recommendation.list', 'recommendation.read'])]
+	public function getPageTitle(): string
 	{
-		return $this->getRelatedPage()->getProject();
+		return $this->getRelatedPage()->getTitle();
+	}
+
+	#[Groups(['recommendation.list', 'recommendation.read'])]
+	public function getPageUrl(): string
+	{
+		return $this->getRelatedPage()->getUrl();
 	}
 
 	/**
@@ -288,6 +330,7 @@ class Recommendation
 	 *
 	 * The resulting value is a simple MD5 hash of the serialized values.
 	 */
+	#[Groups(['recommendation.list', 'recommendation.read'])]
 	public function getUniqueMatchingIdentifier(): string
 	{
 		$parentResponse = $this->getParentResult()->getParentResponse();

@@ -43,7 +43,7 @@ export class RequestTestingButton extends NbButton {
 			refreshButton.loading = true;
 		}
 
-		ApiClient.post("api_testing_request_create", { project_id: this.projectId }, null)
+		ApiClient.post("/api/testing_requests", { project: `/api/projects/${this.projectId}` }, null)
 			.then(() => {
 				window.Flash.show("success", Translator.trans("automated_testing.testing_request_created"));
 

@@ -111,7 +111,7 @@ class RecommendationController extends AbstractController
 		// Trigger a new testing request for this tool
 		$testingRequest = new TestingRequest(
 			$project->getId(),
-			$recommendationGroup->getSample()->getParentResult()->getParentResponse()->getTool()
+			[$recommendationGroup->getSample()->getParentResult()->getParentResponse()->getTool()],
 		);
 		$bus->dispatch($testingRequest);
 
@@ -123,7 +123,6 @@ class RecommendationController extends AbstractController
 	 *
 	 * Available query parameters:
 	 * - `project_id` - `int` (required)
-	 * - `show_completed` - `bool` (defaults to `false`) - Whether completed recommendations should be included
 	 */
 	#[Route(path: '', methods: ['GET', 'HEAD'], name: 'list', options: ['expose' => true])]
 	public function list(Request $request): JsonResponse
@@ -135,10 +134,6 @@ class RecommendationController extends AbstractController
 		}
 
 		$project = $this->getProject($projectId);
-
-		if ($request->query->get('show_completed')) {
-			return $this->apiSuccess($project->getSortedRecommendations());
-		}
 
 		return $this->apiSuccess($project->getActiveRecommendations());
 	}

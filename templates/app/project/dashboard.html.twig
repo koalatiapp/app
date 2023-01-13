@@ -44,7 +44,7 @@
 				<div class="button-container margin-top">
 					<nb-button href="{{ path('project_testing', {id: project.id|hashids_encode}) }}">{% trans %}project_dashboard.up_next.implement_recommendations.cta{% endtrans %}</nb-button>
 				</div>
-			{% elseif not project.recommendations|length %}
+			{% elseif not project.activeRecommendations|length %}
 				{% trans with {"%projectName%": project.name} %}project_dashboard.up_next.generate_recommendations.explanation{% endtrans %}
 				<hr>
 				<div class="button-container margin-top">
@@ -76,7 +76,7 @@
 					{% if project.activeRecommendationGroups|length %}
 						<a href="{{ path('project_testing', {id: project.id|hashids_encode}) }}" class="text-highlight orange">{% trans with {"%count%": project.activeRecommendationGroups|length} %}project_dashboard.summary.step.recommendations.count{% endtrans %}</a>
 					{% else %}
-						{% if project.recommendations|length %}
+						{% if project.activeRecommendations|length %}
 							<span class="text-highlight green">{% trans %}project_dashboard.summary.step.recommendations.completed{% endtrans %}</span>
 						{% else %}
 							<span class="text-highlight red">{% trans %}project_dashboard.summary.step.recommendations.not_scanned{% endtrans %}</span>

@@ -2,16 +2,47 @@
 
 namespace App\Util\Testing;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
+use ApiPlatform\Metadata\Patch;
+use App\Api\State\RecommendationGroupProcessor;
+use App\Api\State\RecommendationGroupProvider;
 use App\Entity\Project;
 use App\Entity\Testing\Recommendation;
 use App\Entity\User;
 use App\Mercure\MercureEntityInterface;
+use App\Repository\ProjectRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * A group of recommendations of the same type.
  */
+#[ApiResource(
+	provider: RecommendationGroupProvider::class,
+	openapiContext: ["tags" => ['Recommendation Group']],
+	normalizationContext: ["groups" => "recommendation.list"],
+	uriTemplate: '/projects/{projectId}/recommendation_groups',
+	uriVariables: ['projectId' => new Link(fromClass: Project::class)],
+	operations: [new GetCollection()],
+)]
+#[ApiResource(
+	provider: RecommendationGroupProvider::class,
+	openapiContext: ["tags" => ['Recommendation Group']],
+	normalizationContext: ["groups" => "recommendation.read"],
+	processor: RecommendationGroupProcessor::class,
+	operations: [
+		new Get(
+			security: "is_granted('project_view', object.getProject())",
+		),
+		new Patch(
+			security: "is_granted('project_participate', object.getProject())",
+			denormalizationContext: ["groups" => "recommendation.write"],
+		),
+	],
+)]
 class RecommendationGroup implements \Countable, MercureEntityInterface
 {
 	/**
@@ -29,7 +60,7 @@ class RecommendationGroup implements \Countable, MercureEntityInterface
 	/**
 	 * @return ArrayCollection<int, Recommendation>
 	 */
-	#[Groups(['recommendation_group'])]
+	#[Groups(['recommendation.read'])]
 	public function getRecommendations(): ArrayCollection
 	{
 		return $this->recommendations;
@@ -43,13 +74,13 @@ class RecommendationGroup implements \Countable, MercureEntityInterface
 		return $this;
 	}
 
-	#[Groups(['default'])]
+	#[Groups(['recommendation.list', 'recommendation.read'])]
 	public function getSampleId(): ?int
 	{
 		return $this->getSample()?->getId() ?: null;
 	}
 
-	#[Groups(['recommendation_group'])]
+	#[Groups(['recommendation.read'])]
 	public function getSample(): ?Recommendation
 	{
 		if (!$this->isSorted) {
@@ -59,48 +90,42 @@ class RecommendationGroup implements \Countable, MercureEntityInterface
 		return $this->getRecommendations()->first() ?: null;
 	}
 
-	#[Groups(['default'])]
 	public function getProjectId(): ?int
 	{
 		return $this->getSample()?->getProject()->getId();
 	}
 
+	#[Groups(['recommendation.list', 'recommendation.read'])]
 	public function getProject(): ?Project
 	{
 		return $this->getSample()?->getProject();
 	}
 
-	#[Groups(['default'])]
+	#[Groups(['recommendation.list', 'recommendation.read'])]
 	public function getType(): ?string
 	{
 		return $this->getSample()?->getType();
 	}
 
-	#[Groups(['default'])]
+	#[Groups(['recommendation.list', 'recommendation.read'])]
 	public function getUniqueName(): ?string
 	{
 		return $this->getSample()?->getUniqueName();
 	}
 
-	#[Groups(['default'])]
+	#[Groups(['recommendation.list', 'recommendation.read'])]
 	public function getTemplate(): ?string
 	{
 		return $this->getSample()?->getTemplate();
 	}
 
-	#[Groups(['default'])]
+	#[Groups(['recommendation.list', 'recommendation.read'])]
 	public function getTitle(): ?string
 	{
 		return $this->getSample()?->getTitle();
 	}
 
-	#[Groups(['default'])]
-	public function getHtmlTitle(): ?string
-	{
-		return $this->getSample()?->getHtmlTitle();
-	}
-
-	#[Groups(['default'])]
+	#[Groups(['recommendation.list', 'recommendation.read'])]
 	public function getProjectOwnerType(): ?string
 	{
 		$projectOwner = $this->getSample()?->getProject()->getOwner();
@@ -112,7 +137,7 @@ class RecommendationGroup implements \Countable, MercureEntityInterface
 		return 'organization';
 	}
 
-	#[Groups(['default'])]
+	#[Groups(['recommendation.list', 'recommendation.read'])]
 	public function getProjectOwnerId(): ?int
 	{
 		$projectOwner = $this->getSample()?->getProject()->getOwner();
@@ -120,10 +145,32 @@ class RecommendationGroup implements \Countable, MercureEntityInterface
 		return $projectOwner->getId();
 	}
 
-	#[Groups(['default'])]
+	#[Groups(['recommendation.list', 'recommendation.read'])]
 	public function getTool(): ?string
 	{
 		return $this->getSample()?->getParentResult()?->getParentResponse()?->getTool();
+	}
+
+	#[Groups(['recommendation.read'])]
+	public function getIsCompleted(): bool
+	{
+		foreach ($this->getRecommendations() as $recommendation) {
+			if (!$recommendation->getIsCompleted()) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	#[Groups(['recommendation.write'])]
+	public function setIsCompleted(bool $isCompleted): self
+	{
+		foreach ($this->getRecommendations() as $recommendation) {
+			$recommendation->setIsCompleted($isCompleted);
+		}
+
+		return $this;
 	}
 
 	public function count(): int
@@ -131,7 +178,7 @@ class RecommendationGroup implements \Countable, MercureEntityInterface
 		return $this->recommendations->count();
 	}
 
-	#[Groups(['default'])]
+	#[Groups(['recommendation.list', 'recommendation.read'])]
 	public function getCount(): int
 	{
 		return $this->count();
@@ -146,7 +193,13 @@ class RecommendationGroup implements \Countable, MercureEntityInterface
 		$recommendationIterator->uasort(function ($a, $b) {
 			$priorities = Recommendation::TYPE_PRIORITIES;
 
-			return $priorities[$a->getType()] > $priorities[$b->getType()] ? 1 : -1;
+			if ($priorities[$a->getType()] > $priorities[$b->getType()]) {
+				return 1;
+			} elseif ($priorities[$a->getType()] < $priorities[$b->getType()]) {
+				return -1;
+			}
+
+			return strnatcasecmp($a->getTitle(), $b->getTitle());
 		});
 
 		$this->recommendations = new ArrayCollection(iterator_to_array($recommendationIterator));
@@ -192,8 +245,8 @@ class RecommendationGroup implements \Countable, MercureEntityInterface
 		return $groups;
 	}
 
-	#[Groups(['default'])]
-	public function getId(): string
+	#[Groups(['recommendation.list', 'recommendation.read'])]
+	public function getId(): ?string
 	{
 		return $this->getUniqueMatchingIdentifier();
 	}
@@ -204,6 +257,7 @@ class RecommendationGroup implements \Countable, MercureEntityInterface
 	 *
 	 * The resulting value is a simple MD5 hash of the serialized values.
 	 */
+	#[Groups(['recommendation.list', 'recommendation.read'])]
 	public function getUniqueMatchingIdentifier(): string
 	{
 		$sample = $this->getSample();
@@ -224,11 +278,28 @@ class RecommendationGroup implements \Countable, MercureEntityInterface
 	 */
 	public static function generateGroupMatchingIdentifier(int $projectId, string $toolName, string $recommendationUniqueName): string
 	{
-		return md5(serialize([
-			$projectId,
+		return $projectId.'Fm'.md5(serialize([
 			$toolName,
 			$recommendationUniqueName,
 		]));
+	}
+
+	public static function loadFromGroupMatchingIdentifier(string $identifier, ProjectRepository $projectRepository): ?self
+	{
+		$projectId = explode('Fm', $identifier)[0] ?? null;
+		$project = $projectRepository->find($projectId);
+
+		if (!$project) {
+			return null;
+		}
+
+		foreach ($project->getActiveRecommendationGroups() as $recommendationGroup) {
+			if ($recommendationGroup->getUniqueMatchingIdentifier() == $identifier) {
+				return $recommendationGroup;
+			}
+		}
+
+		return null;
 	}
 
 	/**
@@ -250,6 +321,6 @@ class RecommendationGroup implements \Countable, MercureEntityInterface
 
 	public function getMercureSerializationGroup(): string
 	{
-		return "recommendation_group.read";
+		return "recommendation.read";
 	}
 }

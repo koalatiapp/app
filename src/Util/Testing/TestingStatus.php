@@ -8,19 +8,19 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 class TestingStatus implements MercureEntityInterface
 {
-	#[Groups(['default'])]
+	#[Groups(['read'])]
 	private readonly bool $pending;
 
-	#[Groups(['default'])]
+	#[Groups(['read'])]
 	private readonly ?int $requestCount;
 
-	#[Groups(['default'])]
+	#[Groups(['read'])]
 	private readonly ?int $timeEstimate;
 
-	#[Groups(['default'])]
+	#[Groups(['read'])]
 	private readonly int $pageCount;
 
-	#[Groups(['default'])]
+	#[Groups(['read'])]
 	private readonly int $activePageCount;
 
 	/**
@@ -76,6 +76,6 @@ class TestingStatus implements MercureEntityInterface
 
 	public function getMercureSerializationGroup(): string
 	{
-		return "testing_status.read";
+		return "read";
 	}
 }

@@ -169,11 +169,11 @@ export class RecommendationProgressIndicator extends LitElement {
 	_handleStatusUpdate(status)
 	{
 		this._hasReceivedFirstResponse = true;
-		this.pageCount = status.pageCount;
-		this.activePageCount = status.activePageCount;
+		this.pageCount = status.page_count;
+		this.activePageCount = status.active_page_count;
 		this.hasRequestsPending = status.pending;
-		this.pendingRequestCount = status.requestCount;
-		this.timeLeftInMs = status.timeEstimate;
+		this.pendingRequestCount = status.request_count;
+		this.timeLeftInMs = status.time_estimate;
 		this._startTimerInterval();
 
 		for (const refreshButton of querySelectorAllAnywhere("request-testing-button")) {
@@ -190,7 +190,7 @@ export class RecommendationProgressIndicator extends LitElement {
 
 			const status = update.data;
 
-			if (typeof status.requestCount != "undefined") {
+			if (typeof status.request_count != "undefined") {
 				this._handleStatusUpdate(status);
 			} else if (status.pending && !this._hasReceivedFirstResponse) {
 				this.fetchStatus();

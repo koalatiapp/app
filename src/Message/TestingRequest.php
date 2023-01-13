@@ -5,21 +5,21 @@ namespace App\Message;
 class TestingRequest
 {
 	/**
-	 * Undocumented function.
-	 *
-	 * @param string|array<mixed,string>|null $tools
-	 * @param int|array<mixed,int>|null       $pageIds
+	 * @param array<int|string,string>|null $tools
+	 * @param array<int|string,int>|null    $pageIds
 	 */
 	public function __construct(
-		private readonly int $projectId,
+		private ?int $projectId = null,
+
 		/**
 		 * Tool(s) to run.
 		 */
-		private $tools = null,
+		private ?array $tools = null,
+
 		/**
 		 * ID(s) of the pages on which to run the tools.
 		 */
-		private $pageIds = null
+		private ?array $pageIds = null
 	) {
 	}
 
