@@ -19,7 +19,7 @@ class RecommendationProcessor extends AbstractDoctrineStateWrapper
 		if (!$recommendation->getIsCompleted()) {
 			$recommendation->setCompletedBy(null);
 		} elseif (!$originalData['isCompleted']) {
-			$recommendation->setCompletedBy($this->getUser());
+			$recommendation->complete($this->getUser());
 		}
 	}
 }
