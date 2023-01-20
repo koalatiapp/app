@@ -1,6 +1,98 @@
 api_platform:
     title: 'Koalati API'
-    description: 'Use Koalati''s API to integrate website testing features in your favorite tools and platforms.'
+    description: >
+        <h2>Introduction</h2>
+        <p>The Koalati API allows you to integrate the website testing features you know and love in your favorite tools and platforms.</p>
+        <p>The API is built on REST principles, and can be used with both the managed and the self-hosted versions of Koalati.</p>
+
+        <hr>
+
+        <h2>API URL</h2>
+        <p>
+            The Koalati API for the managed version of Koalati is available at the following URL:<br>
+            <code>https://app.koalati.com/api/</code>
+        </p>
+        <p>
+            For self-hosted instances of Koalati in which the API is available (v1.1.0 and above), you can access the API at
+            the <code>/api/</code> of your instance's hostname.
+        </p>
+
+        <hr>
+
+        <h2>Formats</h2>
+        <p>The following formats can be used to interact with the API:</p>
+        <ul>
+            <li>JSON-LD (<code>application/ld+json</code>) - default</li>
+            <li>JSON (<code>application/json</code>)</li>
+            <li>JSON HAL (<code>application/hal+json</code>)</li>
+            <li>JSON:API (<code>application/vnd.api+json</code>)</li>
+            <li>XML (<code>application/xml</code> or <code>text/xml</code>)</li>
+            <li>YAML (<code>application/x-yaml</code>)</li>
+            <li>CSV (<code>text/csv</code>)</li>
+        </ul>
+        <p>
+            <strong>However, please note that authentication calls must use the
+            JSON (<code>application/json</code>) format.</strong>
+        </p>
+
+        <hr>
+
+        <h2>Pagination</h2>
+        <p>Koalati provides API endpoints to retrieve lists of resources.</p>
+        <p>Most of these lists are paginated, displaying <code>50</code> items per page by default</p>
+        <h3>Changing the number of items per page</h3>
+        <p>You can change the number of items per page by passing the <code>itemsPerPage</code> query parameter in your API calls (maximum of <code>100</code>).</p>
+        <h3>Disabling the pagination</h3>
+        <p>You can disable the pagination by passing the <code>pagination</code> query parameter in your API calls with a value of <code>false</code>.</p>
+
+
+        <hr>
+
+        <h2>HTTP Methods</h2>
+        <p>Koalati's API uses the standard HTTP verbs, as follows:</p>
+        <ul>
+            <li>
+                <code>GET</code>:
+                Used for retrieving resources.
+            </li>
+            <li>
+                <code>POST</code>:
+            	Used for creating resources and performing resource actions.
+            </li>
+            <li>
+                <code>PUT</code>:
+            	Used for updating resources.
+            </li>
+            <li>
+                <code>PATCH</code>:
+            	Used for partially updating resources.
+            </li>
+            <li>
+                <code>DELETE</code>:
+            	Used for deleting resources.
+            </li>
+        </ul>
+
+        <hr>
+
+        <h2>HTTP Codes</h2>
+        <p>Koalati's API responds with standard HTTP codes.</p>
+        <p>Here are the status codes you are likely to encounter when using the Koalati API:</p>
+        <ul>
+            <li><code>200</code>: OK</li>
+            <li><code>201</code>: Created</li>
+            <li><code>202</code>: Accepted</li>
+            <li><code>204</code>: No Content (Resource has been deleted)</li>
+            <li><code>400</code>: Bad Request</li>
+            <li><code>401</code>: Unauthorized (Missing Authorization token)</li>
+            <li><code>403</code>: Forbidden (User does not have access to the requested action or resource)</li>
+            <li><code>404</code>: URL Not Found</li>
+            <li><code>405</code>: Method Not Allowed</li>
+            <li><code>429</code>: Rate Limit Exceeded (API usage limit exceeded)</li>
+            <li><code>500</code>: Internal Error</li>
+        </ul>
+        <p>For more information about HTTP codes, please refer to <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status">MDN's documentation</a>.</p>
+
     version: '1.0.0'
     show_webby: false
     mapping:
@@ -24,23 +116,30 @@ api_platform:
         denormalizationContext:
             groups: ['write']
             allow_extra_attributes: false
+        pagination_client_enabled: true
+        pagination_items_per_page: 50
+        pagination_maximum_items_per_page: 100
+    collection:
+        pagination:
+            enabled_parameter_name: pagination
+            items_per_page_parameter_name: itemsPerPage
     exception_to_status:
         Symfony\Component\Serializer\Exception\ExceptionInterface: 400 # Use a raw status code (recommended)
         ApiPlatform\Exception\InvalidArgumentException: !php/const Symfony\Component\HttpFoundation\Response::HTTP_BAD_REQUEST
         ApiPlatform\Exception\FilterValidationException: 400
         Doctrine\ORM\OptimisticLockException: 409
-        Symfony\Component\Serializer\Exception\ExtraAttributesException: 400
     swagger:
         api_keys:
             JWT:
                 name: Authorization
                 type: header
+    enable_swagger_ui: false
     openapi:
         contact:
             # The identifying name of the contact person/organization.
             name: Technologies Koalati Inc.
             # The URL pointing to the contact information. MUST be in the format of a URL.
-            url: https://www.koalati.com/help-center
+            url: https://www.koalati.com
             # The email address of the contact person/organization. MUST be in the format of an email address.
             email: info@koalati.com
         # A URL to the Terms of Service for the API. MUST be in the format of a URL.

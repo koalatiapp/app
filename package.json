@@ -1,7 +1,7 @@
 {
   "name": "@koalati/app",
   "dependencies": {
-    "@sentry/browser": "^7.0.0",
+    "@sentry/browser": "^7.31.1",
     "@symfony/webpack-encore": "^1.8.1",
     "@tinymce/tinymce-webcomponent": "^2.0.0",
     "core-js": "^3.10.2",

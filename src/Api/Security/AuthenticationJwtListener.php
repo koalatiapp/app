@@ -61,7 +61,9 @@ class AuthenticationJwtListener
 			$session = $this->requestStack->getSession();
 
 			if ($event->getPayload()['username'] != $session->get('_security.last_username')) {
-				throw new UnauthorizedHttpException("bearer", "User session does not match the provided JWT. Please re-authenticate.");
+				if (!str_contains($request->headers->get('referer'), "/api/docs")) {
+					throw new UnauthorizedHttpException("bearer", "User session does not match the provided JWT. Please re-authenticate or clear your session cookie.");
+				}
 			}
 		}
 	}

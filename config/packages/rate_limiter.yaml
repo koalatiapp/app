@@ -1,0 +1,12 @@
+framework:
+    rate_limiter:
+        anonymous_api:
+            # Authentication calls are limited to 60 calls per hour
+            policy: 'fixed_window'
+            limit: 60
+            interval: '60 minutes'
+        authenticated_api:
+            # API calls are limited to 60 calls per minute
+            policy: 'token_bucket'
+            limit: 60
+            rate: { interval: '1 second', amount: 1 }
