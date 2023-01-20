@@ -37,6 +37,20 @@ api_platform:
 
         <hr>
 
+        <h2>Rate Limiting</h2>
+        <p>To ensure our platform remains stable and that API usage remains aligned with the core purpose of Koalati, the API is rate-limited.</p>
+        <p>We ask developers to use industry standard techniques to limit calls, cache results, and retry requests responsibly.</p>
+        <ul>
+            <li>Limit for authentication endpoints: <strong>60 calls per hour</strong>.</li>
+            <li>Limit for all other endpoints: <strong>60 calls per minute</strong>.</li>
+        </ul>
+        <p>
+            Every API response contains headers to help you prevent excessive usage
+            (<code>x-ratelimit-limit</code>, <code>x-ratelimit-remaining</code> and <code>x-ratelimit-retry-after</code>).
+        </p>
+
+        <hr>
+
         <h2>Pagination</h2>
         <p>Koalati provides API endpoints to retrieve lists of resources.</p>
         <p>Most of these lists are paginated, displaying <code>50</code> items per page by default</p>
