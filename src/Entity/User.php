@@ -26,7 +26,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
 	normalizationContext: ["groups" => "user.read"],
 	operations: [
-		new Get(),
+		new Get(security: "is_granted('user_view', object)"),
 	],
 )]
 #[ORM\Table(name: '`user`')]
