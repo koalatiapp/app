@@ -64,6 +64,12 @@ final class OpenApiFactoryDecorator implements OpenApiFactoryInterface
 			];
 		}
 
+		// Add docuemntation for authentication
+		$customDocumentationTags[] = [
+			"name" => $this->translator->trans("api.docs.authentication.title"),
+			"description" => $this->translator->trans("api.docs.authentication.content"),
+		];
+
 		$tags = $this->openApi->getTags();
 		array_unshift($tags, ...$customDocumentationTags);
 
@@ -132,7 +138,7 @@ final class OpenApiFactoryDecorator implements OpenApiFactoryInterface
 			ref: 'JWT Token',
 			post: new Model\Operation(
 				operationId: 'postCredentialsItem',
-				tags: ['API Authentication (JWT)'],
+				tags: ['Authentication'],
 				responses: [
 					'200' => [
 						'description' => 'Get JWT token',
@@ -145,9 +151,9 @@ final class OpenApiFactoryDecorator implements OpenApiFactoryInterface
 						],
 					],
 				],
-				summary: 'Get JWT token to authenticate.',
+				summary: 'Generate an authentication token (JWT)',
 				requestBody: new Model\RequestBody(
-					description: 'Generate new JWT Token',
+					description: 'Generates a JWT to authenticate as the specified user.',
 					content: new \ArrayObject([
 						'application/json' => [
 							'schema' => [
@@ -168,7 +174,7 @@ final class OpenApiFactoryDecorator implements OpenApiFactoryInterface
 			ref: 'JWT Token',
 			post: new Model\Operation(
 				operationId: 'postRefreshTokenItem',
-				tags: ['API Authentication (JWT)'],
+				tags: ['Authentication'],
 				responses: [
 					'200' => [
 						'description' => 'Refresh JWT token',
@@ -181,9 +187,9 @@ final class OpenApiFactoryDecorator implements OpenApiFactoryInterface
 						],
 					],
 				],
-				summary: 'Refresh the JWT token used to authenticate.',
+				summary: 'Refresh an authentication token',
 				requestBody: new Model\RequestBody(
-					description: 'Generates a new JWT Token from the provided Refresh Token.',
+					description: 'Generates a new JWT from the provided Refresh Token.',
 					content: new \ArrayObject([
 						'application/json' => [
 							'schema' => [

@@ -139,6 +139,31 @@ api:
                     <li><code>500</code>: Internal Error</li>
                 </ul>
                 <p>For more information about HTTP codes, please refer to <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status">MDN's documentation</a>.</p>
+        authentication:
+            title: Authentication
+            content: >
+                <p>To access Koalati's API, you have to authenticate with a valid Koalati user account.</p>
+                <p>
+                    This is done by generating an authentication token (in the form of a JWT) and providing it as a
+                    <a href="https://oauth.net/2/bearer-tokens/" target="_blank">Bearer Token</a> in all of your API calls.
+                </p>
+                <p>There are two ways to generate an authentication token for the Koalati API:</p>
+                <ul>
+                    <li>
+                        <strong>Generate the authentication token within the Koalati application itself.</strong><br>
+                        To do so, go to <i/Settings > Security</i>, and find the <i>API Authentication</i> section.
+                    </li>
+                    <li>
+                        <strong>Call the <code>/api/auth</code> API endpoint with the desired user's login credentials.</strong><br>
+                        You should only do this once to get the initial token; you should never store your login credentials
+                        on a server or provide them to a third party application.
+                    </li>
+                </ul>
+                <p>
+                    Every authentication token you generate has an expiration date, after which it becomes invalid. However,
+                    you may refresh a authentication token by providing the API the refresh token that was issued at the same
+                    time as your JWT. Check out the <code>/api/token/refresh</code> endpoint below to learn how to do this.
+                </p>
 
 branding:
     name: Koalati
