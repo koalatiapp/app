@@ -92,7 +92,7 @@
 			</ul>
         </li>
 
- 		<li class="{{ current_route in ['edit_profile', 'manage_account_security', 'manage_contact_preferences', 'manage_subscription'] ? 'active' : '' }}">
+ 		<li class="{{ current_route in ['edit_profile', 'manage_account_security', 'manage_account_api', 'manage_contact_preferences', 'manage_subscription'] ? 'active' : '' }}">
 		 	<a href="{{ path('edit_profile') }}">
                 <i class="far fa-gear" aria-hidden="true"></i>
                 <span>{% trans %}navigation.settings.label{% endtrans %}</span>
@@ -110,7 +110,7 @@
 						</a>
 					</li>
 				{% endif %}
-				<li class="{{ current_route in ['manage_account_security'] ? 'active' : '' }}">
+				<li class="{{ current_route in ['manage_account_security', 'manage_account_api'] ? 'active' : '' }}">
 					<a href="{{ path('manage_account_security') }}">
 						{% trans %}navigation.settings.sublink.security{% endtrans %}
 					</a>

@@ -151,7 +151,7 @@ api:
                 <ul>
                     <li>
                         <strong>Generate the authentication token within the Koalati application itself.</strong><br>
-                        To do so, go to <i/Settings > Security</i>, and find the <i>API Authentication</i> section.
+                        To do so, go to <i/Settings > Security > API access</i>, and find the <i>Authentication Token</i> section.
                     </li>
                     <li>
                         <strong>Call the <code>/api/auth</code> API endpoint with the desired user's login credentials.</strong><br>
@@ -500,7 +500,10 @@ user_settings:
         flash:
             success: Your profile has been updated!
     security:
-        title: Security settings
+        tabs:
+            account: Your account
+            api: API access
+        title: Account security
         password:
             title: Change your password
             form:
@@ -530,6 +533,25 @@ user_settings:
                 submit_label: Delete my account
             flash:
                 success: Your email address has been updated!
+    api:
+        title: API access
+        authentication:
+            title: Authentication Token
+            content: >
+                <p>An authentication token is required to use Koalati's API.</p>
+                <p>
+                    You can generate an authentication token by using the form below, or by
+                    <a href="/api/docs#tag/Authentication" target="_blank" class="text-link">making an authentication call</a>
+                    to the API with your credentials.
+                </p>
+                <p><strong>Make sure you keep your API tokens safe. Do not provide API tokens to untrustworthy parties or applications.</strong></p>
+            generate: Generate API tokens
+            tokens_generated: Your API tokens have been generated. Make sure you keep them safe!
+        documentation:
+            title: API Documentation
+            content: >
+                <p>Looking to integrate Koalati into your favorite tools and workflows?</p>
+                <p>Take a look at our <a href="/api/docs" target="_blank" class="text-link">API's documentation</a>!</p>
     subscription:
         title: Manage your subscription
         overview:

@@ -1,0 +1,30 @@
+{% extends 'app_base.html.twig' %}
+
+{% block title %}{% trans %}user_settings.api.title{% endtrans %}{% endblock %}
+
+{% block head %}
+	{{ encore_entry_link_tags('settings') }}
+{% endblock %}
+
+{% block page_tabs %}
+	{% include 'app/user/security/_tabs.html.twig' %}
+{% endblock %}
+
+{% block body %}
+	<div class="grid cols-2">
+        <div class="card">
+			<h2>{% trans %}user_settings.api.authentication.title{% endtrans %}</h2>
+			{% trans %}user_settings.api.authentication.content{% endtrans %}
+			<hr>
+			<api-authentication-token-form></api-authentication-token-form>
+		</div>
+        <div class="card">
+			<h2>{% trans %}user_settings.api.documentation.title{% endtrans %}</h2>
+			{% trans %}user_settings.api.documentation.content{% endtrans %}
+		</div>
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+	{{ encore_entry_script_tags('settings') }}
+{% endblock %}

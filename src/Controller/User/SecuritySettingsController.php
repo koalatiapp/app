@@ -39,7 +39,7 @@ class SecuritySettingsController extends AbstractController
 			return $emailForm;
 		}
 
-		return $this->render('app/user/security.html.twig', [
+		return $this->render('app/user/security/security_settings.html.twig', [
 				'passwordForm' => $passwordForm->createView(),
 				'emailForm' => $emailForm->createView(),
 				'deletionForm' => $deletionForm->createView(),
