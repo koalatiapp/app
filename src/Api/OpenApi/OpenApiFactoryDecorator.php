@@ -5,11 +5,17 @@ namespace App\Api\OpenApi;
 use ApiPlatform\OpenApi\Factory\OpenApiFactoryInterface;
 use ApiPlatform\OpenApi\Model;
 use ApiPlatform\OpenApi\OpenApi;
+use Symfony\Component\Asset\Packages;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class OpenApiFactoryDecorator implements OpenApiFactoryInterface
 {
+	private OpenApi $openApi;
+
 	public function __construct(
-		private OpenApiFactoryInterface $decorated
+		private OpenApiFactoryInterface $decorated,
+		private Packages $packages,
+		private TranslatorInterface $translator,
 	) {
 	}
 
@@ -18,30 +24,55 @@ final class OpenApiFactoryDecorator implements OpenApiFactoryInterface
 	 */
 	public function __invoke(array $context = []): OpenApi
 	{
-		$openApi = ($this->decorated)($context);
+		$this->openApi = ($this->decorated)($context);
 
-		$this->addTokenSchema($openApi);
-		$this->addRefreshTokenSchema($openApi);
-		$this->addCredentialsSchema($openApi);
+		$this->addLogo();
+		$this->addTokenSchema();
+		$this->addRefreshTokenSchema();
+		$this->addCredentialsSchema();
+		$this->addAuthOperation();
+		$this->addTokenRefreshOperation();
+		$this->updateIdentifierTypesForHashIds();
+		$this->addBasicDocumentation();
 
-		$securitySchemas = $openApi->getComponents()->getSecuritySchemes() ?? [];
-		$securitySchemas['JWT'] = new \ArrayObject([
-			'type' => 'http',
-			'scheme' => 'bearer',
-			'bearerFormat' => 'JWT',
-		]);
-
-		$this->addAuthOperation($openApi);
-		$this->addTokenRefreshOperation($openApi);
-
-		$this->updateIdentifierTypesForHashIds($openApi);
-
-		return $openApi;
+		return $this->openApi;
 	}
 
-	private function addTokenSchema(OpenApi $openApi): void
+	private function addLogo(): void
 	{
-		$schemas = $openApi->getComponents()->getSchemas();
+		$info = $this->openApi->getInfo();
+		$logoObject = [
+			"url" => $this->packages->getUrl("media/brand/koalati-logo.svg"),
+			"altText" => "Koalati",
+			"href" => "https://www.koalati.com",
+		];
+
+		$this->openApi = $this->openApi->withInfo(
+			$info->withExtensionProperty("x-logo", $logoObject)
+		);
+	}
+
+	private function addBasicDocumentation(): void
+	{
+		$customDocumentationTags = ["introduction", "url", "formats", "rate_limiting", "pagination", "http_methods", "http_codes"];
+
+		foreach ($customDocumentationTags as &$tag) {
+			$tag = [
+				"name" => $this->translator->trans("api.docs.$tag.title"),
+				"description" => $this->translator->trans("api.docs.$tag.content"),
+				"x-traitTag" => true,
+			];
+		}
+
+		$tags = $this->openApi->getTags();
+		array_unshift($tags, ...$customDocumentationTags);
+
+		$this->openApi = $this->openApi->withTags($tags);
+	}
+
+	private function addTokenSchema(): void
+	{
+		$schemas = $this->openApi->getComponents()->getSchemas();
 		$schemas['Token'] = new \ArrayObject([
 			'type' => 'object',
 			'properties' => [
@@ -57,9 +88,9 @@ final class OpenApiFactoryDecorator implements OpenApiFactoryInterface
 		]);
 	}
 
-	private function addRefreshTokenSchema(OpenApi $openApi): void
+	private function addRefreshTokenSchema(): void
 	{
-		$schemas = $openApi->getComponents()->getSchemas();
+		$schemas = $this->openApi->getComponents()->getSchemas();
 		$schemas['RefreshToken'] = new \ArrayObject([
 			'type' => 'object',
 			'properties' => [
@@ -70,9 +101,9 @@ final class OpenApiFactoryDecorator implements OpenApiFactoryInterface
 		]);
 	}
 
-	private function addCredentialsSchema(OpenApi $openApi): void
+	private function addCredentialsSchema(): void
 	{
-		$schemas = $openApi->getComponents()->getSchemas();
+		$schemas = $this->openApi->getComponents()->getSchemas();
 		$schemas['Credentials'] = new \ArrayObject([
 			'type' => 'object',
 			'properties' => [
@@ -88,8 +119,15 @@ final class OpenApiFactoryDecorator implements OpenApiFactoryInterface
 		]);
 	}
 
-	private function addAuthOperation(OpenApi $openApi): void
+	private function addAuthOperation(): void
 	{
+		$securitySchemas = $this->openApi->getComponents()->getSecuritySchemes() ?? [];
+		$securitySchemas['JWT'] = new \ArrayObject([
+			'type' => 'http',
+			'scheme' => 'bearer',
+			'bearerFormat' => 'JWT',
+		]);
+
 		$pathItem = new Model\PathItem(
 			ref: 'JWT Token',
 			post: new Model\Operation(
@@ -121,10 +159,10 @@ final class OpenApiFactoryDecorator implements OpenApiFactoryInterface
 				security: [],
 			),
 		);
-		$openApi->getPaths()->addPath('/api/auth', $pathItem);
+		$this->openApi->getPaths()->addPath('/api/auth', $pathItem);
 	}
 
-	private function addTokenRefreshOperation(OpenApi $openApi): void
+	private function addTokenRefreshOperation(): void
 	{
 		$pathItem = new Model\PathItem(
 			ref: 'JWT Token',
@@ -157,16 +195,16 @@ final class OpenApiFactoryDecorator implements OpenApiFactoryInterface
 				security: [],
 			),
 		);
-		$openApi->getPaths()->addPath('/api/token/refresh', $pathItem);
+		$this->openApi->getPaths()->addPath('/api/token/refresh', $pathItem);
 	}
 
 	/**
 	 * Updates schemas and request body formats to make sure all IDs
 	 * and entity references are documented as IRIs instead of numerical IDs.
 	 */
-	private function updateIdentifierTypesForHashIds(OpenApi $openApi): void
+	private function updateIdentifierTypesForHashIds(): void
 	{
-		foreach ($openApi->getComponents()->getSchemas() as $component) {
+		foreach ($this->openApi->getComponents()->getSchemas() as $component) {
 			foreach ($component["properties"] as $property => $definition) {
 				if ($property == "id" || str_ends_with($property, "_id")) {
 					$definition["type"] = "string";
