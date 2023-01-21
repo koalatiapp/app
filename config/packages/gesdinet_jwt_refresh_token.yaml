@@ -1,4 +1,4 @@
 gesdinet_jwt_refresh_token:
     refresh_token_class: App\Entity\ApiRefreshToken
-    ttl: 2592000 # 1 month
+    ttl: 86400 # 1 day
     single_use: true
