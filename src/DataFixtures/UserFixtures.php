@@ -101,7 +101,7 @@ class UserFixtures extends Fixture
 
 		// User without subscription plan AND without an organization
 		$user = new User();
-		$user->setEmail('no-organiation@plan.com')
+		$user->setEmail('no-organization@plan.com')
 			->setFirstName('Jay "The Loner"')
 			->setLastName('Freeman')
 			->setSubscriptionPlan(NoPlan::UNIQUE_NAME)

@@ -27,7 +27,7 @@ class OrganizationFixtures extends Fixture implements DependentFixtureInterface
 		$isFirstUser = true;
 
 		foreach ($users as $user) {
-			if ($user->getEmail() == "no-organiation@plan.com") {
+			if ($user->getEmail() == "no-organization@plan.com") {
 				continue;
 			}
 
