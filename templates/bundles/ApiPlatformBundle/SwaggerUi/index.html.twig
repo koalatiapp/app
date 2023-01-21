@@ -12,9 +12,14 @@
         <link rel="stylesheet" href="{{ asset('bundles/apiplatform/swagger-ui/swagger-ui.css', assetPackage) }}">
         <link rel="stylesheet" href="{{ asset('bundles/apiplatform/style.css', assetPackage) }}">
 		<style>
-			body { margin-top: 0; }
+			body { margin-top: 0; background-color: white; }
 			/* Logo */
 			.menu-content > div:first-child img { height: 60px; margin-top: 1rem; margin-bottom: .5rem; padding-right: 1rem; }
+			/* Navigation */
+			.menu-content,
+			.menu-content ul li label,
+			.menu-content *:has(> [href*="https://redocly.com"]) { background-color: #fafbff; }
+			.menu-content ul li label:hover { background-color: #e4e9fb; }
 			/* Search */
 			[role="search"] [data-role="search:results"] { min-height: 0; max-height: calc(100vh - 30px); padding-bottom: 0; border: none; position: relative; }
 			[role="search"] [data-role="search:results"]::before { content: ' '; position: absolute; top: 100%; left: 0; width: 100%; height: 100vh; background: rgba(0, 0, 0, .2); backdrop-filter: blur(3px); z-index: 2; }
