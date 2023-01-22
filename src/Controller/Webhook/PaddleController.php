@@ -48,6 +48,7 @@ class PaddleController extends AbstractController
 		return match ($alertType) {
 			'subscription_created', 'subscription_updated' => $this->updateUserSubscription($request),
 			'subscription_paused', 'subscription_cancelled' => $this->cancelUserSubscription($request),
+			'subscription_payment_success' => $this->handleSubscriptionSuccessfulPayment($request),
 			default => throw new \Exception(sprintf('The "%s" Paddle alert is not handled by the application at the moment.', $alertType)),
 		};
 	}
@@ -132,6 +133,21 @@ class PaddleController extends AbstractController
 			]);
 			$this->mailer->send($email);
 		}
+	}
+
+	private function handleSubscriptionSuccessfulPayment(Request $request): Response
+	{
+		$user = $this->getTargetUser($request);
+		$nextPaymentDate = new \DateTime($request->request->get('next_bill_date'));
+
+		$user->setPreviousBillingDate(new \DateTime('now'))
+			->setNextBillingDate($nextPaymentDate)
+			->setSubscriptionRenewalDate($nextPaymentDate);
+
+		$this->entityManager->persist($user);
+		$this->entityManager->flush();
+
+		return new Response('ok');
 	}
 
 	private function getTargetUser(Request $request): User

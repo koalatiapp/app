@@ -23,6 +23,10 @@
 	{{ encore_entry_link_tags('settings') }}
 {% endblock %}
 
+{% block page_tabs %}
+	{% include 'app/user/subscription/_tabs.html.twig' %}
+{% endblock %}
+
 {% block body %}
 	{% if upcomingPlan %}
 		<div class="notice">

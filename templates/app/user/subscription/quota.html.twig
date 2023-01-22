@@ -1,0 +1,85 @@
+{% extends 'app_base.html.twig' %}
+
+{% block title %}{% trans %}user_settings.quota.title{% endtrans %}{% endblock %}
+
+{% block head %}
+	<style>
+
+	</style>
+	{{ encore_entry_link_tags('settings') }}
+{% endblock %}
+
+{% block page_tabs %}
+	{% include 'app/user/subscription/_tabs.html.twig' %}
+{% endblock %}
+
+{% block body %}
+	<div class="grid cols-2">
+		<div class="card">
+			<h2>{% trans %}user_settings.quota.settings.title{% endtrans %}</h2>
+		</div>
+		<div class="card">
+			<h2>{% trans %}user_settings.quota.current_cycle.title{% endtrans %}</h2>
+
+			<table class="simple-table">
+				<tbody>
+					<tr>
+						<th>{% trans %}user_settings.quota.label.usage{% endtrans %}</th>
+						<td>{{ usageManager.pageTestUsage|number_format }} / {{ usageManager.pageTestQuota|number_format }}</td>
+					</tr>
+					<tr>
+						<th>{% trans %}user_settings.quota.label.cost{% endtrans %}</th>
+						<td>{{ usageManager.usageCostEstimate|format_currency('USD') }}</td>
+					</tr>
+					<tr>
+						<th>{% trans %}user_settings.quota.label.start_date{% endtrans %}</th>
+						<td>{{ usageManager.usageCycleStartDate|format_date('long') }}</td>
+					</tr>
+					<tr>
+						<th>{% trans %}user_settings.quota.label.end_date{% endtrans %}</th>
+						<td>{{ usageManager.usageCycleEndDate|format_date('long') }}</td>
+					</tr>
+					<tr>
+						<th>{% trans %}user_settings.quota.label.billing_date{% endtrans %}</th>
+						<td>{{ usageManager.usageCycleBillingDate|format_date('long') }}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<hr class="spacer small">
+
+	<div class="grid">
+		<div class="card">
+			<h2>{% trans %}user_settings.quota.history.title{% endtrans %}</h2>
+
+			<table class="simple-table">
+				<thead>
+					<tr>
+						<th>{% trans %}user_settings.quota.label.start_date{% endtrans %}</th>
+						<th>{% trans %}user_settings.quota.label.end_date{% endtrans %}</th>
+						<th>{% trans %}user_settings.quota.label.billing_date{% endtrans %}</th>
+						<th>{% trans %}user_settings.quota.label.usage{% endtrans %}</th>
+						<th>{% trans %}user_settings.quota.label.cost{% endtrans %}</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for usage_cycle in historicalUsage %}
+						<tr>
+							<td>{{ usage_cycle.usageCycleStartDate|format_date('long') }}</td>
+							<td>{{ usage_cycle.usageCycleEndDate|format_date('long') }}</td>
+							<td>{{ usage_cycle.usageCycleBillingDate|format_date('long') }}</td>
+							<td>{{ usage_cycle.pageTestUsage|number_format }}</td>
+							<td>{{ usage_cycle.usageCostEstimate|format_currency('USD') }}</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+	{{ encore_entry_script_tags('settings') }}
+{% endblock %}

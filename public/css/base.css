@@ -41,6 +41,13 @@ ul.bullet-list { padding-left: 1rem; list-style: disc; }
 ul.bullet-list li { line-height: 1.5; }
 ul.bullet-list li + li { margin-top: .5em; }
 
+/* Simple table */
+.simple-table th { padding: .5rem; padding-right: 1rem; text-align: left; color: var(--color-blue-darker); background-color: var(--color-blue-10); border-top-left-radius: .25rem; border-bottom-left-radius: .25rem; }
+.simple-table td { padding: .5rem; padding-right: 1rem; text-align: left; background-color: var(--color-blue-lightest); border-top-right-radius: .25rem; border-bottom-right-radius: .25rem; }
+/* Simple table: with header row(s) */
+.simple-table thead th { border-radius: .25rem; }
+.simple-table thead + tbody td { border-radius: .25rem; }
+
 /* Focus outline */
 *:where(:focus-visible),
 *:where(.simulate-focus) { outline: 3px solid var(--color-blue-50); outline-offset: 1px; border-radius: .5rem; box-shadow: 0 0 1rem 0 rgba(var(--shadow-rgb), .2); }

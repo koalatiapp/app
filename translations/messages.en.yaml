@@ -553,6 +553,9 @@ user_settings:
                 <p>Looking to integrate Koalati into your favorite tools and workflows?</p>
                 <p>Take a look at our <a href="/api/docs" target="_blank" class="text-link">API's documentation</a>!</p>
     subscription:
+        tabs:
+            subscription: Your subscription
+            quota: Quotas & usage
         title: Manage your subscription
         overview:
             title: Overview
@@ -586,6 +589,20 @@ user_settings:
         flash:
             subscription_change_success: Your subscription is being updated! Please hold on, this page will reload in just a moment...
             subscription_cancellation_success: Your subscription has been cancelled! Please hold on, this page will reload in just a moment...
+    quota:
+        title: Quotas and usage
+        settings:
+            title: Quota settings
+        current_cycle:
+            title: Current usage cycle
+        history:
+            title: Historical usage
+        label:
+            usage: Usage (Page Tests)
+            cost: Estimated cost (USD)
+            start_date: Start date
+            end_date: End date
+            billing_date: Billing date
 
 dashboard:
     title: Dashboard

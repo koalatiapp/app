@@ -92,7 +92,7 @@
 			</ul>
         </li>
 
- 		<li class="{{ current_route in ['edit_profile', 'manage_account_security', 'manage_account_api', 'manage_contact_preferences', 'manage_subscription'] ? 'active' : '' }}">
+ 		<li class="{{ current_route in ['edit_profile', 'manage_account_security', 'manage_account_api', 'manage_contact_preferences', 'manage_subscription', 'manage_subscription_quota'] ? 'active' : '' }}">
 		 	<a href="{{ path('edit_profile') }}">
                 <i class="far fa-gear" aria-hidden="true"></i>
                 <span>{% trans %}navigation.settings.label{% endtrans %}</span>
@@ -104,7 +104,7 @@
 					</a>
 				</li>
 				{% if not self_hosting_mode %}
-					<li class="{{ current_route in ['manage_subscription'] ? 'active' : '' }}">
+					<li class="{{ current_route in ['manage_subscription', 'manage_subscription_quota'] ? 'active' : '' }}">
 						<a href="{{ path('manage_subscription') }}">
 							{% trans %}navigation.settings.sublink.subscription{% endtrans %}
 						</a>

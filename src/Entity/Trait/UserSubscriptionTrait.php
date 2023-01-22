@@ -30,6 +30,12 @@ trait UserSubscriptionTrait
 	#[ORM\Column(type: 'datetime', nullable: true)]
 	private ?\DateTimeInterface $subscriptionRenewalDate = null;
 
+	#[ORM\Column(type: 'datetime', nullable: true)]
+	private ?\DateTimeInterface $previousBillingDate = null;
+
+	#[ORM\Column(type: 'datetime', nullable: true)]
+	private ?\DateTimeInterface $nextBillingDate = null;
+
 	public function getPaddleUserId(): ?string
 	{
 		return $this->paddleUserId;
@@ -103,6 +109,30 @@ trait UserSubscriptionTrait
 	public function setSubscriptionRenewalDate(?\DateTimeInterface $subscriptionRenewalDate): static
 	{
 		$this->subscriptionRenewalDate = $subscriptionRenewalDate;
+
+		return $this;
+	}
+
+	public function getNextBillingDate(): ?\DateTimeInterface
+	{
+		return $this->nextBillingDate;
+	}
+
+	public function setNextBillingDate(?\DateTimeInterface $nextBillingDate): static
+	{
+		$this->nextBillingDate = $nextBillingDate;
+
+		return $this;
+	}
+
+	public function getPreviousBillingDate(): ?\DateTimeInterface
+	{
+		return $this->previousBillingDate;
+	}
+
+	public function setPreviousBillingDate(?\DateTimeInterface $previousBillingDate): static
+	{
+		$this->previousBillingDate = $previousBillingDate;
 
 		return $this;
 	}

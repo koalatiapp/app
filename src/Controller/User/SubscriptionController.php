@@ -10,6 +10,7 @@ use App\Subscription\Plan\SmallTeamPlan;
 use App\Subscription\Plan\SoloAnnualPlan;
 use App\Subscription\Plan\SoloPlan;
 use App\Subscription\PlanManager;
+use App\Subscription\UsageManager;
 use App\Util\SelfHosting;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -51,11 +52,35 @@ class SubscriptionController extends AbstractController
 			$upcomingPlan = $this->planManager->getPlanFromUniqueName($user->getUpcomingSubscriptionPlan());
 		}
 
-		return $this->render('app/user/subscription.html.twig', [
+		return $this->render('app/user/subscription/subscription.html.twig', [
 				'currentPlan' => $plan,
 				'upcomingPlan' => $upcomingPlan,
 				'upcomingPlanChangeDate' => $user->getSubscriptionChangeDate(),
 				'plans' => $plans,
+			]);
+	}
+
+	#[Route(path: '/account/subscription/quota', name: 'manage_subscription_quota')]
+	public function manageSubscriptionQuota(UsageManager $usageManager): Response
+	{
+		$historicalUsage = [];
+		$userCreatedDate = $this->getUser()->getDateCreated();
+		$fromDate = new \DateTime("-1 month");
+
+		while ($fromDate >= $userCreatedDate) {
+			$historicalUsage[] = [
+				"pageTestUsage" => $usageManager->getPageTestUsage($fromDate),
+				"usageCostEstimate" => $usageManager->getUsageCostEstimate($fromDate),
+				"usageCycleStartDate" => $usageManager->getUsageCycleStartDate($fromDate),
+				"usageCycleEndDate" => $usageManager->getUsageCycleEndDate($fromDate),
+				"usageCycleBillingDate" => $usageManager->getUsageCycleBillingDate($fromDate),
+			];
+			$fromDate = $fromDate->modify("-1 month");
+		}
+
+		return $this->render('app/user/subscription/quota.html.twig', [
+				"usageManager" => $usageManager,
+				"historicalUsage" => $historicalUsage,
 			]);
 	}
 }

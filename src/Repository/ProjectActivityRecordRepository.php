@@ -5,8 +5,10 @@ namespace App\Repository;
 use App\Entity\Organization;
 use App\Entity\ProjectActivityRecord;
 use App\Entity\User;
+use App\Subscription\UsageManager;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Contracts\Service\Attribute\Required;
 
 /**
  * @extends ServiceEntityRepository<ProjectActivityRecord>
@@ -18,9 +20,50 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ProjectActivityRecordRepository extends ServiceEntityRepository
 {
+	private UsageManager $usageManager;
+
 	public function __construct(ManagerRegistry $registry)
 	{
 		parent::__construct($registry, ProjectActivityRecord::class);
+	}
+
+	#[Required]
+	public function setDependencies(UsageManager $usageManager): void
+	{
+		$this->usageManager = $usageManager;
+	}
+
+	/**
+	 * @return array<int,ProjectActivityRecord>
+	 */
+	public function findAllForUser(User $user): array
+	{
+		return $this->findBy(["user" => $user], ["dateCreated" => "DESC", "pageUrl" => "ASC", "tool" => "ASC"]);
+	}
+
+	/**
+	 * @return array<int,ProjectActivityRecord>
+	 */
+	public function findAllForUserInCycle(User $user, \DateTimeInterface|string $cycleStartDate): array
+	{
+		if (is_string($cycleStartDate)) {
+			$cycleStartDate = new \DateTime($cycleStartDate);
+		}
+
+		return $this->createQueryBuilder("r")
+			->where("r.user = :user")
+			->andWhere("r.dateCreated >= :cycleStartDate")
+			->andWhere("r.dateCreated <= :cycleEndDate")
+			->addOrderBy("r.dateCreated", "DESC")
+			->addOrderBy("r.pageUrl", "ASC")
+			->addOrderBy("r.tool", "ASC")
+			->setParameters([
+				"user" => $user,
+				"cycleStartDate" => $cycleStartDate,
+				"cycleEndDate" => $this->usageManager->getUsageCycleEndDate($cycleStartDate),
+			])
+			->getQuery()
+			->getResult();
 	}
 
 	public function getActiveProjectCount(User|Organization $entity, \DateTimeInterface|string|null $fromDate = null, \DateTimeInterface|string|null $toDate = null): int
