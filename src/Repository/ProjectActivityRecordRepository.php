@@ -54,13 +54,13 @@ class ProjectActivityRecordRepository extends ServiceEntityRepository
 			->where("r.user = :user")
 			->andWhere("r.dateCreated >= :cycleStartDate")
 			->andWhere("r.dateCreated <= :cycleEndDate")
-			->addOrderBy("r.dateCreated", "DESC")
+			->orderBy("r.dateCreated", "DESC")
 			->addOrderBy("r.pageUrl", "ASC")
 			->addOrderBy("r.tool", "ASC")
 			->setParameters([
 				"user" => $user,
 				"cycleStartDate" => $cycleStartDate,
-				"cycleEndDate" => $this->usageManager->getUsageCycleEndDate($cycleStartDate),
+				"cycleEndDate" => $this->usageManager->withUser($user)->getUsageCycleEndDate($cycleStartDate),
 			])
 			->getQuery()
 			->getResult();

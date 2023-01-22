@@ -17,7 +17,7 @@ class SmallTeamPlan extends SoloPlan
 	/**
 	 * @var int PAGE_TEST_QUOTA Quota of page tests that are included for free in this plan
 	 */
-	public const PAGE_TEST_QUOTA = 40_000;
+	public const PAGE_TEST_QUOTA = 100;
 
 	/**
 	 * @var int MAX_ACTIVE_PAGES_PER_PROJECT Maximum number of active pages a project can have

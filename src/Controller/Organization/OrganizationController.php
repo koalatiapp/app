@@ -12,6 +12,7 @@ use App\Form\Organization\NewOrganizationType;
 use App\Form\Organization\OrganizationType;
 use App\Repository\OrganizationRepository;
 use App\Security\OrganizationVoter;
+use App\Subscription\UsageManager;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,6 +30,7 @@ class OrganizationController extends AbstractController
 	public function __construct(
 		public OrganizationRepository $organizationRepository,
 		public SluggerInterface $slugger,
+		private UsageManager $usageManager,
 	) {
 	}
 
@@ -77,8 +79,11 @@ class OrganizationController extends AbstractController
 			return $this->redirectToRoute('organization_create');
 		}
 
+		$organization = $id ? $this->organizationRepository->find($id) : $this->getDefaultOrganization();
+
 		return $this->render('app/organization/dashboard.html.twig', [
-				'organization' => $id ? $this->organizationRepository->find($id) : $this->getDefaultOrganization(),
+				'organization' => $organization,
+				'usageManager' => $this->usageManager->withUser($organization->getOwner()),
 			]);
 	}
 

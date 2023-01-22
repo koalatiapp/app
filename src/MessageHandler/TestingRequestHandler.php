@@ -9,6 +9,7 @@ use App\Message\TestingRequest;
 use App\Message\TestingStatusRequest;
 use App\Repository\ProjectRepository;
 use App\Subscription\PlanManager;
+use App\Subscription\UsageManager;
 use App\ToolsService\Endpoint\ToolsEndpoint;
 use App\Util\Testing\AvailableToolsFetcher;
 use Doctrine\Common\Collections\Collection;
@@ -31,6 +32,7 @@ class TestingRequestHandler
 		private readonly EntityManagerInterface $entityManager,
 		private readonly PlanManager $planManager,
 		private readonly MessageBusInterface $bus,
+		private UsageManager $usageManager,
 	) {
 	}
 
@@ -70,6 +72,21 @@ class TestingRequestHandler
 		// Limit the number of URLs sent for testing to reduce load on server
 		if (count($pageUrls) > $maxActivePageCount) {
 			$pageUrls = array_slice($pageUrls, 0, $maxActivePageCount);
+		}
+
+		// Make sure not to cross the amount of page tests allowed by the user's spending limits
+		$usageManager = $this->usageManager->withUser($project->getTopLevelOwner());
+		$numberOfPageTestsAllowed = $usageManager->getNumberOfPageTestsAllowed();
+
+		if ($numberOfPageTestsAllowed <= 0) {
+			// Send an update to the client(s) to indicate that testing is NOT in progress
+			$this->bus->dispatch(new TestingStatusRequest($project->getId()));
+
+			return;
+		}
+
+		if (count($pageUrls) > $numberOfPageTestsAllowed) {
+			$pageUrls = array_slice($pageUrls, 0, $numberOfPageTestsAllowed);
 		}
 
 		try {

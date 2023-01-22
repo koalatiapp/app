@@ -9,3 +9,6 @@ fieldset.checkbox label { margin-top: 8px; padding-left: 10px; font-size: .9rem;
 /* Errors */
 fieldset .error { display: block; padding: 12px; padding-right: 42px; margin: 5px 0; font-size: .85rem; font-weight: 500; color: var(--notification-danger-text-color); background-color: var(--color-red-lighter); border-radius: 8px; position: relative; }
 fieldset .error::after { content: '\f06a'; display: flex; justify-content: center; align-items: center; font-family: var(--fa-style-family); font-size: 22px; font-weight: 600; line-height: 1rem; position: absolute; top: 0; right: 12px; bottom: 0; }
+/* Help text */
+form .help-text { margin-bottom: .5rem; font-size: .9em; color: var(--color-gray-dark); }
+form nb-checkbox + .help-text { padding-left: 35px; }

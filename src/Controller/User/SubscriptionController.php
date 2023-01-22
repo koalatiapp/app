@@ -3,6 +3,7 @@
 namespace App\Controller\User;
 
 use App\Controller\AbstractController;
+use App\Form\User\UserQuotaPreferencesType;
 use App\Subscription\Plan\BusinessAnnualPlan;
 use App\Subscription\Plan\BusinessPlan;
 use App\Subscription\Plan\SmallTeamAnnualPlan;
@@ -12,6 +13,7 @@ use App\Subscription\Plan\SoloPlan;
 use App\Subscription\PlanManager;
 use App\Subscription\UsageManager;
 use App\Util\SelfHosting;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -61,26 +63,22 @@ class SubscriptionController extends AbstractController
 	}
 
 	#[Route(path: '/account/subscription/quota', name: 'manage_subscription_quota')]
-	public function manageSubscriptionQuota(UsageManager $usageManager): Response
+	public function manageSubscriptionQuota(Request $request, UsageManager $usageManager): Response
 	{
-		$historicalUsage = [];
-		$userCreatedDate = $this->getUser()->getDateCreated();
-		$fromDate = new \DateTime("-1 month");
+		$user = $this->getUser();
+		$form = $this->createForm(UserQuotaPreferencesType::class, $user);
+		$form->handleRequest($request);
 
-		while ($fromDate >= $userCreatedDate) {
-			$historicalUsage[] = [
-				"pageTestUsage" => $usageManager->getPageTestUsage($fromDate),
-				"usageCostEstimate" => $usageManager->getUsageCostEstimate($fromDate),
-				"usageCycleStartDate" => $usageManager->getUsageCycleStartDate($fromDate),
-				"usageCycleEndDate" => $usageManager->getUsageCycleEndDate($fromDate),
-				"usageCycleBillingDate" => $usageManager->getUsageCycleBillingDate($fromDate),
-			];
-			$fromDate = $fromDate->modify("-1 month");
+		if ($form->isSubmitted() && $form->isValid()) {
+			$this->entityManager->persist($user);
+			$this->entityManager->flush();
+
+			$this->addFlash('success', $this->translator->trans('user_settings.quota.settings.flash.success'));
 		}
 
 		return $this->render('app/user/subscription/quota.html.twig', [
+				"form" => $form->createView(),
 				"usageManager" => $usageManager,
-				"historicalUsage" => $historicalUsage,
 			]);
 	}
 }

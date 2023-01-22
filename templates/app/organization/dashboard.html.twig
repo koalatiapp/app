@@ -8,6 +8,23 @@
 {% endblock %}
 
 {% block body %}
+	{% if usageManager.numberOfPageTestsAllowed <= 0 %}
+		<div class="notice warning">
+			{% if usageManager.isSpendingLimitReached %}
+				{% if app.user is same as(organization.owner) %}
+					{% trans %}quota_notices.your_spending_limit_exceeded{% endtrans %}
+				{% else %}
+					{% trans %}quota_notices.organization_spending_limit_exceeded{% endtrans %}
+				{% endif %}
+			{% else %}
+				{% if app.user is same as(organization.owner) %}
+					{% trans %}quota_notices.your_quota_exceeded{% endtrans %}
+				{% else %}
+					{% trans %}quota_notices.organization_quota_exceeded{% endtrans %}
+				{% endif %}
+			{% endif %}
+		</div>
+	{% endif %}
     <div class="grid fill-small">
         <div class="card">
 			<h2>{% trans %}organization.dashboard.feed{% endtrans %}</h2>

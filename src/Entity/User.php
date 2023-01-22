@@ -7,6 +7,7 @@ use ApiPlatform\Metadata\Get;
 use App\Entity\Checklist\ChecklistTemplate;
 use App\Entity\Testing\IgnoreEntry;
 use App\Entity\Trait\CollectionManagingEntity;
+use App\Entity\Trait\UserQuotaPreferencesTrait;
 use App\Entity\Trait\UserSubscriptionTrait;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -37,6 +38,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
 {
 	use CollectionManagingEntity;
 	use UserSubscriptionTrait;
+	use UserQuotaPreferencesTrait;
 
 	#[ORM\Id]
 	#[ORM\GeneratedValue]

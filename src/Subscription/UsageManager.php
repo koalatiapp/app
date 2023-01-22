@@ -6,6 +6,8 @@ use App\Entity\ProjectActivityRecord;
 use App\Entity\User;
 use App\Repository\ProjectActivityRecordRepository;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Contracts\Cache\ItemInterface;
 
 class UsageManager
 {
@@ -23,9 +25,12 @@ class UsageManager
 		private ProjectActivityRecordRepository $projectActivityRepository,
 		Security $security,
 	) {
-		/** @var User */
+		/** @var ?User */
 		$user = $security->getUser();
-		$this->user = $user;
+
+		if ($user) {
+			$this->user = $user;
+		}
 	}
 
 	public function withUser(User $user): self
@@ -107,15 +112,20 @@ class UsageManager
 	public function getPageTestUsage(\DateTimeInterface|string|null $fromDate = null): int
 	{
 		$testingRequests = $this->getUsageCycleRecords($fromDate);
+
+		// Records are ordered from newest to oldest by default.
+		// For batching calculations, we need the oldest records first.
+		$testingRequests = array_reverse($testingRequests);
+
 		$usageUnits = 0;
 		$batchingWindowEndTimeByUrl = [];
 
 		foreach ($testingRequests as $testingRequest) {
 			$url = $testingRequest->getPageUrl();
 			$timestamp = $testingRequest->getDateCreated()->getTimestamp();
-			$batchingEndTime = $batchingWindowEndTimeByUrl[$url] ?? null;
+			$batchingEndTime = $batchingWindowEndTimeByUrl[$url] ?? 0;
 
-			if ($batchingEndTime === null || $batchingEndTime < $timestamp) {
+			if ($batchingEndTime < $timestamp) {
 				$usageUnits++;
 				$batchingWindowEndTimeByUrl[$url] = $timestamp + self::PAGE_TEST_BATCHING_TIMESPAN;
 			}
@@ -146,5 +156,74 @@ class UsageManager
 	public function getPageTestQuota(): int
 	{
 		return $this->planManager->getPlanFromEntity($this->user)::PAGE_TEST_QUOTA;
+	}
+
+	public function isPageTestQuotaReached(): bool
+	{
+		return $this->getPageTestUsage() >= $this->getPageTestQuota();
+	}
+
+	public function isSpendingLimitReached(): bool
+	{
+		return $this->user->allowsPageTestsOverQuota() && $this->getNumberOfPageTestsAllowed() == 0;
+	}
+
+	/**
+	 * Checks how many pages can still be tested for the current usage cycle
+	 * based on the user's usage level and quota preferences.
+	 */
+	public function getNumberOfPageTestsAllowed(): int
+	{
+		$quota = $this->getPageTestQuota();
+		$currentUsage = $this->getPageTestUsage();
+
+		$quotaLeft = $quota - $currentUsage;
+		$numberOfExtrasAllowed = 0;
+		$plan = $this->planManager->getPlanFromEntity($this->user);
+
+		if ($this->user->allowsPageTestsOverQuota() && $plan::COST_PER_ADDITIONAL_PAGE_TEST > 0) {
+			$spendingLimit = $this->user->getQuotaExceedanceSpendingLimit();
+
+			if ($spendingLimit === null) {
+				$spendingLimit = 1_000_000;
+			}
+
+			$numberOfExtrasAllowed = floor($spendingLimit / $plan::COST_PER_ADDITIONAL_PAGE_TEST);
+		}
+
+		return (int) max(0, $quotaLeft + $numberOfExtrasAllowed);
+	}
+
+	/**
+	 * @return array<int,array{pageTestUsage:int,usageCostEstimate:float,usageCycleStartDate:\DateTimeImmutable,usageCycleEndDate:\DateTimeImmutable,usageCycleBillingDate:\DateTimeImmutable}>
+	 */
+	public function getHistoricalUsage(): array
+	{
+		$date = date("Y_m_d");
+		$cache = new FilesystemAdapter();
+		$cacheKey = "user.{$this->user->getId()}.historical_usage.{$date}";
+
+		$historicalUsage = $cache->get($cacheKey, function (ItemInterface $item) {
+			$item->expiresAfter(3600 * 24);
+
+			$historicalUsage = [];
+			$userCreatedDate = $this->user->getDateCreated();
+			$fromDate = new \DateTime("-1 month");
+
+			while ($fromDate >= $userCreatedDate) {
+				$historicalUsage[] = [
+					"pageTestUsage" => $this->getPageTestUsage($fromDate),
+					"usageCostEstimate" => $this->getUsageCostEstimate($fromDate),
+					"usageCycleStartDate" => $this->getUsageCycleStartDate($fromDate),
+					"usageCycleEndDate" => $this->getUsageCycleEndDate($fromDate),
+					"usageCycleBillingDate" => $this->getUsageCycleBillingDate($fromDate),
+				];
+				$fromDate = $fromDate->modify("-1 month");
+			}
+
+			return $historicalUsage;
+		});
+
+		return $historicalUsage;
 	}
 }

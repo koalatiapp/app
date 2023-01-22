@@ -2,6 +2,7 @@
 
 namespace App\Controller\Project;
 
+use App\Subscription\UsageManager;
 use Hashids\HashidsInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,12 +34,13 @@ class ProjectOverviewController extends AbstractProjectController
 	}
 
 	#[Route(path: '/project/{id}/', name: 'project_dashboard', options: ['expose' => true])]
-	public function projectDashboard(int $id): Response
+	public function projectDashboard(int $id, UsageManager $usageManager): Response
 	{
 		$project = $this->getProject($id);
 
 		return $this->render('app/project/dashboard.html.twig', [
 				'project' => $project,
+				'usageManager' => $usageManager->withUser($project->getTopLevelOwner()),
 			]);
 	}
 }

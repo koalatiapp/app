@@ -593,6 +593,20 @@ user_settings:
         title: Quotas and usage
         settings:
             title: Quota settings
+            update: Update quota settings
+            allows_page_tests_over_quota:
+                label: Allow Page Tests over quota
+                help: >
+                    If you allow Page Tests over your plan's included quota, you will incur a cost for each Page Test that occurs after
+                    your quota has been reached. This cost can be limited by defining a Spending Limit below.
+            quota_exceedance_spending_limit:
+                label: Spending limit (USD)
+                placeholder: Unlimited
+                help: >
+                    Once the estimated cost for the usage cycle reaches your spending limit, any additional testing request will be ignored.
+                    This only takes effect if "Allow Page Tests over quota" is enabled.
+            flash:
+                success: Your quota settings have been updated!
         current_cycle:
             title: Current usage cycle
         history:
@@ -869,6 +883,24 @@ organization_invitation:
         error_already_used: This invitation has already been used on %date%.
         error_expired: This invitation has expired.
         error_already_a_member: You are already a member of this organization.
+
+quota_notices:
+    your_spending_limit_exceeded: >
+        <strong>Your testing quota and your spending limit have been reached.</strong><br>
+        You can still view existing results, but you cannot run more tests until you <a href="/account/subscription/quota" class="text-link">increase your spending limit</a>
+        (or until your quotas reset at the beginning of your next usage cycle).
+    organization_spending_limit_exceeded: >
+        <strong>The testing quota and spending limit of this organization have been reached.</strong><br>
+        You can still view existing results, but you cannot run more tests until the owner increase their spending limit
+        (or until quotas reset at the beginning of their next usage cycle).
+    your_quota_exceeded: >
+        <strong>Your testing quota has been reached.</strong><br>
+        You can still view existing results, but you cannot run more tests until you <a href="/account/subscription/quota" class="text-link">allow Page Tests over your quota</a>
+        (or until your quotas reset at the beginning of your next usage cycle).
+    organization_quota_exceeded: >
+        <strong>The testing quota of this organization has been reached.</strong><br>
+        You can still view existing results, but you cannot run more tests until the organization's owner allows Page Tests over their quota
+        (or until quotas reset at the beginning of their next usage cycle).
 
 roles:
     ROLE_OWNER: Owner

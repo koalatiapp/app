@@ -269,6 +269,18 @@ class Project implements MercureEntityInterface
 		return $this->getOwnerOrganization() ?: $this->getOwnerUser();
 	}
 
+	/**
+	 * @return User|null the user who owns this project (or who owns the organization that owns this project)
+	 */
+	public function getTopLevelOwner(): User|null
+	{
+		if ($organization = $this->getOwnerOrganization()) {
+			return $organization->getOwner();
+		}
+
+		return $this->getOwnerUser();
+	}
+
 	#[Groups(['project.list', 'project.read'])]
 	public function getOwnerOrganizationName(): ?string
 	{
