@@ -77,7 +77,7 @@ class UsageManager
 			}
 		}
 
-		return $cycleStartDate;
+		return $cycleStartDate->setTime(0, 0);
 	}
 
 	public function getUsageCycleEndDate(\DateTimeInterface|string|null $fromDate = null): ?\DateTimeImmutable
@@ -134,15 +134,20 @@ class UsageManager
 		return $usageUnits;
 	}
 
+	public function getUsageUnitsOverQuota(\DateTimeInterface|string|null $fromDate = null): int
+	{
+		return $this->getPageTestUsage($fromDate) - $this->getPageTestQuota();
+	}
+
 	/**
 	 * Returns the estimated cost for the over-the-quota usage for the billing
 	 * cycle.
 	 *
 	 * @return float cost in US dollars
 	 */
-	public function getUsageCostEstimate(\DateTimeInterface|string|null $fromDate = null): float
+	public function getUsageCost(\DateTimeInterface|string|null $fromDate = null): float
 	{
-		$unitsOverQuota = $this->getPageTestUsage($fromDate) - $this->getPageTestQuota();
+		$unitsOverQuota = $this->getUsageUnitsOverQuota($fromDate);
 
 		if ($unitsOverQuota <= 0) {
 			return 0;
@@ -195,14 +200,14 @@ class UsageManager
 	}
 
 	/**
-	 * @return array<int,array{pageTestUsage:int,usageCostEstimate:float,usageCycleStartDate:\DateTimeImmutable,usageCycleEndDate:\DateTimeImmutable,usageCycleBillingDate:\DateTimeImmutable}>
+	 * @return array<int,array{pageTestUsage:int,usageCost:float,usageCycleStartDate:\DateTimeImmutable,usageCycleEndDate:\DateTimeImmutable,usageCycleBillingDate:\DateTimeImmutable}>
 	 */
 	public function getHistoricalUsage(): array
 	{
 		$date = date("Y_m_d");
 		$cache = new FilesystemAdapter();
 		$cacheKey = "user.{$this->user->getId()}.historical_usage.{$date}";
-
+		$cache->delete($cacheKey);
 		$historicalUsage = $cache->get($cacheKey, function (ItemInterface $item) {
 			$item->expiresAfter(3600 * 24);
 
@@ -213,7 +218,7 @@ class UsageManager
 			while ($fromDate >= $userCreatedDate) {
 				$historicalUsage[] = [
 					"pageTestUsage" => $this->getPageTestUsage($fromDate),
-					"usageCostEstimate" => $this->getUsageCostEstimate($fromDate),
+					"usageCost" => $this->getUsageCost($fromDate),
 					"usageCycleStartDate" => $this->getUsageCycleStartDate($fromDate),
 					"usageCycleEndDate" => $this->getUsageCycleEndDate($fromDate),
 					"usageCycleBillingDate" => $this->getUsageCycleBillingDate($fromDate),

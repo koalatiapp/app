@@ -31,7 +31,7 @@
 					</tr>
 					<tr>
 						<th>{% trans %}user_settings.quota.label.cost{% endtrans %}</th>
-						<td>{{ usageManager.usageCostEstimate|format_currency('USD') }}</td>
+						<td>{{ usageManager.usageCost|format_currency('USD') }}</td>
 					</tr>
 					<tr>
 						<th>{% trans %}user_settings.quota.label.start_date{% endtrans %}</th>
@@ -63,7 +63,6 @@
 						<th>{% trans %}user_settings.quota.label.end_date{% endtrans %}</th>
 						<th>{% trans %}user_settings.quota.label.billing_date{% endtrans %}</th>
 						<th>{% trans %}user_settings.quota.label.usage{% endtrans %}</th>
-						<th>{% trans %}user_settings.quota.label.cost{% endtrans %}</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -73,7 +72,6 @@
 							<td>{{ usage_cycle.usageCycleEndDate|format_date('long') }}</td>
 							<td>{{ usage_cycle.usageCycleBillingDate|format_date('long') }}</td>
 							<td>{{ usage_cycle.pageTestUsage|number_format }}</td>
-							<td>{{ usage_cycle.usageCostEstimate|format_currency('USD') }}</td>
 						</tr>
 					{% endfor %}
 				</tbody>

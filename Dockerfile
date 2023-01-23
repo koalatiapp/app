@@ -19,7 +19,10 @@ RUN apk add --no-cache \
 		gettext \
 		git \
 		jq \
+		tzdata \
 	;
+# Set server timezone
+ENV TZ=America/Toronto
 
 ARG APCU_VERSION=5.1.22
 RUN set -eux; \
