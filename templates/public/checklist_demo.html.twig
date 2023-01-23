@@ -8,7 +8,11 @@
 	<link rel="canonical" href="{{ url("checklist_demo") }}">
 
 	<style>
-		.intro { width: 72ch; max-width: 100%; font-size: 1.1em; }
+		section .container { width: min(110ch, 100%); }
+		.intro { width: 60ch; max-width: 100%; margin-right: auto; font-size: 1.1em; }
+
+		demo-checklist { width: 100%; }
+		#reset-button { position: sticky; bottom: 1rem; }
 
 		footer { height: auto; margin-top: 0; background-color: #111; }
 		footer a { color: #dae1fb; }
@@ -27,27 +31,28 @@
 		<a href="https://www.koalati.com" class="brand-logo">
 			<img src="{{ asset("media/brand/koalati-logo.svg") }}" alt="Koalati" width="150" loading="lazy">
 		</a>
-		<nb-button href="{{ path("registration") }}">
+
+		<nb-button href="{{ path("registration") }}" id="reset-button">
 			{% trans %}checklist_demo.sign_up{% endtrans %}
 		</nb-button>
 	</header>
 
 	<section>
 		<div class="container center column">
-			<div class="intro text-center">
+			<div class="intro">
 				<h1 class="huge">{% trans %}checklist_demo.title{% endtrans %}</h1>
 				{% trans with {"%signUpLink%": path("registration")} %}checklist_demo.intro{% endtrans %}
 			</div>
 
-			<nb-button onclick="document.querySelector('demo-checklist').reset()" size="tiny" color="gray">
+			<hr class="spacer small">
+
+			<demo-checklist data-template="{{ serializedItemGroups|json_encode }}"></demo-checklist>
+
+			<nb-button onclick="document.querySelector('demo-checklist').reset()" size="small" color="gray" id="reset-button">
 				<i class="far fa-arrows-rotate"></i>
 				&nbsp;
 				{% trans %}checklist_demo.reset{% endtrans %}
 			</nb-button>
-
-			<hr class="spacer small">
-
-			<demo-checklist data-template="{{ serializedItemGroups|json_encode }}"></demo-checklist>
 		</div>
 	</section>
 

@@ -202,9 +202,9 @@ password_reset:
             <p class="text-gray text-small">If you didn't request a password reset, please ignore this message.</p>
 
 checklist_demo:
-    page_title: Website testing checklist
+    page_title: Website Testing Checklist
     meta_description: Improve your websites by following this detailed testing checklist!
-    title: Website testing checklist
+    title: Website Testing Checklist
     reset: Reset the checklist
     sign_up: Start your free trial
     intro: >
