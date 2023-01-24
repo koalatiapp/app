@@ -430,6 +430,34 @@ search:
         project: Project
         organization: Team
         comment: Comment on %project%
+    route:
+        dashboard:
+            title: Dashboard
+            description: Browse your projects.
+        projects:
+            title: Your Projects
+            description: Browse your projects.
+        help:
+            title: Help Center
+            description: Get support information and read our F.A.Q.
+        onboarding:
+            title: Onboarding
+            description: Review the onboarding experience.
+        edit_profile:
+            title: Your Profile
+            description: Edit your first and last name.
+        manage_account_api:
+            title: Your API settings
+            description: Manage your authentication token
+        manage_account_security:
+            title: Your Account Security
+            description: Change your password and email address or delete your account.
+        manage_subscription:
+            title: Your Subscription
+            description: Change or cancel your subscription plan.
+        manage_subscription_quota:
+            title: Your Usage & Quota
+            description: Adjust your spending limit and manage usage over your quota.
 
 automated_testing:
     testing_request_created: We're running the tests again, the results should start appearing in just a few seconds.

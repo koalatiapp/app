@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class OrganizationSearch implements EntitySearchInterface
+class OrganizationSearch implements SearchInterface
 {
 	/**
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)

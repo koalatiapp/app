@@ -7,12 +7,10 @@ use App\Entity\User;
 class SearchEngine
 {
 	/**
-	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+	 * @param iterable<SearchInterface> $searchEngines
 	 */
 	public function __construct(
-		private readonly ProjectSearch $projectSearch,
-		private readonly OrganizationSearch $organizationSearch,
-		private readonly CommentSearch $commentSearch,
+		private iterable $searchEngines,
 	) {
 	}
 
@@ -28,12 +26,11 @@ class SearchEngine
 	public function search(string $query, ?User $user = null): array
 	{
 		$queryParts = $this->splitQueryIntoParts($query);
+		$results = [];
 
-		$results = [
-			...$this->projectSearch->search($queryParts, $user),
-			...$this->organizationSearch->search($queryParts, $user),
-			...$this->commentSearch->search($queryParts, $user),
-		];
+		foreach ($this->searchEngines as $searchEngine) {
+			array_push($results, ...$searchEngine->search($queryParts, $user));
+		}
 
 		$sortedResults = $this->sortResults($results, $query);
 

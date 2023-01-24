@@ -16,10 +16,10 @@ class SearchController extends AbstractController
 	use ApiControllerTrait;
 	use PreventDirectAccessTrait;
 
-	#[Route(path: '', methods: ['POST'], name: '', options: ['expose' => true])]
+	#[Route(path: '', methods: ['GET'], name: '', options: ['expose' => true])]
 	public function search(Request $request, SearchEngine $searchEngine): Response
 	{
-		$query = $request->request->get('query');
+		$query = $request->query->get('query');
 		$results = $searchEngine->search($query, $this->getUser());
 
 		return $this->apiSuccess([

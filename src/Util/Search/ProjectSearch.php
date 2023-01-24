@@ -10,7 +10,7 @@ use Hashids\HashidsInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class ProjectSearch implements EntitySearchInterface
+class ProjectSearch implements SearchInterface
 {
 	/**
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)

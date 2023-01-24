@@ -1,5 +1,4 @@
 import { LitElement, html, css } from "lit";
-import { ApiClient } from "../../utils/api/index.js";
 import stylesReset from "../../native-bear/styles-reset.js";
 
 const resultsCache = {};
@@ -15,11 +14,11 @@ export class SearchOverlay extends LitElement {
 				#search-overlay { position: fixed; top: 0; left: 0; display: grid; width: 100%; height: 100%; place-items: center; background-color: rgba(0, 5, 19, .6); -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); opacity: 0; pointer-events: none; transition: opacity .35s ease, transform .35s ease; }
 				#search-overlay[aria-hidden="false"] { opacity: 1; pointer-events: auto; z-index: 1000; }
 
-				#search-inner { width: 500px; max-width: 90%; }
+				#search-inner { width: 90%; max-width: 500px; }
 				#search-inner .search-label { margin-bottom: 15px; font-size: 2rem; font-weight: 700; color: #fff; }
 				#search-inner input { padding: 10px 20px; padding-right: 40px; border-width: 3px; border-color: transparent; }
 				#search-inner input:focus { border-color: var(--color-blue-light); }
-				#search-inner .search-results { height: 150px; margin: 30px 0; overflow: auto; }
+				#search-inner .search-results { height: clamp(100px, 40vh, 600px); margin: 30px 0; overflow: auto; }
 				#search-inner .search-results .empty-state { font-weight: 500; color: #fff; }
 				#search-inner .search-results a { display: block; width: 100%; padding: 10px; margin-bottom: 10px; color: var(--color-gray-darker); text-decoration: none; background-color: var(--color-white); border-radius: 10px; }
 				#search-inner .search-results a .title { font-size: 1.1em; font-weight: 600; }
@@ -40,12 +39,6 @@ export class SearchOverlay extends LitElement {
 			isLoading: {type: Boolean},
 		};
 	}
-
-	constructor()
-	{
-		super();
-	}
-
 	connectedCallback()
 	{
 		super.connectedCallback();
@@ -158,7 +151,6 @@ export class SearchOverlay extends LitElement {
 				const link = document.createElement("a");
 				link.href = result.url;
 				link.className = fragment.childElementCount ? "" : "selected";
-				// @TODO: Change the string here for a translation message using willdurand/js-translation-bundle (when it starts supporting PHP 8)
 				link.innerHTML = `<span class="title">${result.title}</span> - <span class="snippet">${result.snippet || "<i>No description or preview available.</i>"}</span>`;
 				link.onfocus = (e) => { this._selectSearchResult(e.target); };
 				fragment.appendChild(link);
@@ -167,7 +159,6 @@ export class SearchOverlay extends LitElement {
 			this.resultsWrapper.innerHTML = "";
 			this.resultsWrapper.appendChild(fragment);
 		} else {
-			// @TODO: Change the string here for a translation message using willdurand/js-translation-bundle (when it starts supporting PHP 8)
 			const emptyState = document.createElement("div");
 			emptyState.className = "empty-state";
 			emptyState.innerHTML = "No results were found for \"%s\".".replace("%s", "<span class='query'></span>");
@@ -199,10 +190,17 @@ export class SearchOverlay extends LitElement {
 			}
 
 			// Query the server for the search results
-			ApiClient.post("api_search", { query }, null, controller).then(response => {
-				resultsCache[query] = response.data.results;
-				resolve(response.data.results);
-			}).catch(() => { resolve(); });
+			fetch(`/internal-api/search?${new URLSearchParams({ query }).toString()}`, {
+				signal: controller.signal,
+				headers: {
+					"X-Requested-With": "XMLHttpRequest",
+				},
+			})
+				.then(response => response.json())
+				.then(response => {
+					resultsCache[query] = response.data.results;
+					resolve(response.data.results);
+				}).catch(() => { resolve(); });
 		});
 	}
 
