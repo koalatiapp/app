@@ -107,4 +107,26 @@ class OrganizationMemberTest extends AbstractApiTestCase
 			user: self::USER_TEST
 		);
 	}
+
+	public function testAdminCanInvitePeopleToJoin()
+	{
+		$response = $this->apiRequest(
+			url: "/api/organization_members/invite",
+			method: "POST",
+			payload: ["first_name" => "Johnny", "email" => "johnny@money.com", "organization" => "/api/organizations/ew8BEeB2PO"],
+			user: self::USER_TEST
+		);
+		$this->assertSame(201, $response->getStatusCode());
+	}
+
+	public function testNonAdminCannotInvitePeopleToJoin()
+	{
+		$response = $this->apiRequest(
+			url: "/api/organization_members/invite",
+			method: "POST",
+			payload: ["first_name" => "Johnny", "email" => "johnny@money.com", "organization" => "/api/organizations/ew8BEeB2PO"],
+			user: self::USER_SMALL_TEAM_PLAN
+		);
+		$this->assertSame(403, $response->getStatusCode());
+	}
 }
