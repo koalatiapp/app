@@ -189,24 +189,25 @@ export class RecommendationList extends AbstractDynamicList {
 	#initIgnoreEntryMercureListener()
 	{
 		MercureClient.subscribe("IgnoreEntry", update => {
+			console.log(update);
 			let itemsHaveChanged = false;
-			const targetProjectId = update.data.targetProject?.id;
-			const targetOrganizationId = update.data.targetOrganization?.id;
+			const targetProject = update.data.target_project;
+			const targetOrganization = update.data.target_organization;
 
 			if (update.event != "create") {
 				return;
 			}
 
-			if (targetProjectId && targetProjectId != this.projectId) {
+			if (targetProject && targetProject != `/api/projects/${this.projectId}`) {
 				return;
 			}
 
-			if (targetOrganizationId && targetOrganizationId != this.organizationId) {
+			if (targetOrganization && targetOrganization != `/api/organizations/${this.organizationId}`) {
 				return;
 			}
 
 			const filteredList = this.items.filter(recommendation => {
-				return recommendation.tool != update.data.tool || recommendation.uniqueName != update.data.recommendationUniqueName;
+				return recommendation.tool != update.data.tool || recommendation.unique_name != update.data.recommendation_unique_name;
 			});
 
 			if (filteredList.length != this.items.length) {

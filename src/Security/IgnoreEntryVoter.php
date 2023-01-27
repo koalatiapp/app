@@ -11,8 +11,8 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 class IgnoreEntryVoter extends Voter
 {
-	final public const VIEW = 'view';
-	final public const DELETE = 'delete';
+	final public const VIEW = 'ignore_entry_view';
+	final public const DELETE = 'ignore_entry_delete';
 
 	/**
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.security)
@@ -57,7 +57,7 @@ class IgnoreEntryVoter extends Voter
 	private function validateAttribute(string $attribute): void
 	{
 		if (!in_array($attribute, [self::VIEW, self::DELETE])) {
-			throw new \Exception("Undefined project voter attribute: $attribute");
+			throw new \Exception("Undefined ignore entry voter attribute: $attribute");
 		}
 	}
 

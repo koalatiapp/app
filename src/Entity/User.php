@@ -65,12 +65,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
 	protected string $password;
 
 	#[ORM\Column(type: 'string', length: 255)]
-	#[Groups(['user.read'])]
+	#[Groups(['user.read', 'ignore_entry.list', 'ignore_entry.read'])]
 	#[Assert\NotBlank]
 	protected ?string $firstName = null;
 
 	#[ORM\Column(type: 'string', length: 255, nullable: true)]
-	#[Groups(['user.read'])]
+	#[Groups(['user.read', 'ignore_entry.list', 'ignore_entry.read'])]
 	protected ?string $lastName = null;
 
 	#[ORM\Column(type: 'datetime', options: ['default' => 'CURRENT_TIMESTAMP'])]

@@ -29,6 +29,7 @@ class RecommendationTest extends AbstractApiTestCase
 		$this->assertArrayHasKey("ignored", $responseContent["hydra:member"][0]);
 		$this->assertArrayHasKey("completed_by", $responseContent["hydra:member"][0]);
 		$this->assertArrayHasKey("is_completed", $responseContent["hydra:member"][0]);
+		$this->assertArrayHasKey("tool", $responseContent["hydra:member"][0]);
 	}
 
 	public function testUserCannotListRecommendationsOfProjectItsNotAMemberOf()

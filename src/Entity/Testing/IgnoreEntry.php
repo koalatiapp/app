@@ -2,6 +2,13 @@
 
 namespace App\Entity\Testing;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
 use App\Entity\Organization;
 use App\Entity\Page;
 use App\Entity\Project;
@@ -11,58 +18,75 @@ use App\Repository\Testing\IgnoreEntryRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
+#[ApiResource(
+	openapiContext: ["tags" => ['Ignore Recommendations']],
+	normalizationContext: ["groups" => "ignore_entry.list"],
+	uriTemplate: '/projects/{projectId}/ignore_entries',
+	uriVariables: ['projectId' => new Link(fromClass: Project::class, fromProperty: 'ignoreEntries')],
+	operations: [new GetCollection()],
+)]
+#[ApiResource(
+	openapiContext: ["tags" => ['Ignore Recommendations']],
+	normalizationContext: ["groups" => "ignore_entry.read"],
+	operations: [
+		new Get(
+			security: "is_granted('ignore_entry_view', object)",
+		),
+		new Delete(
+			security: "is_granted('ignore_entry_delete', object)",
+		),
+	],
+)]
+#[ApiFilter(SearchFilter::class, properties: ['targetUser' => 'exact', 'targetProject' => 'exact', 'targetOrganization' => 'exact'])]
 #[ORM\Entity(repositoryClass: IgnoreEntryRepository::class)]
 class IgnoreEntry implements MercureEntityInterface
 {
 	#[ORM\Id]
 	#[ORM\GeneratedValue]
 	#[ORM\Column(type: 'integer')]
-	#[Groups(['default'])]
+	#[Groups(['ignore_entry.list', 'ignore_entry.read'])]
 	private ?int $id = null;
 
 	#[ORM\Column(type: 'datetime')]
-	#[Groups(['default'])]
+	#[Groups(['ignore_entry.list', 'ignore_entry.read'])]
 	private ?\DateTimeInterface $dateCreated;
 
 	#[ORM\Column(type: 'string', length: 255)]
-	#[Groups(['default'])]
+	#[Groups(['ignore_entry.list', 'ignore_entry.read'])]
 	private ?string $tool;
 
 	#[ORM\Column(type: 'string', length: 255)]
-	#[Groups(['default'])]
+	#[Groups(['ignore_entry.list', 'ignore_entry.read'])]
 	private ?string $test;
 
 	#[ORM\Column(type: 'string', length: 255)]
-	#[Groups(['default'])]
+	#[Groups(['ignore_entry.list', 'ignore_entry.read'])]
 	private ?string $recommendationUniqueName;
 
 	#[ORM\ManyToOne(targetEntity: Organization::class, inversedBy: 'ignoreEntries')]
 	#[ORM\JoinColumn(name: 'target_organization_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-	#[Groups(['default'])]
 	private ?Organization $targetOrganization = null;
 
 	#[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'ignoreEntries')]
 	#[ORM\JoinColumn(name: 'target_user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-	#[Groups(['default'])]
 	private ?User $targetUser = null;
 
 	#[ORM\ManyToOne(targetEntity: Project::class, inversedBy: 'ignoreEntries')]
 	#[ORM\JoinColumn(name: 'target_project_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-	#[Groups(['default'])]
+	#[Groups(['ignore_entry.list', 'ignore_entry.read'])]
 	private ?Project $targetProject = null;
 
 	#[ORM\ManyToOne(targetEntity: User::class)]
 	#[ORM\JoinColumn(nullable: false)]
-	#[Groups(['default'])]
+	#[Groups(['ignore_entry.list', 'ignore_entry.read'])]
 	private ?User $createdBy = null;
 
 	#[ORM\ManyToOne(targetEntity: Page::class, inversedBy: 'ignoreEntries')]
 	#[ORM\JoinColumn(name: 'page_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-	#[Groups(['default'])]
 	private ?Page $targetPage = null;
 
 	#[ORM\Column(type: 'string', length: 512)]
-	#[Groups(['default'])]
+	#[Groups(['ignore_entry.list', 'ignore_entry.read'])]
 	private ?string $recommendationTitle;
 
 	public function __construct(string $tool, string $test, string $recommendationUniqueName, string $recommendationTitle, null|Organization|User|Project|Page $scopeTarget = null, ?User $createdBy = null)
@@ -197,21 +221,24 @@ class IgnoreEntry implements MercureEntityInterface
 
 	public function setScope(Organization|User|Project|Page $scopeTarget): self
 	{
-		switch ($scopeTarget::class) {
-			case Organization::class:
-				return $this->setTargetOrganization($scopeTarget);
-			case User::class:
-				return $this->setTargetUser($scopeTarget);
-			case Project::class:
-				return $this->setTargetProject($scopeTarget);
-			case Page::class:
-				return $this->setTargetPage($scopeTarget);
+		if ($scopeTarget instanceof Organization) {
+			return $this->setTargetOrganization($scopeTarget);
 		}
 
-		return $this;
+		if ($scopeTarget instanceof User) {
+			return $this->setTargetUser($scopeTarget);
+		}
+
+		if ($scopeTarget instanceof Project) {
+			return $this->setTargetProject($scopeTarget);
+		}
+
+		if ($scopeTarget instanceof Page) {
+			return $this->setTargetPage($scopeTarget);
+		}
 	}
 
-	#[Groups(['default'])]
+	#[Groups(['ignore_entry.list', 'ignore_entry.read'])]
 	public function getScopeType(): string
 	{
 		if ($this->getTargetUser()) {

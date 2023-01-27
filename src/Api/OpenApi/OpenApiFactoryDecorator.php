@@ -211,7 +211,7 @@ final class OpenApiFactoryDecorator implements OpenApiFactoryInterface
 	private function updateIdentifierTypesForHashIds(): void
 	{
 		foreach ($this->openApi->getComponents()->getSchemas() as $component) {
-			foreach ($component["properties"] as $property => $definition) {
+			foreach ($component["properties"] ?? [] as $property => $definition) {
 				if ($property == "id" || str_ends_with($property, "_id")) {
 					$definition["type"] = "string";
 				}

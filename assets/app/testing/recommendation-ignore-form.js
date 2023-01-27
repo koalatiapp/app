@@ -65,7 +65,7 @@ export class RecommendationIgnoreForm extends LitElement {
 		return html`
 			${faImport}
 			<form @submit="${this._submitCallback}">
-				<nb-input type="hidden" name="recommendation_id" value=${this.recommendation.sampleId}></nb-input>
+				<nb-input type="hidden" name="recommendation_id" value=${this.recommendation.sample_id}></nb-input>
 				<nb-field label=${Translator.trans("recommendation.ignore_form.recommendation")}>
 					<nb-markdown barebones id="ignore-form-recommendation-title">
 						<script type="text/markdown">${this.recommendation.title}</script>
@@ -121,7 +121,12 @@ export class RecommendationIgnoreForm extends LitElement {
 	{
 		e.preventDefault();
 
-		await ApiClient.post("api_testing_ignore_entry_create", new FormData(this.form));
+		const formData = new FormData(this.form);
+
+		await ApiClient.post("/api/ignore_entries", {
+			recommendation: `/api/recommendations/${this.recommendation.sample_id}`,
+			scope: formData.get("scope"),
+		});
 		Modal.closeCurrent();
 
 		window.plausible("Testing usage", { props: { action: "Ignore recommendation", recommendation: this.recommendation } });

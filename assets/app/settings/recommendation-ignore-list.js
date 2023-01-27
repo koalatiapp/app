@@ -35,7 +35,7 @@ export class RecommendationIgnoreList extends AbstractDynamicList {
 				label: "ignore_entry.listing.title",
 				render: item => {
 					// Remove links from the recommendation title
-					const strippedTitle = item.recommendationTitle.replace(/\[.+?\]\(.+?\)/g, "").replace(/\.{2,}/g, ".");
+					const strippedTitle = item.recommendation_title.replace(/\[.+?\]\(.+?\)/g, "").replace(/\.{2,}/g, ".");
 
 					return html`
 						<nb-markdown barebones>
@@ -43,8 +43,8 @@ export class RecommendationIgnoreList extends AbstractDynamicList {
 						</nb-markdown>
 						<div class="meta">
 							${Translator.trans("ignore_entry.listing.meta", {
-								user: item.createdBy.firstName + " " + item.createdBy.lastName,
-								date: new Intl.DateTimeFormat("en-CA").format(new Date(item.dateCreated))
+								user: item.created_by.first_name + " " + item.created_by.last_name,
+								date: new Intl.DateTimeFormat("en-CA").format(new Date(item.date_created))
 							})}
 						</div>
 					`;
@@ -54,7 +54,7 @@ export class RecommendationIgnoreList extends AbstractDynamicList {
 			{
 				key: "scope",
 				label: "ignore_entry.listing.scope",
-				render: (item) => item.scopeType,
+				render: (item) => item.scope_type,
 				placeholder: html`
 					<div class="nb--list-item-column-placeholder" style="width: 8ch;">&nbsp;</div>
 				`
@@ -91,7 +91,7 @@ export class RecommendationIgnoreList extends AbstractDynamicList {
 
 	supportedUpdateFilter(update)
 	{
-		if (this.projectId && update.data.scopeType == "project" && update.data.targetProject?.id != this.projectId) {
+		if (this.projectId && update.data.scope_type == "project" && update.data.target_project != `/api/projects/${this.projectId}`) {
 			return false;
 		}
 
@@ -100,12 +100,12 @@ export class RecommendationIgnoreList extends AbstractDynamicList {
 
 	fetchListData()
 	{
-		super.fetchListData("api_testing_ignore_entry_list", { project_id: this.projectId });
+		super.fetchListData(`/api/projects/${this.projectId}/ignore_entries`);
 	}
 
 	_deleteIgnoreEntry(item)
 	{
-		ApiClient.delete("api_testing_ignore_entry_delete", { id: item.id });
+		ApiClient.delete(`/api/ignore_entries/${item.id}`);
 	}
 }
 

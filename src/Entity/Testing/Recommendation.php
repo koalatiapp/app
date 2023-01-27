@@ -321,6 +321,12 @@ class Recommendation
 		return $this->getRelatedPage()->getUrl();
 	}
 
+	#[Groups(['recommendation.list', 'recommendation.read'])]
+	public function getTool(): string
+	{
+		return $this->getParentResult()->getParentResponse()->getTool();
+	}
+
 	/**
 	 * Returns an app-wide unique identifier composed of the related page's ID,
 	 * the tool's name and the recommendation's unique name.

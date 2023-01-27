@@ -20,6 +20,7 @@ class RecommendationGroupTest extends AbstractApiTestCase
 		$this->assertArrayHasKey("template", $responseContent["hydra:member"][0]);
 		$this->assertArrayHasKey("type", $responseContent["hydra:member"][0]);
 		$this->assertArrayHasKey("unique_matching_identifier", $responseContent["hydra:member"][0]);
+		$this->assertArrayHasKey("tool", $responseContent["hydra:member"][0]);
 	}
 
 	public function testUserCannotListRecommendationGroupsOfProjectItsNotAMemberOf()

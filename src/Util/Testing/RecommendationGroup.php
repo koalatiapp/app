@@ -148,7 +148,7 @@ class RecommendationGroup implements \Countable, MercureEntityInterface
 	#[Groups(['recommendation.list', 'recommendation.read'])]
 	public function getTool(): ?string
 	{
-		return $this->getSample()?->getParentResult()?->getParentResponse()?->getTool();
+		return $this->getSample()?->getTool();
 	}
 
 	#[Groups(['recommendation.read'])]
