@@ -3,7 +3,7 @@ import ApiError from "./api-error";
 // @TODO: Add CSRF and/or session checks to API calls
 
 /**
-  * The `ApiClient` class handles all requests made to the internal Koalati API.
+  * The `ApiClient` class handles all requests made to the Koalati API.
   *
   * In addition to making the HTTP requests, it also handles the formatting
   * of requests and responses, basic error handling and response status checks,
