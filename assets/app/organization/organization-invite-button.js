@@ -60,7 +60,7 @@ export class OrganizationInviteButton extends NbButton {
 			title: Translator.trans("organization.settings.members.invite.modal.title"),
 			content: html`
 				<form @submit=${e => this._submitInviteCallback(e, modal)}>
-					<input type="hidden" name="id" value=${this.organizationId}>
+					<input type="hidden" name="organization" value=${`/api/organizations/${this.organizationId}`}>
 					<fieldset>
 						<nb-input type="text" name="first_name" label="${Translator.trans("organization.settings.members.invite.modal.first_name")}" placeholder="John" class="small" required></nb-input>
 					</fieldset>
@@ -85,7 +85,7 @@ export class OrganizationInviteButton extends NbButton {
 		const form = e.target;
 		const formData = new FormData(form);
 
-		ApiClient.post("api_organization_members_invite", formData).then(response => {
+		ApiClient.post("/api/organization_members/invite", formData).then(response => {
 			if (typeof response == "undefined") {
 				return;
 			}

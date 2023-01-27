@@ -77,6 +77,12 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 			}
 		}
 
+		if ($organizationInvitationUrl = $request->getSession()->get("pre_redirect_organization_invitation_url")) {
+			$request->getSession()->remove("pre_redirect_organization_invitation_url");
+
+			return new RedirectResponse($organizationInvitationUrl);
+		}
+
 		if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
 			if (!str_contains($targetPath, "/internal-api/")) {
 				return new RedirectResponse($targetPath);

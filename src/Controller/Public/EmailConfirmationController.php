@@ -7,6 +7,7 @@ use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
 use App\Security\LoginFormAuthenticator;
 use App\Util\Analytics\AnalyticsInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -59,6 +60,13 @@ class EmailConfirmationController extends AbstractController
 		$this->addFlash('success', $this->translator->trans('registration.flash.email_confirmed'));
 
 		$authenticator->authenticateUser($user, $loginFormAuthenticator, $request);
+		$request->getSession()->set(Security::LAST_USERNAME, $user->getEmail());
+
+		if ($organizationInvitationUrl = $request->getSession()->get("pre_redirect_organization_invitation_url")) {
+			$request->getSession()->remove("pre_redirect_organization_invitation_url");
+
+			return $this->redirect($organizationInvitationUrl);
+		}
 
 		return $this->redirectToRoute("dashboard");
 	}

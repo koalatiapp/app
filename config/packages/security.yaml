@@ -48,6 +48,7 @@ security:
         - { path: ^/api/docs, roles: PUBLIC_ACCESS } # Allows accessing the Swagger UI docs
         - { path: ^/api/auth, roles: PUBLIC_ACCESS }
         - { path: ^/api/token/refresh, roles: PUBLIC_ACCESS }
+        - { path: ^/team/invitation/.+/.+, roles: PUBLIC_ACCESS }
         - { path: ^/(login|logout|sign-up|reset-password(/.+)?|translations)$ }
         - { path: ^/verify-email }
         - { path: ^/internal-api/public/ }
