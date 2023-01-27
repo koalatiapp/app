@@ -1,5 +1,5 @@
 import { NbButton } from "../../native-bear";
-import { ApiClient } from "../../utils/api";
+import { InternalApiClient } from "../../utils/internal-api";
 import confirm from "../../utils/confirm.js";
 
 export class SusbcriptionCancelButton extends NbButton {
@@ -24,7 +24,7 @@ export class SusbcriptionCancelButton extends NbButton {
 			if (userConfirmed) {
 				this.loading = true;
 
-				ApiClient.post("api_user_subscription_cancel_plan")
+				InternalApiClient.post("api_user_subscription_cancel_plan")
 					.then(response => {
 						if (response.status == "ok") {
 							window.Flash.show("success", "user_settings.subscription.flash.subscription_cancellation_success");

@@ -1,6 +1,6 @@
 import { html } from "lit";
 import { NbButton } from "../../native-bear";
-import { ApiClient } from "../../utils/api";
+import { InternalApiClient } from "../../utils/internal-api";
 import confirm from "../../utils/confirm.js";
 
 export class PaddleSubscriptionButton extends NbButton {
@@ -73,7 +73,7 @@ export class PaddleSubscriptionButton extends NbButton {
 			}
 
 			// Make the API call to change the subscription
-			ApiClient.post("api_user_subscription_change_plan", { plan: this.planName }).then(() => {
+			InternalApiClient.post("api_user_subscription_change_plan", { plan: this.planName }).then(() => {
 				this.loading = false;
 				window.Flash.show("success", "user_settings.subscription.flash.subscription_change_success");
 				setTimeout(() => { window.location.reload(); }, 5000);
@@ -85,7 +85,7 @@ export class PaddleSubscriptionButton extends NbButton {
 
 	#getUserEmail()
 	{
-		return ApiClient.get("api_user_current").then(response => response.data.email);
+		return InternalApiClient.get("api_user_current").then(response => response.data.email);
 	}
 
 	triggerPaddleCheckout(userEmail)

@@ -1,6 +1,6 @@
 import { LitElement, html, css } from "lit";
 import Modal from "../../utils/modal.js";
-import { ApiClient } from "../../utils/api";
+import { InternalApiClient } from "../../utils/internal-api";
 
 export class FeedbackFormToggle extends LitElement {
 	static get styles()
@@ -110,7 +110,7 @@ export class FeedbackFormToggle extends LitElement {
 
 		submitButton.loading = true;
 
-		ApiClient.post("api_feedback_submit", data, null).then(() => {
+		InternalApiClient.post("api_feedback_submit", data, null).then(() => {
 			window.Flash.show("success", Translator.trans("feedback.flash.success"));
 			Modal.closeCurrent();
 
