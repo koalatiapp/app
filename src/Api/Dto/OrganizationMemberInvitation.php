@@ -29,11 +29,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class OrganizationMemberInvitation
 {
 	#[Groups(['organization_member_invitation.write'])]
-	public ?Organization $organization = null;
+	public Organization $organization;
 
 	#[Groups(['organization_member_invitation.write'])]
-	public ?string $email = null;
+	public string $email;
 
 	#[Groups(['organization_member_invitation.write'])]
-	public ?string $firstName = null;
+	public string $firstName;
 }

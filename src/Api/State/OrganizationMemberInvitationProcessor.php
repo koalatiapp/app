@@ -38,15 +38,15 @@ class OrganizationMemberInvitationProcessor implements ProcessorInterface
 	 */
 	public function process($data, Operation $operation, array $uriVariables = [], array $context = []): ?object
 	{
-		if (!$data->organization) {
+		if (!isset($data->organization)) {
 			throw new BadRequestHttpException("Payload is missing 'project'.");
 		}
 
-		if (!$data->firstName) {
+		if (!isset($data->firstName)) {
 			throw new BadRequestHttpException("Payload is missing 'first_name'.");
 		}
 
-		if (!$data->email) {
+		if (!isset($data->email)) {
 			throw new BadRequestHttpException("Payload is missing 'email'.");
 		}
 
