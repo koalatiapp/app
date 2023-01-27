@@ -70,7 +70,7 @@ class IgnoreEntryTest extends AbstractApiTestCase
 		$response = $this->apiRequest(
 			url: "/api/ignore_entries",
 			method: "POST",
-			payload: ["recommendation" => "/api/projects/ew8BEeB2PO", "scope" => "project"],
+			payload: ["recommendation" => "/api/recommendations/ew8BEeB2PO", "scope" => "project"],
 			user: self::USER_TEST
 		);
 		$this->assertSame(201, $response->getStatusCode());
@@ -81,7 +81,7 @@ class IgnoreEntryTest extends AbstractApiTestCase
 		$response = $this->apiRequest(
 			url: "/api/ignore_entries",
 			method: "POST",
-			payload: ["recommendation" => "/api/projects/ew8BEeB2PO", "scope" => "project"],
+			payload: ["recommendation" => "/api/recommendations/ew8BEeB2PO", "scope" => "project"],
 			user: self::USER_SMALL_TEAM_PLAN
 		);
 		$this->assertSame(403, $response->getStatusCode());
