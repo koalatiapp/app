@@ -140,6 +140,24 @@ try {
 		$verboseMode
 	);
 
+	if ($types['frontend']) {
+		if ($types['unit']) {
+			runCommand(
+				'Running JS unit tests... ',
+				'npm run test:unit',
+				$verboseMode
+			);
+		}
+	}
+
+	if ($types['e2e']) {
+		runCommand(
+			'Running end-to-end tests... ',
+			'npm run test:e2e',
+			$verboseMode
+		);
+	}
+
 	if ($types['backend']) {
 		if ($types['unit'] && $types['functional']) {
 			runCommand(
@@ -160,24 +178,6 @@ try {
 				$verboseMode
 			);
 		}
-	}
-
-	if ($types['frontend']) {
-		if ($types['unit']) {
-			runCommand(
-				'Running JS unit tests... ',
-				'npm run test:unit',
-				$verboseMode
-			);
-		}
-	}
-
-	if ($types['e2e']) {
-		runCommand(
-			'Running end-to-end tests... ',
-			'npm run test:e2e',
-			$verboseMode
-		);
 	}
 } catch (Exception $e) {
 	$hasFailed = true;
