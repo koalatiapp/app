@@ -134,7 +134,7 @@ class ProjectSettingsController extends AbstractProjectController
 	private function isRequestingDeletion(Form $form, Request $request): bool
 	{
 		$clickedButtonName = $form->getClickedButton()->getName();
-		$csrfToken = $request->request->get($form->getName())['_token'] ?? null;
+		$csrfToken = $request->request->all($form->getName())['_token'] ?? null;
 
 		return $clickedButtonName == 'delete' && $this->isCsrfTokenValid($form->getName(), $csrfToken);
 	}
