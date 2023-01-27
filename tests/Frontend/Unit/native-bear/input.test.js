@@ -18,7 +18,7 @@ describe("nb-input", () => {
 			`
 				<slot></slot>
 				<div class="input-wrapper">
-					<input type="text" name="my_input" class="input" id="my-input" value="my value" placeholder="" autocomplete="on">
+					<input type="text" name="my_input" part="input" class="input" id="my-input" value="my value" placeholder="" autocomplete="on">
 				</div>
 			`
 		);
@@ -34,7 +34,7 @@ describe("nb-input", () => {
 				<label for="my-input">My test input</label>
 				<slot></slot>
 				<div class="input-wrapper">
-					<input type="text" name="my_input" class="input" id="my-input" value="my value" placeholder="" autocomplete="on">
+					<input type="text" name="my_input" part="input" class="input" id="my-input" value="my value" placeholder="" autocomplete="on">
 				</div>
 			`
 		);

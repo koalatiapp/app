@@ -72,6 +72,7 @@ export class NbInput extends LitElement {
 		this.type = "text";
 		this.placeholder = "";
 		this.autocomplete = "on";
+		this.step = null;
 		this.rows = 3;
 		this._required = false;
 		this.readonly = false;
@@ -95,7 +96,7 @@ export class NbInput extends LitElement {
 			${this.label ? html`<label for=${this.inputId}>${this.label}</label>` : ""}
 			<slot></slot>
 			<div class="input-wrapper">
-				<input part="input" class="input" id=${this.inputId} name=${this.disableAutofill ? "" : this.name} type=${this.type == "password" && this.revealed ? "text" : this.type} placeholder=${this.placeholder} autocomplete=${this.autocomplete} value=${this.value} step=${this.step} ?readonly=${this.readonly} ?disabled=${this.disabled} @input=${this._updateValue}>
+				<input part="input" class="input" id=${this.inputId} name=${this.disableAutofill ? "" : this.name} type=${this.type == "password" && this.revealed ? "text" : this.type} placeholder=${this.placeholder} autocomplete=${this.autocomplete} value=${this.value}${this.step !== null ? ` step=${this.step}` : ""} ?readonly=${this.readonly} ?disabled=${this.disabled} @input=${this._updateValue}>
 				${this.type == "password" ? html`
 					<nb-icon-button class="toggle-reveal" size="tiny" color="gray" @click=${this.#revealPassword}>
 						<i class="fas fa-${this.revealed ? "eye-slash" : "eye"}" aria-label=${Translator.trans(`generic.password.${this.revealed ? "hide" : "reveal"}`)}></i>
