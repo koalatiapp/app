@@ -55,16 +55,6 @@ class IgnoreEntryTest extends AbstractApiTestCase
 		$this->assertSame(403, $response->getStatusCode());
 	}
 
-	public function testUserCanDeleteIgnoreEntry()
-	{
-		$response = $this->apiRequest(
-			url: "/api/ignore_entries/ew8BEeB2PO",
-			method: "DELETE",
-			user: self::USER_TEST
-		);
-		$this->assertSame(204, $response->getStatusCode());
-	}
-
 	public function testUserCreateIgnoreEntryInProjectsTheyAreAMemberOf()
 	{
 		$response = $this->apiRequest(
@@ -85,5 +75,15 @@ class IgnoreEntryTest extends AbstractApiTestCase
 			user: self::USER_SMALL_TEAM_PLAN
 		);
 		$this->assertSame(403, $response->getStatusCode());
+	}
+
+	public function testUserCanDeleteIgnoreEntry()
+	{
+		$response = $this->apiRequest(
+			url: "/api/ignore_entries/K1aJjAb3oj",
+			method: "DELETE",
+			user: self::USER_TEST
+		);
+		$this->assertSame(204, $response->getStatusCode());
 	}
 }
