@@ -201,6 +201,11 @@ plan:
                     up to <strong>30 pages per project</strong>
                 </li>
                 <li>
+                    <i class="far fa-check text-green"></i>
+                    <strong>40,000</strong> page tests included<br>
+                    <div class="text-smaller text-gray">$0.00118056 / extra page test</div>
+                </li>
+                <li>
                     <i class="far fa-times text-gray"></i>
                     no project members
                 </li>
@@ -231,6 +236,11 @@ plan:
                 </li>
                 <li>
                     <i class="far fa-check text-green"></i>
+                    <strong>40,000</strong> page tests included<br>
+                    <div class="text-smaller text-gray">$0.00118056 / extra page test</div>
+                </li>
+                <li>
+                    <i class="far fa-check text-green"></i>
                     project members
                 </li>
                 <li>
@@ -257,6 +267,11 @@ plan:
                 <li>
                     <i class="far fa-check text-green"></i>
                     <strong>unlimited pages per project</strong>
+                </li>
+                <li>
+                    <i class="far fa-check text-green"></i>
+                    <strong>150,000</strong> page tests included<br>
+                    <div class="text-smaller text-gray">$0.00079861 / extra page test</div>
                 </li>
                 <li>
                     <i class="far fa-check text-green"></i>
