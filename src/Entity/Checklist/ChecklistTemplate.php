@@ -8,7 +8,6 @@ use App\Repository\Checklist\ChecklistTemplateRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ChecklistTemplateRepository::class)]
 class ChecklistTemplate
@@ -34,12 +33,10 @@ class ChecklistTemplate
 	private ?array $checklistContent = [];
 	#[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'checklistTemplates')]
 	#[ORM\JoinColumn(name: 'owner_user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-	#[Groups(['default'])]
 	private ?User $ownerUser = null;
 
 	#[ORM\ManyToOne(targetEntity: Organization::class, inversedBy: 'checklistTemplates')]
 	#[ORM\JoinColumn(name: 'owner_organization_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-	#[Groups(['default'])]
 	private ?Organization $ownerOrganization = null;
 
 	/**

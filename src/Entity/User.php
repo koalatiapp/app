@@ -43,7 +43,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
 	#[ORM\Id]
 	#[ORM\GeneratedValue]
 	#[ORM\Column(type: 'integer')]
-	#[Groups(['default'])]
 	protected int $id;
 
 	#[ORM\Column(type: 'string', length: 180, unique: true)]
@@ -377,7 +376,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
 		return $this->removeCollectionElement('ignoreEntries', $ignoreEntry, 'TargetUser');
 	}
 
-	#[Groups(['default'])]
 	public function getAvatarUrl(int $size = 80): string
 	{
 		$gravatarApi = new GravatarApi(['default' => 'retro']);

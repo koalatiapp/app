@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use App\Repository\OrganizationInvitationRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: OrganizationInvitationRepository::class)]
 class OrganizationInvitation
@@ -12,31 +11,24 @@ class OrganizationInvitation
 	#[ORM\Id]
 	#[ORM\GeneratedValue]
 	#[ORM\Column(type: 'integer')]
-	#[Groups(['default'])]
 	private ?int $id = null;
 
 	#[ORM\Column(type: 'string', length: 255)]
-	#[Groups(['default'])]
 	private ?string $firstName;
 
 	#[ORM\Column(type: 'string', length: 255)]
-	#[Groups(['default'])]
 	private ?string $email;
 
 	#[ORM\Column(type: 'string', length: 255)]
-	#[Groups(['default'])]
 	private ?string $hash;
 
 	#[ORM\Column(type: 'datetime')]
-	#[Groups(['default'])]
 	private ?\DateTimeInterface $dateCreated;
 
 	#[ORM\Column(type: 'datetime')]
-	#[Groups(['default'])]
 	private ?\DateTimeInterface $dateExpired;
 
 	#[ORM\Column(type: 'datetime', nullable: true)]
-	#[Groups(['default'])]
 	private ?\DateTimeInterface $dateUsed;
 
 	#[ORM\ManyToOne(targetEntity: Organization::class, inversedBy: 'organizationInvitations')]

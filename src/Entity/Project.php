@@ -505,13 +505,11 @@ class Project implements MercureEntityInterface
 		return $this->comments->filter(fn (Comment $comment = null) => !$comment->getThread());
 	}
 
-	#[Groups(['default'])]
 	public function getCommentCount(): int
 	{
 		return $this->comments->count();
 	}
 
-	#[Groups(['default'])]
 	public function getUnresolvedCommentCount(): int
 	{
 		return $this->comments->filter(fn (Comment $comment = null) => !$comment->isResolved() && !$comment->getThread())->count();
@@ -520,7 +518,6 @@ class Project implements MercureEntityInterface
 	/**
 	 * @return array<int,string>
 	 */
-	#[Groups(['default'])]
 	public function getTags(): array
 	{
 		return $this->tags ?? [];

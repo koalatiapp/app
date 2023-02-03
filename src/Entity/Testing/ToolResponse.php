@@ -6,7 +6,6 @@ use App\Repository\Testing\ToolResponseRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Table]
 #[ORM\Index(name: 'page_url_index', columns: ['tool', 'url'])]
@@ -16,23 +15,18 @@ class ToolResponse
 	#[ORM\Id]
 	#[ORM\GeneratedValue]
 	#[ORM\Column(type: 'integer')]
-	#[Groups(['default'])]
 	private ?int $id = null;
 
 	#[ORM\Column(type: 'string', length: 255)]
-	#[Groups(['default'])]
 	private string $tool;
 
 	#[ORM\Column(type: 'string', length: 510)]
-	#[Groups(['default'])]
 	private string $url;
 
 	#[ORM\Column(type: 'datetime')]
-	#[Groups(['default'])]
 	private \DateTimeInterface $dateReceived;
 
 	#[ORM\Column(type: 'integer')]
-	#[Groups(['default'])]
 	private int $processingTime;
 
 	/**
