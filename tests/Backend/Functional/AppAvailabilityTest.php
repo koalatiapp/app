@@ -21,7 +21,7 @@ class AppAvailabilityTest extends AbstractAppTestCase
 	{
 		$this->client->request('GET', $url);
 
-		$this->assertResponseIsSuccessful();
+		$this->assertResponseIsSuccessful($url);
 	}
 
 	public function urlProvider()
@@ -29,6 +29,7 @@ class AppAvailabilityTest extends AbstractAppTestCase
 		yield ['/'];
 		yield ['/projects'];
 		yield ['/help'];
+		yield ['/onboarding'];
 		yield ['/team/create'];
 		yield ['/team/ew8BEeB2PO'];
 		yield ['/team/ew8BEeB2PO/leave'];
@@ -47,6 +48,9 @@ class AppAvailabilityTest extends AbstractAppTestCase
 		yield ['/account/contact-preferences'];
 		yield ['/edit-profile'];
 		yield ['/account/security'];
+		yield ['/account/security/api'];
 		yield ['/account/subscription'];
+		yield ['/account/subscription/quota'];
+		yield ['/api/docs'];
 	}
 }

@@ -18,7 +18,7 @@ class PublicAvailabilityTest extends WebTestCase
 		$client = self::createClient();
 		$client->request('GET', $url);
 
-		$this->assertResponseIsSuccessful();
+		$this->assertResponseIsSuccessful($url);
 	}
 
 	public function publicUrlProvider()
