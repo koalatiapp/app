@@ -102,7 +102,11 @@ class ApiClient {
 			fetchOptions.signal = abortController.signal;
 		}
 
-		const response = await fetch(endpoint, fetchOptions);
+		// @TODO: Implement better pagination support
+		const endpointUrl = new URL(endpoint, location.origin);
+		endpointUrl.searchParams.set("pagination", "false");
+
+		const response = await fetch(endpointUrl, fetchOptions);
 
 		// Automatically re-authenticate and retry the request if we get a 401 response
 		if (response.status == 401) {
