@@ -163,7 +163,7 @@ services:
     App\Util\Favicon\Driver\FaviconKit:
         arguments:
             - '@App\Util\Url'
-            - '%env(FAVICONKIT_API_HOSTNAME)'
+            - '%env(FAVICONKIT_API_HOSTNAME)%'
 
     App\Util\Favicon\FaviconFetcher:
         arguments:
