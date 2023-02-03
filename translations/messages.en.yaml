@@ -171,6 +171,7 @@ branding:
 footer:
     privacy_policy: Privacy policy
     terms_of_service: Terms of use
+    api_docs: API docs
 
 plan:
     NoSubscription:
