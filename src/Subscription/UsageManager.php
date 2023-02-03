@@ -5,6 +5,7 @@ namespace App\Subscription;
 use App\Entity\ProjectActivityRecord;
 use App\Entity\User;
 use App\Repository\ProjectActivityRecordRepository;
+use App\Subscription\Model\CurrentUsageCycle;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Contracts\Cache\ItemInterface;
@@ -230,5 +231,22 @@ class UsageManager
 		});
 
 		return $historicalUsage;
+	}
+
+	public function getCurrentUsageCycleObject(): CurrentUsageCycle
+	{
+		return new CurrentUsageCycle(
+			usageCycleStartDate: $this->getUsageCycleStartDate(),
+			usageCycleEndDate: $this->getUsageCycleEndDate(),
+			usageCycleBillingDate: $this->getUsageCycleBillingDate(),
+			pageTestUsage: $this->getPageTestUsage(),
+			usageCost: $this->getUsageCost(),
+			pageTestQuota: $this->getPageTestQuota(),
+			pageTestQuotaReached: $this->isPageTestQuotaReached(),
+			spendingLimitReached: $this->isSpendingLimitReached(),
+			numberOfPageTestsAllowed: $this->getNumberOfPageTestsAllowed(),
+			pageTestsOverQuotaAllowed: $this->user->allowsPageTestsOverQuota(),
+			spendingLimit: $this->user->getQuotaExceedanceSpendingLimit(),
+		);
 	}
 }
