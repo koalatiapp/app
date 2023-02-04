@@ -8,17 +8,16 @@ use Symfony\Component\Routing\RouterInterface;
 class HtmlSanitizer
 {
 	public function __construct(
-		private SanitizerInterface $htmlSanitizer,
-		private RouterInterface $router,
+		private readonly SanitizerInterface $htmlSanitizer,
+		private readonly RouterInterface $router,
 	) {
 	}
 
 	public function sanitize(string $unsafeHtml): string
 	{
 		$sanitizedHtml = $this->htmlSanitizer->sanitize($unsafeHtml);
-		$sanitizedHtml = $this->proxyImages($sanitizedHtml);
 
-		return $sanitizedHtml;
+		return $this->proxyImages($sanitizedHtml);
 	}
 
 	private function proxyImages(string $html): string

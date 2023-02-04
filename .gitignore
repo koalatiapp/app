@@ -40,3 +40,7 @@ yarn-error.log
 # Local filestorage
 /public/storage/*
 !/public/storage/.gitkeep
+
+###> lexik/jwt-authentication-bundle ###
+/config/jwt/*.pem
+###< lexik/jwt-authentication-bundle ###

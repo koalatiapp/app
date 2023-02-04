@@ -2,9 +2,9 @@
 
 namespace App\Tests\Unit\ApiClient\Endpoint;
 
-use App\ApiClient\Endpoint\StatusEndpoint;
-use App\ApiClient\MockClient;
-use App\ApiClient\MockServerlessClient;
+use App\ToolsService\Endpoint\StatusEndpoint;
+use App\ToolsService\MockClient;
+use App\ToolsService\MockServerlessClient;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -13,10 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  */
 class StatusEndpointTest extends WebTestCase
 {
-	/**
-	 * @var StatusEndpoint
-	 */
-	private $statusEndpoint;
+	private StatusEndpoint $statusEndpoint;
 
 	public function setup(): void
 	{

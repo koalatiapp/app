@@ -14,11 +14,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class NewProjectType extends AbstractType
 {
-	private ?OrganizationRepository $organizationRepository;
+	private ?OrganizationRepository $organizationRepository = null;
 
-	/**
-	 * @required
-	 */
+	#[\Symfony\Contracts\Service\Attribute\Required]
 	public function setOrganizationRepository(OrganizationRepository $organizationRepository): void
 	{
 		$this->organizationRepository = $organizationRepository;

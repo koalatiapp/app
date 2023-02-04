@@ -10,7 +10,7 @@ use League\Flysystem\Local\LocalFilesystemAdapter;
 
 class FilesystemManager
 {
-	private FilesystemOperator $filesystem;
+	private readonly FilesystemOperator $filesystem;
 	private bool $isLocalFilesystem = false;
 
 	public function __construct(

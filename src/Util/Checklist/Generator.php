@@ -12,7 +12,7 @@ use App\Util\Config;
 class Generator
 {
 	public function __construct(
-		private Config $config,
+		private readonly Config $config,
 	) {
 	}
 
@@ -65,6 +65,12 @@ class Generator
 		 * @var array<int,array<string,array<string,Item>>>
 		 */
 		static $existingItems = [];
+
+		// Reset state when generating a new checklist
+		if ($configFilename == "checklist/base") {
+			$existingGroups = [];
+			$existingItems = [];
+		}
 
 		$templateGroups = $this->config->get($configFilename);
 

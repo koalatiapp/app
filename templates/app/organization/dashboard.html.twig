@@ -8,6 +8,23 @@
 {% endblock %}
 
 {% block body %}
+	{% if usageManager.numberOfPageTestsAllowed <= 0 %}
+		<div class="notice warning">
+			{% if usageManager.isSpendingLimitReached %}
+				{% if app.user is same as(organization.owner) %}
+					{% trans %}quota_notices.your_spending_limit_exceeded{% endtrans %}
+				{% else %}
+					{% trans %}quota_notices.organization_spending_limit_exceeded{% endtrans %}
+				{% endif %}
+			{% else %}
+				{% if app.user is same as(organization.owner) %}
+					{% trans %}quota_notices.your_quota_exceeded{% endtrans %}
+				{% else %}
+					{% trans %}quota_notices.organization_quota_exceeded{% endtrans %}
+				{% endif %}
+			{% endif %}
+		</div>
+	{% endif %}
     <div class="grid fill-small">
         <div class="card">
 			<h2>{% trans %}organization.dashboard.feed{% endtrans %}</h2>
@@ -26,7 +43,7 @@
 				<p class="text-gray">{% trans with {"%count%": organization.membersSortedByRole|length - 5} %}organization.dashboard.member_list.x_more{% endtrans %}</p>
 			{% endif %}
 
-			{% if is_granted("manage", organization) %}
+			{% if is_granted(constant("App\\Security\\OrganizationVoter::EDIT"), organization) %}
 				<hr>
 				<div class="text-center">
 					<nb-button href="{{ path("organization_settings", {id: organization.id|hashids_encode}) }}#members">

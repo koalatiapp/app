@@ -9,31 +9,28 @@ use App\Repository\UserRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
-use ReflectionProperty;
 
 class OrganizationFixtures extends Fixture implements DependentFixtureInterface
 {
-	/**
-	 * @var UserRepository
-	 */
-	private $userRepository;
-
-	public function __construct(UserRepository $userRepository)
-	{
-		$this->userRepository = $userRepository;
+	public function __construct(
+		private readonly UserRepository $userRepository
+	) {
 	}
 
 	public function load(ObjectManager $manager): void
 	{
 		$organization = (new Organization())
-			->setName('Koalati Inc.')
-			->setSlug('koalati-inc');
+			->setName('Koalati Inc.');
 		$manager->persist($organization);
 
 		$users = $this->userRepository->findAll();
 		$isFirstUser = true;
 
 		foreach ($users as $user) {
+			if ($user->getEmail() == "no-organization@plan.com") {
+				continue;
+			}
+
 			$role = $isFirstUser ? OrganizationMember::ROLE_OWNER : OrganizationMember::ROLE_MEMBER;
 			$membership = new OrganizationMember($organization, $user, $role);
 			$organization->addMember($membership);
@@ -54,6 +51,12 @@ class OrganizationFixtures extends Fixture implements DependentFixtureInterface
 			$isFirstUser = false;
 		}
 
+		$secondOrganization = (new Organization())
+			->setName('The Lone Wolf Team');
+		$secondOrganizationMembership = new OrganizationMember($secondOrganization, $this->userRepository->find(1), OrganizationMember::ROLE_OWNER);
+		$manager->persist($secondOrganization);
+		$manager->persist($secondOrganizationMembership);
+
 		$manager->flush();
 	}
 
@@ -64,7 +67,7 @@ class OrganizationFixtures extends Fixture implements DependentFixtureInterface
 	 */
 	private function forceSetInvitationHash(OrganizationInvitation $invitation, string $hash): OrganizationInvitation
 	{
-		$reflectedHashProperty = new ReflectionProperty(OrganizationInvitation::class, 'hash');
+		$reflectedHashProperty = new \ReflectionProperty(OrganizationInvitation::class, 'hash');
 		$reflectedHashProperty->setAccessible(true);
 		$reflectedHashProperty->setValue($invitation, $hash);
 

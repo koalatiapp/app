@@ -2,60 +2,83 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
+use ApiPlatform\Metadata\Patch;
 use App\Repository\OrganizationMemberRepository;
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-/**
- * @ORM\Entity(repositoryClass=OrganizationMemberRepository::class)
- */
+#[ApiResource(
+	openapiContext: ["tags" => ['Organization Member']],
+	normalizationContext: ["groups" => "organization.read"],
+	uriTemplate: '/organizations/{organizationId}/members',
+	uriVariables: ['organizationId' => new Link(fromClass: Organization::class, fromProperty: 'members')],
+	operations: [new GetCollection()],
+)]
+#[ApiResource(
+	openapiContext: ["tags" => ['Organization Member']],
+	normalizationContext: ["groups" => "member.read"],
+	denormalizationContext: ["groups" => "member.write"],
+	operations: [
+		new Get(security: "is_granted('view', object)"),
+		new Patch(security: "is_granted('edit', object)"),
+		new Delete(security: "is_granted('edit', object)"),
+	],
+)]
+#[ApiFilter(OrderFilter::class, properties: ['dateCreated'])]
+#[ApiFilter(SearchFilter::class, properties: ['roles' => 'partial'])]
+#[ORM\Entity(repositoryClass: OrganizationMemberRepository::class)]
 class OrganizationMember
 {
-	public const ROLE_OWNER = 'ROLE_OWNER';
-	public const ROLE_ADMIN = 'ROLE_ADMIN';
-	public const ROLE_MEMBER = 'ROLE_MEMBER';
-	public const ROLE_VISITOR = 'ROLE_VISITOR';
-	public const ROLE_VALUES = [
+	final public const ROLE_OWNER = 'ROLE_OWNER';
+	final public const ROLE_ADMIN = 'ROLE_ADMIN';
+	final public const ROLE_MEMBER = 'ROLE_MEMBER';
+	final public const ROLE_VISITOR = 'ROLE_VISITOR';
+	final public const ROLE_VALUES = [
 		self::ROLE_OWNER => 1000,
 		self::ROLE_ADMIN => 100,
 		self::ROLE_MEMBER => 10,
 		self::ROLE_VISITOR => 1,
 	];
 
-	/**
-	 * @ORM\Id
-	 * @ORM\GeneratedValue
-	 * @ORM\Column(type="integer")
-	 * @Groups({"default"})
-	 */
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[ORM\Column(type: 'integer')]
+	#[Groups(['member.read', 'organization.read'])]
 	private ?int $id = null;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity=Organization::class, inversedBy="members")
-	 * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
-	 * @Groups({"default"})
-	 */
+	#[ORM\ManyToOne(targetEntity: Organization::class, inversedBy: 'members')]
+	#[ORM\JoinColumn(name: 'organization_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
+	#[Groups(['member.read'])]
 	private ?Organization $organization;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity=User::class, inversedBy="organizationLinks")
-	 * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
-	 * @Groups({"default"})
-	 */
+	#[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'organizationLinks')]
+	#[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
+	#[Groups(['member.read', 'organization.read'])]
 	private ?User $user;
 
 	/**
+	 * Available roles are:
+	 * - `ROLE_OWNER`
+	 * - `ROLE_ADMIN`
+	 * - `ROLE_MEMBER`
+	 * - `ROLE_VISITOR`.
+	 *
 	 * @var array<string>
-	 * @ORM\Column(type="json")
-	 * @Groups({"default"})
 	 */
+	#[ORM\Column(type: 'json')]
+	#[Groups(['member.read', 'member.write', 'organization.read'])]
 	private array $roles = [];
 
-	/**
-	 * @ORM\Column(type="datetime")
-	 * @Groups({"default"})
-	 */
+	#[ORM\Column(type: 'datetime')]
+	#[Groups(['member.read', 'organization.read'])]
 	private \DateTimeInterface $dateCreated;
 
 	/**
@@ -66,7 +89,7 @@ class OrganizationMember
 		$this->setOrganization($organization);
 		$this->setUser($user);
 		$this->setRoles((array) $roles);
-		$this->setDateCreated(new DateTime());
+		$this->setDateCreated(new \DateTime());
 	}
 
 	public function getId(): ?int
@@ -98,6 +121,18 @@ class OrganizationMember
 		return $this;
 	}
 
+	#[Groups(['member.read', 'organization.read'])]
+	public function getFirstName(): string
+	{
+		return $this->getUser()->getFirstName();
+	}
+
+	#[Groups(['member.read', 'organization.read'])]
+	public function getLastName(): string
+	{
+		return $this->getUser()->getLastName();
+	}
+
 	/**
 	 * @return string[]|null
 	 */
@@ -109,15 +144,13 @@ class OrganizationMember
 	/**
 	 * Defines the role of the member within the organization.
 	 * Allowed array values are the following \App\Entity\OrganizationMember constants:
-	 * `ROLE_ADMIN`, `ROLE_MEMBER`, `ROLE_VISITOR`.
+	 * `ROLE_OWNER, `ROLE_ADMIN`, `ROLE_MEMBER`, `ROLE_VISITOR`.
 	 *
 	 * @param string[] $roles
 	 */
 	public function setRoles(array $roles): self
 	{
-		$this->roles = array_filter($roles, function ($role) {
-			return in_array($role, [self::ROLE_OWNER, self::ROLE_ADMIN, self::ROLE_MEMBER, self::ROLE_VISITOR]);
-		});
+		$this->roles = array_filter($roles, fn ($role) => in_array($role, [self::ROLE_OWNER, self::ROLE_ADMIN, self::ROLE_MEMBER, self::ROLE_VISITOR]));
 
 		return $this;
 	}
@@ -150,9 +183,7 @@ class OrganizationMember
 		return $this;
 	}
 
-	/**
-	 * @Groups({"default"})
-	 */
+	#[Groups(['member.read', 'organization.read'])]
 	public function getHighestRole(): ?string
 	{
 		$highestValue = 0;
@@ -173,5 +204,11 @@ class OrganizationMember
 		$highestRole = $this->getHighestRole();
 
 		return self::ROLE_VALUES[$highestRole];
+	}
+
+	#[Groups(['member.read', 'organization.read'])]
+	public function getUserAvatar(): ?string
+	{
+		return $this->getUser()->getAvatarUrl();
 	}
 }

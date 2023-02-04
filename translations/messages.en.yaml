@@ -28,6 +28,142 @@ generic:
 api:
     flash:
         server_error: Something went wrong. Please make sure you're still logged in, and try again.
+    docs:
+        introduction:
+            title: Introduction
+            content: >
+                <p>The Koalati API allows you to integrate the website testing features you know and love in your favorite tools and platforms.</p>
+                <p>The API is built on REST principles, and can be used with both the managed and the self-hosted versions of Koalati.</p>
+        url:
+            title: API URL
+            content: >
+                <p>
+                    The Koalati API for the managed version of Koalati is available at the following URL:<br>
+                    <code>https://app.koalati.com/api/</code>
+                </p>
+                <p>
+                    For self-hosted instances of Koalati in which the API is available (v1.1.0 and above), you can access the API at
+                    the <code>/api/</code> of your instance's hostname.
+                </p>
+        formats:
+            title: Formats
+            content: >
+                <p>The following formats can be used to interact with the API:</p>
+                <ul>
+                    <li>JSON-LD (<code>application/ld+json</code>) - default</li>
+                    <li>JSON (<code>application/json</code>)</li>
+                    <li>JSON HAL (<code>application/hal+json</code>)</li>
+                    <li>JSON:API (<code>application/vnd.api+json</code>)</li>
+                    <li>XML (<code>application/xml</code> or <code>text/xml</code>)</li>
+                    <li>YAML (<code>application/x-yaml</code>)</li>
+                    <li>CSV (<code>text/csv</code>)</li>
+                </ul>
+                <p>
+                    <strong>However, please note that authentication calls must use the
+                    JSON (<code>application/json</code>) format.</strong>
+                </p>
+        rate_limiting:
+            title: Rate Limiting
+            content: >
+                <p>To ensure our platform remains stable and that API usage remains aligned with the core purpose of Koalati, the API is rate-limited.</p>
+                <p>We ask developers to use industry standard techniques to limit calls, cache results, and retry requests responsibly.</p>
+                <ul>
+                    <li>
+                        Limit for authentication endpoints: <strong>60 calls per hour</strong><br>
+                        <small>(fixed window strategy: resets once per hour)</small>
+                    </li>
+                    <li>
+                        Limit for all other endpoints: <strong>60 calls per minute</strong> <br>
+                        <small>(bucket strategy: one token restored per second)</small>
+                    </li>
+                </ul>
+                <p>
+                    Every API response contains headers to help you prevent excessive usage
+                    <ul>
+                        <li><code>x-ratelimit-limit</code></li>
+                        <li><code>x-ratelimit-remaining</code></li>
+                        <li><code>x-ratelimit-retry-after</code></li>
+                    </ul>
+                </p>
+        pagination:
+            title: Pagination
+            content: >
+                <p>Koalati provides API endpoints to retrieve lists of resources.</p>
+                <p>Most of these lists are paginated, displaying <code>50</code> items per page by default</p>
+                <h3>Changing the number of items per page</h3>
+                <p>You can change the number of items per page by passing the <code>itemsPerPage</code> query parameter in your API calls (maximum of <code>100</code>).</p>
+                <h3>Disabling the pagination</h3>
+                <p>You can disable the pagination by passing the <code>pagination</code> query parameter in your API calls with a value of <code>false</code>.</p>
+        http_methods:
+            title: HTTP Methods
+            content: >
+                <p>Koalati's API uses the standard HTTP verbs, as follows:</p>
+                <ul>
+                    <li>
+                        <code>GET</code>:
+                        Used for retrieving resources.
+                    </li>
+                    <li>
+                        <code>POST</code>:
+                        Used for creating resources and performing resource actions.
+                    </li>
+                    <li>
+                        <code>PUT</code>:
+                        Used for updating resources.
+                    </li>
+                    <li>
+                        <code>PATCH</code>:
+                        Used for partially updating resources.
+                    </li>
+                    <li>
+                        <code>DELETE</code>:
+                        Used for deleting resources.
+                    </li>
+                </ul>
+        http_codes:
+            title: HTTP Status Codes
+            content: >
+                <p>Koalati's API responds with standard HTTP status codes.</p>
+                <p>Here are the status codes you are likely to encounter when using the Koalati API:</p>
+                <ul>
+                    <li><code>200</code>: OK</li>
+                    <li><code>201</code>: Created</li>
+                    <li><code>202</code>: Accepted</li>
+                    <li><code>204</code>: No Content (Resource has been deleted)</li>
+                    <li><code>400</code>: Bad Request</li>
+                    <li><code>401</code>: Unauthorized (Missing Authorization token)</li>
+                    <li><code>403</code>: Forbidden (User does not have access to the requested action or resource)</li>
+                    <li><code>404</code>: URL Not Found</li>
+                    <li><code>405</code>: Method Not Allowed</li>
+                    <li><code>429</code>: Rate Limit Exceeded (API usage limit exceeded)</li>
+                    <li><code>500</code>: Internal Error</li>
+                </ul>
+                <p>For more information about HTTP codes, please refer to <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status">MDN's documentation</a>.</p>
+        authentication:
+            title: Authentication
+            content: >
+                <p>To access Koalati's API, you have to authenticate with a valid Koalati user account.</p>
+                <p>
+                    This is done by generating an authentication token (in the form of a JWT) and providing it as a
+                    <a href="https://oauth.net/2/bearer-tokens/" target="_blank">Bearer Token</a> in all of your API calls.
+                </p>
+                <p>There are two ways to generate an authentication token for the Koalati API:</p>
+                <ul>
+                    <li>
+                        <strong>Generate the authentication token within the Koalati application itself.</strong><br>
+                        To do so, go to <i/Settings > Security > API access</i>, and find the <i>Authentication Token</i> section.
+                    </li>
+                    <li>
+                        <strong>Call the <code>/api/auth</code> API endpoint with the desired user's login credentials.</strong><br>
+                        You should only do this once to get the initial token; you should never store your login credentials
+                        on a server or provide them to a third party application.
+                    </li>
+                </ul>
+                <p>
+                    Every authentication token you generate has an expiration date, after which it becomes invalid. However,
+                    you may refresh a authentication token by providing the API the refresh token that was issued at the same
+                    time as your JWT. Check out the <code>/api/token/refresh</code> endpoint below to learn how to do this.
+                </p>
 
 branding:
     name: Koalati
@@ -35,6 +171,7 @@ branding:
 footer:
     privacy_policy: Privacy policy
     terms_of_service: Terms of use
+    api_docs: API docs
 
 plan:
     NoSubscription:
@@ -62,6 +199,11 @@ plan:
                 <li>
                     <i class="far fa-check text-green"></i>
                     up to <strong>30 pages per project</strong>
+                </li>
+                <li>
+                    <i class="far fa-check text-green"></i>
+                    <strong>6,000</strong> page tests included<br>
+                    <div class="text-smaller text-gray">$0.00118056 / extra page test</div>
                 </li>
                 <li>
                     <i class="far fa-times text-gray"></i>
@@ -94,6 +236,11 @@ plan:
                 </li>
                 <li>
                     <i class="far fa-check text-green"></i>
+                    <strong>40,000</strong> page tests included<br>
+                    <div class="text-smaller text-gray">$0.00118056 / extra page test</div>
+                </li>
+                <li>
+                    <i class="far fa-check text-green"></i>
                     project members
                 </li>
                 <li>
@@ -120,6 +267,11 @@ plan:
                 <li>
                     <i class="far fa-check text-green"></i>
                     <strong>unlimited pages per project</strong>
+                </li>
+                <li>
+                    <i class="far fa-check text-green"></i>
+                    <strong>150,000</strong> page tests included<br>
+                    <div class="text-smaller text-gray">$0.00079861 / extra page test</div>
                 </li>
                 <li>
                     <i class="far fa-check text-green"></i>
@@ -294,6 +446,34 @@ search:
         project: Project
         organization: Team
         comment: Comment on %project%
+    route:
+        dashboard:
+            title: Dashboard
+            description: Browse your projects.
+        projects:
+            title: Your Projects
+            description: Browse your projects.
+        help:
+            title: Help Center
+            description: Get support information and read our F.A.Q.
+        onboarding:
+            title: Onboarding
+            description: Review the onboarding experience.
+        edit_profile:
+            title: Your Profile
+            description: Edit your first and last name.
+        manage_account_api:
+            title: Your API settings
+            description: Manage your authentication token
+        manage_account_security:
+            title: Your Account Security
+            description: Change your password and email address or delete your account.
+        manage_subscription:
+            title: Your Subscription
+            description: Change or cancel your subscription plan.
+        manage_subscription_quota:
+            title: Your Usage & Quota
+            description: Adjust your spending limit and manage usage over your quota.
 
 automated_testing:
     testing_request_created: We're running the tests again, the results should start appearing in just a few seconds.
@@ -364,7 +544,10 @@ user_settings:
         flash:
             success: Your profile has been updated!
     security:
-        title: Security settings
+        tabs:
+            account: Your account
+            api: API access
+        title: Account security
         password:
             title: Change your password
             form:
@@ -394,7 +577,29 @@ user_settings:
                 submit_label: Delete my account
             flash:
                 success: Your email address has been updated!
+    api:
+        title: API access
+        authentication:
+            title: Authentication Token
+            content: >
+                <p>An authentication token is required to use Koalati's API.</p>
+                <p>
+                    You can generate an authentication token by using the form below, or by
+                    <a href="/api/docs#tag/Authentication" target="_blank" class="text-link">making an authentication call</a>
+                    to the API with your credentials.
+                </p>
+                <p><strong>Make sure you keep your API tokens safe. Do not provide API tokens to untrustworthy parties or applications.</strong></p>
+            generate: Generate API tokens
+            tokens_generated: Your API tokens have been generated. Make sure you keep them safe!
+        documentation:
+            title: API Documentation
+            content: >
+                <p>Looking to integrate Koalati into your favorite tools and workflows?</p>
+                <p>Take a look at our <a href="/api/docs" target="_blank" class="text-link">API's documentation</a>!</p>
     subscription:
+        tabs:
+            subscription: Your subscription
+            quota: Quotas & usage
         title: Manage your subscription
         overview:
             title: Overview
@@ -428,6 +633,34 @@ user_settings:
         flash:
             subscription_change_success: Your subscription is being updated! Please hold on, this page will reload in just a moment...
             subscription_cancellation_success: Your subscription has been cancelled! Please hold on, this page will reload in just a moment...
+    quota:
+        title: Quotas and usage
+        settings:
+            title: Quota settings
+            update: Update quota settings
+            allows_page_tests_over_quota:
+                label: Allow Page Tests over quota
+                help: >
+                    If you allow Page Tests over your plan's included quota, you will incur a cost for each Page Test that occurs after
+                    your quota has been reached. This cost can be limited by defining a Spending Limit below.
+            quota_exceedance_spending_limit:
+                label: Spending limit (USD)
+                placeholder: Unlimited
+                help: >
+                    Once the estimated cost for the usage cycle reaches your spending limit, any additional testing request will be ignored.
+                    This only takes effect if "Allow Page Tests over quota" is enabled.
+            flash:
+                success: Your quota settings have been updated!
+        current_cycle:
+            title: Current usage cycle
+        history:
+            title: Historical usage
+        label:
+            usage: Usage (Page Tests)
+            cost: Estimated cost (USD)
+            start_date: Start date
+            end_date: End date
+            billing_date: Billing date
 
 dashboard:
     title: Dashboard
@@ -694,6 +927,24 @@ organization_invitation:
         error_already_used: This invitation has already been used on %date%.
         error_expired: This invitation has expired.
         error_already_a_member: You are already a member of this organization.
+
+quota_notices:
+    your_spending_limit_exceeded: >
+        <strong>Your testing quota and your spending limit have been reached.</strong><br>
+        You can still view existing results, but you cannot run more tests until you <a href="/account/subscription/quota" class="text-link">increase your spending limit</a>
+        (or until your quotas reset at the beginning of your next usage cycle).
+    organization_spending_limit_exceeded: >
+        <strong>The testing quota and spending limit of this organization have been reached.</strong><br>
+        You can still view existing results, but you cannot run more tests until the owner increase their spending limit
+        (or until quotas reset at the beginning of their next usage cycle).
+    your_quota_exceeded: >
+        <strong>Your testing quota has been reached.</strong><br>
+        You can still view existing results, but you cannot run more tests until you <a href="/account/subscription/quota" class="text-link">allow Page Tests over your quota</a>
+        (or until your quotas reset at the beginning of your next usage cycle).
+    organization_quota_exceeded: >
+        <strong>The testing quota of this organization has been reached.</strong><br>
+        You can still view existing results, but you cannot run more tests until the organization's owner allows Page Tests over their quota
+        (or until quotas reset at the beginning of their next usage cycle).
 
 roles:
     ROLE_OWNER: Owner

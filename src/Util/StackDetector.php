@@ -12,8 +12,8 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 class StackDetector
 {
 	public function __construct(
-		private HttpClientInterface $httpClient,
-		private LoggerInterface $logger,
+		private readonly HttpClientInterface $httpClient,
+		private readonly LoggerInterface $logger,
 	) {
 	}
 
@@ -42,7 +42,7 @@ class StackDetector
 			if ($headNode->children("[href*='cdn.shopify.com'], [src*='cdn.shopify.com']")->count() > 1) {
 				return Framework::SHOPIFY;
 			}
-		} catch (Exception $exception) {
+		} catch (\Exception $exception) {
 			$this->logger->error($exception);
 		}
 
@@ -79,7 +79,7 @@ class StackDetector
 			$response->getHeaders();
 			$response->getContent();
 			$cachedResponses[$url] = $response;
-		} catch (Exception $e) {
+		} catch (Exception) {
 			$cachedResponses[$url] = null;
 		}
 

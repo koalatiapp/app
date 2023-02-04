@@ -18,14 +18,16 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-        bind:
-            Symfony\Component\Serializer\Serializer $simpleSerializer: '@SimpleSerializer'
 
     _instanceof:
         App\Subscription\Plan\PlanInterface:
             tags: ['app.subscription_plan']
         App\Mercure\EntityHandlerInterface:
             tags: ['app.mercure_entity_handler']
+        App\Serializer\EntityExtension\EntityExtensionInterface:
+            tags: ['app.serializer.entity_extension']
+        App\Util\Search\SearchInterface:
+            tags: ['app.search']
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -42,52 +44,6 @@ services:
     App\Controller\:
         resource: '../src/Controller/'
         tags: ['controller.service_arguments']
-
-    # @TODO: Find a way to implement the normalizer/serializers without requiring the container (currently causes a circular reference with DefaultNormalizer)
-    Symfony\Component\DependencyInjection\ContainerInterface:
-        '@service_container'
-
-    # Configure the serializer for entities by default
-    SimpleSerializer:
-        class: Symfony\Component\Serializer\Serializer
-        arguments:
-            - ['@DateTimeNormalizer', '@JsonSerializableNormalizer', '@GetSetMethodNormalizer', '@ObjectNormalizer']
-            - ['@JsonEncoder']
-
-    Symfony\Component\Serializer\SerializerInterface:
-        class: Symfony\Component\Serializer\Serializer
-        public: true
-        arguments:
-            - ['@ProjectNormalizer', '@DefaultNormalizer']
-            - ['@JsonEncoder']
-
-    ProjectNormalizer:
-        class: App\Serializer\ProjectNormalizer
-        tags: [serializer.normalizer]
-
-    DefaultNormalizer:
-        class: App\Serializer\DefaultNormalizer
-        public: true
-        tags: [serializer.normalizer]
-
-    GetSetMethodNormalizer:
-        class: Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer
-        tags: [serializer.normalizer]
-
-    ObjectNormalizer:
-        class: Symfony\Component\Serializer\Normalizer\ObjectNormalizer
-        tags: [serializer.normalizer]
-
-    DateTimeNormalizer:
-        class: Symfony\Component\Serializer\Normalizer\DateTimeNormalizer
-        tags: [serializer.normalizer]
-
-    JsonSerializableNormalizer:
-        class: Symfony\Component\Serializer\Normalizer\JsonSerializableNormalizer
-        tags: [serializer.normalizer]
-
-    JsonEncoder:
-        class: Symfony\Component\Serializer\Encoder\JsonEncoder
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
@@ -127,13 +83,13 @@ services:
     App\Storage\UserUploadStorage:
         parent:  App\Storage\AbstractStorage
 
-    App\ApiClient\ClientInterface:
-        class: 'App\ApiClient\Client'
+    App\ToolsService\ClientInterface:
+        class: 'App\ToolsService\Client'
         arguments:
             - '%env(TOOLS_API_WORKER_URL)%'
             - '%env(TOOLS_API_WORKER_BEARER_TOKEN)%'
 
-    App\ApiClient\ServerlessClient:
+    App\ToolsService\ServerlessClient:
         arguments:
             - '%env(TOOLS_API_FUNCTIONS_URL)%'
             - '%env(TOOLS_API_FUNCTIONS_BEARER_TOKEN)%'
@@ -186,6 +142,26 @@ services:
         arguments:
             - !tagged_iterator app.mercure_entity_handler
 
+    App\Util\Search\SearchEngine:
+        arguments:
+            - !tagged_iterator app.search
+
+    # API
+    ApiPlatform\State\ProcessorInterface $persistProcessor: '@api_platform.doctrine.orm.state.persist_processor'
+    ApiPlatform\State\ProcessorInterface $removeProcessor: '@api_platform.doctrine.orm.state.remove_processor'
+    App\Api\OpenApi\OpenApiFactoryDecorator:
+        decorates: 'api_platform.openapi.factory'
+        arguments: ['@.inner']
+    App\Api\Routing\EncryptedIriConverter:
+        decorates: 'api_platform.iri_converter'
+        arguments: ['@.inner']
+    App\Api\State\EncryptedIdsCallableProvider:
+        decorates: 'api_platform.state_provider.locator'
+        arguments: ['@.inner']
+    App\Api\Security\AuthenticationJwtListener:
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJwtCreated }
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_decoded, method: onJwtDecoded }
 
     ############################
     # Doctrine event listeners #

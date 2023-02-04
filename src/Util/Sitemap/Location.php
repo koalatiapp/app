@@ -10,26 +10,20 @@ use DOMDocument;
  */
 class Location
 {
-	/**
-	 * URL of the page or document.
-	 */
-	public string $url;
-
-	/**
-	 * Title of the page or document.
-	 */
-	public ?string $title = null;
-
-	/**
-	 * HTTP status code of the page or document.
-	 */
-	public ?int $statusCode = null;
-
-	public function __construct(string $url, ?string $title = null, ?int $statusCode = null)
-	{
-		$this->url = $url;
-		$this->title = $title;
-		$this->statusCode = $statusCode;
+	public function __construct(
+		/**
+		 * URL of the page or document.
+		 */
+		public string $url,
+		/**
+		 * Title of the page or document.
+		 */
+		public ?string $title = null,
+		/**
+		 * HTTP status code of the page or document.
+		 */
+		public ?int $statusCode = null
+	) {
 	}
 
 	/**
@@ -48,7 +42,7 @@ class Location
 		]);
 		libxml_set_streams_context($context);
 
-		$domDocument = new DOMDocument();
+		$domDocument = new \DOMDocument();
 		$domDocument->preserveWhiteSpace = false;
 
 		// DOMDocument::loadHTMLFile throws uncatchable errors when it hits 403/404/500/etc.

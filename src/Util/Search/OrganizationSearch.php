@@ -12,17 +12,17 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class OrganizationSearch implements EntitySearchInterface
+class OrganizationSearch implements SearchInterface
 {
 	/**
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	public function __construct(
-		private UrlGeneratorInterface $router,
-		private OrganizationRepository $organizationRepository,
-		private TranslatorInterface $translator,
-		private SluggerInterface $slugger,
-		private HashidsInterface $idHasher
+		private readonly UrlGeneratorInterface $router,
+		private readonly OrganizationRepository $organizationRepository,
+		private readonly TranslatorInterface $translator,
+		private readonly SluggerInterface $slugger,
+		private readonly HashidsInterface $idHasher
 	) {
 	}
 
@@ -49,7 +49,7 @@ class OrganizationSearch implements EntitySearchInterface
 
 			// Apply the actual search
 			foreach ($sluggedQueryParts as $part) {
-				if (strpos($sluggedOrganizationName, $part) === false) {
+				if (!str_contains($sluggedOrganizationName, $part)) {
 					continue 2;
 				}
 			}

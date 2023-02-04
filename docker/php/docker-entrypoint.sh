@@ -63,6 +63,13 @@ if [ "$1" = 'php-fpm' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ] || [ "$1
 	setfacl -R -m u:www-data:rwX -m u:"$(whoami)":rwX var
 	setfacl -dR -m u:www-data:rwX -m u:"$(whoami)":rwX var
 
+	if [ ! -f config/jwt/private.pem ]; then
+		echo "API authentication: initializing public and private keys for JWT generation"
+    php bin/console lexik:jwt:generate-keypair
+		setfacl -R -m u:www-data:rX -m u:"$(whoami)":rwX config/jwt
+		setfacl -dR -m u:www-data:rX -m u:"$(whoami)":rwX config/jwt
+	fi
+
 	echo "Setting up cronjobs"
 	cat config/cronjobs > /etc/crontabs/root
 	echo "" >> /etc/crontabs/root

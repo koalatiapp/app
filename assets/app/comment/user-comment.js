@@ -164,7 +164,7 @@ export class UserComment extends LitElement {
 			${this.showReplyEditor ? html`
 				<br>
 				<comment-editor projectId=${this.data.project.id}
-					checklistItemId=${this.data?.checklistItem?.id || ""}
+					checklistItemIri=${this.data?.checklist_item || ""}
 					threadId=${this.commentId}
 					@submitted-comment=${() => this.showReplyEditor = false}>
 				</comment-editor>
@@ -183,9 +183,7 @@ export class UserComment extends LitElement {
 			return;
 		}
 
-		ApiClient.get("api_comments_details", { id: this.commentId }).then(response => {
-			this._loadData(response.data);
-		});
+		ApiClient.get(`/api/comments/${this.commentId}`).then(this._loadData);
 	}
 
 	_loadData(data)
@@ -199,11 +197,11 @@ export class UserComment extends LitElement {
 		this.data = data;
 		this.commentId = data.id;
 		this.thread = thread;
-		this.dateCreated = new Date(data.dateCreated);
-		this.authorAvatarUrl = data.author?.avatarUrl ?? this.placeholderUrl;
-		this.authorName = data.authorName;
+		this.dateCreated = new Date(data.date_created);
+		this.authorAvatarUrl = data.author_avatar || this.placeholderUrl;
+		this.authorName = data.author_name;
 		this.content = data.content;
-		this.isResolved = data.isResolved;
+		this.isResolved = data.is_resolved;
 		this.replies = Object.values(data.replies);
 		this._loaded = true;
 
@@ -215,8 +213,8 @@ export class UserComment extends LitElement {
 		const resolveButton = this.shadowRoot.querySelector("nb-button.resolve");
 		resolveButton.loading = true;
 
-		ApiClient.patch("api_comments_resolve", { id: this.commentId }).then(response => {
-			this.isResolved = response.data.isResolved;
+		ApiClient.patch(`/api/comments/${this.commentId}`, { is_resolved: true }).then(response => {
+			this.isResolved = response.is_resolved;
 		}).finally(() => {
 			resolveButton.loading = false;
 		});

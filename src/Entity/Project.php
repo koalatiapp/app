@@ -2,13 +2,23 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use App\Api\State\ProjectProcessor;
 use App\Entity\Checklist\Checklist;
 use App\Entity\Testing\IgnoreEntry;
 use App\Entity\Testing\Recommendation;
 use App\Mercure\MercureEntityInterface;
 use App\Repository\ProjectRepository;
 use App\Util\Testing\RecommendationGroup;
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
@@ -18,122 +28,123 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass=ProjectRepository::class)
- * @SuppressWarnings("ExcessiveClassComplexity")
+ * @SuppressWarnings("PHPMD.ExcessiveClassComplexity")
+ * @SuppressWarnings("PHPMD.ExcessivePublicCount")
  */
+#[ApiResource(
+	processor: ProjectProcessor::class,
+	normalizationContext: ["groups" => "project.read"],
+	denormalizationContext: ["groups" => "project.write"],
+	operations: [
+		new Get(security: "is_granted('project_view', object)"),
+		new GetCollection(normalizationContext: ["groups" => "project.list"]),
+		new Post(security: "is_granted('project_edit', object)"),
+		new Put(security: "is_granted('project_edit', object)"),
+		new Patch(security: "is_granted('project_edit', object)"),
+		new Delete(security: "is_granted('project_edit', object)"),
+	],
+)]
+#[ApiFilter(OrderFilter::class, properties: ['dateCreated', 'name'])]
+#[ApiFilter(SearchFilter::class, properties: ['ownerOrganization' => 'exact', 'ownerUser' => 'exact', 'tags' => 'partial'])]
+#[ORM\Entity(repositoryClass: ProjectRepository::class)]
 class Project implements MercureEntityInterface
 {
-	public const STATUS_NEW = 'NEW';
-	public const STATUS_IN_PROGRESS = 'IN_PROGRESS';
-	public const STATUS_MAINTENANCE = 'MAINTENANCE';
-	public const STATUS_COMPLETED = 'COMPLETED';
+	final public const STATUS_NEW = 'NEW';
+	final public const STATUS_IN_PROGRESS = 'IN_PROGRESS';
+	final public const STATUS_MAINTENANCE = 'MAINTENANCE';
+	final public const STATUS_COMPLETED = 'COMPLETED';
 
-	public const ROLE_ADMIN = 'ROLE_ADMIN';
-	public const ROLE_MANAGE = 'ROLE_MANAGE';
-	public const ROLE_USER = 'ROLE_USER';
-	public const ROLE_INVITED = 'ROLE_INVITED';
+	final public const ROLE_ADMIN = 'ROLE_ADMIN';
+	final public const ROLE_MANAGE = 'ROLE_MANAGE';
+	final public const ROLE_USER = 'ROLE_USER';
+	final public const ROLE_INVITED = 'ROLE_INVITED';
 
-	/**
-	 * @var int
-	 * @ORM\Id
-	 * @ORM\GeneratedValue
-	 * @ORM\Column(type="integer")
-	 * @Groups({"default"})
-	 */
-	private $id = null;
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[ORM\Column(type: 'integer')]
+	#[Groups(['project.list', 'project.read'])]
+	private ?int $id = null;
 
-	/**
-	 * @var string
-	 * @Assert\NotBlank
-	 * @Assert\Length(max = 255)
-	 * @ORM\Column(type="string", length=255)
-	 * @Groups({"default"})
-	 */
-	private $name;
+	#[Assert\NotBlank]
+	#[Assert\Length(max: 255)]
+	#[ORM\Column(type: 'string', length: 255)]
+	#[Groups(['project.list', 'project.read', 'project.write'])]
+	private ?string $name = null;
 
-	/**
-	 * @var \DateTimeInterface
-	 * @ORM\Column(type="datetime")
-	 * @Groups({"default"})
-	 */
-	private $dateCreated;
+	#[ORM\Column(type: 'datetime')]
+	#[Groups(['project.list', 'project.read'])]
+	private \DateTimeInterface $dateCreated;
 
-	/**
-	 * @var string
-	 * @Assert\NotBlank
-	 * @Assert\Url(relativeProtocol = true)
-	 * @ORM\Column(type="string", length=512)
-	 * @Groups({"default"})
-	 */
-	private $url;
+	#[Assert\NotBlank]
+	#[Assert\Url(relativeProtocol: true)]
+	#[ORM\Column(type: 'string', length: 512)]
+	#[Groups(['project.list', 'project.read', 'project.write'])]
+	private ?string $url = null;
 
 	/**
 	 * @var Collection<int, Page>
-	 * @ORM\OneToMany(targetEntity=Page::class, mappedBy="project")
-	 * @Groups({"project"})
-	 * @MaxDepth(1)
 	 */
-	private $pages;
+	#[ORM\OneToMany(targetEntity: Page::class, mappedBy: 'project')]
+	#[Groups(['project.read'])]
+	#[MaxDepth(1)]
+	private Collection $pages;
 
 	/**
 	 * @var Collection<int, ProjectMember>
-	 * @ORM\OneToMany(targetEntity=ProjectMember::class, mappedBy="project")
-	 * @Groups({"default"})
-	 * @MaxDepth(1)
 	 */
-	private $teamMembers;
+	#[ORM\OneToMany(targetEntity: ProjectMember::class, mappedBy: 'project')]
+	#[MaxDepth(1)]
+	private Collection $teamMembers;
 
 	/**
-	 * @ORM\OneToMany(targetEntity=IgnoreEntry::class, mappedBy="targetProject")
-	 *
-	 * @var \Doctrine\Common\Collections\Collection<int, IgnoreEntry>
+	 * @var Collection<int,Recommendation>
 	 */
-	private $ignoreEntries;
+	#[ORM\OneToMany(targetEntity: Recommendation::class, mappedBy: 'project')]
+	private Collection $recommendations;
 
 	/**
-	 * @ORM\Column(type="array", nullable=true)
-	 *
+	 * @var Collection<int, IgnoreEntry>
+	 */
+	#[ORM\OneToMany(targetEntity: IgnoreEntry::class, mappedBy: 'targetProject')]
+	private Collection $ignoreEntries;
+	/**
 	 * @var array<int,string>|null
 	 */
+	#[ORM\Column(type: 'array', nullable: true)]
+	#[Groups(['project.list', 'project.read', 'project.write'])]
 	private ?array $disabledTools = [];
 
-	/**
-	 * @ORM\OneToOne(targetEntity=Checklist::class, mappedBy="project", cascade={"persist", "remove"})
-	 */
-	private ?Checklist $checklist;
+	#[ORM\OneToOne(targetEntity: Checklist::class, mappedBy: 'project', cascade: ['persist', 'remove'])]
+	private ?Checklist $checklist = null;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity=User::class, inversedBy="personalProjects")
-	 * @ORM\JoinColumn(name="owner_user_id", referencedColumnName="id", onDelete="CASCADE")
-	 * @Groups({"default"})
-	 */
+	#[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'personalProjects')]
+	#[ORM\JoinColumn(name: 'owner_user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+	#[Groups(['project.list', 'project.read'])]
 	private ?User $ownerUser = null;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity=Organization::class, inversedBy="projects")
-	 * @ORM\JoinColumn(name="owner_organization_id", referencedColumnName="id", onDelete="CASCADE")
-	 * @Groups({"default"})
-	 */
+	#[ORM\ManyToOne(targetEntity: Organization::class, inversedBy: 'projects')]
+	#[ORM\JoinColumn(name: 'owner_organization_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+	#[Groups(['project.list', 'project.read', 'project.write'])]
 	private ?Organization $ownerOrganization = null;
+
 	/**
-	 * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="project")
-	 * @ORM\OrderBy({"isResolved" = "ASC"}, {"dateCreated" = "ASC"})
-	 * @Groups({"comments"})
-	 *
 	 * @var Collection<int,Comment>
 	 */
+	#[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'project')]
+	#[ORM\OrderBy(['isResolved' => 'ASC', 'dateCreated' => 'ASC'])]
+	#[Groups(['comments'])]
 	private Collection $comments;
 
 	/**
-	 * @ORM\Column(type="array", nullable=true)
-	 *
 	 * @var array<int,string>
 	 */
+	#[ORM\Column(type: 'array', nullable: true)]
+	#[Groups(['project.list', 'project.read'])]
 	private ?array $tags = [];
 
 	public function __construct()
 	{
-		$this->dateCreated = new DateTime();
+		$this->dateCreated = new \DateTime();
 		$this->pages = new ArrayCollection();
 		$this->teamMembers = new ArrayCollection();
 		$this->ignoreEntries = new ArrayCollection();
@@ -253,9 +264,27 @@ class Project implements MercureEntityInterface
 		return $this;
 	}
 
-	public function getOwner(): Organization|User
+	public function getOwner(): Organization|User|null
 	{
 		return $this->getOwnerOrganization() ?: $this->getOwnerUser();
+	}
+
+	/**
+	 * @return User|null the user who owns this project (or who owns the organization that owns this project)
+	 */
+	public function getTopLevelOwner(): User|null
+	{
+		if ($organization = $this->getOwnerOrganization()) {
+			return $organization->getOwner();
+		}
+
+		return $this->getOwnerUser();
+	}
+
+	#[Groups(['project.list', 'project.read'])]
+	public function getOwnerOrganizationName(): ?string
+	{
+		return $this->getOwnerOrganization()?->getName();
 	}
 
 	/**
@@ -289,49 +318,55 @@ class Project implements MercureEntityInterface
 	}
 
 	/**
-	 * @return ArrayCollection<int,Recommendation>
+	 * @return Collection<int,Recommendation>
 	 */
-	public function getRecommendations(): ArrayCollection
+	public function getRecommendations(): Collection
 	{
-		$recommendations = new ArrayCollection();
-
-		foreach ($this->getActivePages() as $page) {
-			foreach ($page->getRecommendations() as $recommendation) {
-				$recommendations->add($recommendation);
-			}
-		}
-
-		return $recommendations;
+		return $this->recommendations;
 	}
 
 	/**
-	 * @return ArrayCollection<int,Recommendation>
+	 * @param Collection<int,Recommendation> $recommendations
 	 */
-	public function getSortedRecommendations(): ArrayCollection
+	public function setRecommendations(Collection $recommendations): self
 	{
-		/**
-		 * @var \ArrayIterator<int, Recommendation> $recommendationIterator
-		 */
-		$recommendationIterator = $this->getRecommendations()->getIterator();
-		$recommendationIterator->uasort(function ($a, $b) {
-			$priorities = Recommendation::TYPE_PRIORITIES;
+		$this->recommendations = $recommendations;
 
-			return $priorities[$a->getType()] > $priorities[$b->getType()] ? 1 : -1;
-		});
-
-		return new ArrayCollection(iterator_to_array($recommendationIterator));
+		return $this;
 	}
 
 	/**
+	 * Returns all recommendations that are linked to active pages,
+	 * that are not ignored and that are not completed.
+	 *
 	 * @return ArrayCollection<int,Recommendation>
 	 */
 	public function getActiveRecommendations(): ArrayCollection
 	{
-		return $this->getSortedRecommendations()->filter(function ($recommendation) {
-			return !$recommendation->getIsCompleted()
-							   && !$recommendation->isIgnored()
-							   && !$recommendation->getRelatedPage()->getIsIgnored();
+		$recommendations = $this->recommendations->filter(
+			function (Recommendation $recommendation = null) {
+				return !$recommendation->getIsCompleted()
+					&& !$recommendation->isIgnored()
+					&& !$recommendation->getRelatedPage()->getIsIgnored();
+			}
+		);
+
+		// Sort the recommendations by priority level
+		/** @var \ArrayIterator<int, Recommendation> $recommendationIterator */
+		$recommendationIterator = $recommendations->getIterator();
+		$recommendationIterator->uasort(function (Recommendation $a, Recommendation $b) {
+			$priorities = Recommendation::TYPE_PRIORITIES;
+
+			if ($priorities[$a->getType()] > $priorities[$b->getType()]) {
+				return 1;
+			} elseif ($priorities[$a->getType()] < $priorities[$b->getType()]) {
+				return -1;
+			}
+
+			return strnatcasecmp($a->getTitle(), $b->getTitle());
 		});
+
+		return new ArrayCollection(iterator_to_array($recommendationIterator));
 	}
 
 	/**
@@ -398,9 +433,7 @@ class Project implements MercureEntityInterface
 
 	public function enableTool(string $tool): self
 	{
-		$this->disabledTools = array_filter($this->getDisabledTools(), function ($disabledTool) use ($tool) {
-			return strcasecmp($tool, $disabledTool) != 0;
-		});
+		$this->disabledTools = array_filter($this->getDisabledTools(), fn ($disabledTool) => strcasecmp($tool, $disabledTool) != 0);
 
 		return $this;
 	}
@@ -443,6 +476,7 @@ class Project implements MercureEntityInterface
 		return $this->getChecklist()?->getCompletionPercentage() ?: 0;
 	}
 
+	#[Groups(['project.list', 'project.read'])]
 	public function getStatus(): string
 	{
 		$checklist = $this->getChecklist();
@@ -468,32 +502,20 @@ class Project implements MercureEntityInterface
 	 */
 	public function getComments(): Collection
 	{
-		return $this->comments->filter(function (Comment $comment) {
-			return !$comment->getThread();
-		});
+		return $this->comments->filter(fn (Comment $comment = null) => !$comment->getThread());
 	}
 
-	/**
-	 * @Groups({"default"})
-	 */
 	public function getCommentCount(): int
 	{
 		return $this->comments->count();
 	}
 
-	/**
-	 * @Groups({"default"})
-	 */
 	public function getUnresolvedCommentCount(): int
 	{
-		return $this->comments->filter(function (Comment $comment) {
-			return !$comment->isResolved() && !$comment->getThread();
-		})->count();
+		return $this->comments->filter(fn (Comment $comment = null) => !$comment->isResolved() && !$comment->getThread())->count();
 	}
 
 	/**
-	 * @Groups({"default"})
-	 *
 	 * @return array<int,string>
 	 */
 	public function getTags(): array
@@ -523,5 +545,10 @@ class Project implements MercureEntityInterface
 	public function hasTag(string $tag): bool
 	{
 		return in_array($tag, $this->getTags());
+	}
+
+	public function getMercureSerializationGroup(): string
+	{
+		return "project.read";
 	}
 }

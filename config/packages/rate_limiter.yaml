@@ -1,0 +1,27 @@
+framework:
+    rate_limiter:
+        app_authentication:
+            # App authentication calls are limited to 20 calls, with 1 new call allowed every minute
+            policy: 'token_bucket'
+            limit: 20
+            rate: { interval: '1 minute', amount: 1 }
+        anonymous_api:
+            # API authentication calls are limited to 60 calls per hour
+            policy: 'fixed_window'
+            limit: 60
+            interval: '60 minutes'
+        authenticated_api:
+            # API calls are limited to 60 calls per minute
+            policy: 'token_bucket'
+            limit: 60
+            rate: { interval: '1 second', amount: 1 }
+
+when@test:
+    framework:
+        rate_limiter:
+            anonymous_api:
+                limit: 60000
+            authenticated_api:
+                limit: 60000
+            app_authentication:
+                limit: 60000

@@ -14,11 +14,11 @@ test.describe("checklist", () => {
 		await page.click("#sidebar >> text=Checklist");
 
 		// Get the first checklist item
-		const checklistItem = page.locator('checklist-item-list .nb--list-item').first();
+		const checklistItem = page.locator("checklist-item-list .nb--list-item").first();
 		const itemTitle = await checklistItem.locator("[nb-column='title'] nb-markdown").innerText();
 
 		// Click the Learn more link
-		await checklistItem.locator('text=Learn more').first().click();
+		await checklistItem.locator("text=Learn more").first().click();
 
 		// Check that the sidepanel opened with the right info
 		const sidepanel = page.locator("nb-sidepanel");

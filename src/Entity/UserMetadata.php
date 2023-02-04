@@ -5,41 +5,22 @@ namespace App\Entity;
 use App\Repository\UserMetadataRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=UserMetadataRepository::class)
- */
+#[ORM\Entity(repositoryClass: UserMetadataRepository::class)]
 class UserMetadata
 {
-	public const TRIAL_ENDING_NOTICE_SENT = 'trial_ending_notice_sent';
+	final public const TRIAL_ENDING_NOTICE_SENT = 'trial_ending_notice_sent';
 
-	/**
-	 * @ORM\Id
-	 * @ORM\GeneratedValue
-	 * @ORM\Column(type="integer")
-	 */
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[ORM\Column(type: 'integer')]
 	private ?int $id = null;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity=User::class, inversedBy="metadata")
-	 * @ORM\JoinColumn(nullable=false)
-	 */
-	private User $user;
-
-	/**
-	 * @ORM\Column(type="string", length=255)
-	 */
-	private string $name;
-
-	/**
-	 * @ORM\Column(type="string", length=255)
-	 */
-	private string $value;
-
-	public function __construct(User $user, string $name, string $value = '')
+	public function __construct(#[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'metadata')]
+		#[ORM\JoinColumn(nullable: false)]
+		private User $user, #[ORM\Column(type: 'string', length: 255)]
+		private string $name, #[ORM\Column(type: 'string', length: 255)]
+		private string $value = '')
 	{
-		$this->user = $user;
-		$this->name = $name;
-		$this->value = $value;
 	}
 
 	public function getId(): ?int

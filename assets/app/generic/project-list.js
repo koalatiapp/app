@@ -60,7 +60,7 @@ export class ProjectList extends AbstractDynamicList {
 				key: "icon",
 				label: "",
 				render: (item) => html`
-					<img src="${item.faviconUrl}" loading="lazy" width="25" height="25" class="favicon">
+					<img src="${item.favicon_url}" loading="lazy" width="25" height="25" class="favicon">
 				`,
 				placeholder: html`
 					<div class="nb--list-item-column-placeholder" style="width: 25px; line-height: 25px;">&nbsp;</div>
@@ -97,18 +97,18 @@ export class ProjectList extends AbstractDynamicList {
 				placeholder: html`
 					<div class="nb--list-item-column-placeholder" style="width: 70%;">&nbsp;</div>
 				`,
-				sortingValue: item => item.dateCreated
+				sortingValue: item => item.date_created
 			},
 			{
 				key: "createdDate",
 				label: "project.date_created",
 				render: (item) => html`
-					${timeago.format(item.dateCreated)}
+					${timeago.format(item.date_created)}
 				`,
 				placeholder: html`
 					<div class="nb--list-item-column-placeholder" style="width: 70%;">&nbsp;</div>
 				`,
-				sortingValue: item => item.dateCreated
+				sortingValue: item => item.date_created
 			},
 			{
 				key: "actions",
@@ -155,16 +155,16 @@ export class ProjectList extends AbstractDynamicList {
 
 	fetchListData()
 	{
-		super.fetchListData("api_projects_list", { owner_type: this.ownerType, owner_organization_id: this.organizationId });
+		if (this.organizationId) {
+			return super.fetchListData("/api/projects", { owner_organization: `/api/organizations/${this.organizationId}` });
+		}
+
+		return super.fetchListData("/api/projects");
 	}
 
 	static _getProjectOwnerName(item)
 	{
-		if (item.ownerOrganization) {
-			return item.ownerOrganization.name;
-		}
-
-		return Translator.trans("generic.you");
+		return item.owner_organization_name || Translator.trans("generic.you");
 	}
 
 	_emptyStateLabel()

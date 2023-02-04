@@ -8,60 +8,41 @@ use App\Repository\Checklist\ChecklistTemplateRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
 
-/**
- * @ORM\Entity(repositoryClass=ChecklistTemplateRepository::class)
- */
+#[ORM\Entity(repositoryClass: ChecklistTemplateRepository::class)]
 class ChecklistTemplate
 {
-	/**
-	 * @ORM\Id
-	 * @ORM\GeneratedValue
-	 * @ORM\Column(type="integer")
-	 */
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[ORM\Column(type: 'integer')]
 	private ?int $id = null;
 
-	/**
-	 * @ORM\Column(type="string", length=255)
-	 */
-	private ?string $name;
+	#[ORM\Column(type: 'string', length: 255)]
+	private ?string $name = null;
+
+	#[ORM\Column(type: 'text', nullable: true)]
+	private ?string $description = null;
+
+	#[ORM\Column(type: 'boolean')]
+	private ?bool $isPublic = null;
 
 	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	private ?string $description;
-
-	/**
-	 * @ORM\Column(type="boolean")
-	 */
-	private ?bool $isPublic;
-
-	/**
-	 * @ORM\Column(type="json")
-	 *
 	 * @var array<mixed,mixed>
 	 */
+	#[ORM\Column(type: 'json')]
 	private ?array $checklistContent = [];
-	/**
-	 * @ORM\ManyToOne(targetEntity=User::class, inversedBy="checklistTemplates")
-	 * @ORM\JoinColumn(name="owner_user_id", referencedColumnName="id", onDelete="CASCADE")
-	 * @Groups({"default"})
-	 */
-	private ?User $ownerUser;
+	#[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'checklistTemplates')]
+	#[ORM\JoinColumn(name: 'owner_user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+	private ?User $ownerUser = null;
+
+	#[ORM\ManyToOne(targetEntity: Organization::class, inversedBy: 'checklistTemplates')]
+	#[ORM\JoinColumn(name: 'owner_organization_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+	private ?Organization $ownerOrganization = null;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity=Organization::class, inversedBy="checklistTemplates")
-	 * @ORM\JoinColumn(name="owner_organization_id", referencedColumnName="id", onDelete="CASCADE")
-	 * @Groups({"default"})
-	 */
-	private ?Organization $ownerOrganization;
-
-	/**
-	 * @ORM\OneToMany(targetEntity=Checklist::class, mappedBy="template")
-	 *
 	 * @var Collection<int,Checklist>
 	 */
+	#[ORM\OneToMany(targetEntity: Checklist::class, mappedBy: 'template')]
 	private Collection $childChecklists;
 
 	public function __construct()

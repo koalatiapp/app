@@ -1,5 +1,4 @@
 security:
-    enable_authenticator_manager: true
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
@@ -15,6 +14,20 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        api_auth:
+            pattern: ^/api/
+            stateless: true
+            provider: app_user_provider
+            entry_point: jwt
+            json_login:
+                check_path: api_auth # The name in routes.yaml is enough for mapping
+                username_path: email
+                password_path: password
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+            jwt: ~
+            refresh_jwt:
+                check_path: api_refresh_token
         main:
             lazy: true
             provider: app_user_provider
@@ -32,9 +45,13 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
+        - { path: ^/api/docs, roles: PUBLIC_ACCESS } # Allows accessing the Swagger UI docs
+        - { path: ^/api/auth, roles: PUBLIC_ACCESS }
+        - { path: ^/api/token/refresh, roles: PUBLIC_ACCESS }
+        - { path: ^/team/invitation/.+/.+, roles: PUBLIC_ACCESS }
         - { path: ^/(login|logout|sign-up|reset-password(/.+)?|translations)$ }
         - { path: ^/verify-email }
-        - { path: ^/api/public/ }
+        - { path: ^/internal-api/public/ }
         - { path: ^/webhook/ }
         - { path: ^/free-checklist }
         - { path: ^/, roles: ROLE_USER }

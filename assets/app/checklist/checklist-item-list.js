@@ -41,7 +41,7 @@ export class ChecklistItemList extends AbstractDynamicList {
 				key: "checkbox",
 				label: "",
 				render: (item, list) => html`
-					<nb-checkbox id="checklist-item-${item.id}-checkbox" aria-labelledby="checklist-item-${item.id}-title" ?checked=${item.isCompleted} @change=${() => list._toggleItemCompletionCallback(item)}></nb-checkbox>
+					<nb-checkbox id="checklist-item-${item.id}-checkbox" aria-labelledby="checklist-item-${item.id}-title" ?checked=${item.is_completed} @change=${() => list._toggleItemCompletionCallback(item)}></nb-checkbox>
 				`,
 				placeholder: html`
 					<div class="nb--list-item-column-placeholder" style="width: 3ch; height: 3ch;">&nbsp;</div>
@@ -60,12 +60,12 @@ export class ChecklistItemList extends AbstractDynamicList {
 							${Translator.trans("project_checklist.item.view_more")}
 						</a>
 						${list.projectId ? html`
-							<a href="#" class="view-item-details comments ${item.unresolvedCommentCount ? "unresolved" : (item.commentCount ? "resolved" : "none")}"
+							<a href="#" class="view-item-details comments ${item.unresolved_comment_count ? "unresolved" : (item.comment_count ? "resolved" : "none")}"
 								@click=${e => { e.preventDefault(); list._expandChecklistItem(item, false); }}>
 								<i class="fad fa-comment"></i>&nbsp;
-								${item.unresolvedCommentCount
-									? Translator.transChoice("project_checklist.item.unresolved_comments_count", item.unresolvedCommentCount, { "count": item.unresolvedCommentCount })
-									: Translator.transChoice("project_checklist.item.comments_count", item.commentCount, { "count": item.commentCount })
+								${item.unresolved_comment_count
+									? Translator.transChoice("project_checklist.item.unresolved_comments_count", item.unresolved_comment_count, { "count": item.unresolved_comment_count })
+									: Translator.transChoice("project_checklist.item.comments_count", item.comment_count, { "count": item.comment_count })
 								}
 							</a>
 						`: ""}
@@ -166,7 +166,7 @@ export class ChecklistItemList extends AbstractDynamicList {
 
 	fetchListData()
 	{
-		super.fetchListData("api_checklist_item_list", { project_id: this.projectId, group_id: this.groupId });
+		super.fetchListData(`/api/checklist_item_groups/${this.groupId}`, null, "items");
 	}
 
 	/**
@@ -177,15 +177,15 @@ export class ChecklistItemList extends AbstractDynamicList {
 	{
 		for (const existingItem of this.items) {
 			if (existingItem.id == item.id) {
-				existingItem.isCompleted = !existingItem.isCompleted;
+				existingItem.is_completed = !existingItem.is_completed;
 				break;
 			}
 		}
 
 		this.requestUpdate("items");
-		this.dispatchEvent(new CustomEvent("checklist-item-toggled", { bubbles: true, composed: true, detail: { item, checked: item.isCompleted } }));
+		this.dispatchEvent(new CustomEvent("checklist-item-toggled", { bubbles: true, composed: true, detail: { item, checked: item.is_completed } }));
 
-		window.plausible("Checklist usage", { props: { action: item.isCompleted ? "Checked item" : "Unchecked item" } });
+		window.plausible("Checklist usage", { props: { action: item.is_completed ? "Checked item" : "Unchecked item" } });
 	}
 
 	_expandChecklistItem(item, expandResources)
@@ -197,12 +197,12 @@ export class ChecklistItemList extends AbstractDynamicList {
 				<script type="text/markdown">${item.description}</script>
 			</nb-markdown>
 
-			${item.resourceUrls?.length ? html`
+			${item.resource_urls?.length ? html`
 				<nb-accordion ?open=${expandResources}>
 					<div slot="summary">${Translator.trans("project_checklist.item.resources")}</div>
 
 					<ul class="grid cols-2" style="--grid-gap: 1rem;">
-						${item.resourceUrls.map(url => html`
+						${item.resource_urls.map(url => html`
 							<li>
 								<link-preview-card url=${url}></link-preview-card>
 							</li>`
@@ -215,7 +215,7 @@ export class ChecklistItemList extends AbstractDynamicList {
 				<hr>
 				<h3>${Translator.trans("comment.section_heading")}</h3>
 				<br>
-				<comment-list projectId=${this.projectId} checklistItemId=${item.id}></comment-list>
+				<comment-list projectId=${this.projectId} checklistItemIri=${item["@id"]}></comment-list>
 			` : ""}
 		`, sidepanel);
 		document.body.append(sidepanel);

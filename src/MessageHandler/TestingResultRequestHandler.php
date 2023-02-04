@@ -14,13 +14,13 @@ use App\Repository\PageRepository;
 use App\Repository\ProjectRepository;
 use App\Repository\Testing\RecommendationRepository;
 use App\Util\Testing\RecommendationGroup;
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-class TestingResultRequestHandler implements MessageHandlerInterface
+#[AsMessageHandler]
+class TestingResultRequestHandler
 {
 	/**
 	 * @var array<int,Project>
@@ -35,12 +35,12 @@ class TestingResultRequestHandler implements MessageHandlerInterface
 	private array $completedRecommendations = [];
 
 	public function __construct(
-		private EntityManagerInterface $entityManager,
-		private ProjectRepository $projectRepository,
-		private RecommendationRepository $recommendationRepository,
-		private PageRepository $pageRepository,
-		private UpdateDispatcher $updateDispatcher,
-		private MessageBusInterface $bus,
+		private readonly EntityManagerInterface $entityManager,
+		private readonly ProjectRepository $projectRepository,
+		private readonly RecommendationRepository $recommendationRepository,
+		private readonly PageRepository $pageRepository,
+		private readonly UpdateDispatcher $updateDispatcher,
+		private readonly MessageBusInterface $bus,
 	) {
 	}
 
@@ -122,7 +122,7 @@ class TestingResultRequestHandler implements MessageHandlerInterface
 	 */
 	private function processToolResponse(array $payload): ToolResponse
 	{
-		$now = new DateTime();
+		$now = new \DateTime();
 
 		// Generate the base tool response
 		$toolResponse = $this->createToolResponse($payload);
@@ -221,7 +221,7 @@ class TestingResultRequestHandler implements MessageHandlerInterface
 				'template' => $rawRecommendation[0],
 				'params' => $rawRecommendation[1],
 				'type' => ($rawRecommendation[2] ?? null) ?: Recommendation::TYPE_OPTIMIZATION,
-				'uniqueName' => substr($rawRecommendation[0], 0, 255),
+				'uniqueName' => substr((string) $rawRecommendation[0], 0, 255),
 			];
 		}
 

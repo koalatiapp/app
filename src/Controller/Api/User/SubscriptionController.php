@@ -11,9 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/api/user/subscription", name="api_user_subscription_")
- */
+#[Route(path: '/internal-api/user/subscription', name: 'api_user_subscription_')]
 class SubscriptionController extends AbstractController
 {
 	use ApiControllerTrait;
@@ -27,9 +25,7 @@ class SubscriptionController extends AbstractController
 		}
 	}
 
-	/**
-	 * @Route("/change", methods={"POST","PUT"}, name="change_plan", options={"expose": true})
-	 */
+	#[Route(path: '/change', methods: ['POST', 'PUT'], name: 'change_plan', options: ['expose' => true])]
 	public function changePlan(Request $request, SubscriptionUpdater $subscriptionUpdater): JsonResponse
 	{
 		$user = $this->getUser();
@@ -44,9 +40,7 @@ class SubscriptionController extends AbstractController
 		return $this->apiSuccess();
 	}
 
-	/**
-	 * @Route("/cancel", methods={"POST","PUT"}, name="cancel_plan", options={"expose": true})
-	 */
+	#[Route(path: '/cancel', methods: ['POST', 'PUT'], name: 'cancel_plan', options: ['expose' => true])]
 	public function cancelPlan(SubscriptionUpdater $subscriptionUpdater): JsonResponse
 	{
 		$user = $this->getUser();

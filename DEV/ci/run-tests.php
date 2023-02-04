@@ -9,7 +9,7 @@ if (!exec('command -v docker-compose')) {
 	printf("  \033[1;31mThis script is meant to be executed from your local computer / host machine.\033[0m".PHP_EOL);
 	printf("  \033[1;31mFor more information, try running this script with --help.\033[0m".PHP_EOL);
 	printf(PHP_EOL);
-	exit();
+	exit;
 }
 
 // Display help if requested
@@ -24,7 +24,7 @@ if (isset($options['h']) || isset($options['help'])) {
 	printf("\033[0;32m      --type[=frontend,backend,e2e,unit,functional]       Defines the types of tests that will run. \033[1;30m(Ex.: \"--type=frontend,unit\" will only run unit tests for frontend components)\033[0m".PHP_EOL);
 	printf("\033[0;32m  -v, --verbose                                           Shows the output of every command executed.\033[0m".PHP_EOL);
 	printf(PHP_EOL);
-	exit();
+	exit;
 }
 
 // Utility functions
@@ -62,7 +62,7 @@ function parseTypeOption(): array
 			printf("  \033[1;31m   %s\033[0m".PHP_EOL, $type);
 			printf("  \033[1;31mFor more information, try running this script with --help.\033[0m".PHP_EOL);
 			printf(PHP_EOL);
-			exit();
+			exit;
 		}
 	}
 
@@ -140,6 +140,24 @@ try {
 		$verboseMode
 	);
 
+	if ($types['frontend']) {
+		if ($types['unit']) {
+			runCommand(
+				'Running JS unit tests... ',
+				'npm run test:unit',
+				$verboseMode
+			);
+		}
+	}
+
+	if ($types['e2e']) {
+		runCommand(
+			'Running end-to-end tests... ',
+			'npm run test:e2e',
+			$verboseMode
+		);
+	}
+
 	if ($types['backend']) {
 		if ($types['unit'] && $types['functional']) {
 			runCommand(
@@ -160,24 +178,6 @@ try {
 				$verboseMode
 			);
 		}
-	}
-
-	if ($types['frontend']) {
-		if ($types['unit']) {
-			runCommand(
-				'Running JS unit tests... ',
-				'npm run test:unit',
-				$verboseMode
-			);
-		}
-	}
-
-	if ($types['e2e']) {
-		runCommand(
-			'Running end-to-end tests... ',
-			'npm run test:e2e',
-			$verboseMode
-		);
 	}
 } catch (Exception $e) {
 	$hasFailed = true;

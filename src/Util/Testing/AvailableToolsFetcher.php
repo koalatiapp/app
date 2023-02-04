@@ -9,13 +9,13 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class AvailableToolsFetcher
 {
 	private const NPM_KEYWORD = 'koalati-tool';
-	private FilesystemAdapter $cache;
+	private readonly FilesystemAdapter $cache;
 
 	/**
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.httpClient)
 	 */
 	public function __construct(
-		private HttpClientInterface $httpClient,
+		private readonly HttpClientInterface $httpClient,
 	) {
 		$this->cache = new FilesystemAdapter();
 	}
@@ -55,11 +55,10 @@ class AvailableToolsFetcher
 		}
 
 		$results = $response->toArray()['objects'] ?? [];
-		$packages = array_map(function ($package) {
+
+		return array_map(function ($package) {
 			return new ToolPackage($package['package']['name'], $package['package']['description']);
 		}, $results);
-
-		return $packages;
 	}
 
 	/**

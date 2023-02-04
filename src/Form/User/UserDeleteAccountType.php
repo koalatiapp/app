@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class UserDeleteAccountType extends AbstractType
 {
-	private User $user;
+	private readonly User $user;
 
 	public function __construct(TokenStorageInterface $tokenStorage)
 	{

@@ -91,7 +91,7 @@ export class RecommendationDetails extends LitElement {
 			<h3>${Translator.trans("recommendation.modal.description_heading")}</h3>
 			<nb-markdown>
 				<script type="text/markdown">
-					${this.recommendationGroup.sample.parentResult.description}
+					${this.recommendationGroup.sample.parent_result.description}
 				</script>
 			</nb-markdown>
 
@@ -99,22 +99,22 @@ export class RecommendationDetails extends LitElement {
 
 			<h3>${Translator.trans("recommendation.modal.pages_heading")}</h3>
 			${this.recommendationGroup.recommendations.map(recommendation => {
-				const renderedTable = this.constructor._renderTable(recommendation.parentResult.dataTable);
-				const renderedSnippets = this.constructor._renderSnippets(recommendation.parentResult.snippets);
+				const renderedTable = this.constructor._renderTable(recommendation.parent_result.data_table);
+				const renderedSnippets = this.constructor._renderSnippets(recommendation.parent_result.snippets);
 				const hasDetails = renderedSnippets || renderedTable;
 
 				return html`
 					<nb-accordion ?open=${this.recommendationGroup.recommendations.indexOf(recommendation) === 0}>
 						<div slot="summary">
-							<div class="page-title">${escapeHtml(recommendation.relatedPage.title) || recommendation.relatedPage.url}</div>
-							<div class="page-url">${recommendation.relatedPage.url}</div>
+							<div class="page-title">${escapeHtml(recommendation.page_title) || recommendation.page_url}</div>
+							<div class="page-url">${recommendation.page_url}</div>
 						</div>
 
 						${renderedTable}
 						${renderedSnippets}
 						${!hasDetails ? html`<div class="page-empty-state">${Translator.trans("recommendation.modal.no_page_details")}</div>` : ""}
 
-						<p>${Translator.trans("recommendation.modal.last_occured_on", { "date": new Intl.DateTimeFormat("en-CA", { dateStyle: "medium", timeStyle: "medium" }).format(new Date(recommendation.dateLastOccured))})}</p>
+						<p>${Translator.trans("recommendation.modal.last_occured_on", { "date": new Intl.DateTimeFormat("en-CA", { dateStyle: "medium", timeStyle: "medium" }).format(new Date(recommendation.date_last_occured))})}</p>
 					</nb-accordion>
 				`;
 			})}
@@ -126,10 +126,9 @@ export class RecommendationDetails extends LitElement {
 		this._loading = true;
 
 		return new Promise(resolve => {
-			ApiClient.get("api_testing_recommendation_group_details", { id: this.recommendationId }, null)
-				.then(response => {
-					resolve(response.data);
-				}).catch(() => {
+			ApiClient.get(`/api/recommendation_groups/${this.recommendationId}`, {}, null)
+				.then(resolve)
+				.catch(() => {
 					resolve(null);
 				}).finally(() => {
 					this._loading = false;

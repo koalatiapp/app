@@ -12,15 +12,14 @@ use App\Form\Organization\NewOrganizationType;
 use App\Form\Organization\OrganizationType;
 use App\Repository\OrganizationRepository;
 use App\Security\OrganizationVoter;
+use App\Subscription\UsageManager;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
-/**
- * @Route("/team", name="organization_")
- */
+#[Route(path: '/team', name: 'organization_')]
 class OrganizationController extends AbstractController
 {
 	use SuggestUpgradeControllerTrait;
@@ -31,6 +30,7 @@ class OrganizationController extends AbstractController
 	public function __construct(
 		public OrganizationRepository $organizationRepository,
 		public SluggerInterface $slugger,
+		private UsageManager $usageManager,
 	) {
 	}
 
@@ -41,12 +41,10 @@ class OrganizationController extends AbstractController
 		return $organizationLink?->getOrganization();
 	}
 
-	/**
-	 * @Route("/create", name="create")
-	 */
+	#[Route(path: '/create', name: 'create')]
 	public function create(Request $request): Response
 	{
-		if (!$this->isGranted(OrganizationVoter::OWN_ORGANIZATION)) {
+		if (!$this->isGranted(OrganizationVoter::CREATE)) {
 			return $this->suggestPlanUpgrade('upgrade_suggestion.create_team');
 		}
 
@@ -55,15 +53,11 @@ class OrganizationController extends AbstractController
 		$form->handleRequest($request);
 
 		if ($form->isSubmitted()) {
-			$slug = $this->slugger->slug($organization->getName());
-			$organization->setSlug($slug);
-
 			if ($form->isValid()) {
-				$em = $this->getDoctrine()->getManager();
 				$membership = new OrganizationMember($organization, $this->getUser(), [OrganizationMember::ROLE_OWNER]);
-				$em->persist($organization);
-				$em->persist($membership);
-				$em->flush();
+				$this->entityManager->persist($organization);
+				$this->entityManager->persist($membership);
+				$this->entityManager->flush();
 
 				$this->addFlash('success', 'organization.flash.created_successfully', ['%name%' => $organization->getName()]);
 
@@ -78,23 +72,22 @@ class OrganizationController extends AbstractController
 		return $this->render('app/organization/create.html.twig', ['form' => $form->createView()]);
 	}
 
-	/**
-	 * @Route("/{id}", name="dashboard", defaults={"id"=null})
-	 */
-	public function dashboard(int $id = null, OrganizationRepository $organizationRepository): Response
+	#[Route(path: '/{id}', name: 'dashboard', defaults: ['id' => null])]
+	public function dashboard(int $id = null): Response
 	{
 		if ($this->getUser()->getOrganizationLinks()->isEmpty()) {
 			return $this->redirectToRoute('organization_create');
 		}
 
+		$organization = $id ? $this->organizationRepository->find($id) : $this->getDefaultOrganization();
+
 		return $this->render('app/organization/dashboard.html.twig', [
-			'organization' => $id ? $organizationRepository->find($id) : $this->getDefaultOrganization(),
-		]);
+				'organization' => $organization,
+				'usageManager' => $this->usageManager->withUser($organization->getOwner()),
+			]);
 	}
 
-	/**
-	 * @Route("/{id}/leave", name="leave")
-	 */
+	#[Route(path: '/{id}/leave', name: 'leave')]
 	public function leave(int $id, Request $request): Response
 	{
 		$organization = $this->organizationRepository->find($id);
@@ -123,9 +116,8 @@ class OrganizationController extends AbstractController
 				}
 			}
 
-			$em = $this->getDoctrine()->getManager();
-			$em->remove($membership);
-			$em->flush();
+			$this->entityManager->remove($membership);
+			$this->entityManager->flush();
 
 			$this->addFlash('success', 'organization.flash.member_left_successfully', ['%organization%' => $organization->getName()]);
 
@@ -133,18 +125,16 @@ class OrganizationController extends AbstractController
 		}
 
 		return $this->render('app/organization/leave.html.twig', [
-			'organization' => $organization,
-			'form' => $form->createView(),
-		]);
+				'organization' => $organization,
+				'form' => $form->createView(),
+			]);
 	}
 
-	/**
-	 * @Route("/{id}/settings", name="settings")
-	 */
+	#[Route(path: '/{id}/settings', name: 'settings')]
 	public function settings(int $id, Request $request): Response
 	{
 		$organization = $this->organizationRepository->find($id);
-		$this->denyAccessUnlessGranted(OrganizationVoter::MANAGE, $organization);
+		$this->denyAccessUnlessGranted(OrganizationVoter::EDIT, $organization);
 
 		$deletionForm = $this->processDeletionForm($organization, $request);
 
@@ -155,10 +145,10 @@ class OrganizationController extends AbstractController
 		$updateForm = $this->processUpdateForm($organization, $request);
 
 		return $this->render('app/organization/settings.html.twig', [
-			'organization' => $organization,
-			'form' => $updateForm->createView(),
-			'deletionForm' => $deletionForm->createView(),
-		]);
+				'organization' => $organization,
+				'form' => $updateForm->createView(),
+				'deletionForm' => $deletionForm->createView(),
+			]);
 	}
 
 	private function processDeletionForm(Organization $organization, Request $request): ?FormInterface
@@ -167,18 +157,16 @@ class OrganizationController extends AbstractController
 		$deletionForm->handleRequest($request);
 
 		if ($deletionForm->isSubmitted() && $deletionForm->isValid()) {
-			$em = $this->getDoctrine()->getManager();
-
 			foreach ($organization->getMembers() as $member) {
-				$em->remove($member);
+				$this->entityManager->remove($member);
 			}
 
 			foreach ($organization->getProjects() as $project) {
-				$em->remove($project);
+				$this->entityManager->remove($project);
 			}
 
-			$em->remove($organization);
-			$em->flush();
+			$this->entityManager->remove($organization);
+			$this->entityManager->flush();
 
 			$this->addFlash('success', 'organization.flash.deleted_successfully', ['%name%' => $organization->getName()]);
 
@@ -194,13 +182,9 @@ class OrganizationController extends AbstractController
 		$form->handleRequest($request);
 
 		if ($form->isSubmitted()) {
-			$slug = $this->slugger->slug(trim($organization->getName()));
-			$organization->setSlug($slug);
-
 			if ($form->isValid()) {
-				$em = $this->getDoctrine()->getManager();
-				$em->persist($organization);
-				$em->flush();
+				$this->entityManager->persist($organization);
+				$this->entityManager->flush();
 
 				$this->addFlash('success', 'organization.flash.updated_successfully', ['%name%' => $organization->getName()]);
 			}

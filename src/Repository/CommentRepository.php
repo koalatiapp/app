@@ -64,7 +64,7 @@ class CommentRepository extends ServiceEntityRepository
 
 		if ($requestingUser) {
 			// Add project accessibility check (looks for direct ownership or shared team project)
-			$accessibleOrganizations = $requestingUser->getOrganizationLinks()->map(fn (OrganizationMember $link) => $link->getOrganization());
+			$accessibleOrganizations = $requestingUser->getOrganizationLinks()->map(fn (OrganizationMember $link = null) => $link->getOrganization());
 
 			$userMatchExpression = $queryBuilder->expr()->orX();
 			$userMatchExpression->add($queryBuilder->expr()->eq('p.ownerUser', ':user'));

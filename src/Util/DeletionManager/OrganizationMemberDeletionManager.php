@@ -11,7 +11,7 @@ class OrganizationMemberDeletionManager
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	public function __construct(
-		private EntityManagerInterface $em
+		private readonly EntityManagerInterface $em
 	) {
 	}
 

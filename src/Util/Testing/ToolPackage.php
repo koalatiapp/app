@@ -11,25 +11,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 class ToolPackage
 {
-	/**
-	 * @Groups({"default"})
-	 */
-	public string $name;
-
-	/**
-	 * @Groups({"default"})
-	 */
+	#[Groups(['default'])]
 	public string $url;
 
-	/**
-	 * @Groups({"default"})
-	 */
-	public ?string $description;
-
-	public function __construct(string $name, ?string $description = null)
-	{
-		$this->name = $name;
-		$this->description = $description;
+	public function __construct(
+		#[Groups(['default'])]
+		public string $name,
+		#[Groups(['default'])]
+		public ?string $description = null
+	) {
 		$this->url = 'https://www.npmjs.com/package/'.$name;
 	}
 }

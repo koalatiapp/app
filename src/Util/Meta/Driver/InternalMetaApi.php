@@ -2,7 +2,7 @@
 
 namespace App\Util\Meta\Driver;
 
-use App\ApiClient\Endpoint\MetasEndpoint;
+use App\ToolsService\Endpoint\MetasEndpoint;
 use App\Util\Meta\Metadata;
 use App\Util\Meta\MetaDriverInterface;
 
@@ -12,7 +12,7 @@ class InternalMetaApi implements MetaDriverInterface
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	public function __construct(
-		private MetasEndpoint $metasEndpoint,
+		private readonly MetasEndpoint $metasEndpoint,
 	) {
 	}
 

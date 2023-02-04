@@ -1,5 +1,5 @@
 import { LitElement, html, css } from "lit";
-import { ApiClient } from "../../utils/api";
+import { InternalApiClient } from "../../utils/internal-api";
 import stylesReset from "../../native-bear/styles-reset.js";
 
 export class LinkPreviewCard extends LitElement {
@@ -86,14 +86,14 @@ export class LinkPreviewCard extends LitElement {
 
 	fetchMetadata()
 	{
-		ApiClient.get("api_link_metas", { url: this.url }).then(response => {
+		InternalApiClient.get("api_link_metas", { url: this.url }).then(response => {
 			this.url = response.data.url;
 			this.title = response.data.title ?? "";
 			this.description = response.data.description ?? "";
-			this.imageUrl = response.data.imageUrl ?? "";
+			this.imageUrl = response.data.image_url ?? "";
 
-			if (response.data.siteName && response.data.title.indexOf(response.data.siteName) != 0) {
-				this.siteName = response.data.siteName;
+			if (response.data.site_name && response.data.title.indexOf(response.data.site_name) != 0) {
+				this.siteName = response.data.site_name;
 			} else {
 				const titleSuffix = this.title.replace(/^.+(\s[-|•—]\s.+)$/, "$1");
 

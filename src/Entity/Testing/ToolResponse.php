@@ -2,65 +2,43 @@
 
 namespace App\Entity\Testing;
 
-use App\Repository\ToolResponseRepository;
-use DateTime;
-use DateTimeInterface;
+use App\Repository\Testing\ToolResponseRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
 
-/**
- * @ORM\Entity(repositoryClass=ToolResponseRepository::class)
- * @ORM\Table(indexes={
- * 		@ORM\Index(name="page_url_index", columns={"tool", "url"})
- * })
- */
+#[ORM\Table]
+#[ORM\Index(name: 'page_url_index', columns: ['tool', 'url'])]
+#[ORM\Entity(repositoryClass: ToolResponseRepository::class)]
 class ToolResponse
 {
-	/**
-	 * @ORM\Id
-	 * @ORM\GeneratedValue
-	 * @ORM\Column(type="integer")
-	 * @Groups({"default"})
-	 */
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[ORM\Column(type: 'integer')]
 	private ?int $id = null;
 
-	/**
-	 * @ORM\Column(type="string", length=255)
-	 * @Groups({"default"})
-	 */
+	#[ORM\Column(type: 'string', length: 255)]
 	private string $tool;
 
-	/**
-	 * @ORM\Column(type="string", length=510)
-	 * @Groups({"default"})
-	 */
+	#[ORM\Column(type: 'string', length: 510)]
 	private string $url;
 
-	/**
-	 * @ORM\Column(type="datetime")
-	 * @Groups({"default"})
-	 */
-	private DateTimeInterface $dateReceived;
+	#[ORM\Column(type: 'datetime')]
+	private \DateTimeInterface $dateReceived;
 
-	/**
-	 * @ORM\Column(type="integer")
-	 * @Groups({"default"})
-	 */
+	#[ORM\Column(type: 'integer')]
 	private int $processingTime;
 
 	/**
-	 * @ORM\OneToMany(targetEntity=TestResult::class, mappedBy="parentResponse", orphanRemoval=true)
-	 *
 	 * @var Collection<int,TestResult>
 	 */
+	#[ORM\OneToMany(targetEntity: TestResult::class, mappedBy: 'parentResponse', orphanRemoval: true)]
 	private Collection $testResults;
 
 	public function __construct()
 	{
 		$this->testResults = new ArrayCollection();
-		$this->dateReceived = new DateTime();
+		$this->dateReceived = new \DateTime();
 	}
 
 	public function getId(): ?int
@@ -92,12 +70,12 @@ class ToolResponse
 		return $this;
 	}
 
-	public function getDateReceived(): ?DateTimeInterface
+	public function getDateReceived(): ?\DateTimeInterface
 	{
 		return $this->dateReceived;
 	}
 
-	public function setDateReceived(DateTimeInterface $dateReceived): self
+	public function setDateReceived(\DateTimeInterface $dateReceived): self
 	{
 		$this->dateReceived = $dateReceived;
 

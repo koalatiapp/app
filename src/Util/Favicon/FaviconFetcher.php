@@ -11,7 +11,7 @@ class FaviconFetcher implements FaviconFetcherInterface
 	 * @param array<int,FaviconDriverInterface> $drivers
 	 */
 	public function __construct(
-		private array $drivers
+		private readonly array $drivers
 	) {
 	}
 
@@ -20,7 +20,7 @@ class FaviconFetcher implements FaviconFetcherInterface
 		foreach ($this->drivers as $driver) {
 			try {
 				return $driver->fetch($url);
-			} catch (Throwable $exception) {
+			} catch (Throwable) {
 				// Oh well, no icon from this driver.
 			}
 		}

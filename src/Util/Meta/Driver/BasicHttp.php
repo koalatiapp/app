@@ -13,7 +13,7 @@ class BasicHttp implements MetaDriverInterface
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	public function __construct(
-		private HttpClientInterface $httpClient,
+		private readonly HttpClientInterface $httpClient,
 	) {
 	}
 

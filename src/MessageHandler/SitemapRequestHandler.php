@@ -12,23 +12,23 @@ use App\Util\Sitemap\Builder;
 use App\Util\Sitemap\Location;
 use App\Util\Url;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Symfony\Component\HttpClient\Exception\TransportException;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\Exception\UnrecoverableMessageHandlingException;
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class SitemapRequestHandler implements MessageHandlerInterface
+#[AsMessageHandler]
+class SitemapRequestHandler
 {
 	public function __construct(
-		private ProjectRepository $projectRepository,
-		private Builder $sitemapBuilder,
-		private Url $urlHelper,
-		private EntityManagerInterface $em,
-		private MessageBusInterface $bus,
-		private HttpClientInterface $httpClient,
-		private PlanManager $planManager,
+		private readonly ProjectRepository $projectRepository,
+		private readonly Builder $sitemapBuilder,
+		private readonly Url $urlHelper,
+		private readonly EntityManagerInterface $em,
+		private readonly MessageBusInterface $bus,
+		private readonly HttpClientInterface $httpClient,
+		private readonly PlanManager $planManager,
 	) {
 	}
 
@@ -49,7 +49,6 @@ class SitemapRequestHandler implements MessageHandlerInterface
 		$supportsSsl = $this->websiteSupportsSsl($project);
 		// Crawl website and sitemap, creating/updating pages everytime a page is found
 		$websiteUrl = $this->urlHelper->standardize($project->getUrl(), $supportsSsl);
-		/** @var array<string,Page> */
 		$pagesByUrl = [];
 
 		foreach ($project->getPages() as $page) {
@@ -110,7 +109,7 @@ class SitemapRequestHandler implements MessageHandlerInterface
 			}
 
 			$pageIds = array_slice($pageIds, 0, max(0, $pageLimit - count($pageIdsSentForTest)));
-			$pageIdsSentForTest = array_merge($pageIdsSentForTest, $pageIds);
+			$pageIdsSentForTest = [...$pageIdsSentForTest, ...$pageIds];
 
 			// Dispatch a testing request to start the testing on new pages
 			if ($pageIds) {
@@ -130,7 +129,7 @@ class SitemapRequestHandler implements MessageHandlerInterface
 	{
 		try {
 			$this->em->flush();
-		} catch (Exception $exception) {
+		} catch (\Exception $exception) {
 			// Exception types can vary for integrity constraint errors
 			// But they only mean one thing in this context: the project no longer exists!
 			if (str_contains($exception->getMessage(), "SQLSTATE[23000]")) {

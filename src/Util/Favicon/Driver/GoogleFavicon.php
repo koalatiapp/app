@@ -6,11 +6,9 @@ use App\Util\Url;
 
 class GoogleFavicon implements FaviconDriverInterface
 {
-	private Url $urlHelper;
-
-	public function __construct(Url $urlHelper)
-	{
-		$this->urlHelper = $urlHelper;
+	public function __construct(
+		private readonly Url $urlHelper
+	) {
 	}
 
 	public function fetch(string $url): string

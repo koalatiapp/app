@@ -2,7 +2,7 @@ addedFiles=`echo "$(git diff --diff-filter=d --cached --name-only)" | paste -s -
 
 if [ -z "$addedFiles" ];
 then
-	vendor/phpmd/phpmd/src/bin/phpmd src text .phpmd.xml --exclude DEV/ci/*.php
+	vendor/phpmd/phpmd/src/bin/phpmd src text .phpmd.xml --exclude DEV/ci/*.php,tests/**/*.php
 else
-	vendor/phpmd/phpmd/src/bin/phpmd $addedFiles text .phpmd.xml --exclude DEV/ci/*.php
+	vendor/phpmd/phpmd/src/bin/phpmd $addedFiles text .phpmd.xml --exclude DEV/ci/*.php,tests/**/*.php
 fi

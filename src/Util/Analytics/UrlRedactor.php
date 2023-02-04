@@ -11,8 +11,8 @@ class UrlRedactor
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	public function __construct(
-		private RouterInterface $router,
-		private RequestStack $requestStack
+		private readonly RouterInterface $router,
+		private readonly RequestStack $requestStack
 	) {
 	}
 
@@ -31,8 +31,8 @@ class UrlRedactor
 		}
 
 		foreach ($params as $key => $value) {
-			if ($key == 'id' || preg_match('~.+_?[iI]d$~', $key)) {
-				$value = '_'.strtoupper($key).'_';
+			if ($key == 'id' || preg_match('~.+_?[iI]d$~', (string) $key)) {
+				$value = '_'.strtoupper((string) $key).'_';
 			}
 
 			$redactedParams[$key] = $value;

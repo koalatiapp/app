@@ -103,7 +103,7 @@ export class ChecklistGroup extends LitElement {
 	{
 		this.items = this.list.items;
 		this.itemCount = this.list.items.length;
-		this.completedItemCount = this.list.items.filter(item => item.isCompleted).length;
+		this.completedItemCount = this.list.items.filter(item => item.is_completed).length;
 
 		if (this.itemCount != this.completedItemCount) {
 			this.previouslyCompleted = false;
@@ -126,22 +126,22 @@ export class ChecklistGroup extends LitElement {
 
 		case "unresolved":
 			return item => {
-				return item.unresolvedCommentCount > 0;
+				return item.unresolved_comment_count > 0;
 			};
 
 		case "commented":
 			return item => {
-				return item.commentCount > 0;
+				return item.comment_count > 0;
 			};
 
 		case "completed":
 			return item => {
-				return item.isCompleted;
+				return item.is_completed;
 			};
 
 		case "todo":
 			return item => {
-				return !item.isCompleted;
+				return !item.is_completed;
 			};
 
 		default:

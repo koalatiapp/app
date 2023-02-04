@@ -32,12 +32,8 @@ class RecommendationGroupHandler implements EntityHandlerInterface
 			$projects[$project->getId()] = $project;
 		}
 
-		$users = array_merge(
-			...array_map(function (Project $project) use ($projectHandler) {
-				return $projectHandler->getAffectedUsers($project);
-			}, $projects)
+		return array_merge(
+			...array_map(fn (Project $project) => $projectHandler->getAffectedUsers($project), $projects)
 		);
-
-		return $users;
 	}
 }

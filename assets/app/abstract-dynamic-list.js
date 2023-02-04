@@ -135,14 +135,16 @@ export class AbstractDynamicList extends NbList {
 	/**
 	 * @param {string} endpoint
 	 * @param {FormData|object} body
+	 * @param {string} itemsResponseKey Key to use to retrieve the items from the API's response.
 	 */
-	fetchListData(endpoint, body = {})
+	fetchListData(endpoint, body = {}, itemsResponseKey = "hydra:member")
 	{
 		this._isWaitingForServerResponse = true;
 
 		ApiClient.get(endpoint, body).then(response => {
 			this._isWaitingForServerResponse = false;
-			this.items = Array.isArray(response.data) ? response.data : Object.values(response.data);
+			this.items = response[itemsResponseKey] ?? [];
+			// @TODO: Add support for JSON+LD pagination in dynamic lists
 
 			this.dispatchEvent(new CustomEvent("items-initialized"));
 		});

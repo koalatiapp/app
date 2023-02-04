@@ -7,7 +7,6 @@ use App\Form\User\UserChangeEmailType;
 use App\Form\User\UserChangePasswordType;
 use App\Form\User\UserDeleteAccountType;
 use App\Security\EmailVerifier;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,16 +17,13 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 class SecuritySettingsController extends AbstractController
 {
 	public function __construct(
-		private UserPasswordHasherInterface $passwordHasher,
-		private TokenStorageInterface $tokenStorage,
-		private EntityManagerInterface $entityManager,
-		private EmailVerifier $emailVerifier,
+		private readonly UserPasswordHasherInterface $passwordHasher,
+		private readonly TokenStorageInterface $tokenStorage,
+		private readonly EmailVerifier $emailVerifier,
 	) {
 	}
 
-	/**
-	 * @Route("/account/security", name="manage_account_security")
-	 */
+	#[Route(path: '/account/security', name: 'manage_account_security')]
 	public function securitySettings(Request $request): Response
 	{
 		$deletionForm = $this->processDeletionForm($request);
@@ -43,11 +39,11 @@ class SecuritySettingsController extends AbstractController
 			return $emailForm;
 		}
 
-		return $this->render('app/user/security.html.twig', [
-			'passwordForm' => $passwordForm->createView(),
-			'emailForm' => $emailForm->createView(),
-			'deletionForm' => $deletionForm->createView(),
-		]);
+		return $this->render('app/user/security/security_settings.html.twig', [
+				'passwordForm' => $passwordForm->createView(),
+				'emailForm' => $emailForm->createView(),
+				'deletionForm' => $deletionForm->createView(),
+			]);
 	}
 
 	private function processPasswordForm(Request $request): FormInterface

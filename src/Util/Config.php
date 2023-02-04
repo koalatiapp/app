@@ -31,7 +31,7 @@ class Config
 	 *
 	 * @var array<mixed>
 	 */
-	private static $loadedConfigurations = [];
+	private static array $loadedConfigurations = [];
 
 	/**
 	 * @param string $configDirectory the relative path of the directory containing the configurations
@@ -107,21 +107,10 @@ class Config
 			return null;
 		}
 
-		switch ($extension) {
-			case 'json':
-				$data = json_decode(file_get_contents($fullFilename), true);
-				break;
-			case 'php':
-				$data = include $fullFilename;
-				break;
-			case 'yml':
-			case 'yaml':
-				$data = Yaml::parse(file_get_contents($fullFilename));
-				break;
-			default:
-				$data = null;
-		}
-
-		return $data;
+		return match ($extension) {
+			'json' => json_decode(file_get_contents($fullFilename), true, 512, JSON_THROW_ON_ERROR),
+			'php' => include $fullFilename,
+			'yml', 'yaml' => Yaml::parse(file_get_contents($fullFilename)),
+		};
 	}
 }

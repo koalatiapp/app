@@ -21,19 +21,19 @@ class Crawler
 	/**
 	 * Maximum crawling duration in seconds.
 	 */
-	public const MAX_CRAWL_DURATION = 600;
+	final public const MAX_CRAWL_DURATION = 600;
 
 	/**
 	 * Maximum number of unique pages to crawl.
 	 */
-	public const MAX_CRAWL_PAGES = 1000;
+	final public const MAX_CRAWL_PAGES = 1000;
 
 	/**
 	 * @var array<string,Location>
 	 */
 	private array $pagesFound = [];
 
-	private Spider $spider;
+	private readonly Spider $spider;
 
 	public function __construct(string $websiteUrl, ?callable $pageFoundCallback = null)
 	{
@@ -70,7 +70,7 @@ class Crawler
 		$politenessPolicyEventListener = new PolitenessPolicyListener(10);
 		$downloader->getDispatcher()->addListener(
 			SpiderEvents::SPIDER_CRAWL_PRE_REQUEST,
-			[$politenessPolicyEventListener, 'onCrawlPreRequest']
+			$politenessPolicyEventListener->onCrawlPreRequest(...)
 		);
 
 		// Check if the maximum crawl duration has been exceeded
@@ -118,7 +118,7 @@ class Crawler
 
 				try {
 					$title = $crawler->filterXpath('//title')->text();
-				} catch (Exception $exception) {
+				} catch (Exception) {
 					$title = null;
 				}
 
@@ -144,17 +144,13 @@ class Crawler
 		// Check for canonical URL
 		$canonicalTag = $crawler->filterXPath('//link[@rel="canonical"]');
 		if ($canonicalTag->count()) {
-			$canonicalUrl = $canonicalTag->attr('href');
-
-			return $canonicalUrl;
+			return $canonicalTag->attr('href');
 		}
 
 		// Check for og:URL
 		$ogurlTag = $crawler->filterXPath('//meta[@property="og:url"]');
 		if ($ogurlTag->count()) {
-			$ogurl = $ogurlTag->attr('content');
-
-			return $ogurl;
+			return $ogurlTag->attr('content');
 		}
 
 		return $crawler->getUri();

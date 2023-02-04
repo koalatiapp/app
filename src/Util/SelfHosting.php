@@ -6,8 +6,8 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class SelfHosting
 {
-	private bool $selfHostingMode;
-	private bool $inviteOnlyRegistrationMode;
+	private readonly bool $selfHostingMode;
+	private readonly bool $inviteOnlyRegistrationMode;
 
 	public function __construct(ParameterBagInterface $parameterBag)
 	{

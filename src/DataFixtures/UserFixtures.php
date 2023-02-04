@@ -14,14 +14,9 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserFixtures extends Fixture
 {
-	/**
-	 * @var UserPasswordHasherInterface
-	 */
-	private $passwordHasher;
-
-	public function __construct(UserPasswordHasherInterface $passwordHasher)
-	{
-		$this->passwordHasher = $passwordHasher;
+	public function __construct(
+		private readonly UserPasswordHasherInterface $passwordHasher
+	) {
 	}
 
 	public function load(ObjectManager $manager): void
@@ -98,6 +93,19 @@ class UserFixtures extends Fixture
 			->setLastName('Doe')
 			->setSubscriptionPlan(TrialPlan::UNIQUE_NAME)
 			->setIsVerified(false)
+			->setPassword($this->passwordHasher->hashPassword(
+				$user,
+				'123456'
+			));
+		$manager->persist($user);
+
+		// User without subscription plan AND without an organization
+		$user = new User();
+		$user->setEmail('no-organization@plan.com')
+			->setFirstName('Jay "The Loner"')
+			->setLastName('Freeman')
+			->setSubscriptionPlan(NoPlan::UNIQUE_NAME)
+			->setIsVerified(true)
 			->setPassword($this->passwordHasher->hashPassword(
 				$user,
 				'123456'

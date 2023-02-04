@@ -1,0 +1,54 @@
+api_platform:
+    title: 'Koalati API'
+    description: Integrate Koalati's suite of QA tools in your favorite workflows and tools with our REST API.
+    version: '1.0.0'
+    show_webby: false
+    mapping:
+        paths: ['%kernel.project_dir%/src/Entity', '%kernel.project_dir%/src/Util/Testing', '%kernel.project_dir%/src/Subscription/Model', '%kernel.project_dir%/src/Api/Dto']
+    patch_formats:
+        json:     ['application/merge-patch+json', 'application/json']
+    formats:
+        jsonld:   ['application/ld+json']
+        jsonhal:  ['application/hal+json']
+        jsonapi:  ['application/vnd.api+json']
+        json:     ['application/json']
+        xml:      ['application/xml', 'text/xml']
+        yaml:     ['application/x-yaml']
+        csv:      ['text/csv']
+        html:     ['text/html']
+    defaults:
+        processor: App\Api\State\DefaultProcessor
+        normalizationContext:
+            groups: ['read']
+            skip_null_values: false
+        denormalizationContext:
+            groups: ['write']
+            allow_extra_attributes: false
+        pagination_client_enabled: true
+        pagination_items_per_page: 50
+        pagination_maximum_items_per_page: 100
+    collection:
+        pagination:
+            enabled_parameter_name: pagination
+            items_per_page_parameter_name: itemsPerPage
+    exception_to_status:
+        Symfony\Component\Serializer\Exception\ExceptionInterface: 400 # Use a raw status code (recommended)
+        ApiPlatform\Exception\InvalidArgumentException: !php/const Symfony\Component\HttpFoundation\Response::HTTP_BAD_REQUEST
+        ApiPlatform\Exception\FilterValidationException: 400
+        Doctrine\ORM\OptimisticLockException: 409
+    swagger:
+        api_keys:
+            JWT:
+                name: Authorization
+                type: header
+    enable_swagger_ui: false
+    openapi:
+        contact:
+            # The identifying name of the contact person/organization.
+            name: Technologies Koalati Inc.
+            # The URL pointing to the contact information. MUST be in the format of a URL.
+            url: https://www.koalati.com
+            # The email address of the contact person/organization. MUST be in the format of an email address.
+            email: info@koalati.com
+        # A URL to the Terms of Service for the API. MUST be in the format of a URL.
+        termsOfService: https://www.koalati.com/terms-of-use

@@ -2,84 +2,74 @@
 
 namespace App\Entity\Testing;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
 use App\Repository\Testing\TestResultRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
 
-/**
- * @ORM\Entity(repositoryClass=TestResultRepository::class)
- */
+#[ApiResource(
+	openapiContext: ["tags" => ['Test Result']],
+	normalizationContext: ["groups" => "recommendation.read"],
+	operations: [
+		new Get(
+			security: "is_granted('test_result_view', object)",
+		),
+	],
+)]
+#[ORM\Entity(repositoryClass: TestResultRepository::class)]
 class TestResult
 {
-	/**
-	 * @ORM\Id
-	 * @ORM\GeneratedValue
-	 * @ORM\Column(type="integer")
-	 * @Groups({"default"})
-	 */
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[ORM\Column(type: 'integer')]
+	#[Groups(['recommendation.read'])]
 	private ?int $id = null;
 
-	/**
-	 * @ORM\Column(type="string", length=255)
-	 * @Groups({"default"})
-	 */
+	#[ORM\Column(type: 'string', length: 255)]
+	#[Groups(['recommendation.read'])]
 	private string $uniqueName;
 
-	/**
-	 * @ORM\Column(type="string", length=512)
-	 * @Groups({"default"})
-	 */
+	#[ORM\Column(type: 'string', length: 512)]
+	#[Groups(['recommendation.read'])]
 	private string $title;
 
-	/**
-	 * @ORM\Column(type="text")
-	 * @Groups({"default"})
-	 */
+	#[ORM\Column(type: 'text')]
+	#[Groups(['recommendation.read'])]
 	private string $description;
 
-	/**
-	 * @ORM\Column(type="float", nullable=true)
-	 * @Groups({"default"})
-	 */
-	private ?float $weight;
+	#[ORM\Column(type: 'float', nullable: true)]
+	#[Groups(['recommendation.read'])]
+	private ?float $weight = null;
 
-	/**
-	 * @ORM\Column(type="float")
-	 * @Groups({"default"})
-	 */
+	#[ORM\Column(type: 'float')]
+	#[Groups(['recommendation.read'])]
 	private float $score;
 
 	/**
-	 * @ORM\Column(type="array", nullable=true)
-	 * @Groups({"default"})
-	 *
 	 * @var array<int,mixed>|null
 	 */
+	#[ORM\Column(type: 'array', nullable: true)]
+	#[Groups(['recommendation.read'])]
 	private ?array $snippets = [];
 
 	/**
-	 * @ORM\Column(type="array", nullable=true)
-	 * @Groups({"default"})
-	 *
 	 * @var array<int,array<mixed,mixed>>
 	 */
+	#[ORM\Column(type: 'array', nullable: true)]
+	#[Groups(['recommendation.read'])]
 	private ?array $dataTable = [];
 
-	/**
-	 * @ORM\ManyToOne(targetEntity=ToolResponse::class, inversedBy="testResults")
-	 * @ORM\JoinColumn(name="parent_response_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
-	 */
+	#[ORM\ManyToOne(targetEntity: ToolResponse::class, inversedBy: 'testResults')]
+	#[ORM\JoinColumn(name: 'parent_response_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
 	private ToolResponse $parentResponse;
 
 	/**
-	 * @ORM\OneToMany(targetEntity=Recommendation::class, mappedBy="parentResult")
-	 * @MaxDepth(1)
-	 *
 	 * @var Collection<int,Recommendation>
 	 */
+	#[ORM\OneToMany(targetEntity: Recommendation::class, mappedBy: 'parentResult')]
 	private Collection $recommendations;
 
 	public function __construct()

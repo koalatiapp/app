@@ -27,3 +27,11 @@ framework:
             'App\Message\TestingStatusRequest': async_priority_low
             'App\Message\ScreenshotRequest': async_priority_high
             'App\Message\FaviconRequest': async_priority_high
+
+# when@test:
+#    framework:
+#        messenger:
+#            transports:
+#                # replace with your transport name here (e.g., my_transport: 'in-memory://')
+#                # For more Messenger testing tools, see https://github.com/zenstruck/messenger-test
+#                async: 'in-memory://'

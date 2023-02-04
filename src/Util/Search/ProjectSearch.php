@@ -10,16 +10,16 @@ use Hashids\HashidsInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class ProjectSearch implements EntitySearchInterface
+class ProjectSearch implements SearchInterface
 {
 	/**
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	public function __construct(
-		private UrlGeneratorInterface $router,
-		private ProjectRepository $projectRepository,
-		private TranslatorInterface $translator,
-		private HashidsInterface $idHasher
+		private readonly UrlGeneratorInterface $router,
+		private readonly ProjectRepository $projectRepository,
+		private readonly TranslatorInterface $translator,
+		private readonly HashidsInterface $idHasher
 	) {
 	}
 

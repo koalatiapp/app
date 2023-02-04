@@ -4,11 +4,8 @@ namespace App\Util\Screenshot\Driver;
 
 class ApiFlash extends AbstractScreenshotDriver implements ScreenshotDriverInterface
 {
-	private string $accessKey;
-
-	public function __construct(string $accessKey)
+	public function __construct(private readonly string $accessKey)
 	{
-		$this->accessKey = $accessKey;
 	}
 
 	public function screenshot(string $url, int $viewportWidth, int $viewportHeight, ?int $renderWidth = null, int $renderScale = 1): string
@@ -28,8 +25,6 @@ class ApiFlash extends AbstractScreenshotDriver implements ScreenshotDriverInter
 			'thumbnail_width' => $renderWidth,
 		]);
 
-		$response = file_get_contents('https://api.apiflash.com/v1/urltoimage?'.$params);
-
-		return $response;
+		return file_get_contents('https://api.apiflash.com/v1/urltoimage?'.$params);
 	}
 }

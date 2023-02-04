@@ -3,76 +3,46 @@
 namespace App\Entity;
 
 use App\Repository\OrganizationInvitationRepository;
-use DateTime;
-use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
 
-/**
- * @ORM\Entity(repositoryClass=OrganizationInvitationRepository::class)
- */
+#[ORM\Entity(repositoryClass: OrganizationInvitationRepository::class)]
 class OrganizationInvitation
 {
-	/**
-	 * @ORM\Id
-	 * @ORM\GeneratedValue
-	 * @ORM\Column(type="integer")
-	 * @Groups({"default"})
-	 */
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[ORM\Column(type: 'integer')]
 	private ?int $id = null;
 
-	/**
-	 * @ORM\Column(type="string", length=255)
-	 * @Groups({"default"})
-	 */
+	#[ORM\Column(type: 'string', length: 255)]
 	private ?string $firstName;
 
-	/**
-	 * @ORM\Column(type="string", length=255)
-	 * @Groups({"default"})
-	 */
+	#[ORM\Column(type: 'string', length: 255)]
 	private ?string $email;
 
-	/**
-	 * @ORM\Column(type="string", length=255)
-	 * @Groups({"default"})
-	 */
+	#[ORM\Column(type: 'string', length: 255)]
 	private ?string $hash;
 
-	/**
-	 * @ORM\Column(type="datetime")
-	 * @Groups({"default"})
-	 */
-	private ?DateTimeInterface $dateCreated;
+	#[ORM\Column(type: 'datetime')]
+	private ?\DateTimeInterface $dateCreated;
 
-	/**
-	 * @ORM\Column(type="datetime")
-	 * @Groups({"default"})
-	 */
-	private ?DateTimeInterface $dateExpired;
+	#[ORM\Column(type: 'datetime')]
+	private ?\DateTimeInterface $dateExpired;
 
-	/**
-	 * @ORM\Column(type="datetime", nullable=true)
-	 * @Groups({"default"})
-	 */
-	private ?DateTimeInterface $dateUsed;
+	#[ORM\Column(type: 'datetime', nullable: true)]
+	private ?\DateTimeInterface $dateUsed;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity=Organization::class, inversedBy="organizationInvitations")
-	 * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
-	 */
+	#[ORM\ManyToOne(targetEntity: Organization::class, inversedBy: 'organizationInvitations')]
+	#[ORM\JoinColumn(name: 'organization_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
 	private Organization $organization;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity=User::class)
-	 * @ORM\JoinColumn(name="inviter_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
-	 */
+	#[ORM\ManyToOne(targetEntity: User::class)]
+	#[ORM\JoinColumn(name: 'inviter_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
 	private User $inviter;
 
 	public function __construct(string $firstName, string $email, Organization $organization, User $inviter)
 	{
-		$this->dateCreated = new DateTime();
-		$this->dateExpired = new DateTime('+7 days');
+		$this->dateCreated = new \DateTime();
+		$this->dateExpired = new \DateTime('+7 days');
 		$this->dateUsed = null;
 		$this->hash = bin2hex(random_bytes(16));
 		$this->setFirstName($firstName);
@@ -115,36 +85,36 @@ class OrganizationInvitation
 		return $this;
 	}
 
-	public function getDateCreated(): DateTimeInterface
+	public function getDateCreated(): \DateTimeInterface
 	{
 		return $this->dateCreated;
 	}
 
-	public function setDateCreated(DateTimeInterface $dateCreated): self
+	public function setDateCreated(\DateTimeInterface $dateCreated): self
 	{
 		$this->dateCreated = $dateCreated;
 
 		return $this;
 	}
 
-	public function getDateExpired(): DateTimeInterface
+	public function getDateExpired(): \DateTimeInterface
 	{
 		return $this->dateExpired;
 	}
 
-	public function setDateExpired(DateTimeInterface $dateExpired): self
+	public function setDateExpired(\DateTimeInterface $dateExpired): self
 	{
 		$this->dateExpired = $dateExpired;
 
 		return $this;
 	}
 
-	public function getDateUsed(): ?DateTimeInterface
+	public function getDateUsed(): ?\DateTimeInterface
 	{
 		return $this->dateUsed;
 	}
 
-	public function setDateUsed(DateTimeInterface $dateUsed): self
+	public function setDateUsed(\DateTimeInterface $dateUsed): self
 	{
 		$this->dateUsed = $dateUsed;
 
@@ -153,7 +123,7 @@ class OrganizationInvitation
 
 	public function markAsUsed(): self
 	{
-		$this->setDateUsed(new DateTime());
+		$this->setDateUsed(new \DateTime());
 
 		return $this;
 	}
@@ -165,7 +135,7 @@ class OrganizationInvitation
 
 	public function hasExpired(): bool
 	{
-		return new DateTime() >= $this->getDateExpired();
+		return new \DateTime() >= $this->getDateExpired();
 	}
 
 	public function getOrganization(): ?Organization

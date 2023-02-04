@@ -5,6 +5,8 @@ namespace App\Controller\Trait;
 use App\Entity\Organization;
 use App\Entity\Project;
 use App\Mercure\UpdateDispatcher;
+use App\Repository\OrganizationRepository;
+use App\Repository\ProjectRepository;
 use App\Security\OrganizationVoter;
 use App\Security\ProjectVoter;
 use App\Util\ClientMessageSerializer;
@@ -19,6 +21,8 @@ trait ApiControllerTrait
 	protected ClientMessageSerializer $serializer;
 	protected TranslatorInterface $translator;
 	protected RequestStack $requestStack;
+	protected ProjectRepository $projectRepository;
+	protected OrganizationRepository $organizationRepository;
 
 	/**
 	 * The duration for which the current request's response will be cached.
@@ -26,17 +30,21 @@ trait ApiControllerTrait
 	 */
 	private int $cacheDuration = 0;
 
-	/** @required */
+	#[\Symfony\Contracts\Service\Attribute\Required]
 	public function setDependencies(
 		UpdateDispatcher $updateDispatcher,
 		ClientMessageSerializer $serializer,
 		TranslatorInterface $translator,
 		RequestStack $requestStack,
+		ProjectRepository $projectRepository,
+		OrganizationRepository $organizationRepository,
 	): void {
 		$this->updateDispatcher = $updateDispatcher;
 		$this->serializer = $serializer;
 		$this->translator = $translator;
 		$this->requestStack = $requestStack;
+		$this->projectRepository = $projectRepository;
+		$this->organizationRepository = $organizationRepository;
 	}
 
 	/**
@@ -52,11 +60,7 @@ trait ApiControllerTrait
 			$id = $this->idHasher->decode($id)[0];
 		}
 
-		/**
-		 * @var \App\Repository\ProjectRepository
-		 */
-		$repository = $this->getDoctrine()->getRepository(Project::class);
-		$project = $repository->find($id);
+		$project = $this->projectRepository->find($id);
 
 		if (!$project) {
 			$this->notFound()->send();
@@ -88,11 +92,7 @@ trait ApiControllerTrait
 			$id = $this->idHasher->decode($id)[0];
 		}
 
-		/**
-		 * @var \App\Repository\OrganizationRepository
-		 */
-		$repository = $this->getDoctrine()->getRepository(Organization::class);
-		$organization = $repository->find($id);
+		$organization = $this->organizationRepository->find($id);
 
 		if (!$organization) {
 			$this->notFound()->send();
@@ -112,13 +112,11 @@ trait ApiControllerTrait
 	 */
 	protected function apiError(string $message, int $code = 400): JsonResponse
 	{
-		$response = new JsonResponse([
+		return new JsonResponse([
 			'status' => "error",
 			'code' => $code,
 			'message' => $message,
 		]);
-
-		return $response;
 	}
 
 	/**

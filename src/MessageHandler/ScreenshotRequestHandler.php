@@ -9,17 +9,18 @@ use App\Util\Meta\MetaFetcher;
 use App\Util\Screenshot\ScreenshotGeneratorInterface;
 use App\Util\SelfHosting;
 use App\Util\Url;
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-class ScreenshotRequestHandler implements MessageHandlerInterface
+#[AsMessageHandler]
+class ScreenshotRequestHandler
 {
 	public function __construct(
-		private ProjectRepository $projectRepository,
-		private ScreenshotGeneratorInterface $screenshotGenerator,
-		private ProjectStorage $projectStorage,
-		private Url $urlHelper,
-		private SelfHosting $selfHosting,
-		private MetaFetcher $metaFetcher,
+		private readonly ProjectRepository $projectRepository,
+		private readonly ScreenshotGeneratorInterface $screenshotGenerator,
+		private readonly ProjectStorage $projectStorage,
+		private readonly Url $urlHelper,
+		private readonly SelfHosting $selfHosting,
+		private readonly MetaFetcher $metaFetcher,
 	) {
 	}
 

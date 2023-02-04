@@ -19,6 +19,8 @@ This is the official repository for the Koalati web application, available at [a
   - [Cron jobs](docs/system/cronjobs.md)
   - [Icons](docs/system/icons.md)
   - [Server to client updates (Mercure)](docs/system/server-client-updates.md)
+  - [API](docs/system/api.md)
+  - [Serializer](docs/system/serializer.md)
   - [Self-hosting](docs/system/self-hosting.md)
 ### Features
   - Projects

@@ -11,7 +11,7 @@ class UrlMeta implements MetaDriverInterface
 {
 	private const API_URI = 'https://api.urlmeta.org/';
 
-	private HttpClientInterface $httpClient;
+	private readonly HttpClientInterface $httpClient;
 
 	public function __construct(string $accountEmail, string $apiKey)
 	{

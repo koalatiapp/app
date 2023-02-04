@@ -10,16 +10,16 @@ use Hashids\HashidsInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class CommentSearch implements EntitySearchInterface
+class CommentSearch implements SearchInterface
 {
 	/**
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	public function __construct(
-		private UrlGeneratorInterface $router,
-		private CommentRepository $commentRepository,
-		private TranslatorInterface $translator,
-		private HashidsInterface $idHasher
+		private readonly UrlGeneratorInterface $router,
+		private readonly CommentRepository $commentRepository,
+		private readonly TranslatorInterface $translator,
+		private readonly HashidsInterface $idHasher
 	) {
 	}
 

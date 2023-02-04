@@ -4,3 +4,6 @@
 .notice.warning::before { content: '\f06a'; }
 .notice.danger { color: white; background-color: var(--color-red); }
 .notice.danger::before { content: '\f057'; }
+
+.notice a.text-link { font-weight: 500; color: inherit; }
+.notice a.text-link:hover { opacity: .7; }

@@ -70,7 +70,7 @@
 							{% trans %}navigation.team.sublink.dashboard{% endtrans %}
 						</a>
 					</li>
-					{% if is_granted("manage", organization) %}
+					{% if is_granted(constant("App\\Security\\OrganizationVoter::EDIT"), organization) %}
 						<li class="{{ current_route in ['organization_settings'] ? 'active' : '' }}">
 							<a href="{{ path('organization_settings', {id: organization.id|hashids_encode}) }}">
 								{% trans %}navigation.team.sublink.settings{% endtrans %}
@@ -92,7 +92,7 @@
 			</ul>
         </li>
 
- 		<li class="{{ current_route in ['edit_profile', 'manage_account_security', 'manage_contact_preferences', 'manage_subscription'] ? 'active' : '' }}">
+ 		<li class="{{ current_route in ['edit_profile', 'manage_account_security', 'manage_account_api', 'manage_contact_preferences', 'manage_subscription', 'manage_subscription_quota'] ? 'active' : '' }}">
 		 	<a href="{{ path('edit_profile') }}">
                 <i class="far fa-gear" aria-hidden="true"></i>
                 <span>{% trans %}navigation.settings.label{% endtrans %}</span>
@@ -104,13 +104,13 @@
 					</a>
 				</li>
 				{% if not self_hosting_mode %}
-					<li class="{{ current_route in ['manage_subscription'] ? 'active' : '' }}">
+					<li class="{{ current_route in ['manage_subscription', 'manage_subscription_quota'] ? 'active' : '' }}">
 						<a href="{{ path('manage_subscription') }}">
 							{% trans %}navigation.settings.sublink.subscription{% endtrans %}
 						</a>
 					</li>
 				{% endif %}
-				<li class="{{ current_route in ['manage_account_security'] ? 'active' : '' }}">
+				<li class="{{ current_route in ['manage_account_security', 'manage_account_api'] ? 'active' : '' }}">
 					<a href="{{ path('manage_account_security') }}">
 						{% trans %}navigation.settings.sublink.security{% endtrans %}
 					</a>

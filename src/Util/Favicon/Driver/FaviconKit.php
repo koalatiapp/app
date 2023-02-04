@@ -3,20 +3,19 @@
 namespace App\Util\Favicon\Driver;
 
 use App\Util\Url;
-use Exception;
 
 class FaviconKit implements FaviconDriverInterface
 {
 	public function __construct(
-		private Url $urlHelper,
-		private string $apiHostname,
+		private readonly Url $urlHelper,
+		private readonly string $apiHostname,
 	) {
 	}
 
 	public function fetch(string $url): string
 	{
 		if (!$this->apiHostname) {
-			throw new Exception("FaviconKit API hostname not configured. Please provide a `FAVICONKIT_API_HOSTNAME` environment variable.");
+			throw new \Exception("FaviconKit API hostname not configured. Please provide a `FAVICONKIT_API_HOSTNAME` environment variable.");
 		}
 
 		$hostname = $this->apiHostname;

@@ -2,6 +2,13 @@
 
 namespace App\Entity\Checklist;
 
+use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
+use ApiPlatform\Metadata\Patch;
 use App\Entity\Comment;
 use App\Mercure\MercureEntityInterface;
 use App\Repository\Checklist\ItemRepository;
@@ -10,64 +17,71 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-/**
- * @ORM\Entity(repositoryClass=ItemRepository::class)
- */
+#[ApiResource(
+	openapiContext: ["tags" => ['Checklist Item']],
+	normalizationContext: ["groups" => "checklist_item.list"],
+	uriTemplate: '/checklists/{checklistId}/items',
+	uriVariables: ['checklistId' => new Link(fromClass: Checklist::class, fromProperty: 'items')],
+	operations: [new GetCollection()],
+)]
+#[ApiResource(
+	openapiContext: ["tags" => ['Checklist Item']],
+	normalizationContext: ["groups" => "checklist_item.read"],
+	operations: [
+		new Get(
+			security: "is_granted('checklist_view', object.getChecklist())",
+			uriTemplate: '/checklist_items/{id}',
+		),
+		new Patch(
+			denormalizationContext: ["groups" => "checklist_item.write"],
+			security: "is_granted('checklist_view', object.getChecklist())",
+			uriTemplate: '/checklist_items/{id}',
+		),
+	],
+)]
+#[ApiFilter(BooleanFilter::class, properties: ['isCompleted'])]
+#[ORM\Entity(repositoryClass: ItemRepository::class)]
 class Item implements MercureEntityInterface
 {
-	/**
-	 * @ORM\Id
-	 * @ORM\GeneratedValue
-	 * @Groups({"default"})
-	 * @ORM\Column(type="integer")
-	 */
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[Groups(['checklist_item.list', 'checklist_item.read', 'checklist.read', 'checklist_item_group.read'])]
+	#[ORM\Column(type: 'integer')]
 	private ?int $id = null;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity=Checklist::class, inversedBy="items")
-	 * @ORM\JoinColumn(name="checklist_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
-	 */
-	private ?Checklist $checklist;
+	#[ORM\ManyToOne(targetEntity: Checklist::class, inversedBy: 'items')]
+	#[ORM\JoinColumn(name: 'checklist_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
+	private ?Checklist $checklist = null;
+
+	#[ORM\ManyToOne(targetEntity: ItemGroup::class, inversedBy: 'items')]
+	#[ORM\JoinColumn(name: 'parent_group_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
+	private ?ItemGroup $parentGroup = null;
+
+	#[ORM\Column(type: 'text')]
+	#[Groups(['checklist_item.list', 'checklist_item.read', 'checklist.read', 'checklist_item_group.read'])]
+	private ?string $title = null;
+
+	#[ORM\Column(type: 'text')]
+	#[Groups(['checklist_item.list', 'checklist_item.read', 'checklist.read', 'checklist_item_group.read'])]
+	private ?string $description = null;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity=ItemGroup::class, inversedBy="items")
-	 * @ORM\JoinColumn(name="parent_group_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
-	 */
-	private ?ItemGroup $parentGroup;
-
-	/**
-	 * @ORM\Column(type="text")
-	 * @Groups({"default"})
-	 */
-	private ?string $title;
-
-	/**
-	 * @ORM\Column(type="text")
-	 * @Groups({"default"})
-	 */
-	private ?string $description;
-
-	/**
-	 * @ORM\Column(type="array", nullable=true)
-	 * @Groups({"default"})
-	 *
 	 * @var array<int,string>
 	 */
+	#[ORM\Column(type: 'array', nullable: true)]
+	#[Groups(['checklist_item.list', 'checklist_item.read', 'checklist.read', 'checklist_item_group.read'])]
 	private ?array $resourceUrls = [];
 
-	/**
-	 * @ORM\Column(type="boolean")
-	 * @Groups({"default"})
-	 */
+	#[ORM\Column(type: 'boolean')]
+	#[Groups(['checklist_item.list', 'checklist_item.read', 'checklist_item.write', 'checklist.read', 'checklist_item_group.read'])]
 	private ?bool $isCompleted = false;
 
 	/**
-	 * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="checklistItem", orphanRemoval=true)
-	 * @ORM\OrderBy({"isResolved" = "ASC"}, {"dateCreated" = "ASC"})
-	 * @Groups({"comments"})
-	 *
 	 * @var Collection<int,Comment>
 	 */
+	#[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'checklistItem', orphanRemoval: true)]
+	#[ORM\OrderBy(['isResolved' => 'ASC', 'dateCreated' => 'ASC'])]
+	#[Groups(['checklist_item.read'])]
 	private Collection $comments;
 
 	public function __construct()
@@ -163,9 +177,7 @@ class Item implements MercureEntityInterface
 	 */
 	public function getComments(): Collection
 	{
-		return $this->comments->filter(function (Comment $comment) {
-			return !$comment->getThread();
-		});
+		return $this->comments->filter(fn (Comment $comment = null) => !$comment->getThread());
 	}
 
 	public function addComment(Comment $comment): self
@@ -190,21 +202,20 @@ class Item implements MercureEntityInterface
 		return $this;
 	}
 
-	/**
-	 * @Groups({"default"})
-	 */
+	#[Groups(['checklist_item.list', 'checklist_item.read', 'checklist.read', 'checklist_item_group.read'])]
 	public function getCommentCount(): int
 	{
 		return $this->comments->count();
 	}
 
-	/**
-	 * @Groups({"default"})
-	 */
+	#[Groups(['checklist_item.list', 'checklist_item.read', 'checklist.read', 'checklist_item_group.read'])]
 	public function getUnresolvedCommentCount(): int
 	{
-		return $this->comments->filter(function (Comment $comment) {
-			return !$comment->isResolved() && !$comment->getThread();
-		})->count();
+		return $this->comments->filter(fn (Comment $comment = null) => !$comment->isResolved() && !$comment->getThread())->count();
+	}
+
+	public function getMercureSerializationGroup(): string
+	{
+		return "checklist_item.read";
 	}
 }

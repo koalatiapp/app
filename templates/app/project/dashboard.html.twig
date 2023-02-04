@@ -22,6 +22,24 @@
 {% endblock %}
 
 {% block body %}
+	{% if usageManager.numberOfPageTestsAllowed <= 0 %}
+		<div class="notice warning">
+			{% if usageManager.isSpendingLimitReached %}
+				{% if app.user is same as(project.topLevelOwner) %}
+					{% trans %}quota_notices.your_spending_limit_exceeded{% endtrans %}
+				{% else %}
+					{% trans %}quota_notices.organization_spending_limit_exceeded{% endtrans %}
+				{% endif %}
+			{% else %}
+				{% if app.user is same as(project.topLevelOwner) %}
+					{% trans %}quota_notices.your_quota_exceeded{% endtrans %}
+				{% else %}
+					{% trans %}quota_notices.organization_quota_exceeded{% endtrans %}
+				{% endif %}
+			{% endif %}
+		</div>
+	{% endif %}
+
 	<div class="grid">
 		<div class="card">
 			<h2>{% trans %}project_dashboard.up_next.title{% endtrans %}</h2>
@@ -44,7 +62,7 @@
 				<div class="button-container margin-top">
 					<nb-button href="{{ path('project_testing', {id: project.id|hashids_encode}) }}">{% trans %}project_dashboard.up_next.implement_recommendations.cta{% endtrans %}</nb-button>
 				</div>
-			{% elseif not project.recommendations|length %}
+			{% elseif not project.activeRecommendations|length %}
 				{% trans with {"%projectName%": project.name} %}project_dashboard.up_next.generate_recommendations.explanation{% endtrans %}
 				<hr>
 				<div class="button-container margin-top">
@@ -76,7 +94,7 @@
 					{% if project.activeRecommendationGroups|length %}
 						<a href="{{ path('project_testing', {id: project.id|hashids_encode}) }}" class="text-highlight orange">{% trans with {"%count%": project.activeRecommendationGroups|length} %}project_dashboard.summary.step.recommendations.count{% endtrans %}</a>
 					{% else %}
-						{% if project.recommendations|length %}
+						{% if project.activeRecommendations|length %}
 							<span class="text-highlight green">{% trans %}project_dashboard.summary.step.recommendations.completed{% endtrans %}</span>
 						{% else %}
 							<span class="text-highlight red">{% trans %}project_dashboard.summary.step.recommendations.not_scanned{% endtrans %}</span>

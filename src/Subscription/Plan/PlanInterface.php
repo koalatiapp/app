@@ -15,6 +15,21 @@ interface PlanInterface
 	public const PADDLE_ID = '';
 
 	/**
+	 * @var int PAGE_TEST_QUOTA Quota of page tests that are included for free in this plan
+	 */
+	public const PAGE_TEST_QUOTA = 0;
+
+	/**
+	 * @var float COST_PER_ADDITIONAL_PAGE_TEST Cost of each additional page test after the quota has been reached, in US dollars
+	 */
+	public const COST_PER_ADDITIONAL_PAGE_TEST = 0.00118056;
+
+	/**
+	 * @var bool CAN_EXCEED_PAGE_TEST_QUOTA Whether the user can make additional page tests after reaching the quota included in their plan
+	 */
+	public const CAN_EXCEED_PAGE_TEST_QUOTA = true;
+
+	/**
 	 * @var int MAX_ACTIVE_PAGES_PER_PROJECT Maximum number of active pages a project can have
 	 */
 	public const MAX_ACTIVE_PAGES_PER_PROJECT = 0;
@@ -83,6 +98,11 @@ interface PlanInterface
 	 * @return bool Whether the user has access to the monitoring features
 	 */
 	public function hasMonitoringAccess(): bool;
+
+	/**
+	 * @return bool Whether the user has access to the Koalati API
+	 */
+	public function hasApiAccess(): bool;
 
 	public function isUpgradeComparedTo(PlanInterface $comparativePlan): bool;
 

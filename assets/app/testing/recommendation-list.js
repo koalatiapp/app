@@ -49,13 +49,19 @@ export class RecommendationList extends AbstractDynamicList {
 				label: "recommendation.listing.title",
 				render: item => {
 					// Remove links from the recommendation title
-					const strippedTitle = item.htmlTitle.replace(/\[.+?\]\(.+?\)/g, "").replace(/\.{2,}/g, ".");
+					let htmlTitle = item.template;
+
+					for (const paramKey in item.parameters) {
+						htmlTitle = htmlTitle.replace(paramKey, `<span class='parameter'>${paramKey}</span>`);
+					}
+
+					const strippedTitle = htmlTitle.replace(/\[.+?\]\(.+?\)/g, "").replace(/\.{2,}/g, ".");
 
 					return html`
 						<nb-markdown barebones>
 							<script type="text/markdown">${strippedTitle}</script>
 						</nb-markdown>
-						<recommendation-details-link recommendationId=${item.sampleId} modalTitle=${strippedTitle}>
+						<recommendation-details-link recommendationId=${item.id} modalTitle=${strippedTitle}>
 							<i class="fad fa-circle-info"></i>&nbsp;
 							${Translator.trans("recommendation.view_more")}
 						</recommendation-details-link>
@@ -131,7 +137,7 @@ export class RecommendationList extends AbstractDynamicList {
 
 	supportedUpdateFilter(update)
 	{
-		return update.data?.projectId == this.projectId;
+		return update.data?.project == `/api/projects/${this.projectId}`;
 	}
 
 	render()
@@ -155,7 +161,7 @@ export class RecommendationList extends AbstractDynamicList {
 
 	fetchListData()
 	{
-		super.fetchListData("api_testing_recommendation_group_list", { project_id: this.projectId });
+		super.fetchListData(`/api/projects/${this.projectId}/recommendation_groups`);
 	}
 
 	_markItemAsCompletedCallback(completedItem)
@@ -163,7 +169,7 @@ export class RecommendationList extends AbstractDynamicList {
 		completedItem._pendingCompletion = true;
 		this.requestUpdate("items");
 
-		ApiClient.put("api_testing_recommendation_group_complete", { id: completedItem.sampleId }, null).then(() => {
+		ApiClient.patch(`/api/recommendation_groups/${completedItem.id}`, { is_completed: true }, null).then(() => {
 			this.items = this.items.filter(item => item !== completedItem);
 		});
 
@@ -183,24 +189,25 @@ export class RecommendationList extends AbstractDynamicList {
 	#initIgnoreEntryMercureListener()
 	{
 		MercureClient.subscribe("IgnoreEntry", update => {
+			console.log(update);
 			let itemsHaveChanged = false;
-			const targetProjectId = update.data.targetProject?.id;
-			const targetOrganizationId = update.data.targetOrganization?.id;
+			const targetProject = update.data.target_project;
+			const targetOrganization = update.data.target_organization;
 
 			if (update.event != "create") {
 				return;
 			}
 
-			if (targetProjectId && targetProjectId != this.projectId) {
+			if (targetProject && targetProject != `/api/projects/${this.projectId}`) {
 				return;
 			}
 
-			if (targetOrganizationId && targetOrganizationId != this.organizationId) {
+			if (targetOrganization && targetOrganization != `/api/organizations/${this.organizationId}`) {
 				return;
 			}
 
 			const filteredList = this.items.filter(recommendation => {
-				return recommendation.tool != update.data.tool || recommendation.uniqueName != update.data.recommendationUniqueName;
+				return recommendation.tool != update.data.tool || recommendation.unique_name != update.data.recommendation_unique_name;
 			});
 
 			if (filteredList.length != this.items.length) {

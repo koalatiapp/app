@@ -2,30 +2,31 @@
 
 namespace App\MessageHandler;
 
-use App\ApiClient\Endpoint\StatusEndpoint;
 use App\Entity\Project;
 use App\Mercure\UpdateDispatcher;
 use App\Mercure\UpdateType;
 use App\Message\TestingStatusRequest;
 use App\Repository\ProjectRepository;
 use App\Subscription\PlanManager;
+use App\ToolsService\Endpoint\StatusEndpoint;
 use App\Util\Testing\TestingStatus;
 use Symfony\Component\Cache\Adapter\ApcuAdapter;
 use Symfony\Component\Cache\CacheItem;
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-class TestingStatusRequestHandler implements MessageHandlerInterface
+#[AsMessageHandler]
+class TestingStatusRequestHandler
 {
-	private ApcuAdapter $cache;
+	private readonly ApcuAdapter $cache;
 
 	/**
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	public function __construct(
-		private ProjectRepository $projectRepository,
-		private PlanManager $planManager,
-		private UpdateDispatcher $updateDispatcher,
-		private StatusEndpoint $statusApi,
+		private readonly ProjectRepository $projectRepository,
+		private readonly PlanManager $planManager,
+		private readonly UpdateDispatcher $updateDispatcher,
+		private readonly StatusEndpoint $statusApi,
 	) {
 		$this->cache = new ApcuAdapter('project_status', 30);
 	}
@@ -115,7 +116,7 @@ class TestingStatusRequestHandler implements MessageHandlerInterface
 	{
 		if (!isset($status['expected_end_timestamp'])) {
 			$expectedEndingTimestamp = time() + ((int) $status['timeEstimate'] / 1000);
-			$status = array_merge($status, ['expected_end_timestamp' => $expectedEndingTimestamp]);
+			$status = [...$status, ...['expected_end_timestamp' => $expectedEndingTimestamp]];
 		}
 
 		$previousStatusCache = $this->getCacheItem($project);

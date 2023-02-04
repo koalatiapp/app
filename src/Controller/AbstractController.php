@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
 use Hashids\HashidsInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as DefaultAbstractController;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -16,41 +18,38 @@ abstract class AbstractController extends DefaultAbstractController
 	protected TranslatorInterface $translator;
 	protected LoggerInterface $logger;
 	protected HashidsInterface $idHasher;
+	protected EntityManagerInterface $entityManager;
 
-	/**
-	 * @required
-	 */
+	#[\Symfony\Contracts\Service\Attribute\Required]
+	public function setEntityManager(EntityManagerInterface $entityManager): void
+	{
+		$this->entityManager = $entityManager;
+	}
+
+	#[\Symfony\Contracts\Service\Attribute\Required]
 	public function setTranslator(TranslatorInterface $translator): void
 	{
 		$this->translator = $translator;
 	}
 
-	/**
-	 * @required
-	 */
+	#[\Symfony\Contracts\Service\Attribute\Required]
 	public function setLogger(LoggerInterface $logger): void
 	{
 		$this->logger = $logger;
 	}
 
-	/**
-	 * @required
-	 */
+	#[\Symfony\Contracts\Service\Attribute\Required]
 	public function setIdHasher(HashidsInterface $idHasher): void
 	{
 		$this->idHasher = $idHasher;
 	}
 
 	/**
-	 * Get a user from the Security Token Storage.
+	 * {@inheritDoc}
 	 *
 	 * @return User|null
-	 *
-	 * @throws \LogicException If SecurityBundle is not available
-	 *
-	 * @see TokenInterface::getUser()
 	 */
-	protected function getUser()
+	protected function getUser(): ?UserInterface
 	{
 		/** @var User|null */
 		$user = parent::getUser();

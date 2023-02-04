@@ -10,9 +10,6 @@ use App\Subscription\Plan\NoPlan;
 use App\Subscription\Plan\TrialPlan;
 use App\Util\Analytics\AnalyticsInterface;
 use App\Util\SelfHosting;
-use DateTime;
-use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,16 +22,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class RegistrationController extends AbstractController
 {
 	public function __construct(
-		private UserPasswordHasherInterface $passwordHasher,
-		private AnalyticsInterface $analytics,
-		private EmailVerifier $emailVerifier,
+		private readonly UserPasswordHasherInterface $passwordHasher,
+		private readonly AnalyticsInterface $analytics,
+		private readonly EmailVerifier $emailVerifier,
 	) {
 	}
 
-	/**
-	 * @Route("/sign-up", name="registration")
-	 */
-	public function signUp(Request $request, EntityManagerInterface $entityManager, SelfHosting $selfHosting, MailerInterface $mailer): Response
+	#[Route(path: '/sign-up', name: 'registration')]
+	public function signUp(Request $request, SelfHosting $selfHosting, MailerInterface $mailer): Response
 	{
 		$user = new User();
 		$form = $this->createForm(UserRegistrationType::class, $user);
@@ -56,12 +51,12 @@ class RegistrationController extends AbstractController
 				// Start users on a 14 day trial
 				$user->setSubscriptionPlan(TrialPlan::UNIQUE_NAME);
 				if (!$selfHosting->isSelfHosted()) {
-					$user->setSubscriptionChangeDate(new DateTime('+14 days'))
-						->setUpcomingSubscriptionPlan(NoPlan::UNIQUE_NAME);
+					$user->setSubscriptionChangeDate(new \DateTime('+14 days'))
+							->setUpcomingSubscriptionPlan(NoPlan::UNIQUE_NAME);
 				}
 
-				$entityManager->persist($user);
-				$entityManager->flush();
+				$this->entityManager->persist($user);
+				$this->entityManager->flush();
 
 				// Request that the users validates their email address
 				$this->emailVerifier->sendEmailConfirmation($user);
@@ -69,14 +64,14 @@ class RegistrationController extends AbstractController
 				// Send Welcome email
 				try {
 					$email = (new TemplatedEmail())
-						->to(new Address($user->getEmail(), $user->getFirstName()))
-						->subject($this->translator->trans('email.welcome.subject'))
-						->htmlTemplate('email/welcome.html.twig')
-						->context([
-							'user' => $user,
-						]);
+							->to(new Address($user->getEmail(), $user->getFirstName()))
+							->subject($this->translator->trans('email.welcome.subject'))
+							->htmlTemplate('email/welcome.html.twig')
+							->context([
+								'user' => $user,
+							]);
 					$mailer->send($email);
-				} catch (Exception $exception) {
+				} catch (\Exception $exception) {
 					$this->logger->warning($exception->getMessage(), $exception->getTrace());
 				}
 

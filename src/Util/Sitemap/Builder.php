@@ -4,8 +4,6 @@ namespace App\Util\Sitemap;
 
 use App\Util\Sitemap\Exception\CrawlerException;
 use App\Util\Url;
-use DOMDocument;
-use Exception;
 use Psr\Log\LoggerInterface;
 
 class Builder
@@ -19,8 +17,8 @@ class Builder
 	private array $locations = [];
 
 	public function __construct(
-		private Url $urlHelper,
-		private LoggerInterface $logger,
+		private readonly Url $urlHelper,
+		private readonly LoggerInterface $logger,
 	) {
 	}
 
@@ -101,7 +99,7 @@ class Builder
 	{
 		$urls = [];
 
-		$domDocument = new DOMDocument();
+		$domDocument = new \DOMDocument();
 		$domDocument->preserveWhiteSpace = false;
 		$domDocument->load($sitemapUrl);
 		$domNodeList = $domDocument->getElementsByTagName('loc');
@@ -117,7 +115,7 @@ class Builder
 						foreach ($this->scanSitemap($url->nodeValue) as $childSitemapUrl) {
 							$urls[] = $childSitemapUrl;
 						}
-					} catch (Exception $exception) {
+					} catch (\Exception $exception) {
 						// Sub-sitemap couldn't be fetched :/
 						$this->logger->error($exception->getMessage(), $exception->getTrace());
 					}
@@ -130,9 +128,7 @@ class Builder
 		}
 
 		// Sort URLS by length (length is a decent indicator of relevance)
-		usort($urls, function (string $urlA, string $urlB) {
-			return strlen($urlA) <=> strlen($urlB);
-		});
+		usort($urls, fn (string $urlA, string $urlB) => strlen($urlA) <=> strlen($urlB));
 
 		return $urls;
 	}

@@ -15,6 +15,11 @@ class SoloPlan extends NoPlan
 	public const PADDLE_ID = '664974';
 
 	/**
+	 * @var int PAGE_TEST_QUOTA Quota of page tests that are included for free in this plan
+	 */
+	public const PAGE_TEST_QUOTA = 6_000;
+
+	/**
 	 * @var int MAX_ACTIVE_PAGES_PER_PROJECT Maximum number of active pages a project can have
 	 */
 	public const MAX_ACTIVE_PAGES_PER_PROJECT = 30;
@@ -40,6 +45,11 @@ class SoloPlan extends NoPlan
 	public const HAS_MONITORING_ACCESS = true;
 
 	public function isPaidPlan(): bool
+	{
+		return true;
+	}
+
+	public function hasApiAccess(): bool
 	{
 		return true;
 	}

@@ -28,7 +28,7 @@ export class CommentEditor extends LitElement {
 	static get properties() {
 		return {
 			projectId: {type: String},
-			checklistItemId: {type: String},
+			checklistItemIri: {type: String},
 			threadId: {type: String},
 			content: {type: String},
 		};
@@ -98,12 +98,21 @@ export class CommentEditor extends LitElement {
 			return;
 		}
 
-		ApiClient.post("api_comments_submit", {
-			project_id: this.projectId ?? "",
-			checklist_item_id: this.checklistItemId ?? "",
-			thread_id: this.threadId ?? "",
+		const payload = {
 			content: content,
-		}).then(() => {
+		};
+
+		if (this.projectId) {
+			payload.project = `/api/projects/${this.projectId}`;
+		}
+		if (this.checklistItemIri) {
+			payload.checklist_item = this.checklistItemIri;
+		}
+		if (this.threadId) {
+			payload.thread = `/api/comments/${this.threadId}`;
+		}
+
+		ApiClient.post("/api/comments", payload).then(() => {
 			this.#clear();
 			window.Flash.show("success", Translator.trans("comment.flash.submitted"));
 

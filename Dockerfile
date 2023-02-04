@@ -13,14 +13,18 @@ FROM php:${PHP_VERSION}-fpm-alpine AS symfony_php
 # persistent / runtime deps
 RUN apk add --no-cache \
 		acl \
+		openssl \
 		fcgi \
 		file \
 		gettext \
 		git \
 		jq \
+		tzdata \
 	;
+# Set server timezone
+ENV TZ=America/Toronto
 
-ARG APCU_VERSION=5.1.19
+ARG APCU_VERSION=5.1.22
 RUN set -eux; \
 	apk add --no-cache --virtual .build-deps \
 		$PHPIZE_DEPS \

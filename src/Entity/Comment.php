@@ -2,105 +2,113 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use App\Api\State\CommentProcessor;
 use App\Entity\Checklist\Item;
 use App\Mercure\MercureEntityInterface;
 use App\Repository\CommentRepository;
-use DateTime;
-use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
 
-/**
- * @ORM\Entity(repositoryClass=CommentRepository::class)
- */
+#[ApiResource(
+	openapiContext: ["tags" => ['Comment']],
+	normalizationContext: ["groups" => "comment.list"],
+	uriTemplate: '/projects/{projectId}/comments',
+	uriVariables: ['projectId' => new Link(fromClass: Project::class, fromProperty: 'comments')],
+	operations: [new GetCollection()],
+)]
+#[ApiResource(
+	openapiContext: ["tags" => ['Comment']],
+	normalizationContext: ["groups" => "comment.read"],
+	processor: CommentProcessor::class,
+	operations: [
+		new Get(
+			security: "is_granted('comment_view', object)",
+		),
+		new Post(
+			denormalizationContext: ["groups" => "comment.write"],
+		),
+		new Patch(
+			security: "is_granted('comment_resolve', object)",
+			denormalizationContext: ["groups" => "comment.resolve"],
+		),
+	],
+)]
+#[ApiFilter(SearchFilter::class, properties: ['checklistItem' => 'exact', 'author' => 'exact', 'authorName' => 'partial', 'content' => 'partial', 'textContent' => 'partial'])]
+#[ApiFilter(BooleanFilter::class, properties: ['isResolved'])]
+#[ORM\Entity(repositoryClass: CommentRepository::class)]
 class Comment implements MercureEntityInterface
 {
-	/**
-	 * @ORM\Id
-	 * @ORM\GeneratedValue
-	 * @Groups({"default"})
-	 * @ORM\Column(type="integer")
-	 */
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[Groups(['comment.list', 'comment.read'])]
+	#[ORM\Column(type: 'integer')]
 	private ?int $id = null;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity=User::class)
-	 * @ORM\JoinColumn(onDelete="CASCADE")
-	 * @Groups({"default"})
-	 */
+	#[ORM\ManyToOne(targetEntity: User::class)]
+	#[ORM\JoinColumn(onDelete: 'CASCADE')]
+	#[Groups(['comment.list', 'comment.read'])]
 	private ?User $author = null;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity=Project::class, inversedBy="comments")
-	 * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
-	 * @Groups({"default"})
-	 * @MaxDepth(1)
-	 */
-	private Project $project;
+	#[ORM\ManyToOne(targetEntity: Project::class, inversedBy: 'comments')]
+	#[ORM\JoinColumn(onDelete: 'CASCADE', nullable: false)]
+	#[Groups(['comment.list', 'comment.read', 'comment.write'])]
+	private ?Project $project = null;
 
-	/**
-	 * @ORM\Column(type="text")
-	 * @Groups({"default"})
-	 */
+	#[ORM\Column(type: 'text')]
+	#[Groups(['comment.list', 'comment.read', 'comment.write'])]
 	private string $content;
 
-	/**
-	 * @ORM\Column(type="text")
-	 */
+	#[ORM\Column(type: 'text')]
+	#[Groups(['comment.list', 'comment.read'])]
 	private string $textContent;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity=Comment::class, inversedBy="replies")
-	 * @ORM\JoinColumn(onDelete="CASCADE")
-	 * @Groups({"default"})
-	 */
+	#[ORM\ManyToOne(targetEntity: Comment::class, inversedBy: 'replies')]
+	#[ORM\JoinColumn(onDelete: 'CASCADE')]
+	#[Groups(['comment.list', 'comment.read', 'comment.write'])]
 	private ?Comment $thread = null;
 
 	/**
-	 * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="thread")
-	 * @ORM\OrderBy({"isResolved" = "ASC"}, {"dateCreated" = "ASC"})
-	 * @Groups({"default"})
-	 *
 	 * @var Collection<int,self>
 	 */
+	#[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'thread')]
+	#[ORM\OrderBy(['isResolved' => 'ASC', 'dateCreated' => 'ASC'])]
+	#[Groups(['comment.list', 'comment.read'])]
 	private Collection $replies;
 
-	/**
-	 * @ORM\Column(type="datetime")
-	 * @Groups({"default"})
-	 */
-	private DateTimeInterface $dateCreated;
+	#[ORM\Column(type: 'datetime')]
+	#[Groups(['comment.list', 'comment.read'])]
+	private \DateTimeInterface $dateCreated;
 
-	/**
-	 * @ORM\Column(type="string", length=255, nullable=true)
-	 * @Groups({"default"})
-	 */
+	#[ORM\Column(type: 'string', length: 255, nullable: true)]
+	#[Groups(['comment.list', 'comment.read'])]
 	private ?string $authorName = null;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity=Item::class, inversedBy="comments")
-	 * @ORM\JoinColumn(onDelete="CASCADE")
-	 * @Groups({"default"})
-	 */
+	#[ORM\ManyToOne(targetEntity: Item::class, inversedBy: 'comments')]
+	#[ORM\JoinColumn(onDelete: 'CASCADE')]
+	#[Groups(['comment.list', 'comment.read', 'comment.write'])]
 	private ?Item $checklistItem = null;
 
-	/**
-	 * @ORM\Column(type="boolean")
-	 * @Groups({"default"})
-	 */
+	#[ORM\Column(type: 'boolean')]
+	#[Groups(['comment.list', 'comment.read', 'comment.write', 'comment.resolve'])]
 	private bool $isResolved = false;
 
-	/**
-	 * @ORM\Column(type="boolean")
-	 */
+	#[ORM\Column(type: 'boolean')]
 	private bool $isDeleted = false;
 
 	public function __construct()
 	{
-		$this->dateCreated = new DateTime();
+		$this->dateCreated = new \DateTime();
 		$this->replies = new ArrayCollection();
 	}
 
@@ -196,12 +204,12 @@ class Comment implements MercureEntityInterface
 		return $this;
 	}
 
-	public function getDateCreated(): ?DateTimeInterface
+	public function getDateCreated(): ?\DateTimeInterface
 	{
 		return $this->dateCreated;
 	}
 
-	public function setDateCreated(DateTimeInterface $dateCreated): self
+	public function setDateCreated(\DateTimeInterface $dateCreated): self
 	{
 		$this->dateCreated = $dateCreated;
 
@@ -263,5 +271,16 @@ class Comment implements MercureEntityInterface
 		$this->isDeleted = $isDeleted;
 
 		return $this;
+	}
+
+	#[Groups(['comment.list', 'comment.read'])]
+	public function getAuthorAvatar(): ?string
+	{
+		return $this->getAuthor()?->getAvatarUrl();
+	}
+
+	public function getMercureSerializationGroup(): string
+	{
+		return "comment.read";
 	}
 }

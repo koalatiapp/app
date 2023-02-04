@@ -15,63 +15,61 @@ use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ProjectSettingsController extends AbstractProjectController
 {
 	use SuggestUpgradeControllerTrait;
 
-	/**
-	 * @Route("/project/{id}/settings/team", name="project_settings_team")
-	 */
+	public function __construct(
+		private readonly MessageBusInterface $bus,
+	) {
+	}
+
+	#[Route(path: '/project/{id}/settings/team', name: 'project_settings_team')]
 	public function teamSettings(int $id): Response
 	{
 		$project = $this->getProject($id);
 
-		if (!$this->isGranted(ProjectVoter::MANAGE, $project)) {
+		if (!$this->isGranted(ProjectVoter::EDIT, $project)) {
 			return $this->suggestPlanUpgrade('upgrade_suggestion.project');
 		}
 
 		return $this->render('app/project/settings/team.html.twig', ['project' => $project]);
 	}
 
-	/**
-	 * @Route("/project/{id}/settings/checklist", name="project_settings_checklist")
-	 */
+	#[Route(path: '/project/{id}/settings/checklist', name: 'project_settings_checklist')]
 	public function checklistSettings(int $id): Response
 	{
 		$project = $this->getProject($id);
 
-		if (!$this->isGranted(ProjectVoter::MANAGE, $project)) {
+		if (!$this->isGranted(ProjectVoter::EDIT, $project)) {
 			return $this->suggestPlanUpgrade('upgrade_suggestion.project');
 		}
 
 		return $this->render('app/project/settings/checklist.html.twig', ['project' => $project]);
 	}
 
-	/**
-	 * @Route("/project/{id}/settings/automated-testing", name="project_settings_automated_testing")
-	 */
+	#[Route(path: '/project/{id}/settings/automated-testing', name: 'project_settings_automated_testing')]
 	public function automatedTestingSettings(int $id, AvailableToolsFetcher $availableToolsFetcher): Response
 	{
 		$project = $this->getProject($id);
 
-		if (!$this->isGranted(ProjectVoter::MANAGE, $project)) {
+		if (!$this->isGranted(ProjectVoter::EDIT, $project)) {
 			return $this->suggestPlanUpgrade('upgrade_suggestion.project');
 		}
 
 		return $this->render('app/project/settings/automated-testing.html.twig', ['project' => $project, 'tools' => $availableToolsFetcher->getTools()]);
 	}
 
-	/**
-	 * @Route("/project/{id}/settings", name="project_settings")
-	 */
+	#[Route(path: '/project/{id}/settings', name: 'project_settings')]
 	public function projectSettings(int $id, Request $request, Url $urlHelper): Response
 	{
 		$project = $this->getProject($id);
 		$originalProject = clone $project;
 
-		if (!$this->isGranted(ProjectVoter::MANAGE, $project)) {
+		if (!$this->isGranted(ProjectVoter::EDIT, $project)) {
 			return $this->suggestPlanUpgrade('upgrade_suggestion.project');
 		}
 
@@ -86,9 +84,8 @@ class ProjectSettingsController extends AbstractProjectController
 			if ($this->isRequestingDeletion($form, $request)) {
 				if ($form->get('deleteConfirmation')->getData() === true) {
 					$projectName = $project->getName();
-					$em = $this->getDoctrine()->getManager();
-					$em->remove($project);
-					$em->flush();
+					$this->entityManager->remove($project);
+					$this->entityManager->flush();
 
 					$this->addFlash('success', 'project_settings.project.flash.deleted_successfully', ['%name%' => $projectName]);
 
@@ -104,9 +101,9 @@ class ProjectSettingsController extends AbstractProjectController
 		}
 
 		return $this->render('app/project/settings/project.html.twig', [
-			'project' => $project,
-			'form' => $form->createView(),
-		]);
+				'project' => $project,
+				'form' => $form->createView(),
+			]);
 	}
 
 	private function processChanges(Form $form, Project $project, Project $originalProject, Url $urlHelper): void
@@ -121,16 +118,15 @@ class ProjectSettingsController extends AbstractProjectController
 
 		if ($form->isValid()) {
 			$project->setUrl($websiteUrl);
-			$em = $this->getDoctrine()->getManager();
-			$em->persist($project);
-			$em->flush();
+			$this->entityManager->persist($project);
+			$this->entityManager->flush();
 
 			$this->addFlash('success', 'project_settings.project.flash.updated_successfully', ['%name%' => $project->getName()]);
 
 			if ($urlHasChanged) {
-				$this->dispatchMessage(new ScreenshotRequest($project->getId()));
-				$this->dispatchMessage(new FaviconRequest($project->getId()));
-				$this->dispatchMessage(new SitemapRequest($project->getId()));
+				$this->bus->dispatch(new ScreenshotRequest($project->getId()));
+				$this->bus->dispatch(new FaviconRequest($project->getId()));
+				$this->bus->dispatch(new SitemapRequest($project->getId()));
 			}
 		}
 	}
@@ -138,7 +134,7 @@ class ProjectSettingsController extends AbstractProjectController
 	private function isRequestingDeletion(Form $form, Request $request): bool
 	{
 		$clickedButtonName = $form->getClickedButton()->getName();
-		$csrfToken = $request->request->get($form->getName())['_token'] ?? null;
+		$csrfToken = $request->request->all($form->getName())['_token'] ?? null;
 
 		return $clickedButtonName == 'delete' && $this->isCsrfTokenValid($form->getName(), $csrfToken);
 	}

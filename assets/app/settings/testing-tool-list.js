@@ -1,5 +1,5 @@
 import { html, css } from "lit";
-import { ApiClient } from "../../utils/api";
+import { InternalApiClient } from "../../utils/internal-api";
 import { AbstractDynamicList } from "../abstract-dynamic-list";
 
 export class TestingToolList extends AbstractDynamicList {
@@ -72,12 +72,19 @@ export class TestingToolList extends AbstractDynamicList {
 
 	fetchListData()
 	{
-		super.fetchListData("api_project_automated_testing_settings_tools_list", { project_id: this.projectId });
+		this._isWaitingForServerResponse = true;
+
+		InternalApiClient.get("api_project_automated_testing_settings_tools_list", { project_id: this.projectId }).then(response => {
+			this._isWaitingForServerResponse = false;
+			this.items = response.data;
+
+			this.dispatchEvent(new CustomEvent("items-initialized"));
+		});
 	}
 
 	toggleTool(toolName, state)
 	{
-		ApiClient.post("api_project_automated_testing_settings_tools_toggle", {
+		InternalApiClient.post("api_project_automated_testing_settings_tools_toggle", {
 			project_id: this.projectId,
 			tool: toolName,
 			enabled: state ? 1 : 0

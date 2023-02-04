@@ -89,5 +89,30 @@
 			<p>Once that 14-day period is over, you won't have access to your projects anymore until you subscribe to a paid plan.</p>
 			<p>If you have created a team, neither you or your team's members will be able to access the team's projects until you subscribe to the Small Team or Business plan, or until you transfer ownership of the team to a user who is on one of these plans. To transfer a team's ownership, please contact us.</p>
 		</nb-accordion>
+
+		<hr class="spacer small">
+		<h3>API</h3>
+
+		<nb-accordion>
+			<div slot="summary">Does Koalati offer an API?</div>
+			<p>Yes!</p>
+			<p>Take a look at our <a href="/api/docs" target="_blank" class="text-link">API documentation</a> for more information on how you can integrate Koalati in your favorite tools and workflows.</p>
+		</nb-accordion>
+
+		<hr class="spacer small">
+		<h3>Subscriptions</h3>
+
+		<nb-accordion>
+			<div slot="summary">How do I change or cancel my subscription?</div>
+			<p>You can change or cancel your subscription by yourself in the <a href="{{ path("manage_subscription") }}" class="text-link">Manage Subscription page</a>.</p>
+			<p>If you have any question regarding your subscription, don't hesitate to contact us via email at <a href="mailto:info@koalati.com" class="text-link">info@koalati.com</a>: we'll get back to you as swiftly as possible.</p>
+		</nb-accordion>
+
+		<nb-accordion>
+			<div slot="summary">Can I increase my automated testing quotas?</div>
+			<p>Your page testing quota is determined by your subscription plan, so you can upgrade or downgrade your plan to change your quota.</p>
+			<p>You can also allow automated testing to exceed your plan's quota by Allowing Page Tests over Quota in the <a href="{{ path("manage_subscription_quota") }}" class="text-link">Quotas & Usage page</a>.</p>
+			<p>In that page, you'll also be able to define a spending limit to prevent unwanted charges from being incurred when over-the-quota usage is allowed.</p>
+		</nb-accordion>
 	</section>
 {% endblock %}

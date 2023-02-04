@@ -2,13 +2,14 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
 use App\Entity\Checklist\ChecklistTemplate;
 use App\Entity\Testing\IgnoreEntry;
 use App\Entity\Trait\CollectionManagingEntity;
+use App\Entity\Trait\UserQuotaPreferencesTrait;
 use App\Entity\Trait\UserSubscriptionTrait;
 use App\Repository\UserRepository;
-use DateTime;
-use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -20,119 +21,107 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass=UserRepository::class)
- * @ORM\Table(name="`user`", indexes={
- *     @ORM\Index(name="user_paddle_user_id", columns={"paddle_user_id"})
- * })
- * @UniqueEntity(fields="email", message="user.error.unique_email")
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+#[ApiResource(
+	normalizationContext: ["groups" => "user.read"],
+	operations: [
+		new Get(security: "is_granted('user_view', object)"),
+	],
+)]
+#[ORM\Table(name: '`user`')]
+#[ORM\Index(name: 'user_paddle_user_id', columns: ['paddle_user_id'])]
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+#[UniqueEntity(fields: 'email', message: 'user.error.unique_email')]
+class User implements UserInterface, PasswordAuthenticatedUserInterface, \Stringable
 {
 	use CollectionManagingEntity;
 	use UserSubscriptionTrait;
+	use UserQuotaPreferencesTrait;
 
-	/**
-	 * @ORM\Id
-	 * @ORM\GeneratedValue
-	 * @ORM\Column(type="integer")
-	 * @Groups({"default"})
-	 */
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[ORM\Column(type: 'integer')]
 	protected int $id;
 
-	/**
-	 * @ORM\Column(type="string", length=180, unique=true)
-	 * @Groups({"self"})
-	 * @Assert\NotBlank
-	 */
-	protected ?string $email;
+	#[ORM\Column(type: 'string', length: 180, unique: true)]
+	#[Groups(['self'])]
+	#[Assert\NotBlank]
+	protected ?string $email = null;
 
 	/**
 	 * @var array<string>
-	 * @ORM\Column(type="json")
 	 */
+	#[ORM\Column(type: 'json')]
 	protected array $roles = [];
 
 	/**
 	 * @var string The hashed password
-	 * @ORM\Column(type="string")
-	 * @Assert\NotBlank
 	 */
+	#[ORM\Column(type: 'string')]
+	#[Assert\NotBlank]
 	protected string $password;
 
-	/**
-	 * @ORM\Column(type="string", length=255)
-	 * @Groups({"default"})
-	 * @Assert\NotBlank
-	 */
-	protected ?string $firstName;
+	#[ORM\Column(type: 'string', length: 255)]
+	#[Groups(['user.read', 'ignore_entry.list', 'ignore_entry.read'])]
+	#[Assert\NotBlank]
+	protected ?string $firstName = null;
 
-	/**
-	 * @ORM\Column(type="string", length=255, nullable=true)
-	 * @Groups({"default"})
-	 */
-	protected ?string $lastName;
+	#[ORM\Column(type: 'string', length: 255, nullable: true)]
+	#[Groups(['user.read', 'ignore_entry.list', 'ignore_entry.read'])]
+	protected ?string $lastName = null;
 
-	/**
-	 * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
-	 */
-	protected ?DateTimeInterface $dateCreated;
+	#[ORM\Column(type: 'datetime', options: ['default' => 'CURRENT_TIMESTAMP'])]
+	protected ?\DateTimeInterface $dateCreated;
 
-	/**
-	 * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
-	 */
-	protected ?DateTimeInterface $dateLastLoggedIn;
+	#[ORM\Column(type: 'datetime', options: ['default' => 'CURRENT_TIMESTAMP'])]
+	protected ?\DateTimeInterface $dateLastLoggedIn;
 
 	/**
 	 * @var Collection<int, Project>
-	 * @ORM\OneToMany(targetEntity=Project::class, mappedBy="ownerUser")
-	 * @ORM\OrderBy({"dateCreated" = "DESC"})
 	 */
+	#[ORM\OneToMany(targetEntity: Project::class, mappedBy: 'ownerUser')]
+	#[ORM\OrderBy(['dateCreated' => 'DESC'])]
 	protected Collection $personalProjects;
 
 	/**
 	 * @var Collection<int, OrganizationMember>
-	 * @ORM\OneToMany(targetEntity=OrganizationMember::class, mappedBy="user", orphanRemoval=true)
 	 */
+	#[ORM\OneToMany(targetEntity: OrganizationMember::class, mappedBy: 'user', orphanRemoval: true)]
 	protected Collection $organizationLinks;
 
 	/**
 	 * @var Collection<int, ProjectMember>
-	 * @ORM\OneToMany(targetEntity=ProjectMember::class, mappedBy="user")
 	 */
+	#[ORM\OneToMany(targetEntity: ProjectMember::class, mappedBy: 'user')]
 	protected Collection $projectLinks;
 
 	/**
-	 * @ORM\OneToMany(targetEntity=ChecklistTemplate::class, mappedBy="ownerUser")
-	 *
 	 * @var \Doctrine\Common\Collections\Collection<int, ChecklistTemplate>
 	 */
+	#[ORM\OneToMany(targetEntity: ChecklistTemplate::class, mappedBy: 'ownerUser')]
 	protected ?Collection $checklistTemplates;
 
 	/**
-	 * @ORM\OneToMany(targetEntity=IgnoreEntry::class, mappedBy="targetUser")
-	 *
 	 * @var \Doctrine\Common\Collections\Collection<int, IgnoreEntry>
 	 */
+	#[ORM\OneToMany(targetEntity: IgnoreEntry::class, mappedBy: 'targetUser')]
 	protected ?Collection $ignoreEntries;
 
 	/**
-	 * @ORM\OneToMany(targetEntity=UserMetadata::class, mappedBy="user", orphanRemoval=true, cascade={"persist"})
-	 *
 	 * @var \Doctrine\Common\Collections\Collection<int, UserMetadata>
 	 */
+	#[ORM\OneToMany(targetEntity: UserMetadata::class, mappedBy: 'user', orphanRemoval: true, cascade: ['persist'])]
 	protected Collection $metadata;
 
-	/**
-	 * @ORM\Column(type="boolean")
-	 */
+	#[ORM\Column(type: 'boolean')]
 	private bool $isVerified = false;
 
 	public function __construct()
 	{
-		$this->dateCreated = new DateTime();
-		$this->dateLastLoggedIn = new DateTime();
+		$this->dateCreated = new \DateTime();
+		$this->dateLastLoggedIn = new \DateTime();
 		$this->personalProjects = new ArrayCollection();
 		$this->organizationLinks = new ArrayCollection();
 		$this->projectLinks = new ArrayCollection();
@@ -211,7 +200,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	 */
 	public function getPassword(): string
 	{
-		return (string) $this->password;
+		return $this->password;
 	}
 
 	public function setPassword(string $password): self
@@ -259,24 +248,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 		return $this->getFirstName().' '.$this->getLastName();
 	}
 
-	public function getDateCreated(): DateTimeInterface
+	public function getDateCreated(): \DateTimeInterface
 	{
 		return $this->dateCreated;
 	}
 
-	public function setDateCreated(DateTimeInterface $dateCreated): self
+	public function setDateCreated(\DateTimeInterface $dateCreated): self
 	{
 		$this->dateCreated = $dateCreated;
 
 		return $this;
 	}
 
-	public function getDateLastLoggedIn(): DateTimeInterface
+	public function getDateLastLoggedIn(): \DateTimeInterface
 	{
 		return $this->dateLastLoggedIn;
 	}
 
-	public function setDateLastLoggedIn(DateTimeInterface $dateLastLoggedIn): self
+	public function setDateLastLoggedIn(\DateTimeInterface $dateLastLoggedIn): self
 	{
 		$this->dateLastLoggedIn = $dateLastLoggedIn;
 
@@ -387,9 +376,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 		return $this->removeCollectionElement('ignoreEntries', $ignoreEntry, 'TargetUser');
 	}
 
-	/**
-	 * @Groups({"default"})
-	 */
 	public function getAvatarUrl(int $size = 80): string
 	{
 		$gravatarApi = new GravatarApi(['default' => 'retro']);
@@ -463,7 +449,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 		return $this;
 	}
 
-	public function __toString()
+	public function __toString(): string
 	{
 		return (string) $this->getId();
 	}
@@ -478,5 +464,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 		$this->isVerified = $isVerified;
 
 		return $this;
+	}
+
+	/**
+	 * @return Collection<int,?Organization>
+	 */
+	public function getOrganizations(): Collection
+	{
+		return $this->getOrganizationLinks()->map(fn (?OrganizationMember $membership = null) => $membership->getOrganization());
 	}
 }

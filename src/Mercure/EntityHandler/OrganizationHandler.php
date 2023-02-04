@@ -24,6 +24,6 @@ class OrganizationHandler implements EntityHandlerInterface
 	 */
 	public function getAffectedUsers(MercureEntityInterface $organization): array
 	{
-		return $organization->getMembers()->map(fn (OrganizationMember $member) => $member->getUser())->toArray();
+		return $organization->getMembers()->map(fn (OrganizationMember $member = null) => $member->getUser())->toArray();
 	}
 }

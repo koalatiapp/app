@@ -2,99 +2,99 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Doctrine\Orm\Filter\NumericFilter;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
+use ApiPlatform\Metadata\Patch;
 use App\Entity\Testing\IgnoreEntry;
 use App\Entity\Testing\Recommendation;
 use App\Repository\PageRepository;
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
 
-/**
- * @ORM\Entity(repositoryClass=PageRepository::class)
- * @ORM\Table(indexes={
- * 		@ORM\Index(name="page_url_index", columns={"url"})
- * })
- */
+#[ApiResource(
+	normalizationContext: ["groups" => "page.list"],
+	uriTemplate: '/projects/{projectId}/pages',
+	uriVariables: ['projectId' => new Link(fromClass: Project::class, fromProperty: 'pages')],
+	operations: [new GetCollection()],
+)]
+#[ApiResource(
+	normalizationContext: ["groups" => "page.read"],
+	denormalizationContext: ["groups" => "page.write"],
+	operations: [
+		new Get(security: "is_granted('page_view', object)"),
+		new Patch(security: "is_granted('page_edit', object)"),
+	],
+)]
+#[ApiFilter(OrderFilter::class, properties: ['url', 'title', 'dateUpdated'])]
+#[ApiFilter(SearchFilter::class, properties: ['title' => 'partial', 'url' => 'partial', 'httpCode' => 'exact'])]
+#[ApiFilter(NumericFilter::class, properties: ['httpCode'])]
+#[ApiFilter(BooleanFilter::class, properties: ['isIgnored'])]
+#[ORM\Index(name: 'page_url_index', columns: ['url'])]
+#[ORM\Entity(repositoryClass: PageRepository::class)]
 class Page
 {
-	/**
-	 * @ORM\Id
-	 * @ORM\GeneratedValue
-	 * @ORM\Column(type="integer")
-	 * @Groups({"default"})
-	 */
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[ORM\Column(type: 'integer')]
+	#[Groups(['page.list', 'page.read'])]
 	private ?int $id = null;
 
-	/**
-	 * @ORM\Column(type="string", length=255, nullable=true)
-	 * @Groups({"default"})
-	 */
+	#[ORM\Column(type: 'string', length: 255, nullable: true)]
+	#[Groups(['page.list', 'page.read'])]
 	private ?string $title;
 
-	/**
-	 * @ORM\Column(type="string", length=510)
-	 * @Groups({"default"})
-	 */
+	#[ORM\Column(type: 'string', length: 510)]
+	#[Groups(['page.list', 'page.read'])]
 	private string $url;
 
-	/**
-	 * @ORM\Column(type="datetime")
-	 * @Groups({"default"})
-	 */
+	#[ORM\Column(type: 'datetime')]
 	private \DateTimeInterface $dateCreated;
 
-	/**
-	 * @ORM\Column(type="datetime")
-	 * @Groups({"default"})
-	 */
+	#[ORM\Column(type: 'datetime')]
+	#[Groups(['page.list', 'page.read'])]
 	private \DateTimeInterface $dateUpdated;
 
-	/**
-	 * @ORM\Column(type="integer", nullable=true)
-	 * @Groups({"default"})
-	 */
-	private ?int $httpCode;
+	#[ORM\Column(type: 'integer', nullable: true)]
+	#[Groups(['page.list', 'page.read'])]
+	private ?int $httpCode = null;
 
 	/**
-	 * @ORM\OneToMany(targetEntity=Recommendation::class, mappedBy="relatedPage", orphanRemoval=true)
-	 * @Groups({"page"})
-	 * @MaxDepth(1)
-	 *
 	 * @var Collection<int,Recommendation>
 	 */
+	#[ORM\OneToMany(targetEntity: Recommendation::class, mappedBy: 'relatedPage', orphanRemoval: true)]
 	private Collection $recommendations;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity=Project::class, inversedBy="pages")
-	 * @ORM\JoinColumn(name="project_id", referencedColumnName="id", onDelete="CASCADE")
-	 * @Groups({"page"})
-	 * @MaxDepth(1)
-	 */
+	#[ORM\ManyToOne(targetEntity: Project::class, inversedBy: 'pages')]
+	#[ORM\JoinColumn(name: 'project_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+	#[Groups(['page.list', 'page.read'])]
 	private Project $project;
 
-	/**
-	 * @ORM\Column(type="boolean")
-	 * @Groups({"default"})
-	 */
+	#[ORM\Column(type: 'boolean')]
+	#[Groups(['page.list', 'page.read', 'page.write'])]
 	private bool $isIgnored = false;
 
 	/**
-	 * @ORM\OneToMany(targetEntity=IgnoreEntry::class, mappedBy="targetPage")
-	 *
-	 * @var \Doctrine\Common\Collections\Collection<int, IgnoreEntry>
+	 * @var Collection<int, IgnoreEntry>
 	 */
-	private $ignoreEntries;
+	#[ORM\OneToMany(targetEntity: IgnoreEntry::class, mappedBy: 'targetPage')]
+	private Collection $ignoreEntries;
 
 	public function __construct(Project $project, string $url, ?string $title = null)
 	{
 		$this->setUrl($url);
 		$this->setTitle($title);
 		$this->setProject($project);
-		$this->dateCreated = new DateTime();
-		$this->dateUpdated = new DateTime();
+		$this->dateCreated = new \DateTime();
+		$this->dateUpdated = new \DateTime();
 		$this->recommendations = new ArrayCollection();
 		$this->ignoreEntries = new ArrayCollection();
 	}
@@ -112,7 +112,7 @@ class Page
 	public function setTitle(?string $title): self
 	{
 		$this->title = mb_substr($title ?: '', 0, 255);
-		$this->setDateUpdated(new DateTime());
+		$this->setDateUpdated(new \DateTime());
 
 		return $this;
 	}

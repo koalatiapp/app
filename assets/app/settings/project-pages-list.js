@@ -52,7 +52,7 @@ export class ProjectPagesList extends AbstractDynamicList {
 				key: "actions",
 				label: null,
 				render: (item, list) => html`
-					<nb-switch page-id=${item.id} onLabel=${Translator.trans("pages.listing.enabled")} offLabel=${Translator.trans("pages.listing.disabled")} @change=${e => list.togglePage(item.id, e.target.checked)} ?checked=${!item.isIgnored} labelFirst></nb-switch>
+					<nb-switch page-id=${item.id} onLabel=${Translator.trans("pages.listing.enabled")} offLabel=${Translator.trans("pages.listing.disabled")} @change=${e => list.togglePage(item.id, e.target.checked)} ?checked=${!item.is_ignored} labelFirst></nb-switch>
 				`,
 				placeholder: html`
 					<div class="nb--list-item-column-placeholder" style="width: 2ch; font-size: 1.75em; margin-left: auto;">&nbsp;</div>
@@ -77,19 +77,15 @@ export class ProjectPagesList extends AbstractDynamicList {
 
 	fetchListData()
 	{
-		super.fetchListData("api_project_pages_list", { project_id: this.projectId });
+		super.fetchListData(`/api/projects/${this.projectId}/pages`);
 	}
 
 	togglePage(pageId, state)
 	{
-		ApiClient.post("api_project_pages_toggle", {
-			project_id: this.projectId,
-			page_id: pageId,
-			enabled: state ? 1 : 0
-		}, null).then(response => {
+		ApiClient.patch(`/api/pages/${pageId}`, { is_ignored: !state }, null).then(response => {
 			for (const item of this.items) {
 				if (item.id == pageId) {
-					item.isIgnored = !response.data.enabled;
+					item.is_ignored = response.is_ignored;
 				}
 			}
 
