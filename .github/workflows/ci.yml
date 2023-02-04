@@ -19,7 +19,7 @@ jobs:
             - name: Install PHP dependencies (composer install)
               uses: php-actions/composer@v6
               with:
-                php_version: 8.1
+                php_version: 8.2
                 php_extensions: xsl bcmath pcntl
             - name: Use Node.js 12.x
               uses: actions/setup-node@v1
