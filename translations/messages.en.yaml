@@ -62,6 +62,34 @@ api:
                     <strong>However, please note that authentication calls must use the
                     JSON (<code>application/json</code>) format.</strong>
                 </p>
+                <p>
+                    You can specify the desired response format by using the
+                    <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept" target="_blank"><code>Accept</code> HTTP header</a>. Ex.: <code>Accept: application/ld+json</code>.
+                </p>
+                <p>
+                    The payload type may be defined using the Content-Type HTTP header.
+                    <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept" target="_blank"><code>Accept</code> HTTP header</a>. Ex.: <code>Content-Type: application/ld+json</code>.
+                </p>
+                <p>
+                    This documentation provides payload samples for the most popular and recommended formats.
+                    Here are a few examples of the other supported formats:
+                </p>
+                <p><strong>XML:</strong></p>
+                <pre><code><!--
+                    -->&lt;item&gt;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;Sample Org&lt;/name&gt;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;url&gt;https://sample.koalati.com&lt;/url&gt;
+                    &lt;/item&gt;</pre></code>
+                <p><strong>YAML:</strong></p>
+                <pre><code><!--
+                    -->name: Sample Org
+                    url: https://sample.koalati.com
+                </pre></code>
+                <p><strong>CSV:</strong></p>
+                <pre><code><!--
+                    -->name,url
+                    "Sample Org","https://sample.koalati.com"
+                </pre></code>
         rate_limiting:
             title: Rate Limiting
             content: >
