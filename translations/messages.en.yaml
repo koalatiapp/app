@@ -67,8 +67,9 @@ api:
                     <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept" target="_blank"><code>Accept</code> HTTP header</a>. Ex.: <code>Accept: application/ld+json</code>.
                 </p>
                 <p>
-                    The payload type may be defined using the Content-Type HTTP header.
-                    <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept" target="_blank"><code>Accept</code> HTTP header</a>. Ex.: <code>Content-Type: application/ld+json</code>.
+                    The payload type may be defined using the
+                    <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type" target="_blank">Content-Type HTTP header</a>.
+                    Ex.: <code>Content-Type: application/ld+json</code>.
                 </p>
                 <p>
                     This documentation provides payload samples for the most popular and recommended formats.
