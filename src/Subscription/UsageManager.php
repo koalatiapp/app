@@ -205,30 +205,30 @@ class UsageManager
 	 */
 	public function getHistoricalUsage(): array
 	{
-		$date = date("Y_m_d");
 		$cache = new FilesystemAdapter();
-		$cacheKey = "user.{$this->user->getId()}.historical_usage.{$date}";
-		$cache->delete($cacheKey);
-		$historicalUsage = $cache->get($cacheKey, function (ItemInterface $item) {
-			$item->expiresAfter(3600 * 24);
 
-			$historicalUsage = [];
-			$userCreatedDate = $this->user->getDateCreated();
-			$fromDate = new \DateTime("-1 month");
+		$historicalUsage = [];
+		$userCreatedDate = $this->user->getDateCreated();
+		$fromDate = new \DateTime("-1 month");
 
-			while ($fromDate >= $userCreatedDate) {
-				$historicalUsage[] = [
-					"pageTestUsage" => $this->getPageTestUsage($fromDate),
-					"usageCost" => $this->getUsageCost($fromDate),
-					"usageCycleStartDate" => $this->getUsageCycleStartDate($fromDate),
-					"usageCycleEndDate" => $this->getUsageCycleEndDate($fromDate),
-					"usageCycleBillingDate" => $this->getUsageCycleBillingDate($fromDate),
+		while ($fromDate >= $userCreatedDate) {
+			$cycleStartDate = $this->getUsageCycleStartDate($fromDate);
+			$cacheKey = "user.{$this->user->getId()}.historical_usage.{$cycleStartDate->format("Y-m-d")}";
+
+			$historicalUsage[] = $cache->get($cacheKey, function (ItemInterface $item) use ($cycleStartDate) {
+				$item->expiresAfter(3600 * 24 * 365);
+
+				return [
+					"pageTestUsage" => $this->getPageTestUsage($cycleStartDate),
+					"usageCost" => $this->getUsageCost($cycleStartDate),
+					"usageCycleStartDate" => $cycleStartDate,
+					"usageCycleEndDate" => $this->getUsageCycleEndDate($cycleStartDate),
+					"usageCycleBillingDate" => $this->getUsageCycleBillingDate($cycleStartDate),
 				];
-				$fromDate = $fromDate->modify("-1 month");
-			}
+			});
 
-			return $historicalUsage;
-		});
+			$fromDate = $fromDate->modify("-1 month");
+		}
 
 		return $historicalUsage;
 	}

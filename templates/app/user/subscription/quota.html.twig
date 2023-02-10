@@ -56,26 +56,7 @@
 		<div class="card">
 			<h2>{% trans %}user_settings.quota.history.title{% endtrans %}</h2>
 
-			<table class="simple-table">
-				<thead>
-					<tr>
-						<th>{% trans %}user_settings.quota.label.start_date{% endtrans %}</th>
-						<th>{% trans %}user_settings.quota.label.end_date{% endtrans %}</th>
-						<th>{% trans %}user_settings.quota.label.billing_date{% endtrans %}</th>
-						<th>{% trans %}user_settings.quota.label.usage{% endtrans %}</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for usage_cycle in usageManager.historicalUsage %}
-						<tr>
-							<td>{{ usage_cycle.usageCycleStartDate|format_date('long') }}</td>
-							<td>{{ usage_cycle.usageCycleEndDate|format_date('long') }}</td>
-							<td>{{ usage_cycle.usageCycleBillingDate|format_date('long') }}</td>
-							<td>{{ usage_cycle.pageTestUsage|number_format }}</td>
-						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
+			<historical-usage-table></historical-usage-table>
 		</div>
 	</div>
 {% endblock %}

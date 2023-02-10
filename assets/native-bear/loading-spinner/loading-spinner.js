@@ -21,8 +21,8 @@ export class NbLoadingSpinner extends LitElement {
 				}
 
 				svg { --size: 2rem; width: var(--size); height: var(--size); animation: spin 2s linear infinite; }
-				:host([size="small"] svg { --size: 1rem; }
-				:host([size="large"] svg { --size: 5rem; }
+				:host([size="small"]) svg { --size: 1rem; }
+				:host([size="large"]) svg { --size: 5rem; }
 
 				@media (prefers-color-scheme: dark) {
 

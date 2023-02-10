@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\ProjectActivityRecord;
 use App\Entity\Testing\IgnoreEntry;
 use App\Entity\Testing\Recommendation;
 use App\Entity\Testing\TestResult;
@@ -78,6 +79,14 @@ class TestingFixtures extends Fixture implements DependentFixtureInterface
 					$project->getOwnerOrganization()?->getOwner() ?: $project->getOwnerUser(),
 				);
 				$manager->persist($ignoreEntry);
+
+				$activityRecord = (new ProjectActivityRecord())
+					->setProject($project)
+					->setUser($project->getTopLevelOwner())
+					->setPageUrl($page->getUrl())
+					->setWebsiteUrl($project->getUrl())
+					->setTool("@koalati/tool-seo");
+				$manager->persist($activityRecord);
 			}
 		}
 

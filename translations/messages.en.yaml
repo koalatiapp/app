@@ -684,6 +684,7 @@ user_settings:
             title: Current usage cycle
         history:
             title: Historical usage
+            no_data: No historical data to display.
         label:
             usage: Usage (Page Tests)
             cost: Estimated cost (USD)
