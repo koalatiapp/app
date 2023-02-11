@@ -2,11 +2,15 @@
 
 namespace App\Controller;
 
+use App\Controller\Trait\SuggestUpgradeControllerTrait;
+use App\Subscription\PlanManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class DashboardController extends AbstractController
 {
+	use SuggestUpgradeControllerTrait;
+
 	#[Route(path: '/', name: 'dashboard')]
 	public function overview(): Response
 	{
@@ -23,8 +27,12 @@ class DashboardController extends AbstractController
 	}
 
 	#[Route(path: '/projects', name: 'projects')]
-	public function projects(): Response
+	public function projects(PlanManager $planManager): Response
 	{
+		if (!$planManager->getPlanFromEntity($this->getUser())->hasApiAccess()) {
+			return $this->suggestPlanUpgrade('upgrade_suggestion.project');
+		}
+
 		$projects = $this->getUser()->getAllProjects();
 
 		if ($projects->isEmpty()) {
