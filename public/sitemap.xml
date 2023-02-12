@@ -12,4 +12,8 @@
    <url>
       <loc>https://app.koalati.com/free-checklist</loc>
    </url>
+   </url>
+   <url>
+      <loc>https://app.koalati.com/api/docs</loc>
+   </url>
 </urlset>
