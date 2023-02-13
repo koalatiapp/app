@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Controller\Trait\SuggestUpgradeControllerTrait;
 use App\Security\ProjectVoter;
-use App\Subscription\PlanManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -28,7 +27,7 @@ class DashboardController extends AbstractController
 	}
 
 	#[Route(path: '/projects', name: 'projects')]
-	public function projects(PlanManager $planManager): Response
+	public function projects(): Response
 	{
 		if (!$this->isGranted(ProjectVoter::VIEW, null)) {
 			return $this->suggestPlanUpgrade('upgrade_suggestion.project');
