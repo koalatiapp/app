@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Controller\Trait\SuggestUpgradeControllerTrait;
+use App\Security\ProjectVoter;
 use App\Subscription\PlanManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
