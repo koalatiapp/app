@@ -29,7 +29,7 @@ class DashboardController extends AbstractController
 	#[Route(path: '/projects', name: 'projects')]
 	public function projects(PlanManager $planManager): Response
 	{
-		if (!$planManager->getPlanFromEntity($this->getUser())->hasApiAccess()) {
+		if (!$this->isGranted(ProjectVoter::VIEW, null)) {
 			return $this->suggestPlanUpgrade('upgrade_suggestion.project');
 		}
 
