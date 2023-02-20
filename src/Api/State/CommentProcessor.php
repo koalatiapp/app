@@ -31,7 +31,10 @@ class CommentProcessor extends AbstractDoctrineStateWrapper
 	protected function prePersist(object &$comment, ?array $originalData): void
 	{
 		$comment->setContent($this->htmlSanitizer->sanitize($comment->getContent()));
-		$comment->setAuthor($this->getUser());
+
+		if (($originalData['id'] ?? null) === null) {
+			$comment->setAuthor($this->getUser());
+		}
 
 		if (!$comment->getChecklistItem()) {
 			if (!$comment->getThread()) {
