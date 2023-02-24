@@ -133,6 +133,12 @@ class OrganizationMember
 		return $this->getUser()->getLastName();
 	}
 
+	#[Groups(['member.read', 'organization.read'])]
+	public function getOrganizationName(): string
+	{
+		return $this->getOrganization()->getName();
+	}
+
 	/**
 	 * @return string[]|null
 	 */
