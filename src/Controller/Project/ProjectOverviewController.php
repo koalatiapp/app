@@ -33,7 +33,7 @@ class ProjectOverviewController extends AbstractProjectController
 		return $this->redirectToRoute('projects');
 	}
 
-	#[Route(path: '/project/{id}/', name: 'project_dashboard', options: ['expose' => true])]
+	#[Route(path: '/project/{id}', name: 'project_dashboard', options: ['expose' => true])]
 	public function projectDashboard(int $id, UsageManager $usageManager): Response
 	{
 		$project = $this->getProject($id);

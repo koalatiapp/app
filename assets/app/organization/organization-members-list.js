@@ -56,7 +56,9 @@ export class OrganizationMembersList extends AbstractDynamicList {
 				label: null,
 				render: (item, list) => {
 					return html`
-						<nb-icon-button title=${Translator.trans("organization.settings.members.list.remove")} size="small" color="danger" @click=${() => list.removeMemberCallback(item)}><i class="fas fa-times"></i></nb-icon-button>
+						<nb-icon-button size="small" color="danger" @click=${() => list.removeMemberCallback(item)}>
+							<i class="fas fa-times" aria-label=${Translator.trans("organization.settings.members.list.remove")}></i>
+						</nb-icon-button>
 					`;
 				},
 				placeholder: html`
@@ -147,13 +149,22 @@ export class OrganizationMembersList extends AbstractDynamicList {
 
 	removeMemberCallback(item)
 	{
-		if (confirm(Translator.trans("organization.settings.members.list.remove_confirm", { user: item.user.firstName + " " + item.user.lastName, organization: item.organization.name }))) {
-			ApiClient.delete(`/api/organization_members/${item.id}`).then(response => {
-				this.items = this.items.filter(existingItem => existingItem.id != item.id);
-				window.Flash.show("success", response.data.message);
+		if (confirm(Translator.trans("organization.settings.members.list.remove_confirm", { user: item.first_name + " " + item.last_name, organization: item.organization_name }))) {
+			// If there's just one member left and its the one we're deleting, make VERY sure the user understands the impact of this.
+			if (this.items.length > 1 || confirm(Translator.trans("organization.settings.members.list.remove_confirm_will_delete_org"))) {
+				ApiClient.delete(`/api/organization_members/${item.id}`).then(() => {
+					this.items = this.items.filter(existingItem => existingItem.id != item.id);
 
-				window.plausible("Organization usage", { props: { action: "Removed member" } });
-			});
+					window.plausible("Organization usage", { props: { action: "Removed member" } });
+
+					if (this.items.length == 0) {
+						window.location = "/";
+						return;
+					}
+
+					window.Flash.show("success", Translator.trans("organization.flash.member_removed_successfully", { user: item.first_name + " " + item.last_name, organization: item.organization_name }));
+				});
+			}
 		}
 	}
 

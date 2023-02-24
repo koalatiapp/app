@@ -26,9 +26,9 @@ const createProject = async (page: Page, name: string = "Sample website", url: s
 
 	// Wait for confirmation message
 	await page.waitForSelector("text=has been created successfully")
-	await page.waitForURL(/^http.+\/project\/[a-zA-Z0-9]+\/.*/);
+	await page.waitForURL(/^http.+\/project\/[a-zA-Z0-9]+\/?.*/);
 
-	const projectId = page.url().replace(/.+\/project\/([a-zA-Z0-9]+)\//, "$1");
+	const projectId = page.url().replace(/.+\/project\/([a-zA-Z0-9]+).*?/, "$1");
 
 	return projectId;
 };

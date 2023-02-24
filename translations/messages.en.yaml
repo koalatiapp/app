@@ -933,6 +933,7 @@ organization:
                 role: Role
                 remove: Remove from team
                 remove_confirm: Are you sure you want to remove %user% from %organization%?
+                remove_confirm_will_delete_org: Removing this last member will delete the organization, effective immediately. This action cannot be reversed. Do you still want to go through with the removal?
                 downgrade_self_confirm: Are you sure you want to downgrade your own role within this team? If you proceed, you will lose access to certain features.
     flash:
         created_successfully: Your team "%name%" has been created successfully!

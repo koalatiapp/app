@@ -47,7 +47,7 @@ class Organization implements MercureEntityInterface, \Stringable
 	private ?int $id = null;
 
 	#[ORM\Column(type: 'string', length: 255)]
-	#[Groups(['organization.list', 'organization.read', 'organization.write', 'member.read'])]
+	#[Groups(['organization.list', 'organization.read', 'organization.write'])]
 	private ?string $name = null;
 
 	#[ORM\Column(type: 'string', length: 255)]
