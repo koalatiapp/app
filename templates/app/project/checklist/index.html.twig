@@ -15,9 +15,9 @@
 
 {% block page_tabs %}
 	{% include 'app/_parts/page_tabs.html.twig' with {page_tabs: [
-		{label: 'project_checklist.tabs.overview', route: 'project_checklist', route_params: {id: project.id}},
+		{label: 'project_checklist.tabs.overview', route: 'project_checklist', route_params: {id: project.id|hashids_encode}},
 	]} %}
-	{#label: 'project_checklist.tabs.detailed', route: 'project_checklist_detailed', route_params: {id: project.id}#}
+	{#label: 'project_checklist.tabs.detailed', route: 'project_checklist_detailed', route_params: {id: project.id|hashids_encode}#}
 {% endblock %}
 
 {% block page_actions %}
