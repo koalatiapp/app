@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 interface SearchInterface
 {
 	/**
-	 * Runs the search query on Projects.
+	 * Runs the search query and returns results.
 	 *
 	 * @param array<string> $queryParts
 	 * @param User|null     $user       if a user is specified, the search will be limited to

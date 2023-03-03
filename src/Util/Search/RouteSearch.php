@@ -17,6 +17,7 @@ class RouteSearch implements SearchInterface
 	public const INDEXED_ROUTES = [
 		"dashboard",
 		"projects",
+		"project_creation",
 		"help",
 		"onboarding",
 		"edit_profile",
@@ -37,13 +38,7 @@ class RouteSearch implements SearchInterface
 	}
 
 	/**
-	 * Runs the search query on Projects.
-	 *
-	 * @param array<string> $queryParts
-	 * @param User|null     $user       if a user is specified, the search will be limited to
-	 *                                  ressources that the user has access to
-	 *
-	 * @return Collection<int,SearchResult>
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter.user)
 	 */
 	public function search(array $queryParts, ?User $user = null): Collection
 	{

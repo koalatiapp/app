@@ -482,6 +482,9 @@ search:
         projects:
             title: Your Projects
             description: Browse your projects.
+        project_creation:
+            title: Create a new project
+            description: Start testing a new website.
         help:
             title: Help Center
             description: Get support information and read our F.A.Q.
