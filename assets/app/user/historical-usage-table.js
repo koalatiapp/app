@@ -95,11 +95,16 @@ export class HistoricalUsageTable extends LitElement {
 			return;
 		}
 
+		const loadMoreButton = this.querySelector("nb-button");
 		const previousDate = this.usage.at(-1).usageCycleStartDate;
+
+		loadMoreButton.toggleAttribute("loading", true);
+
 		InternalApiClient.get("api_user_usage_historical", {
 			previousDate,
 			limit: this.#monthsPerRequest,
 		}).then(response => {
+			loadMoreButton.removeAttribute("loading");
 			this.usage = this.usage.concat(response.data);
 			this.canLoadMore = response.data.length == this.#monthsPerRequest;
 		});
