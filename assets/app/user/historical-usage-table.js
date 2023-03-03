@@ -2,6 +2,8 @@ import { LitElement, html } from "lit";
 import { InternalApiClient } from "../../utils/internal-api";
 
 export class HistoricalUsageTable extends LitElement {
+	#monthsPerRequest = 5;
+
 	// Use light DOM instead of shadow DOM
 	createRenderRoot() {
 		return this;
@@ -10,6 +12,7 @@ export class HistoricalUsageTable extends LitElement {
 	static get properties() {
 		return {
 			usage: {state: true},
+			canLoadMore: {state: true},
 		};
 	}
 
@@ -17,6 +20,7 @@ export class HistoricalUsageTable extends LitElement {
 	{
 		super();
 		this.usage = null;
+		this.canLoadMore = false;
 	}
 
 	connectedCallback()
@@ -26,6 +30,7 @@ export class HistoricalUsageTable extends LitElement {
 		InternalApiClient.get("api_user_usage_historical")
 			.then(response => {
 				this.usage = response.data;
+				this.canLoadMore = this.usage.length == this.#monthsPerRequest;
 			});
 	}
 
@@ -75,7 +80,29 @@ export class HistoricalUsageTable extends LitElement {
 					`)}
 				</tbody>
 			</table>
+			<hr class="spacer small">
+			${this.canLoadMore ? html`
+				<nb-button color="gray" size="small" @click=${() => this.#loadMore()}>
+					${Translator.trans("generic.load_more")}
+				</nb-button>
+			` : ""}
 	  	`;
+	}
+
+	#loadMore() {
+		if (this.usage === null || this.usage.length === 0) {
+			this.canLoadMore = false;
+			return;
+		}
+
+		const previousDate = this.usage.at(-1).usageCycleStartDate;
+		InternalApiClient.get("api_user_usage_historical", {
+			previousDate,
+			limit: this.#monthsPerRequest,
+		}).then(response => {
+			this.usage = this.usage.concat(response.data);
+			this.canLoadMore = response.data.length == this.#monthsPerRequest;
+		});
 	}
 }
 

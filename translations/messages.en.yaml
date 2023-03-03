@@ -24,6 +24,7 @@ generic:
     error:
         invalid_name: This name is invalid. Please enter a valid name.
     self_hosted: Self-hosted
+    load_more: Load more
 
 api:
     flash:

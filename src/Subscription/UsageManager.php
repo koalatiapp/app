@@ -6,6 +6,7 @@ use App\Entity\ProjectActivityRecord;
 use App\Entity\User;
 use App\Repository\ProjectActivityRecordRepository;
 use App\Subscription\Model\CurrentUsageCycle;
+use DateTimeInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Contracts\Cache\ItemInterface;
@@ -201,17 +202,20 @@ class UsageManager
 	}
 
 	/**
+	 * This can be an expensive operation to run, especially for users who have created their account a long time ago.
+	 * You should always define a fairly low month count.
+	 *
 	 * @return array<int,array{pageTestUsage:int,usageCost:float,usageCycleStartDate:\DateTimeImmutable,usageCycleEndDate:\DateTimeImmutable,usageCycleBillingDate:\DateTimeImmutable}>
 	 */
-	public function getHistoricalUsage(): array
+	public function getHistoricalUsage(\DateTime $fromDate, int $limit = 5): array
 	{
 		$cache = new FilesystemAdapter();
 
 		$historicalUsage = [];
 		$userCreatedDate = $this->user->getDateCreated();
-		$fromDate = new \DateTime("-1 month");
+		$monthCount = 0;
 
-		while ($fromDate >= $userCreatedDate) {
+		while ($fromDate >= $userCreatedDate && $monthCount < $limit) {
 			$cycleStartDate = $this->getUsageCycleStartDate($fromDate);
 			$cacheKey = "user.{$this->user->getId()}.historical_usage.{$cycleStartDate->format("Y-m-d")}";
 
@@ -228,6 +232,7 @@ class UsageManager
 			});
 
 			$fromDate = $fromDate->modify("-1 month");
+			$monthCount++;
 		}
 
 		return $historicalUsage;
