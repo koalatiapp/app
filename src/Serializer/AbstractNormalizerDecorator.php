@@ -66,6 +66,16 @@ abstract class AbstractNormalizerDecorator implements NormalizerInterface, Denor
 
 	public function denormalize($data, string $type, string $format = null, array $context = []): mixed
 	{
+		// If $data is a JSON-string, it should've been decoded automatically but somehow hasn't (see KOALATI-APP-A2 in Sentry)
+		// Might be an issue in api-platform itself, but either way: we'll try to restore things to a proper state ourselves
+		if (is_string($data)) {
+			try {
+				$data = json_decode($data, true, flags: JSON_THROW_ON_ERROR);
+			} catch (\JsonException $exception) {
+				// Just muting the error - this will fail at a later
+			}
+		}
+
 		return $this->decorated->denormalize($data, $type, $format, $context);
 	}
 
