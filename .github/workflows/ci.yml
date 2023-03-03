@@ -49,7 +49,7 @@ jobs:
             - name: Setup PHP
               uses: shivammathur/setup-php@v2
               with:
-                  php-version: '8.1'
+                  php-version: '8.2'
                   ini-values: post_max_size=256M, max_execution_time=0
             - name: Use Node.js 15.x
               uses: actions/setup-node@v1
