@@ -11,6 +11,7 @@ use VDB\Spider\Discoverer\XPathExpressionDiscoverer;
 use VDB\Spider\Event\SpiderEvents;
 use VDB\Spider\EventListener\PolitenessPolicyListener;
 use VDB\Spider\Filter\Prefetch\AllowedHostsFilter;
+use VDB\Spider\Filter\Prefetch\RestrictToBaseUriFilter;
 use VDB\Spider\Filter\Prefetch\UriFilter;
 use VDB\Spider\Filter\Prefetch\UriWithHashFragmentFilter;
 use VDB\Spider\QueueManager\InMemoryQueueManager;
@@ -55,6 +56,7 @@ class Crawler
 
 		// Filter out URLs from external domains
 		$spider->getDiscovererSet()->addFilter(new AllowedHostsFilter([$websiteUrl], false));
+		$spider->getDiscovererSet()->addFilter(new RestrictToBaseUriFilter($websiteUrl));
 
 		// Filter out URLs with anchors
 		$spider->getDiscovererSet()->addFilter(new UriWithHashFragmentFilter());

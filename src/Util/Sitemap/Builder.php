@@ -34,31 +34,35 @@ class Builder
 
 	/**
 	 * Builds a sitemap from a website's URL.
-	 * The website's sitemap, if available, is fetched and scanned.
-	 * If the builder's `crawlWebsite` property is set to true, the website will also be crawled to generate a more complete sitemap.
+	 *
+	 * This method will both crawl the site and look at the site's sitemap to
+	 * find as many relevant pages as possible.
 	 *
 	 * @param string   $websiteUrl        URL of the website to build the sitemap from
 	 * @param callable $pageFoundCallback Callable to invoke anytime a new page is found.
 	 *                                    The callback will receive a `App\Util\Sitemap\Location` argument with the page's information.
-	 *
-	 * @return self
 	 */
-	public function buildFromWebsiteUrl(string $websiteUrl, callable $pageFoundCallback)
+	public function buildFromWebsiteUrl(string $websiteUrl, callable $pageFoundCallback): self
 	{
 		// Standardize the provided URL
 		$websiteUrl = $this->urlHelper->standardize($websiteUrl, false);
+		$path = $this->urlHelper->path($websiteUrl);
+		$isPartialSite = $path !== '' && $path !== '/';
 
 		// Check if a sitemap is available and scan it if possible
-		$sitemapUrl = $this->findSitemapFromWebsiteUrl($websiteUrl);
+		// But only if the user hasn't requested a specific path to be tested (ex.: https://mysite.com/about)
+		if (!$isPartialSite) {
+			$sitemapUrl = $this->findSitemapFromWebsiteUrl($websiteUrl);
 
-		if ($sitemapUrl) {
-			$newLocations = [];
+			if ($sitemapUrl) {
+				$newLocations = [];
 
-			foreach ($this->scanSitemap($sitemapUrl) as $url) {
-				$newLocations[] = new Location($url);
+				foreach ($this->scanSitemap($sitemapUrl) as $url) {
+					$newLocations[] = new Location($url);
+				}
+
+				call_user_func($pageFoundCallback, $newLocations);
 			}
-
-			call_user_func($pageFoundCallback, $newLocations);
 		}
 
 		// Crawl the website for a more complete sitemap

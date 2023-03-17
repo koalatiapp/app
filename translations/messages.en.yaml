@@ -859,7 +859,7 @@ project_settings:
                     label: Project name
                     placeholder: My awesome project
                 url:
-                    label: Website URL
+                    label: Website or page URL
                     placeholder: www.domain.com
                     error_unreachable: This URL is invalid or unreachable.
                 ignore:
