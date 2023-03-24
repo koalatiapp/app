@@ -71,6 +71,8 @@ class TestApiClient {
 
 		if (method == "DELETE") {
 			body = null;
+		} else if (body instanceof FormData) {
+			body = convertFormDataToJsonObject(body);
 		}
 
 		if (method == "GET") {
@@ -225,6 +227,25 @@ class TestApiClient {
 	delete(endpoint, body = {}, errorCallback = TestApiClient.ERROR_FLASH, abortController = null) {
 		return this.#request("DELETE", endpoint, body, errorCallback, abortController);
 	}
+}
+
+function convertFormDataToJsonObject(formData) {
+	const object = {};
+
+	formData.forEach((value, key) => {
+		if (!Reflect.has(object, key)) {
+			object[key] = value;
+			return;
+		}
+
+		if (!Array.isArray(object[key])) {
+			object[key] = [object[key]];
+		}
+
+		object[key].push(value);
+	});
+
+	return object;
 }
 
 export default TestApiClient;
