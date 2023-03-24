@@ -1,7 +1,7 @@
 /*!
  * Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com
  * License - https://fontawesome.com/license (Commercial License)
- * Copyright 2022 Fonticons, Inc.
+ * Copyright 2023 Fonticons, Inc.
  */
 :root, :host {
   --fa-style-family-duotone: 'Font Awesome 6 Duotone';
@@ -100,6 +100,9 @@
 .fad.fa-sync::after, .fa-duotone.fa-sync::after {
   content: "\f021\f021"; }
 
+.fad.fa-arrow-turn-down-right::after, .fa-duotone.fa-arrow-turn-down-right::after {
+  content: "\e3d6\e3d6"; }
+
 .fad.fa-arrow-up-right-from-square::after, .fa-duotone.fa-arrow-up-right-from-square::after {
   content: "\f08e\f08e"; }
 
@@ -127,6 +130,9 @@
 .fad.fa-phone-laptop::after, .fa-duotone.fa-phone-laptop::after {
   content: "\f87a\f87a"; }
 
+.fad.fa-trash::after, .fa-duotone.fa-trash::after {
+  content: "\f1f8\f1f8"; }
+
 .fad.fa-comment::after, .fa-duotone.fa-comment::after {
   content: "\f075\f075"; }
 
@@ -144,6 +150,12 @@
 
 .fad.fa-cog::after, .fa-duotone.fa-cog::after {
   content: "\f013\f013"; }
+
+.fad.fa-ellipsis-vertical::after, .fa-duotone.fa-ellipsis-vertical::after {
+  content: "\f142\f142"; }
+
+.fad.fa-ellipsis-v::after, .fa-duotone.fa-ellipsis-v::after {
+  content: "\f142\f142"; }
 
 .fad.fa-angle-down::after, .fa-duotone.fa-angle-down::after {
   content: "\f107\f107"; }

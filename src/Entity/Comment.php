@@ -6,6 +6,7 @@ use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
@@ -41,6 +42,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 		new Patch(
 			security: "is_granted('comment_resolve', object)",
 			denormalizationContext: ["groups" => "comment.resolve"],
+		),
+		new Delete(
+			security: "is_granted('comment_delete', object)",
 		),
 	],
 )]
