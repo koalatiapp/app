@@ -71,6 +71,13 @@ test.describe("checklist", () => {
 
 		// Check that the item's comment indicator still says 1 comment (replies don't count as unresolved comments)
 		await expect(checklistItem, "Checklist item comment link is updated upon comment resolution").toContainText("2 comments");
+
+		// Delete the main comment
+		await comment.getByLabel("Delete comment").first().click();
+		await page.getByRole("button", { name: "Yes, delete this comment" }).first().click();
+
+		// Check that the item's comment indicator shows there are no comments anymore
+		await expect(checklistItem, "Checklist item comment link is updated upon comment deletion").toContainText("0 comments");
 	});
 
 	test.afterEach(async ({ page }) => {

@@ -6,6 +6,7 @@ import { ApiClient } from "../../utils/api/index.js";
 import MercureClient from "../../utils/mercure-client.js";
 import stylesReset from "../../native-bear/styles-reset.js";
 import fontAwesomeImport from "../../utils/fontawesome-import.js";
+import confirm from "../../utils/confirm.js";
 
 const cachedComments = {};
 
@@ -18,6 +19,7 @@ export class UserComment extends LitElement {
 			stylesReset,
 			css`
 				:host { display: block; padding: 1rem; background-color: var(--color-white); border: 1px solid var(--color-gray-light); border-radius: .5rem; box-shadow: 0 0 0.5em rgba(var(--shadow-rgb), 0.05); }
+				:host([highlighted]) { border-color: var(--color-blue-50); outline: 2px solid var(--color-blue-50); }
 
 				.header { display: flex; justify-content: space-between; gap: 1em; }
 				.avatar { flex-shrink: 0; width: 2.5em; height: 2.5em; object-fit: cover; border-radius: 50%; }
@@ -58,6 +60,7 @@ export class UserComment extends LitElement {
 			commentId: {type: String},
 			createdDate: {type: Date},
 			authorName: {type: String},
+			author: {type: String},
 			content: {type: String},
 			isResolved: {type: Boolean},
 			thread: {type: Array},
@@ -65,6 +68,7 @@ export class UserComment extends LitElement {
 			showReplies: {type: Boolean},
 			autoShowReplies: {type: Boolean},
 			showReplyEditor: {type: Boolean},
+			highlighted: {type: Boolean, reflect: true},
 			_loaded: {state: true},
 		};
 	}
@@ -77,6 +81,7 @@ export class UserComment extends LitElement {
 		this.dateCreated = new Date();
 		this.authorAvatarUrl = this.placeholderUrl;
 		this.authorName = "";
+		this.author = "";
 		this.content = "";
 		this.isResolved = false;
 		this.thread = null;
@@ -84,6 +89,7 @@ export class UserComment extends LitElement {
 		this.showReplies = true;
 		this.autoShowReplies = false;
 		this.showReplyEditor = false;
+		this.highlighted = false;
 		this._loaded = false;
 	}
 
@@ -118,6 +124,12 @@ export class UserComment extends LitElement {
 					<div class="date">${timeago.format(this.dateCreated)}</div>
 				</div>
 				<div class="actions">
+					${this.author == `/api/users/${CURRENT_USER_ID}` ? html`
+						<nb-icon-button size="tiny" color="gray" @click=${() => this.delete()}>
+							<i class="far fa-trash" aria-label="${Translator.trans("comment.delete.button")}"></i>
+						</nb-icon-button>
+					` : ""}
+
 					${!this.isResolved && !this.thread?.isResolved ? html`
 						<nb-button size="tiny" color="gray" @click=${() => this.toggleReplyEditor(true)}>
 							${Translator.trans("comment.reply")}
@@ -200,6 +212,7 @@ export class UserComment extends LitElement {
 		this.dateCreated = new Date(data.date_created);
 		this.authorAvatarUrl = data.author_avatar || this.placeholderUrl;
 		this.authorName = data.author_name;
+		this.author = data.author;
 		this.content = data.content;
 		this.isResolved = data.is_resolved;
 		this.replies = Object.values(data.replies);
@@ -241,6 +254,29 @@ export class UserComment extends LitElement {
 		}
 	}
 
+	async delete()
+	{
+		this.highlighted = true;
+
+		const deletionConfirmed = await confirm(
+			Translator.trans("comment.delete.confirm_prompt"),
+			Translator.trans("comment.delete.confirm_button"),
+			null,
+			"danger"
+		);
+
+		this.highlighted = false;
+
+		if (!deletionConfirmed) {
+			return;
+		}
+
+		ApiClient.delete(`/api/comments/${this.commentId}`).then(() => {
+			window.Flash.show("success", Translator.trans("comment.flash.deleted"));
+			window.plausible("Checklist usage", { props: { action: "Deleted comment" } });
+		});
+	}
+
 	#initLiveUpdateListener()
 	{
 		this.#mercureUpdateCallback = (update) => {
@@ -258,7 +294,7 @@ export class UserComment extends LitElement {
 			if (update.data.thread?.id == this.commentId) {
 				switch (update.event) {
 				case "delete":
-					this.replies = this.replies.filter(reply => reply.id == update.data.id);
+					this.replies = this.replies.filter(reply => reply.id != update.data.id);
 					break;
 
 				case "create":

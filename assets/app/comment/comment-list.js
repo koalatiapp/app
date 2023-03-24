@@ -132,7 +132,7 @@ export class CommentList extends LitElement {
 
 			switch (update.event) {
 			case "delete":
-				this.threads = this.threads.filter(thread => thread.id == update.data.id);
+				this.threads = this.threads.filter(thread => thread.id != update.data.id);
 				break;
 
 			case "create":

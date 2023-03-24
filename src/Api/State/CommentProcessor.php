@@ -88,4 +88,15 @@ class CommentProcessor extends AbstractDoctrineStateWrapper
 			$this->mercureUpdateDispatcher->dispatch($comment->getChecklistItem(), UpdateType::UPDATE);
 		}
 	}
+
+	/**
+	 * Hook after a resource has been removed in the database.
+	 *
+	 * @param Comment $comment
+	 */
+	protected function postRemove(object &$comment): void
+	{
+		// Dispatch a Mercure event for the parent item and comment as well
+		$this->mercureUpdateDispatcher->prepare($comment->getChecklistItem(), UpdateType::UPDATE);
+	}
 }
