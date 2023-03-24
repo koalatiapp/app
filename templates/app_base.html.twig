@@ -48,6 +48,7 @@
 		{% include "_parts/analytics.html.twig" %}
 
 		<script>
+			window.RELEASE_VERSION = "{{ release_version }}";
 			window.CURRENT_USER_ID = "{{ app.user.id|hashids_encode }}";
 			window.mercureEventSource = new EventSource("{{ mercure(mercure_topic(app.user), mercure_config(app.user))|escape('js') }}", {
 				withCredentials: true

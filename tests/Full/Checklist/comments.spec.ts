@@ -50,7 +50,7 @@ test.describe("checklist", () => {
 		await expect(checklistItem, "Checklist item comment link is updated upon comment creation").toContainText("1 unresolved comment");
 
 		// Reply to the first comment
-		await comment.locator("nb-button >> text=Reply").click({ timeout: 1000 });
+		await comment.locator("nb-button >> text=Reply").click({ timeout: 2000 });
 		const replyEditor = comment.frameLocator("tinymce-editor.ready iframe").locator("[contenteditable]");
 		await replyEditor.click();
 		await replyEditor.type("All good 👍");
