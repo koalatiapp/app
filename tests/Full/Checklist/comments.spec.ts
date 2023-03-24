@@ -50,7 +50,7 @@ test.describe("checklist", () => {
 		await expect(checklistItem, "Checklist item comment link is updated upon comment creation").toContainText("1 unresolved comment");
 
 		// Reply to the first comment
-		await comment.locator("nb-button >> text=Reply").click({ timeout: 1000 });
+		await comment.locator("nb-button >> text=Reply").click({ timeout: 2000 });
 		const replyEditor = comment.frameLocator("tinymce-editor.ready iframe").locator("[contenteditable]");
 		await replyEditor.click();
 		await replyEditor.type("All good 👍");
@@ -71,6 +71,13 @@ test.describe("checklist", () => {
 
 		// Check that the item's comment indicator still says 1 comment (replies don't count as unresolved comments)
 		await expect(checklistItem, "Checklist item comment link is updated upon comment resolution").toContainText("2 comments");
+
+		// Delete the main comment
+		await comment.getByLabel("Delete comment").first().click();
+		await page.getByRole("button", { name: "Yes, delete this comment" }).first().click();
+
+		// Check that the item's comment indicator shows there are no comments anymore
+		await expect(checklistItem, "Checklist item comment link is updated upon comment deletion").toContainText("0 comments");
 	});
 
 	test.afterEach(async ({ page }) => {

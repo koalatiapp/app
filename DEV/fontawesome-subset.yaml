@@ -74,3 +74,9 @@ icons:
       - duotone
   - list-check:
       - duotone
+  - ellipsis-vertical:
+      - solid
+  - trash:
+      - regular
+  - arrow-turn-down-right:
+      - regular

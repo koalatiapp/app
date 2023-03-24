@@ -183,7 +183,7 @@ export class NbSidePanel extends LitElement {
 		}
 
 		const checkForOutsideClick = (e) => {
-			const exceptedSelector = ".flash-message";
+			const exceptedSelector = ".flash-message, .modal-wrapper";
 
 			// Also allow children of all excepted selectors
 			const expandedExceptedSelector = exceptedSelector.split(", ").map(selector => `${selector}, ${selector} *`).join(", ");

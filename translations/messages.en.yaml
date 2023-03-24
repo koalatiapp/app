@@ -1069,8 +1069,13 @@ comment:
     resolve: Resolve
     resolved: Resolved
     view_replies: "{1}View 1 reply|]0,Inf[View %count% comments"
+    delete:
+        button: Delete comment
+        confirm_prompt: Are you sure you want to delete this comment?
+        confirm_button: Yes, delete this comment
     flash:
         submitted: Your comment has been sent!
+        deleted: Your comment has been deleted!
 
 email:
     email_validation:

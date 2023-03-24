@@ -1,7 +1,7 @@
 /*!
  * Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com
  * License - https://fontawesome.com/license (Commercial License)
- * Copyright 2022 Fonticons, Inc.
+ * Copyright 2023 Fonticons, Inc.
  */
 .fa {
   font-family: var(--fa-style-family, "Font Awesome 6 Pro");
@@ -561,6 +561,9 @@ readers do not read off random characters that represent icons */
 .fa-sync::before {
   content: "\f021"; }
 
+.fa-arrow-turn-down-right::before {
+  content: "\e3d6"; }
+
 .fa-arrow-up-right-from-square::before {
   content: "\f08e"; }
 
@@ -588,6 +591,9 @@ readers do not read off random characters that represent icons */
 .fa-phone-laptop::before {
   content: "\f87a"; }
 
+.fa-trash::before {
+  content: "\f1f8"; }
+
 .fa-comment::before {
   content: "\f075"; }
 
@@ -605,6 +611,12 @@ readers do not read off random characters that represent icons */
 
 .fa-cog::before {
   content: "\f013"; }
+
+.fa-ellipsis-vertical::before {
+  content: "\f142"; }
+
+.fa-ellipsis-v::before {
+  content: "\f142"; }
 
 .fa-angle-down::before {
   content: "\f107"; }
