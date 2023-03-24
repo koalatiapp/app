@@ -57,6 +57,14 @@ jobs:
                 node-version: 15.x
             - name: Pull images
               run: docker-compose pull
+            - name: Enable Docker build caching between CI runs
+              uses: jpribyl/action-docker-layer-caching@v0.1.1
+              with:
+                key: docker-layer-cache-{hash}
+                restore-keys: |
+                    docker-layer-cache-
+                    layer-docker-layer-cache-
+              continue-on-error: true
             - name: Start services
               run: docker-compose --env-file .env.test up --build -d
             - name: Wait for services
