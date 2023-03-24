@@ -1,4 +1,4 @@
-.modal-wrapper { display: flex; justify-content: center; align-items: center; position: fixed; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; }
+.modal-wrapper { display: flex; justify-content: center; align-items: center; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 1001; pointer-events: none; }
 .modal-backdrop { background-color: rgba(0, 0, 0, .5); position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 1000; transition: opacity .5s ease-in-out; pointer-events: auto; }
 .modal { width: 600px; font-size: .9rem; background-color: var(--modal-bg-color, white); border-radius: 12px; overflow: hidden; position: relative; pointer-events: auto; z-index: 1001; transition: opacity .35s ease-in-out .2s, transform .35s ease-in-out .2s; }
 .modal.large { width: 1000px; max-width: 100%; }
