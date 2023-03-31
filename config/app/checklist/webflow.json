@@ -82,6 +82,18 @@
 		]
 	},
 	{
+		"title": "Forms",
+		"items": [
+			{
+				"title": "Forms are protected from spam bots and bad actors",
+				"description": "Webflow has a built-in integration with Google's reCATPCHA, which you can set up following the guide in the resources below.",
+				"resourceUrls": [
+					"https://university.webflow.com/lesson/recaptcha"
+				]
+			}
+		]
+	},
+	{
 		"title": "Accessibility",
 		"items": [
 			{
@@ -136,6 +148,41 @@
 				"description": "For Webflow websites, defining a domain as the default domain in your Site Settings will automatically redirect other variants to this domain. It is recommended that you use a domain with the `www.` prefix as the default to avoid potential SSL issues.",
 				"resourceUrls": [
 					"https://university.webflow.com/lesson/set-a-default-domain"
+				]
+			}
+		]
+	},
+	{
+		"title": "Security",
+		"items": [
+			{
+				"title": "An SSL certificate is set up and configured for auto-renewal.",
+				"description": "In Webflow, this is automatically done for you if you turn on the **Enable SSL** in _Site Settings > Publishing > Advanced Publishing Options_, or under the _Advanced options_ of the Publish panel in the Designer.",
+				"resourceUrls": [
+					"https://university.webflow.com/lesson/advanced-publishing-options#enable-ssl",
+					"https://university.webflow.com/lesson/ssl-hosting"
+				]
+			},
+			{
+				"title": "Requests to non-HTTPS URLs are redirected to HTTPS.",
+				"description": "In Webflow, this is automatically done for you if you turn on the **Enable SSL** in _Site Settings > Publishing > Advanced Publishing Options_, or under the _Advanced options_ of the Publish panel in the Designer.",
+				"resourceUrls": [
+					"https://university.webflow.com/lesson/advanced-publishing-options#enable-ssl",
+					"https://university.webflow.com/lesson/ssl-hosting"
+				]
+			},
+			{
+				"title": "The `x-frame-options` header is configured to prevent clickjacking attacks.",
+				"description": "In Webflow, this is done for you if you turn on the **Use secure frame headers** in _Site Settings > Publishing > Advanced Publishing Options_, or under the _Advanced options_ of the Publish panel in the Designer.",
+				"resourceUrls": [
+					"https://university.webflow.com/lesson/advanced-publishing-options#use-secure-frame-headers"
+				]
+			},
+			{
+				"title": "Website backups are set-up and configured to run frequently.",
+				"description": "Webflow has a very good built-in backup system, which automatically creates backups while you work on your site and when you hit Publish.\n\nTo learn more about how Webflow's backup system works and how you can view and restore backups, check out the resources below.",
+				"resourceUrls": [
+					"https://university.webflow.com/lesson/backups"
 				]
 			}
 		]
