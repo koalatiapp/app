@@ -115,7 +115,7 @@ export class DemoChecklist extends LitElement
 
 		for (const group of groups) {
 			for (const item of group.items) {
-				item.isCompleted = progressObject[item.id] ?? false;
+				item.is_completed = progressObject[item.id] ?? false;
 			}
 		}
 
