@@ -72,6 +72,13 @@
 				"title": "The search feature indicates clearly when no results are found. _(if applicable)_",
 				"description": "For users, not finding what they were looking for is frustrating enough. Make sure that you have clear text, and provide any additional guidance you can to help improve their experience.",
 				"resourceUrls": []
+			},
+			{
+				"title": "Search queries with misspelling, accented characters, capitalization and pluralization yield appropriate results. _(if applicable)_",
+				"description": "When users search, they may spell words differently than the spelling in your content.\n\nFor example, they may search for `mexico` instead of `México`. They may search for `apples` instead of `apple`. And vice-versa.\n\nIn most cases, your search engine should be able to return relevant search results even if the search query's capitalization, pluralization, accents and spelling varies from the one in your content.",
+				"resourceUrls": [
+					"https://www.nngroup.com/articles/internal-website-search/"
+				]
 			}
 		]
 	},
@@ -344,6 +351,14 @@
 				"title": "Form submissions trigger some sort of communication to the person responsible for the website or the form.",
 				"description": "For contact forms and other forms of the sort, form submissions should send an email, a text message or a spreadsheet/CRM automation to indicate to the people running the website that a user has submitted a form and is waiting for a response.\n\nIt should be easy for the people running the website to understand which submission was made through which form, in order to understand the context surrounding a form submission.",
 				"resourceUrls": []
+			},
+			{
+				"title": "Forms are protected from spam bots and bad actors",
+				"description": "Online forms are a very common target for spam bots and other bad actors.\n\nTo reduce the chance of spam making it through your site's forms, you should have one or more of the following protections in place:\n\n- Captchas;\n- Honeypot fields;\n- Submission delay;\n- [Action switching](https://github.com/EmilePerron/vermin.js/#action-switching).\n\nCaptchas are generally the hardest type of protection to bypass for bad actors.\n\nDo note that not all forms require anti-spam techniques: if a form does not trigger any requests, does not reveal any private information or is solely client-side, you may not need to protect them.",
+				"resourceUrls": [
+					"https://friendlycaptcha.com/insights/recaptcha-alternatives-compared-recaptcha-vs-hcaptcha-vs-friendly-captcha/",
+					"https://etumos.com/marketing-operations-development/what-to-do-when-spam-bots-are-filling-out-your-forms/"
+				]
 			}
 		]
 	},
@@ -511,6 +526,20 @@
 				"resourceUrls": [
 					"https://linuxize.com/post/redirect-http-to-https-in-apache/",
 					"https://serversforhackers.com/c/redirect-http-to-https-nginx"
+				]
+			},
+			{
+				"title": "A Content Security Policy is set up on the site to prevent script and data injection.",
+				"description": "Setting up a CSP (Content Security Policy) is a fairly simple way to protect your site's users against multiple types of attacks, such as cross-site scripting, data injection and packet sniffing attacks.\n\nThe security policy can be defined by setting a meta tag, or by setting an HTTP header to your server's responses.",
+				"resourceUrls": [
+					"https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP"
+				]
+			},
+			{
+				"title": "The `x-frame-options` header is configured to prevent clickjacking attacks.",
+				"description": "The `x-frame-options` header protects your site from several kinds of clickjacking attacks by restricting where your site can be embedded.\n\nUnless you actively want others to be able to embed your site (e.g. via an `<iframe>`), you should use this feature to block all embedding of your site.\n\nTake a look at the resources below to learn how to do this on your platform or web server.",
+				"resourceUrls": [
+					"https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options"
 				]
 			},
 			{
