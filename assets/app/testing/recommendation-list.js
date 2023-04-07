@@ -41,6 +41,11 @@ export class RecommendationList extends AbstractDynamicList {
 		};
 	}
 
+	static get _itemIdentifierCallback()
+	{
+		return item => item["@id"];
+	}
+
 	static get _columns()
 	{
 		return [
