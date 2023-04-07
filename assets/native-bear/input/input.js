@@ -155,8 +155,6 @@ export class NbInput extends LitElement {
 		this.value = newValue;
 		this.internals.setValidity(validity, validationMessage, input);
 		this.internals.setFormValue(newValue);
-
-		console.log(input);
 	}
 
 	#revealPassword()

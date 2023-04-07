@@ -104,7 +104,10 @@ class ApiClient {
 
 		// @TODO: Implement better pagination support
 		const endpointUrl = new URL(endpoint, location.origin);
-		endpointUrl.searchParams.set("pagination", "false");
+
+		if (!endpointUrl.searchParams.get("pagination")) {
+			endpointUrl.searchParams.set("pagination", "false");
+		}
 
 		const response = await fetch(endpointUrl, fetchOptions);
 

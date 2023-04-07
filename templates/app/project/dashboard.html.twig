@@ -39,6 +39,37 @@
 			{% endif %}
 		</div>
 	{% endif %}
+	<div class="grid cols-4">
+		<a href="{{ path('project_checklist', {id: project.id|hashids_encode}) }}" class="clickable-thumbnail icon">
+			<div class="thumbnail">
+				<i class="fad fa-list-check"></i>
+			</div>
+			<div class="info">
+				<div class="name">{% trans %}project_dashboard.links.checklist{% endtrans %}</div>
+				<i class="far fa-angle-right"></i>
+			</div>
+		</a>
+		<a href="{{ path('project_testing', {id: project.id|hashids_encode}) }}" class="clickable-thumbnail icon">
+			<div class="thumbnail">
+				<i class="fad fa-wand-magic-sparkles"></i>
+			</div>
+			<div class="info">
+				<div class="name">{% trans %}project_dashboard.links.recommendations{% endtrans %}</div>
+				<i class="far fa-angle-right"></i>
+			</div>
+		</a>
+		<a href="{{ path('project_settings', {id: project.id|hashids_encode}) }}" class="clickable-thumbnail icon light">
+			<div class="thumbnail">
+				<i class="fad fa-gears"></i>
+			</div>
+			<div class="info">
+				<div class="name">{% trans %}project_dashboard.links.settings{% endtrans %}</div>
+				<i class="far fa-angle-right"></i>
+			</div>
+		</a>
+	</div>
+
+	<hr class="spacer small">
 
 	<div class="grid">
 		<div class="card">
@@ -120,33 +151,10 @@
 
 	<hr class="spacer small">
 
-	<div class="grid cols-4">
-		<a href="{{ path('project_checklist', {id: project.id|hashids_encode}) }}" class="clickable-thumbnail icon">
-			<div class="thumbnail">
-				<i class="fad fa-list-check"></i>
-			</div>
-			<div class="info">
-				<div class="name">{% trans %}project_dashboard.links.checklist{% endtrans %}</div>
-				<i class="far fa-angle-right"></i>
-			</div>
-		</a>
-		<a href="{{ path('project_testing', {id: project.id|hashids_encode}) }}" class="clickable-thumbnail icon">
-			<div class="thumbnail">
-				<i class="fad fa-wand-magic-sparkles"></i>
-			</div>
-			<div class="info">
-				<div class="name">{% trans %}project_dashboard.links.recommendations{% endtrans %}</div>
-				<i class="far fa-angle-right"></i>
-			</div>
-		</a>
-		<a href="{{ path('project_settings', {id: project.id|hashids_encode}) }}" class="clickable-thumbnail icon light">
-			<div class="thumbnail">
-				<i class="fad fa-gears"></i>
-			</div>
-			<div class="info">
-				<div class="name">{% trans %}project_dashboard.links.settings{% endtrans %}</div>
-				<i class="far fa-angle-right"></i>
-			</div>
-		</a>
+	<div class="grid">
+        <div class="card">
+			<h2>{% trans %}generic.recent_activity{% endtrans %}</h2>
+			<activity-logs projectId="{{ project.id|hashids_encode }}"></activity-logs>
+		</div>
 	</div>
 {% endblock %}
