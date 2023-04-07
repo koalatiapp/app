@@ -44,7 +44,6 @@ Mercure protocol.
 ### Files of interest
 - Controller(s): 
   - [`App\Controller\Project\ProjectChecklistController`](/src/Controller/Project/ProjectChecklistController.php) 
-  - [`App\Controller\Api\Checklist\*`](/src/Controller/Api/Checklist) 
 - Entities(s): [`App\Entity\Checklist\*`](/src/Entity/Checklist) 
 - Services(s): [`App\Util\Checklist\*`](/src/Util/Checklist) 
 - Templates: [`templates/app/project/checklist/`](/templates/app/project/checklist) 

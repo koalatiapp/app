@@ -25,7 +25,6 @@ Mercure protocol.
 
 ### Files of interest
 - Controller(s): 
-  - [`App\Controller\Api\CommentController`](/src/Controller/Api/CommentController.php) 
   - [`App\Controller\ProxyController`](/src/Controller/ProxyController.php)
 - Entities(s): [`src\Entity\Comment`](/src/Entity/Comment.php) 
 - Services(s): [`App\Util\HtmlSanitizer`](/src/Util/HtmlSanitizer.php) 
