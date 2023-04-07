@@ -2,6 +2,7 @@
 
 namespace App\Controller\Webhook;
 
+use App\Activity\Logger\UserLogger;
 use App\Controller\AbstractController;
 use App\Entity\User;
 use App\Repository\UserRepository;
@@ -28,6 +29,7 @@ class PaddleController extends AbstractController
 		private readonly PlanManager $planManager,
 		private readonly UserRepository $userRepository,
 		private readonly MailerInterface $mailer,
+		private readonly UserLogger $userActivityLogger,
 	) {
 	}
 
@@ -94,6 +96,8 @@ class PaddleController extends AbstractController
 		$this->entityManager->persist($user);
 		$this->entityManager->flush();
 
+		$this->userActivityLogger->updateSubscription($user, $originalPlan->getUniqueName(), $newPlan->getUniqueName());
+
 		return new Response('ok');
 	}
 
@@ -110,6 +114,8 @@ class PaddleController extends AbstractController
 
 		$this->entityManager->persist($user);
 		$this->entityManager->flush();
+
+		$this->userActivityLogger->cancelSubscription($user);
 
 		return new Response('ok');
 	}

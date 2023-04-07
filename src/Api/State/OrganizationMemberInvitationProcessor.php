@@ -9,6 +9,7 @@ use App\Entity\Organization;
 use App\Entity\OrganizationInvitation;
 use App\Entity\User;
 use App\Security\OrganizationVoter;
+use App\Activity\ActivityLogger;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -26,6 +27,7 @@ class OrganizationMemberInvitationProcessor implements ProcessorInterface
 		private readonly MailerInterface $mailer,
 		private readonly TranslatorInterface $translator,
 		private readonly EntityManagerInterface $entityManager,
+		private readonly ActivityLogger $activityLogger,
 	) {
 	}
 
@@ -75,6 +77,8 @@ class OrganizationMemberInvitationProcessor implements ProcessorInterface
 		$this->entityManager->flush();
 
 		$this->sendWelcomeEmail($invitation);
+
+		$this->activityLogger->postPersist($invitation, null);
 
 		return null;
 	}

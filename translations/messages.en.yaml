@@ -1078,6 +1078,27 @@ comment:
         submitted: Your comment has been sent!
         deleted: Your comment has been deleted!
 
+activity_log:
+    message:
+        comment_delete: "%user% deleted their comment in %project%."
+        comment_reply: "%user% replied to a comment in %project%."
+        comment_create: "%user% added a comment in %project%."
+        comment_resolve: "%user% resolved a comment in %project%."
+        comment_unresolve: "%user% unresolved to a comment in %project%."
+        project_create: "%user% created a new project: %project%."
+        project_delete: "%user% deleted project %project%."
+        recommendation_group_complete: "%user% marked a recommendation as completed in %project%."
+        recommendation_complete: "%user% marked a recommendation as completed in %project%."
+        testing_request: "%user% requested automated testing on %project%."
+        checklist_item_complete: "%user% marked a checklist task as completed in %project%."
+        checklist_item_uncomplete: "%user% marked a checklist task as NOT completed in %project%."
+        user_profile_update: "You updated your profile's display name."
+        user_password_change: "You changed your password."
+        user_email_change: "You updated your account's email address."
+        user_subscription_change: "You changed your subscription from %previousPlan% to %newPlan%."
+        user_subscription_cancel: "You cancelled your subscription."
+        user_api_usage_settings_change: "You updated your API usage settings (spending limit: %quotaExceedanceSpendingLimit%, tests over limit allowed: %allowsPageTestsOverQuota%)."
+
 email:
     email_validation:
         subject: Confirm your email address

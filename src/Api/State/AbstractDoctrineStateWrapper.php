@@ -9,6 +9,7 @@ use App\Entity\User;
 use App\Mercure\MercureEntityInterface;
 use App\Mercure\UpdateDispatcher;
 use App\Mercure\UpdateType;
+use App\Activity\ActivityLogger;
 use Doctrine\ORM\EntityManagerInterface;
 use Hashids\HashidsInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -30,6 +31,7 @@ abstract class AbstractDoctrineStateWrapper implements ProcessorInterface
 	protected HashidsInterface $idHasher;
 	protected MessageBusInterface $bus;
 	protected UpdateDispatcher $mercureUpdateDispatcher;
+	protected ActivityLogger $activityLogger;
 
 	#[Required]
 	public function setDependencies(
@@ -40,6 +42,7 @@ abstract class AbstractDoctrineStateWrapper implements ProcessorInterface
 		HashidsInterface $idHasher,
 		MessageBusInterface $bus,
 		UpdateDispatcher $mercureUpdateDispatcher,
+		ActivityLogger $activityLogger,
 	): void {
 		$this->security = $security;
 		$this->persistProcessor = $persistProcessor;
@@ -48,6 +51,7 @@ abstract class AbstractDoctrineStateWrapper implements ProcessorInterface
 		$this->idHasher = $idHasher;
 		$this->bus = $bus;
 		$this->mercureUpdateDispatcher = $mercureUpdateDispatcher;
+		$this->activityLogger = $activityLogger;
 	}
 
 	/**
@@ -70,6 +74,7 @@ abstract class AbstractDoctrineStateWrapper implements ProcessorInterface
 			$this->preRemove($data);
 			$this->removeProcessor->process($data, $operation, $uriVariables, $context);
 			$this->postRemove($data);
+			$this->activityLogger->postRemove($data);
 
 			if ($data instanceof MercureEntityInterface) {
 				$this->mercureUpdateDispatcher->dispatchPreparedUpdates();
@@ -82,6 +87,7 @@ abstract class AbstractDoctrineStateWrapper implements ProcessorInterface
 		$this->prePersist($data, $originalData);
 		$this->persistProcessor->process($data, $operation, $uriVariables, $context);
 		$this->postPersist($data, $originalData);
+		$this->activityLogger->postPersist($data, $originalData);
 
 		if ($data instanceof MercureEntityInterface) {
 			$this->mercureUpdateDispatcher->dispatch($data, ($originalData['id'] ?? null) ? UpdateType::UPDATE : UpdateType::CREATE);

@@ -2,6 +2,7 @@
 
 namespace App\Controller\User;
 
+use App\Activity\ActivityLogger;
 use App\Controller\AbstractController;
 use App\Form\User\UserProfileType;
 use Symfony\Component\HttpFoundation\Request;

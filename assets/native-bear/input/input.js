@@ -120,6 +120,10 @@ export class NbInput extends LitElement {
 
 	firstUpdated()
 	{
+		if (this.input.value != this.value) {
+			this.input.value = this.value;
+		}
+
 		this._updateValue();
 
 		if (this.autofocus && document.activeElement == document.body)  {
@@ -147,10 +151,12 @@ export class NbInput extends LitElement {
 			validationMessage = input.validationMessage;
 		}
 
-		const newValue = this.disabled || this.loading ? null :  input.value;
+		const newValue = this.disabled || this.loading ? null : input.value;
 		this.value = newValue;
 		this.internals.setValidity(validity, validationMessage, input);
 		this.internals.setFormValue(newValue);
+
+		console.log(input);
 	}
 
 	#revealPassword()
