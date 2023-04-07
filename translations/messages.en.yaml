@@ -705,7 +705,6 @@ dashboard:
         news: What's new
     actions:
         new_project: New project
-        search_project: Search for a project
     projects:
         title: Jump back in
         empty_state: You don't have any projects yet.
