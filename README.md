@@ -36,8 +36,6 @@ This is the official repository for the Koalati web application, available at [a
 If you would like to contribute to the project, that's awesome!
 Check out the issues, pick one, and take a stab at it!
 
-To get a better understanding of the Koalati ecosystem, take a look at [Koalati's Contributor documentation](https://docs.koalati.com/).
-
 ---
 
 ## Code of conduct
