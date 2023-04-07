@@ -1068,6 +1068,7 @@ comment:
     reply: Reply
     resolve: Resolve
     resolved: Resolved
+    unresolve: Unresolve
     view_replies: "{1}View 1 reply|]0,Inf[View %count% comments"
     delete:
         button: Delete comment

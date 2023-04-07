@@ -27,7 +27,11 @@ export class UserComment extends LitElement {
 				.author { font-size: 1.05em; font-weight: 700; text-overflow: ellipsis; }
 				.date { font-size: .8em; color: var(--color-gray-dark); }
 				.actions { flex-shrink: 0; text-align: right; }
-				.resolved { display: inline-block; padding: 0.5em 0.75em; font-size: 0.8rem; font-weight: 500; color: #269900; background-color: var(--color-green-10); border-radius: 0.5em; cursor: default; }
+				.resolved { display: inline-block; padding: 0.5em 0.75em; font-size: 0.8rem; font-weight: 500; color: #269900; background-color: var(--color-green-10); border-radius: 0.5em; cursor: default; position: relative; }
+				.resolved nb-button { width: 100%; height: 100%; position: absolute; top: 0; left: 0; opacity: 0; }
+				.resolved nb-button:focus,
+				.resolved nb-button:focus-visible,
+				.resolved nb-button:hover { opacity: 1; transition: opacity .25s ease; }
 
 				.body { margin-top: 1.5em; font-size: 1em; }
 				.body * { max-width: 100%; }
@@ -150,6 +154,10 @@ export class UserComment extends LitElement {
 								<i class="fas fa-circle-check"></i>
 								&nbsp;
 								${Translator.trans("comment.resolved")}
+
+								<nb-button size="tiny" color="danger" class="unresolve" @click=${() => this.#unresolve()}>
+									${Translator.trans("comment.unresolve")}
+								</nb-button>
 							</span>
 						` : ""
 					}
@@ -233,6 +241,20 @@ export class UserComment extends LitElement {
 		});
 
 		window.plausible("Checklist usage", { props: { action: "Resolved comment" } });
+	}
+
+	#unresolve()
+	{
+		const unresolveButton = this.shadowRoot.querySelector("nb-button.unresolve");
+		unresolveButton.loading = true;
+
+		ApiClient.patch(`/api/comments/${this.commentId}`, { is_resolved: false }).then(response => {
+			this.isResolved = response.is_resolved;
+		}).finally(() => {
+			unresolveButton.loading = false;
+		});
+
+		window.plausible("Checklist usage", { props: { action: "Unresolved comment" } });
 	}
 
 	toggleReplyEditor(showEditor)
