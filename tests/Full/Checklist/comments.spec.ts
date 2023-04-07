@@ -67,10 +67,15 @@ test.describe("checklist", () => {
 
 		// Resolve the thread
 		await comment.locator("nb-button >> text=Resolve").click({ timeout: 2000 });
-		await page.waitForSelector("user-comment >> text=Resolved", { timeout: 5000 });
+		const resolvedIndicator = await page.waitForSelector("user-comment >> text=Resolved", { timeout: 5000 });
 
-		// Check that the item's comment indicator still says 1 comment (replies don't count as unresolved comments)
+		// Check that the item's comment indicator indicates that there are two comments (without saying they're unresolved)
 		await expect(checklistItem, "Checklist item comment link is updated upon comment resolution").toContainText("2 comments");
+
+		// Unresolve the thread
+		await resolvedIndicator.hover();
+		await comment.getByRole("button", { name: "Unresolve" }).click();
+		await expect(checklistItem, "Checklist item comment link is updated upon unresolving a comment").toContainText("1 unresolved comment");
 
 		// Delete the main comment
 		await comment.getByLabel("Delete comment").first().click();
