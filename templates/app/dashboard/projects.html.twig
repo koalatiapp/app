@@ -3,11 +3,6 @@
 
 {% block head %}
     <link rel="stylesheet" href="{{ asset('css/component/thumbnail.css') }}">
-	<style>
-		@media (max-width: 600px) {
-			#project-search-bar { display: none; }
-		}
-	</style>
 {% endblock %}
 
 {% block section_title %}{% trans %}dashboard.title{% endtrans %}{% endblock %}
@@ -21,12 +16,6 @@
 {% endblock %#}
 
 {% block page_actions %}
-	<div class="typed-input" id="project-search-bar">
-        <input type="text" name="search" placeholder="{% trans %}dashboard.actions.search_project{% endtrans %}" oninput="document.querySelector('project-list').applySearchQuery(this.value)">
-        <span class="type">
-			<i class="far fa-magnifying-glass text-gray"></i>
-		</span>
-    </div>
 	<nb-button href="{{ path('project_creation') }}">{% trans %}dashboard.actions.new_project{% endtrans %}</nb-button>
 {% endblock %}
 
