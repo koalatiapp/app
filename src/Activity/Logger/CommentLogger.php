@@ -38,7 +38,7 @@ class CommentLogger extends AbstractEntityActivityLogger
 			type: "comment_delete",
 			organization: $comment->getProject()->getOwnerOrganization(),
 			project: $comment->getProject(),
-			target: $comment->getChecklistItem(),
+			target: null,
 		);
 	}
 }
