@@ -30,8 +30,11 @@ class ProjectLogger extends AbstractEntityActivityLogger
 		$this->log(
 			type: "project_delete",
 			organization: $project->getOwnerOrganization(),
-			project: $project,
-			target: $project,
+			project: null,
+			target: null,
+			data: [
+				'project' => $project->getName(),
+			]
 		);
 	}
 }

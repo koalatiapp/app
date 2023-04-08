@@ -38,14 +38,17 @@ class ActivityLog
 	private ?int $id = null;
 
 	#[ORM\ManyToOne]
+    #[ORM\JoinColumn(onDelete: "SET NULL")]
 	#[Groups(['activity_log.list'])]
 	private ?User $user = null;
 
-	#[ORM\ManyToOne]
+	#[ORM\ManyToOne()]
 	#[Groups(['activity_log.list'])]
+    #[ORM\JoinColumn(onDelete: "SET NULL")]
 	private ?Organization $organization = null;
 
-	#[ORM\ManyToOne]
+	#[ORM\ManyToOne()]
+    #[ORM\JoinColumn(onDelete: "SET NULL")]
 	#[Groups(['activity_log.list'])]
 	private ?Project $project = null;
 

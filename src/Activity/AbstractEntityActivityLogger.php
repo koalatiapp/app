@@ -34,9 +34,9 @@ abstract class AbstractEntityActivityLogger implements EntityActivityLoggerInter
 		/** @var User */
 		$user = $this->security->getUser();
 
-		$data['user'] = $user->getFullName();
-		$data['project'] = $project?->getName();
-		$data['organization'] = $organization?->getName();
+		$data['user'] ??= $user->getFullName();
+		$data['project'] ??= $project?->getName();
+		$data['organization'] ??= $organization?->getName();
 
 		$log = (new ActivityLog())
 			->setUser($user)
