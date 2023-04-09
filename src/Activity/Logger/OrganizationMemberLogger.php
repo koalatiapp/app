@@ -8,7 +8,7 @@ use App\Entity\OrganizationMember;
 /**
  * @extends AbstractEntityActivityLogger<OrganizationMember>
  */
-class OrganizationMemberInvitationLogger extends AbstractEntityActivityLogger
+class OrganizationMemberLogger extends AbstractEntityActivityLogger
 {
 	public static function getEntityClass(): string
 	{
