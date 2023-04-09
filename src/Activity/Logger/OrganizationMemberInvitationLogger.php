@@ -3,28 +3,31 @@
 namespace App\Activity\Logger;
 
 use App\Activity\AbstractEntityActivityLogger;
+use App\Api\Dto\OrganizationMemberInvitation;
 use App\Entity\OrganizationMember;
 
 /**
- * @extends AbstractEntityActivityLogger<OrganizationMember>
+ * @extends AbstractEntityActivityLogger<OrganizationMemberInvitation>
  */
 class OrganizationMemberInvitationLogger extends AbstractEntityActivityLogger
 {
 	public static function getEntityClass(): string
 	{
-		return OrganizationMember::class;
+		return OrganizationMemberInvitation::class;
 	}
 
+	/** @SuppressWarnings(PHPMD.UnusedFormalParameter) */
 	public function postPersist(object &$invitation, ?array $originalData): void
 	{
 		$this->log(
 			type: "organization_member_invite",
-			organization: $invitation->getOrganization(),
-			target: $invitation->getOrganization(),
-			data: ["name" => $invitation->getFirstName()],
+			organization: $invitation->organization,
+			target: $invitation->organization,
+			data: ["name" => $invitation->firstName],
 		);
 	}
 
+	/** @SuppressWarnings(PHPMD.UnusedFormalParameter) */
 	public function postRemove(object &$invitation): void
 	{
 	}
