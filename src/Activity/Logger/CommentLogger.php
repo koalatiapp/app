@@ -21,7 +21,7 @@ class CommentLogger extends AbstractEntityActivityLogger
 		$activityType = $comment->getThread() ? "comment_reply" : "comment_create";
 
 		if (isset($originalData['isResolved']) && $originalData['isResolved'] != $comment->isResolved()) {
-			$activityType = $comment->isResolved() ? "comment_resolved" : "comment_unresolved";
+			$activityType = $comment->isResolved() ? "comment_resolve" : "comment_unresolve";
 		}
 
 		$this->log(
