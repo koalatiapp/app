@@ -110,7 +110,7 @@ jobs:
               run: ./DEV/ci/run-tests.php --verbose
             - name: Prepare log artifacts (copy from container to host)
               if: always()
-              run: docker cp $(docker-compose ps -q php):/srv/app/var/log var
+              run: sudo docker cp $(docker-compose ps -q php):/srv/app/var/log var
             - name: Save log artifacts
               if: always()
               uses: actions/upload-artifact@v3
