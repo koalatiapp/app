@@ -35,7 +35,7 @@ export class ActivityLogs extends AbstractDynamicList {
 				label: "",
 				render: (item) => html`
 					<p>${Translator.trans(`activity_log.message.${item.type}`, item.data)}</p>
-					<time datetime=${item.date_created}>${timeago.format(item.date_created)}</time>
+					<time datetime=${item.date_created} title=${item.date_created}>${timeago.format(item.date_created)}</time>
 				`,
 				placeholder: html`
 					<div class="nb--list-item-column-placeholder" style="width: 100%; line-height: 1em;">&nbsp;</div>
