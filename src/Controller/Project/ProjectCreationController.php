@@ -2,6 +2,7 @@
 
 namespace App\Controller\Project;
 
+use App\Activity\ActivityLogger;
 use App\Entity\Project;
 use App\Form\Project\NewProjectType;
 use App\Message\FaviconRequest;
@@ -17,6 +18,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ProjectCreationController extends AbstractProjectController
 {
+	public function __construct(
+		private readonly ActivityLogger $activityLogger,
+	) {
+	}
+
 	#[Route(path: '/project/create', name: 'project_creation')]
 	public function projectCreation(Url $urlHelper, Request $request, StackDetector $stackDetector, MessageBusInterface $bus): Response
 	{
@@ -70,6 +76,8 @@ class ProjectCreationController extends AbstractProjectController
 				$bus->dispatch(new FaviconRequest($project->getId()));
 				$bus->dispatch(new SitemapRequest($project->getId()));
 				$this->addFlash('success', 'project_creation.flash.created_successfully', ['%name%' => $project->getName()]);
+
+				$this->activityLogger->postPersist($project, null);
 
 				return $this->redirectToRoute('project_dashboard', ['id' => $this->idHasher->encode($project->getId())]);
 			}

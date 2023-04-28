@@ -2,6 +2,7 @@
 
 namespace App\Controller\Project;
 
+use App\Activity\ActivityLogger;
 use App\Controller\Trait\SuggestUpgradeControllerTrait;
 use App\Entity\Project;
 use App\Form\Project\ProjectSettingsType;
@@ -24,6 +25,7 @@ class ProjectSettingsController extends AbstractProjectController
 
 	public function __construct(
 		private readonly MessageBusInterface $bus,
+		private readonly ActivityLogger $activityLogger,
 	) {
 	}
 
@@ -89,6 +91,8 @@ class ProjectSettingsController extends AbstractProjectController
 
 					$this->addFlash('success', 'project_settings.project.flash.deleted_successfully', ['%name%' => $projectName]);
 
+					$this->activityLogger->postRemove($project);
+
 					return $this->redirectToRoute('dashboard');
 				}
 
@@ -128,6 +132,8 @@ class ProjectSettingsController extends AbstractProjectController
 				$this->bus->dispatch(new FaviconRequest($project->getId()));
 				$this->bus->dispatch(new SitemapRequest($project->getId()));
 			}
+
+			$this->activityLogger->postPersist($project, ['id' => $project->getId()]);
 		}
 	}
 

@@ -25,6 +25,7 @@ generic:
         invalid_name: This name is invalid. Please enter a valid name.
     self_hosted: Self-hosted
     load_more: Load more
+    recent_activity: Recent activity
 
 api:
     flash:
@@ -903,7 +904,6 @@ organization:
         update_label: Save changes
     dashboard:
         title: Team dashboard
-        feed: Recent activity
         projects:
             title: Team projects
             empty_state: There are no team projects yet for %teamName%.
@@ -1076,6 +1076,31 @@ comment:
     flash:
         submitted: Your comment has been sent!
         deleted: Your comment has been deleted!
+
+activity_log:
+    message:
+        comment_delete: "%user% deleted their comment in %project%."
+        comment_reply: "%user% replied to a comment in %project%."
+        comment_create: "%user% added a comment in %project%."
+        comment_resolve: "%user% resolved a comment in %project%."
+        comment_unresolve: "%user% unresolved to a comment in %project%."
+        project_create: "%user% created a new project: %project%."
+        project_delete: "%user% deleted the project %project%."
+        project_edit: "%user% updated the project settings for %project%."
+        recommendation_group_complete: "%user% marked a recommendation as completed in %project%."
+        recommendation_complete: "%user% marked a recommendation as completed in %project%."
+        testing_request: "%user% requested automated testing on %project%."
+        checklist_item_complete: "%user% marked a checklist task as completed in %project%."
+        checklist_item_uncomplete: "%user% marked a checklist task as NOT completed in %project%."
+        organization_member_invite: "%user% invited %name% to join %organization%."
+        organization_member_update: "%user% updated %name%'s role to %role% within %organization%."
+        organization_member_delete: "%user% has removed %name% from the %organization% organization."
+        user_profile_update: "You updated your profile's display name."
+        user_password_change: "You changed your password."
+        user_email_change: "You updated your account's email address."
+        user_subscription_change: "You changed your subscription from %previousPlan% to %newPlan%."
+        user_subscription_cancel: "You cancelled your subscription."
+        user_api_usage_settings_change: "You updated your API usage settings (allow tests over your plan's quota: %allowsPageTestsOverQuota%, spending limit: $%quotaExceedanceSpendingLimit%)."
 
 email:
     email_validation:

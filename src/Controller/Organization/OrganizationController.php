@@ -2,6 +2,7 @@
 
 namespace App\Controller\Organization;
 
+use App\Activity\ActivityLogger;
 use App\Controller\AbstractController;
 use App\Controller\Trait\SuggestUpgradeControllerTrait;
 use App\Entity\Organization;
@@ -31,6 +32,7 @@ class OrganizationController extends AbstractController
 		public OrganizationRepository $organizationRepository,
 		public SluggerInterface $slugger,
 		private UsageManager $usageManager,
+		private ActivityLogger $activityLogger,
 	) {
 	}
 
@@ -60,6 +62,8 @@ class OrganizationController extends AbstractController
 				$this->entityManager->flush();
 
 				$this->addFlash('success', 'organization.flash.created_successfully', ['%name%' => $organization->getName()]);
+
+				$this->activityLogger->postPersist($organization, null);
 
 				return $this->redirectToRoute('organization_dashboard', ['id' => $this->idHasher->encode($organization->getId())]);
 			}
@@ -121,6 +125,8 @@ class OrganizationController extends AbstractController
 
 			$this->addFlash('success', 'organization.flash.member_left_successfully', ['%organization%' => $organization->getName()]);
 
+			$this->activityLogger->postRemove($membership);
+
 			return $this->redirectToRoute('dashboard');
 		}
 
@@ -170,6 +176,8 @@ class OrganizationController extends AbstractController
 
 			$this->addFlash('success', 'organization.flash.deleted_successfully', ['%name%' => $organization->getName()]);
 
+			$this->activityLogger->postRemove($organization);
+
 			return null;
 		}
 
@@ -187,6 +195,8 @@ class OrganizationController extends AbstractController
 				$this->entityManager->flush();
 
 				$this->addFlash('success', 'organization.flash.updated_successfully', ['%name%' => $organization->getName()]);
+
+				$this->activityLogger->postPersist($organization, ['id' => $organization->getId()]);
 			}
 		}
 

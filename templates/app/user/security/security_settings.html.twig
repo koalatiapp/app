@@ -25,4 +25,10 @@
 			{{ form(deletionForm) }}
 		</div>
 	</div>
+	<div class="grid">
+        <div class="card">
+			<h2>{% trans %}generic.recent_activity{% endtrans %}</h2>
+			<activity-logs itemsPerPage="5"></activity-logs>
+		</div>
+	</div>
 {% endblock %}

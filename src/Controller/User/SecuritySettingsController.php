@@ -2,6 +2,8 @@
 
 namespace App\Controller\User;
 
+use App\Activity\ActivityLogger;
+use App\Activity\Logger\UserLogger;
 use App\Controller\AbstractController;
 use App\Form\User\UserChangeEmailType;
 use App\Form\User\UserChangePasswordType;
@@ -20,6 +22,7 @@ class SecuritySettingsController extends AbstractController
 		private readonly UserPasswordHasherInterface $passwordHasher,
 		private readonly TokenStorageInterface $tokenStorage,
 		private readonly EmailVerifier $emailVerifier,
+		private readonly UserLogger $userActivityLogger,
 	) {
 	}
 
@@ -61,6 +64,8 @@ class SecuritySettingsController extends AbstractController
 			$this->entityManager->flush();
 
 			$this->addFlash('success', $this->translator->trans('user_settings.security.password.flash.success'));
+
+			$this->userActivityLogger->updatePassword($user);
 		}
 
 		return $passwordForm;
@@ -83,6 +88,8 @@ class SecuritySettingsController extends AbstractController
 			$request->getSession()->invalidate();
 
 			$this->emailVerifier->sendEmailConfirmation($user);
+
+			$this->userActivityLogger->updateEmail($user);
 
 			return $this->redirectToRoute("verify_email_pending");
 		}

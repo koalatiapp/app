@@ -2,6 +2,7 @@
 
 namespace App\Controller\User;
 
+use App\Activity\Logger\UserLogger;
 use App\Controller\AbstractController;
 use App\Form\User\UserProfileType;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,6 +11,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ProfileController extends AbstractController
 {
+	public function __construct(
+		private readonly UserLogger $userActivityLogger,
+	) {
+	}
+
 	#[Route(path: '/edit-profile', name: 'edit_profile')]
 	public function editProfile(Request $request): Response
 	{
@@ -22,6 +28,8 @@ class ProfileController extends AbstractController
 			$this->entityManager->flush();
 
 			$this->addFlash('success', $this->translator->trans('user_settings.profile.flash.success'));
+
+			$this->userActivityLogger->updateProfile($user);
 		}
 
 		return $this->render('app/user/profile.html.twig', [

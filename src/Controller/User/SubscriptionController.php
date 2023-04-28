@@ -2,6 +2,7 @@
 
 namespace App\Controller\User;
 
+use App\Activity\Logger\UserLogger;
 use App\Controller\AbstractController;
 use App\Form\User\UserQuotaPreferencesType;
 use App\Subscription\Plan\BusinessAnnualPlan;
@@ -25,6 +26,7 @@ class SubscriptionController extends AbstractController
 	 */
 	public function __construct(
 		private readonly PlanManager $planManager,
+		private readonly UserLogger $userActivityLogger,
 		SelfHosting $selfHosting,
 	) {
 		if ($selfHosting->isSelfHosted()) {
@@ -74,6 +76,11 @@ class SubscriptionController extends AbstractController
 			$this->entityManager->flush();
 
 			$this->addFlash('success', $this->translator->trans('user_settings.quota.settings.flash.success'));
+
+			$this->userActivityLogger->updateApiUsageSettings($user, [
+				'allowsPageTestsOverQuota' => $user->allowsPageTestsOverQuota(),
+				'quotaExceedanceSpendingLimit' => $user->getQuotaExceedanceSpendingLimit(),
+			]);
 		}
 
 		return $this->render('app/user/subscription/quota.html.twig', [

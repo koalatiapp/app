@@ -2,6 +2,7 @@
 
 namespace App\Subscription;
 
+use App\Activity\Logger\UserLogger;
 use App\Entity\User;
 use App\Subscription\Plan\NoPlan;
 use App\Subscription\Plan\TrialPlan;

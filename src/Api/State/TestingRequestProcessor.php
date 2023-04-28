@@ -8,6 +8,7 @@ use App\Api\Dto\TestingRequest;
 use App\Entity\Page;
 use App\Message\TestingRequest as TestingRequestMessage;
 use App\Security\ProjectVoter;
+use App\Activity\ActivityLogger;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -18,6 +19,7 @@ class TestingRequestProcessor implements ProcessorInterface
 	public function __construct(
 		protected Security $security,
 		protected MessageBusInterface $bus,
+		protected ActivityLogger $activityLogger,
 	) {
 	}
 
@@ -44,6 +46,7 @@ class TestingRequestProcessor implements ProcessorInterface
 		$message = new TestingRequestMessage($data->project->getId(), $data->tools, $pageIds);
 
 		$this->bus->dispatch($message);
+		$this->activityLogger->postPersist($data, null);
 
 		return $message;
 	}
