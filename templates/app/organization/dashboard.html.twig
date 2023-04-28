@@ -28,7 +28,7 @@
     <div class="grid fill-small">
         <div class="card">
 			<h2>{% trans %}generic.recent_activity{% endtrans %}</h2>
-			<activity-logs organizationId="{{ organization.id|hashids_encode }}"></activity-logs>
+			<activity-logs organizationId="{{ organization.id|hashids_encode }}" itemsPerPage="5"></activity-logs>
 		</div>
 		<div class="card">
 			<h2>{% trans %}organization.dashboard.member_list.title{% endtrans %}</h2>
