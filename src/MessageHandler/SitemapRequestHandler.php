@@ -44,12 +44,14 @@ class SitemapRequestHandler
 			return;
 		}
 
+		$originalPages = $project->getPages()->toArray();
 		$userPlan = $this->planManager->getPlanFromEntity($project->getOwner());
 		$pageLimit = $userPlan->getMaxActivePagesPerProject();
 		$supportsSsl = $this->websiteSupportsSsl($project);
 		// Crawl website and sitemap, creating/updating pages everytime a page is found
 		$websiteUrl = $this->urlHelper->standardize($project->getUrl(), $supportsSsl);
 		$pagesByUrl = [];
+		$foundPageUrls = [];
 
 		foreach ($project->getPages() as $page) {
 			$pageUrl = $this->urlHelper->standardize($page->getUrl(), $supportsSsl);
@@ -59,12 +61,13 @@ class SitemapRequestHandler
 		$pageIdsSentForTest = [];
 
 		/** @param array<int,Location> $locations */
-		$pageFoundCallback = function (array $locations) use (&$pagesByUrl, &$pageIdsSentForTest, $project, $message, $supportsSsl, $pageLimit) {
+		$pageFoundCallback = function (array $locations) use (&$pagesByUrl, &$foundPageUrls, &$pageIdsSentForTest, $project, $message, $supportsSsl, $pageLimit) {
 			$pagesToTest = [];
 			$pendingPersistCount = 0;
 
 			foreach ($locations as $location) {
 				$location->url = $this->urlHelper->standardize($location->url, $supportsSsl);
+				$foundPageUrls[] = $location->url;
 
 				// Check if an existing page can be updated
 				if (isset($pagesByUrl[$location->url])) {
@@ -122,7 +125,13 @@ class SitemapRequestHandler
 		$this->fetchMissingTitles($pagesByUrl);
 		$this->flushOrStopIfProjectIsDeleted();
 
-		// @TODO: Check to delete / deactivate pages that aren't reachable anymore
+		// Check to delete / deactivate pages that aren't reachable anymore
+		foreach ($originalPages as $originalPage) {
+			if (!in_array($pagesByUrl[$originalPage->getUrl()], $foundPageUrls)) {
+				$this->em->remove($originalPage);
+			}
+		}
+		$this->flushOrStopIfProjectIsDeleted();
 	}
 
 	private function flushOrStopIfProjectIsDeleted(): void
