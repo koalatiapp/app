@@ -108,7 +108,7 @@ class Url
 	{
 		$url = static::standardize($url, false);
 
-		return parse_url($url, PHP_URL_HOST);
+		return parse_url($url, PHP_URL_HOST) ?? "";
 	}
 
 	/**
