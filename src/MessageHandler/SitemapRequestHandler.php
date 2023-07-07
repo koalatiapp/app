@@ -127,7 +127,7 @@ class SitemapRequestHandler
 
 		// Check to delete / deactivate pages that aren't reachable anymore
 		foreach ($originalPages as $originalPage) {
-			if (!in_array($pagesByUrl[$originalPage->getUrl()], $foundPageUrls)) {
+			if (!in_array($originalPage->getUrl(), $foundPageUrls)) {
 				$this->em->remove($originalPage);
 			}
 		}
