@@ -28,6 +28,7 @@ export class NbInput extends LitElement {
 				:host(.tiny) { width: 8ch; }
 				:host(.small) { width: 25ch; }
 				:host(.medium) { width: 40ch; }
+				:host(.large) { width: 50ch; }
 				:host([type="date"]) { width: 12ch; }
 
 				/* Password inputs */

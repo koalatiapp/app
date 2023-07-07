@@ -38,14 +38,16 @@ class Builder
 	 * This method will both crawl the site and look at the site's sitemap to
 	 * find as many relevant pages as possible.
 	 *
-	 * @param string   $websiteUrl        URL of the website to build the sitemap from
-	 * @param callable $pageFoundCallback Callable to invoke anytime a new page is found.
-	 *                                    The callback will receive a `App\Util\Sitemap\Location` argument with the page's information.
+	 * @param string   $websiteUrl           URL of the website to build the sitemap from
+	 * @param callable $pageFoundCallback    Callable to invoke anytime a new page is found.
+	 *                                       The callback will receive a `App\Util\Sitemap\Location` argument with the page's information.
+	 * @param bool     $usePageCanonicalUrls Whether the page URLs returned should be the canonical URLs or simply the raw URLs that were found
 	 */
-	public function buildFromWebsiteUrl(string $websiteUrl, callable $pageFoundCallback): self
+	public function buildFromWebsiteUrl(string $websiteUrl, callable $pageFoundCallback, bool $usePageCanonicalUrls): self
 	{
 		// Standardize the provided URL
 		$websiteUrl = $this->urlHelper->standardize($websiteUrl, false);
+		$baseDomain = $this->urlHelper->domain($websiteUrl);
 		$path = $this->urlHelper->path($websiteUrl);
 		$isPartialSite = $path !== '' && $path !== '/';
 
@@ -58,6 +60,10 @@ class Builder
 				$newLocations = [];
 
 				foreach ($this->scanSitemap($sitemapUrl) as $url) {
+					if ($this->urlHelper->domain($url) != $baseDomain) {
+						continue;
+					}
+
 					$newLocations[] = new Location($url);
 				}
 
@@ -67,7 +73,7 @@ class Builder
 
 		// Crawl the website for a more complete sitemap
 		try {
-			$crawler = new Crawler($websiteUrl, $pageFoundCallback);
+			$crawler = new Crawler($websiteUrl, $pageFoundCallback, $usePageCanonicalUrls);
 			$crawler->crawl();
 		} catch (CrawlerException $exception) {
 			// Oh well, let's hope the sitemap was good enough...

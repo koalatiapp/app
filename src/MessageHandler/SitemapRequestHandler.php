@@ -117,7 +117,7 @@ class SitemapRequestHandler
 			}
 		};
 
-		$this->sitemapBuilder->buildFromWebsiteUrl($websiteUrl, $pageFoundCallback);
+		$this->sitemapBuilder->buildFromWebsiteUrl($websiteUrl, $pageFoundCallback, $project->useCanonicalPageUrls());
 
 		$this->fetchMissingTitles($pagesByUrl);
 		$this->flushOrStopIfProjectIsDeleted();

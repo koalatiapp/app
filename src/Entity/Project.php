@@ -142,6 +142,13 @@ class Project implements MercureEntityInterface
 	#[Groups(['project.list', 'project.read'])]
 	private ?array $tags = [];
 
+	/**
+	 * Whether the crawler should use the pages' canonical URL as the standard
+	 * page URL or not. Defaults to true.
+	 */
+	#[ORM\Column(options: ["default" => true])]
+	private bool $useCanonicalPageUrls = true;
+
 	public function __construct()
 	{
 		$this->dateCreated = new \DateTime();
@@ -346,8 +353,8 @@ class Project implements MercureEntityInterface
 		$recommendations = $this->recommendations->filter(
 			function (Recommendation $recommendation = null) {
 				return !$recommendation->getIsCompleted()
-					&& !$recommendation->isIgnored()
-					&& !$recommendation->getRelatedPage()->getIsIgnored();
+							 && !$recommendation->isIgnored()
+							 && !$recommendation->getRelatedPage()->getIsIgnored();
 			}
 		);
 
@@ -550,5 +557,17 @@ class Project implements MercureEntityInterface
 	public function getMercureSerializationGroup(): string
 	{
 		return "project.read";
+	}
+
+	public function useCanonicalPageUrls(): bool
+	{
+		return $this->useCanonicalPageUrls;
+	}
+
+	public function setUseCanonicalPageUrls(bool $useCanonicalPageUrls): self
+	{
+		$this->useCanonicalPageUrls = $useCanonicalPageUrls;
+
+		return $this;
 	}
 }

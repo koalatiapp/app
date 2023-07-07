@@ -114,6 +114,7 @@ class ProjectSettingsController extends AbstractProjectController
 	{
 		$websiteUrl = $urlHelper->standardize($project->getUrl(), false);
 		$urlHasChanged = $originalProject->getUrl() != $project->getUrl();
+		$useCanonicalUrlSettingHasChanged = $originalProject->useCanonicalPageUrls() != $project->useCanonicalPageUrls();
 
 		// Check if the provided website URL exists
 		if ($urlHasChanged && !$urlHelper->exists($websiteUrl)) {
@@ -127,7 +128,7 @@ class ProjectSettingsController extends AbstractProjectController
 
 			$this->addFlash('success', 'project_settings.project.flash.updated_successfully', ['%name%' => $project->getName()]);
 
-			if ($urlHasChanged) {
+			if ($urlHasChanged || $useCanonicalUrlSettingHasChanged) {
 				$this->bus->dispatch(new ScreenshotRequest($project->getId()));
 				$this->bus->dispatch(new FaviconRequest($project->getId()));
 				$this->bus->dispatch(new SitemapRequest($project->getId()));

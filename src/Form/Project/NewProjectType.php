@@ -5,6 +5,7 @@ namespace App\Form\Project;
 use App\Entity\Project;
 use App\Repository\OrganizationRepository;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -34,7 +35,7 @@ class NewProjectType extends AbstractType
 			])
 			->add('url', UrlType::class, [
 				'label' => 'project_creation.form.field.url.label',
-				'attr' => ['placeholder' => 'project_creation.form.field.url.placeholder', 'class' => 'medium'],
+				'attr' => ['placeholder' => 'project_creation.form.field.url.placeholder', 'class' => 'large'],
 			])
 			->add('owner', ChoiceType::class, [
 				'mapped' => false,
@@ -61,6 +62,12 @@ class NewProjectType extends AbstractType
 
 					return 'project.owner.team';
 				},
+			])
+			->add('useCanonicalPageUrls', CheckboxType::class, [
+				'label' => 'project_settings.project.form.field.use_canonical_page_urls.label',
+				'help' => 'project_settings.project.form.field.use_canonical_page_urls.help_text',
+				'help_html' => true,
+				'required' => false,
 			])
 			->add('save', SubmitType::class, [
 				'label' => 'project_creation.form.submit_label',
