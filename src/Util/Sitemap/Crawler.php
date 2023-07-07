@@ -36,12 +36,12 @@ class Crawler
 
 	private readonly Spider $spider;
 
-	public function __construct(string $websiteUrl, ?callable $pageFoundCallback = null)
+	public function __construct(string $websiteUrl, callable $pageFoundCallback = null, bool $usePageCanonicalUrls)
 	{
-		$this->spider = $this->initializeSpider($websiteUrl, $pageFoundCallback);
+		$this->spider = $this->initializeSpider($websiteUrl, $pageFoundCallback, $usePageCanonicalUrls);
 	}
 
-	protected function initializeSpider(string $websiteUrl, ?callable $pageFoundCallback = null): Spider
+	protected function initializeSpider(string $websiteUrl, callable $pageFoundCallback = null, bool $usePageCanonicalUrls): Spider
 	{
 		$startTime = microtime(true);
 		$spider = new Spider($websiteUrl);
@@ -91,7 +91,7 @@ class Crawler
 
 		$spider->getDispatcher()->addListener(
 			SpiderEvents::SPIDER_CRAWL_RESOURCE_PERSISTED,
-			function () use ($downloader, $pageFoundCallback) {
+			function () use ($downloader, $pageFoundCallback, $usePageCanonicalUrls) {
 				$persistenceHandler = $downloader->getPersistenceHandler();
 
 				/** @var \VDB\Spider\Resource */
@@ -107,7 +107,7 @@ class Crawler
 					return;
 				}
 
-				$url = $this->getStandardUrlFromCrawler($crawler);
+				$url = $this->getStandardUrlFromCrawler($crawler, $usePageCanonicalUrls);
 
 				if (!isset($this->pagesFound[$url])) {
 					$this->pagesFound[$url] = new Location($url);
@@ -141,8 +141,12 @@ class Crawler
 	 * Returns the canonical URL if available, then the og:url if available,
 	 * or the `$crawler->getUri()` otherwise.
 	 */
-	private function getStandardUrlFromCrawler(DomCrawler $crawler): string
+	private function getStandardUrlFromCrawler(DomCrawler $crawler, bool $usePageCanonicalUrls): string
 	{
+		if (!$usePageCanonicalUrls) {
+			return $crawler->getUri();
+		}
+
 		// Check for canonical URL
 		$canonicalTag = $crawler->filterXPath('//link[@rel="canonical"]');
 		if ($canonicalTag->count()) {

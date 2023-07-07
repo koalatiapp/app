@@ -55,11 +55,6 @@
 			<property name="exceptions" value="id,i,em,io" />
 		</properties>
 	</rule>
-	<rule ref="rulesets/naming.xml/LongVariable">
-		<properties>
-			<property name="maximum" value="30" />
-		</properties>
-	</rule>
 	<rule ref="rulesets/naming.xml/ShortMethodName">
 		<properties>
 			<property name="exceptions" value="up,down" />

@@ -3,9 +3,19 @@
 {% block title %}{% trans %}project_creation.title{% endtrans %}{% endblock %}
 
 {% block body %}
-    <div class="grid small-fill">
-        <div class="card">
-			{{ form(form) }}
+	{{ form_start(form) }}
+		<div class="grid fill-small">
+			<div class="card">
+				{{ form_row(form.name) }}
+				{{ form_row(form.url) }}
+				{{ form_row(form.owner) }}
+			</div>
+			<div class="card">
+				<h2>{% trans %}generic.advanced_settings{% endtrans %}</h2>
+				{{ form_row(form.useCanonicalPageUrls) }}
+			</div>
 		</div>
-	</div>
+
+		{{ form_rest(form) }}
+	{{ form_end(form) }}
 {% endblock %}

@@ -73,7 +73,10 @@ class ProjectProcessor extends AbstractDoctrineStateWrapper
 			$this->entityManager->flush();
 		}
 
-		if (($originalData['url'] ?? null) != $project->getUrl()) {
+		$urlHasChanged = ($originalData['url'] ?? null) != $project->getUrl();
+		$useCanonicalUrlSettingHasChanged = ($originalData['useCanonicalPageUrls'] ?? null) != $project->useCanonicalPageUrls();
+
+		if ($urlHasChanged || $useCanonicalUrlSettingHasChanged) {
 			$this->bus->dispatch(new ScreenshotRequest($project->getId()));
 			$this->bus->dispatch(new FaviconRequest($project->getId()));
 			$this->bus->dispatch(new SitemapRequest($project->getId()));
