@@ -147,6 +147,7 @@ class Project implements MercureEntityInterface
 	 * page URL or not. Defaults to true.
 	 */
 	#[ORM\Column(options: ["default" => true])]
+	#[Groups(['project.list', 'project.read', 'project.write'])]
 	private bool $useCanonicalPageUrls = true;
 
 	public function __construct()
