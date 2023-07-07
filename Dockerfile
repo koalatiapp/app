@@ -5,21 +5,21 @@
 
 # https://docs.docker.com/engine/reference/builder/#understand-how-arg-and-from-interact
 ARG PHP_VERSION=8.2
-ARG CADDY_VERSION=2.6.4
+ARG CADDY_VERSION=2.7
 
 # "php" stage
 FROM php:${PHP_VERSION}-fpm-alpine AS symfony_php
 
 # persistent / runtime deps
 RUN apk add --no-cache \
-		acl \
-		openssl \
-		fcgi \
-		file \
-		gettext \
-		git \
-		jq \
-		tzdata \
+	acl \
+	openssl \
+	fcgi \
+	file \
+	gettext \
+	git \
+	jq \
+	tzdata \
 	;
 # Set server timezone
 ENV TZ=America/Toronto
@@ -27,40 +27,40 @@ ENV TZ=America/Toronto
 ARG APCU_VERSION=5.1.22
 RUN set -eux; \
 	apk add --no-cache --virtual .build-deps \
-		$PHPIZE_DEPS \
-		icu-dev \
-		libzip-dev \
-		libxslt-dev \
-		zlib-dev \
+	$PHPIZE_DEPS \
+	icu-dev \
+	libzip-dev \
+	libxslt-dev \
+	zlib-dev \
 	; \
 	apk add --update nodejs npm supervisor; \
 	docker-php-ext-configure zip; \
 	docker-php-ext-install -j$(nproc) \
-		pcntl \
-		intl \
-		zip \
-		mysqli \
-		pdo \
-		pdo_mysql \
-		xsl \
-		bcmath \
+	pcntl \
+	intl \
+	zip \
+	mysqli \
+	pdo \
+	pdo_mysql \
+	xsl \
+	bcmath \
 	; \
 	pecl install \
-		apcu-${APCU_VERSION} \
-		redis \
+	apcu-${APCU_VERSION} \
+	redis \
 	; \
 	pecl clear-cache; \
 	docker-php-ext-enable \
-		apcu \
-		redis \
-		opcache \
+	apcu \
+	redis \
+	opcache \
 	; \
 	\
 	runDeps="$( \
-		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local/lib/php/extensions \
-			| tr ',' '\n' \
-			| sort -u \
-			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
+	scanelf --needed --nobanner --format '%n#p' --recursive /usr/local/lib/php/extensions \
+	| tr ',' '\n' \
+	| sort -u \
+	| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
 	)"; \
 	apk add --no-cache --virtual .phpexts-rundeps $runDeps; \
 	\
@@ -113,15 +113,15 @@ ENV APP_ENV ${APP_ENV:-prod}
 RUN set -eux; \
 	mkdir -p var/cache var/log; \
 	if [ "$APP_ENV" = "prod" ]; then \
-		composer install --prefer-dist --no-dev --no-progress --no-scripts --no-interaction; \
-		composer dump-autoload --classmap-authoritative --no-dev; \
-		composer symfony:dump-env prod; \
-		composer run-script --no-dev post-install-cmd; \
+	composer install --prefer-dist --no-dev --no-progress --no-scripts --no-interaction; \
+	composer dump-autoload --classmap-authoritative --no-dev; \
+	composer symfony:dump-env prod; \
+	composer run-script --no-dev post-install-cmd; \
 	else \
-		composer install --prefer-dist --no-progress --no-scripts --no-interaction; \
-		composer dump-autoload --classmap-authoritative; \
-		composer symfony:dump-env dev; \
-		composer run-script --dev post-install-cmd; \
+	composer install --prefer-dist --no-progress --no-scripts --no-interaction; \
+	composer dump-autoload --classmap-authoritative; \
+	composer symfony:dump-env dev; \
+	composer run-script --dev post-install-cmd; \
 	fi; \
 	npm ci --production; \
 	npm run encore production; \

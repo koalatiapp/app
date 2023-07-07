@@ -26,6 +26,7 @@ generic:
     self_hosted: Self-hosted
     load_more: Load more
     recent_activity: Recent activity
+    advanced_settings: Advanced settings
 
 api:
     flash:
@@ -864,6 +865,11 @@ project_settings:
                     error_unreachable: This URL is invalid or unreachable.
                 ignore:
                     label: Manage ignored recommendations
+                use_canonical_page_urls:
+                    label: Use canonical page URLs
+                    help_text: >
+                        When enabled, your pages will be saved and tested based on their canonical URL.
+                        Disable this if your canonical URLs do not point to the site you want to test.
         delete:
             warning_text: "Warning: once you delete a project, there is no turning back. The project will be deleted instantly, and all of its related data will be removed as well. This cannot be undone."
             confirmation_label: I am certain that I want to delete the project "%name%".

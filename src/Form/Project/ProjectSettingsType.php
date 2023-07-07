@@ -27,6 +27,12 @@ class ProjectSettingsType extends AbstractType
 				'label' => 'project_settings.project.form.field.url.label',
 				'attr' => ['placeholder' => 'project_settings.project.form.field.url.placeholder', 'class' => 'medium'],
 			])
+			->add('useCanonicalPageUrls', CheckboxType::class, [
+				'label' => 'project_settings.project.form.field.use_canonical_page_urls.label',
+				'help' => 'project_settings.project.form.field.use_canonical_page_urls.help_text',
+				'help_html' => true,
+				'required' => false,
+			])
 			->add('save', SubmitType::class, [
 				'label' => 'project_settings.project.form.submit_label',
 			])

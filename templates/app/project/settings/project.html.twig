@@ -21,12 +21,20 @@
 				<h2>{% trans %}project_settings.project.tabs.basic_information{% endtrans %}</h2>
 				{{ form_row(form.name) }}
 				{{ form_row(form.url) }}
+
 				{{ submit_button|raw }}
 			</div>
 
 			<div id="pages">
 				<h2>{% trans %}project_settings.project.tabs.pages{% endtrans %}</h2>
 				<project-pages-list projectId="{{ project.id|hashids_encode }}" light></project-pages-list>
+			</div>
+
+			<div id="advanced">
+				<h2>{% trans %}generic.advanced_settings{% endtrans %}</h2>
+				{{ form_row(form.useCanonicalPageUrls) }}
+
+				{{ submit_button|raw }}
 			</div>
 
 			<div id="delete">
