@@ -69,7 +69,7 @@ class Url
 	 */
 	public static function standardize(string $url, bool $forceHttps): string
 	{
-		$url = strtolower($url);
+		$url = strtolower(trim($url));
 
 		if (!preg_match('#(https?:)?//.+#', $url)) {
 			$url = 'http://'.$url;
