@@ -13,6 +13,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * @template T of object
+ *
  * @implements EntityActivityLoggerInterface<T>
  */
 abstract class AbstractEntityActivityLogger implements EntityActivityLoggerInterface
@@ -27,12 +28,16 @@ abstract class AbstractEntityActivityLogger implements EntityActivityLoggerInter
 	/**
 	 * Creates an activity log for the current user.
 	 *
-	 * @param null|array<string,mixed> $data
+	 * @param array<string,mixed>|null $data
 	 */
-	protected function log(string $type, ?Organization $organization = null, ?Project $project = null, ?object $target = null, ?array $data = null): void
+	protected function log(string $type, Organization $organization = null, Project $project = null, object $target = null, array $data = null): void
 	{
-		/** @var User */
+		/** @var ?User */
 		$user = $this->security->getUser();
+
+		if (!$user && $target instanceof User) {
+			$user = $target;
+		}
 
 		$data['user'] ??= $user->getFullName();
 		$data['project'] ??= $project?->getName();
