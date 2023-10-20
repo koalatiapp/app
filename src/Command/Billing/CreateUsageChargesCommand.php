@@ -91,7 +91,12 @@ class CreateUsageChargesCommand extends Command
 				$count++;
 				$totalChargedAmount += $amountDue;
 			} catch (\Exception $exception) {
-				$this->logger->critical($exception->getMessage(), $exception->getTrace());
+				if (!$user->getPaddleSubscriptionId()) {
+					$this->logger->error("User #{$user->getId()} went over their page test quota but does not have a Paddle subscription to charge for the extra {$amountDue}$.", $exception->getTrace());
+				} else {
+					$this->logger->critical($exception->getMessage(), $exception->getTrace());
+				}
+
 				$io->error(sprintf("Failed to charge user with ID #{$user->getId()} $%s for their extra usage in the past cycle.", number_format($amountDue, 2)));
 
 				$failedCount++;
