@@ -29,24 +29,6 @@ services:
     image: "redis:alpine"
     command: redis-server --requirepass ${REDIS_PASSWORD:-ChangeMe}
 
-  database:
-    image: mysql:${MYSQL_VERSION:-8.0}
-    platform: linux/x86_64
-    environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE:-app}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-ChangeMe}
-      MYSQL_USER: ${MYSQL_USER:-symfony}
-      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
-    cap_add:
-      - SYS_NICE  # CAP_SYS_NICE
-    volumes:
-      - db-data:/var/lib/mysql:rw
-    healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-      interval: 3s
-      timeout: 3s
-      retries: 10
-
   tools-service:
     image: koalati/tools-service
     depends_on:
@@ -82,6 +64,3 @@ services:
       - 1025:1025
       - 1080:1080
 ###< symfony/mailer ###
-
-volumes:
-  db-data:
