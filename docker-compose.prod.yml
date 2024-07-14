@@ -8,6 +8,8 @@ services:
         APP_ENV: prod
     environment:
       APP_ENV: prod
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   caddy:
     build:
