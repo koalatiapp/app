@@ -27,6 +27,11 @@ class HtmlSanitizer
 		return preg_replace_callback(
 			'~<img ([^>]*)src=(["\'])(.+?)\2~',
 			function ($matches) use ($router) {
+				// If the URL is already a proxied image URL, don't proxy it twice.
+				if (str_contains($matches[3], '/image-proxy')) {
+					return $matches[0];
+				}
+
 				$proxyUrl = $router->generate(
 					"image_proxy",
 					[
