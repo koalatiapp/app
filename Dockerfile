@@ -5,7 +5,7 @@
 
 # https://docs.docker.com/engine/reference/builder/#understand-how-arg-and-from-interact
 ARG PHP_VERSION=8.2
-ARG CADDY_VERSION=2.7
+ARG CADDY_VERSION=2.8
 
 # "php" stage
 FROM php:${PHP_VERSION}-fpm-alpine AS symfony_php
