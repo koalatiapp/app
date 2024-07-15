@@ -23,10 +23,11 @@ class ProxyController extends AbstractController
 		// If the URL is a Koalati image proxy URL... try to get to the real root URL
 		while (str_contains($url, '/image-proxy')) {
 			$underlyingRequest = Request::create($url);
+			$underlyingUrl = $url;
 			$url = $underlyingRequest->query->get("url");
 
 			if (!$url) {
-				return new Response("Missing image URL in underlying proxy request\n$url.", 400);
+				return new Response("Missing image URL in underlying proxy request\n$underlyingUrl.", 400);
 			}
 
 			$url = urldecode($url);
