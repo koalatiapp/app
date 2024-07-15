@@ -26,7 +26,7 @@ class ProxyController extends AbstractController
 			$url = $underlyingRequest->query->get("url");
 
 			if (!$url) {
-				return new Response("Missing image URL.", 400);
+				return new Response("Missing image URL in underlying proxy request\n$url.", 400);
 			}
 
 			$url = urldecode($url);
