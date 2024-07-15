@@ -63,6 +63,22 @@ class Url
 	}
 
 	/**
+	 * Checks if a URL is an image.
+	 */
+	public function isImage(string $url): bool
+	{
+		try {
+			$response = $this->client->request('GET', $url);
+			$type = $response->getHeaders()['content-type'][0] ?? '';
+			$response->cancel();
+		} catch (TransportException) {
+			$type = '';
+		}
+
+		return str_contains($type, 'image/');
+	}
+
+	/**
 	 * Standardizes an URL, ensuring the "https(s)://" protocol is defined.
 	 *
 	 * @param bool $forceHttps when $forceHttps is set to true, the URL will be changed to use HTTPS

@@ -30,7 +30,7 @@ class FaviconRequestHandler
 
 		$faviconUrl = $this->projectStorage->faviconUrl($project);
 
-		if ($this->urlHelper->exists($faviconUrl)) {
+		if ($this->urlHelper->exists($faviconUrl) && $this->urlHelper->isImage($faviconUrl)) {
 			// We already have a favicon for this URL!
 			// @TODO: Add some kind of timer on this to allow refreshing favicons after a while (or on demand)
 			return;
