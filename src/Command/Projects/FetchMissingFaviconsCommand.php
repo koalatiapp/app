@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Command\Email;
+namespace App\Command\Projects;
 
 use App\Message\FaviconRequest;
 use App\Repository\ProjectRepository;
