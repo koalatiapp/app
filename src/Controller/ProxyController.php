@@ -22,6 +22,7 @@ class ProxyController extends AbstractController
 
 		// If the URL is a Koalati image proxy URL... try to get to the real root URL
 		while (str_contains($url, '/image-proxy')) {
+			$url = html_entity_decode($url);
 			$url = substr($url, strpos($url, "?url=") + 5);
 			$url = urldecode(urldecode($url));
 		}
