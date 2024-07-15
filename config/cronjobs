@@ -1,3 +1,4 @@
 # Send trial ending soon notices via email
 0 * * * *	/srv/app/bin/console app:email:trial-ending-notices > /dev/null 2>&1
 30 7 * * *	/srv/app/bin/console app:billing:create-usage-charges > /dev/null 2>&1
+0 0 */5 * *	/srv/app/bin/console app:projects:fetch-missing-favicons > /dev/null 2>&1
