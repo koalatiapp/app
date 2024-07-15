@@ -10,7 +10,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class ProxyController extends AbstractController
 {
 	#[Route(path: '/image-proxy', name: 'image_proxy')]
-	public function overview(Request $request, HttpClientInterface $httpClient): Response
+	public function proxy(Request $request, HttpClientInterface $httpClient): Response
 	{
 		$url = $request->query->get("url");
 
@@ -22,11 +22,14 @@ class ProxyController extends AbstractController
 
 		// If the URL is a Koalati image proxy URL... try to get to the real root URL
 		while (str_contains($url, '/image-proxy')) {
-			if (!str_contains($url, '?url=')) {
-				$url = urldecode($url);
+			$underlyingRequest = Request::create($url);
+			$url = $underlyingRequest->query->get("url");
+
+			if (!$url) {
+				return new Response("Missing image URL.", 400);
 			}
 
-			$url = urldecode(explode('?url=', $url)[1]);
+			$url = urldecode($url);
 		}
 
 		$sourceResponse = $httpClient->request("GET", $url, [
