@@ -34,7 +34,7 @@ class ProjectHandler implements EntityHandlerInterface
 		$ownerUser = $project->getOwnerUser();
 		$ownerOrganization = $project->getOwnerOrganization();
 		$users = [
-			...$teamMembers->map(fn (ProjectMember $member = null) => $member->getUser()),
+			...$teamMembers->map(fn (?ProjectMember $member = null) => $member->getUser()),
 		];
 
 		if ($ownerUser) {

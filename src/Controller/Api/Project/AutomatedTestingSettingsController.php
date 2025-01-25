@@ -31,10 +31,10 @@ class AutomatedTestingSettingsController extends AbstractController
 
 		foreach ($availableTools as $tool) {
 			$list[] = [
-					'id' => $tool->name,
-					'enabled' => $project->hasToolEnabled($tool->name),
-					'tool' => $tool,
-				];
+				'id' => $tool->name,
+				'enabled' => $project->hasToolEnabled($tool->name),
+				'tool' => $tool,
+			];
 		}
 
 		return $this->apiSuccess($list);
@@ -71,8 +71,8 @@ class AutomatedTestingSettingsController extends AbstractController
 		$this->entityManager->flush();
 
 		return $this->apiSuccess([
-				'tool' => $toolName,
-				'enabled' => $project->hasToolEnabled($toolName),
-			]);
+			'tool' => $toolName,
+			'enabled' => $project->hasToolEnabled($toolName),
+		]);
 	}
 }

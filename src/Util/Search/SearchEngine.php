@@ -73,6 +73,7 @@ class SearchEngine
 			if ($titleSortResult != 0) {
 				return $titleSortResult;
 			}
+
 			// Sort by snippet as a last resort
 			return strnatcasecmp($resultA->snippet, $resultB->snippet);
 		});

@@ -12,18 +12,18 @@ use Doctrine\Migrations\AbstractMigration;
  */
 final class Version20230407152855 extends AbstractMigration
 {
-    public function getDescription(): string
-    {
-        return 'Allow activity logs without a target';
-    }
+	public function getDescription(): string
+	{
+		return 'Allow activity logs without a target';
+	}
 
-    public function up(Schema $schema): void
-    {
-        $this->addSql('ALTER TABLE activity_log CHANGE target target VARCHAR(512) DEFAULT NULL');
-    }
+	public function up(Schema $schema): void
+	{
+		$this->addSql('ALTER TABLE activity_log CHANGE target target VARCHAR(512) DEFAULT NULL');
+	}
 
-    public function down(Schema $schema): void
-    {
-        $this->addSql('ALTER TABLE activity_log CHANGE target target VARCHAR(512) NOT NULL');
-    }
+	public function down(Schema $schema): void
+	{
+		$this->addSql('ALTER TABLE activity_log CHANGE target target VARCHAR(512) NOT NULL');
+	}
 }

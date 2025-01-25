@@ -5,11 +5,11 @@ namespace App\Api\State;
 use ApiPlatform\Metadata\DeleteOperationInterface;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
+use App\Activity\ActivityLogger;
 use App\Entity\User;
 use App\Mercure\MercureEntityInterface;
 use App\Mercure\UpdateDispatcher;
 use App\Mercure\UpdateType;
-use App\Activity\ActivityLogger;
 use Doctrine\ORM\EntityManagerInterface;
 use Hashids\HashidsInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -21,11 +21,15 @@ use Symfony\Contracts\Service\Attribute\Required;
  * around the default Doctrine state providers and processors.
  *
  * @template T of object
+ *
+ * @implements ProcessorInterface<T,?T>
  */
 abstract class AbstractDoctrineStateWrapper implements ProcessorInterface
 {
 	protected Security $security;
+	/** @var ProcessorInterface<T,T> */
 	protected ProcessorInterface $persistProcessor;
+	/** @var ProcessorInterface<T,T> */
 	protected ProcessorInterface $removeProcessor;
 	protected EntityManagerInterface $entityManager;
 	protected HashidsInterface $idHasher;
@@ -33,6 +37,10 @@ abstract class AbstractDoctrineStateWrapper implements ProcessorInterface
 	protected UpdateDispatcher $mercureUpdateDispatcher;
 	protected ActivityLogger $activityLogger;
 
+	/**
+	 * @param ProcessorInterface<T,T> $persistProcessor
+	 * @param ProcessorInterface<T,T> $removeProcessor
+	 */
 	#[Required]
 	public function setDependencies(
 		Security $security,
@@ -54,15 +62,6 @@ abstract class AbstractDoctrineStateWrapper implements ProcessorInterface
 		$this->activityLogger = $activityLogger;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @param mixed               $data
-	 * @param array<string,mixed> $uriVariables
-	 * @param array<mixed>        $context
-	 *
-	 * @return T|null
-	 */
 	public function process($data, Operation $operation, array $uriVariables = [], array $context = []): ?object
 	{
 		// DELETE: use Doctrine's removal processor on the entity

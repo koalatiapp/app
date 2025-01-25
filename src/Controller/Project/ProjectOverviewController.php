@@ -39,8 +39,8 @@ class ProjectOverviewController extends AbstractProjectController
 		$project = $this->getProject($id);
 
 		return $this->render('app/project/dashboard.html.twig', [
-				'project' => $project,
-				'usageManager' => $usageManager->withUser($project->getTopLevelOwner()),
-			]);
+			'project' => $project,
+			'usageManager' => $usageManager->withUser($project->getTopLevelOwner()),
+		]);
 	}
 }

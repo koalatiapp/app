@@ -4,7 +4,6 @@ namespace App\Activity\Logger;
 
 use App\Activity\AbstractEntityActivityLogger;
 use App\Api\Dto\OrganizationMemberInvitation;
-use App\Entity\OrganizationMember;
 
 /**
  * @extends AbstractEntityActivityLogger<OrganizationMemberInvitation>

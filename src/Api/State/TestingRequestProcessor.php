@@ -4,16 +4,19 @@ namespace App\Api\State;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
+use App\Activity\ActivityLogger;
 use App\Api\Dto\TestingRequest;
 use App\Entity\Page;
 use App\Message\TestingRequest as TestingRequestMessage;
 use App\Security\ProjectVoter;
-use App\Activity\ActivityLogger;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Messenger\MessageBusInterface;
 
+/**
+ * @implements ProcessorInterface<TestingRequest, TestingRequestMessage>
+ */
 class TestingRequestProcessor implements ProcessorInterface
 {
 	public function __construct(
@@ -24,13 +27,7 @@ class TestingRequestProcessor implements ProcessorInterface
 	}
 
 	/**
-	 * {@inheritDoc}
-	 *
-	 * @param TestingRequest      $data
-	 * @param array<string,mixed> $uriVariables
-	 * @param array<mixed>        $context
-	 *
-	 * @return TestingRequestMessage
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	public function process($data, Operation $operation, array $uriVariables = [], array $context = []): ?object
 	{

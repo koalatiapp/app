@@ -15,9 +15,6 @@ use function Symfony\Component\String\u;
  */
 class InvalidFilterLogHandler extends AbstractProcessingHandler
 {
-	/**
-	 * {@inheritDoc}
-	 */
 	public function isHandling(LogRecord $record): bool
 	{
 		return $record->message == 'Invalid filter ignored';
@@ -56,7 +53,7 @@ class InvalidFilterLogHandler extends AbstractProcessingHandler
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	protected function write(LogRecord $record): void
 	{

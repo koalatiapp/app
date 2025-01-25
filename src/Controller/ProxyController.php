@@ -28,12 +28,12 @@ class ProxyController extends AbstractController
 		}
 
 		$sourceResponse = $httpClient->request("GET", $url, [
-				"timeout" => 2.5,
-				"max_redirects" => 10,
-				"headers" => [
-					"Accept" => "application/json",
-				],
-			]);
+			"timeout" => 2.5,
+			"max_redirects" => 10,
+			"headers" => [
+				"Accept" => "application/json",
+			],
+		]);
 		$statusCode = $sourceResponse->getStatusCode();
 
 		if ($statusCode < 200 || $statusCode >= 300) {

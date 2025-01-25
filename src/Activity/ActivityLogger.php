@@ -27,7 +27,7 @@ class ActivityLogger
 		}
 	}
 
-	/** @param null|array<string,mixed> $originalData */
+	/** @param array<string,mixed>|null $originalData */
 	public function postPersist(object &$data, ?array $originalData): void
 	{
 		if (isset($this->entityLoggers[$data::class])) {

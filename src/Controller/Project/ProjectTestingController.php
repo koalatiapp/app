@@ -28,8 +28,8 @@ class ProjectTestingController extends AbstractProjectController
 		}
 
 		return $this->render('app/project/testing/index.html.twig', [
-				'project' => $project,
-				'usageManager' => $usageManager->withUser($project->getTopLevelOwner()),
-			]);
+			'project' => $project,
+			'usageManager' => $usageManager->withUser($project->getTopLevelOwner()),
+		]);
 	}
 }

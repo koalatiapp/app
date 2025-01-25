@@ -63,10 +63,8 @@ class Config
 	 * Returns the configuration(s) for the specified filename and configuration key.
 	 * The key is optional, and follows the dot access format (ex.: key.subkey.othersubkey).
 	 * If the requested configuration cannot be found, NULL is returned.
-	 *
-	 * @return mixed
 	 */
-	public function get(string $filename, ?string $key = null)
+	public function get(string $filename, ?string $key = null): mixed
 	{
 		if (!isset(self::$loadedConfigurations[$filename])) {
 			self::$loadedConfigurations[$filename] = $this->loadDataFromFile($filename);

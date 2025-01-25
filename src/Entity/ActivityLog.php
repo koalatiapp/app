@@ -10,7 +10,6 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use App\Repository\ActivityLogRepository;
-use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -38,15 +37,15 @@ class ActivityLog
 	private ?int $id = null;
 
 	#[ORM\ManyToOne]
-    #[ORM\JoinColumn(onDelete: "SET NULL")]
+	#[ORM\JoinColumn(onDelete: "SET NULL")]
 	private ?User $user = null;
 
 	#[ORM\ManyToOne()]
-    #[ORM\JoinColumn(onDelete: "SET NULL")]
+	#[ORM\JoinColumn(onDelete: "SET NULL")]
 	private ?Organization $organization = null;
 
 	#[ORM\ManyToOne()]
-    #[ORM\JoinColumn(onDelete: "SET NULL")]
+	#[ORM\JoinColumn(onDelete: "SET NULL")]
 	private ?Project $project = null;
 
 	#[ORM\Column(length: 255)]
@@ -81,7 +80,7 @@ class ActivityLog
 
 	public function __construct()
 	{
-		$this->dateCreated = new DateTime();
+		$this->dateCreated = new \DateTime();
 	}
 
 	public function getId(): ?int
@@ -143,7 +142,7 @@ class ActivityLog
 		return $this->data ?: [];
 	}
 
-	/** @param null|array<string,mixed> $data */
+	/** @param array<string,mixed>|null $data */
 	public function setData(?array $data): self
 	{
 		$this->data = $data;

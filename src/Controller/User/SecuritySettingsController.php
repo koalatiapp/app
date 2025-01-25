@@ -2,7 +2,6 @@
 
 namespace App\Controller\User;
 
-use App\Activity\ActivityLogger;
 use App\Activity\Logger\UserLogger;
 use App\Controller\AbstractController;
 use App\Form\User\UserChangeEmailType;
@@ -43,10 +42,10 @@ class SecuritySettingsController extends AbstractController
 		}
 
 		return $this->render('app/user/security/security_settings.html.twig', [
-				'passwordForm' => $passwordForm->createView(),
-				'emailForm' => $emailForm->createView(),
-				'deletionForm' => $deletionForm->createView(),
-			]);
+			'passwordForm' => $passwordForm->createView(),
+			'emailForm' => $emailForm->createView(),
+			'deletionForm' => $deletionForm->createView(),
+		]);
 	}
 
 	private function processPasswordForm(Request $request): FormInterface

@@ -15,6 +15,9 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
+/**
+ * @implements ProcessorInterface<IgnoreEntryCreation, IgnoreEntry>
+ */
 class IgnoreEntryProcessor implements ProcessorInterface
 {
 	public function __construct(
@@ -25,13 +28,7 @@ class IgnoreEntryProcessor implements ProcessorInterface
 	}
 
 	/**
-	 * {@inheritDoc}
-	 *
-	 * @param IgnoreEntryCreation $data
-	 * @param array<string,mixed> $uriVariables
-	 * @param array<mixed>        $context
-	 *
-	 * @return IgnoreEntry
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	public function process($data, Operation $operation, array $uriVariables = [], array $context = []): ?object
 	{

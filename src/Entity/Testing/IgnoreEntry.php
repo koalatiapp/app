@@ -89,7 +89,7 @@ class IgnoreEntry implements MercureEntityInterface
 	#[Groups(['ignore_entry.list', 'ignore_entry.read'])]
 	private ?string $recommendationTitle;
 
-	public function __construct(string $tool, string $test, string $recommendationUniqueName, string $recommendationTitle, null|Organization|User|Project|Page $scopeTarget = null, ?User $createdBy = null)
+	public function __construct(string $tool, string $test, string $recommendationUniqueName, string $recommendationTitle, Organization|User|Project|Page|null $scopeTarget = null, ?User $createdBy = null)
 	{
 		$this->dateCreated = new \DateTime();
 		$this->setTool($tool);

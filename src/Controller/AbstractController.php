@@ -45,8 +45,6 @@ abstract class AbstractController extends DefaultAbstractController
 	}
 
 	/**
-	 * {@inheritDoc}
-	 *
 	 * @return User|null
 	 */
 	protected function getUser(): ?UserInterface
@@ -58,8 +56,6 @@ abstract class AbstractController extends DefaultAbstractController
 	}
 
 	/**
-	 * {@inheritDoc}
-	 *
 	 * @param string                   $message
 	 * @param array<string,mixed>|null $messageParams
 	 */

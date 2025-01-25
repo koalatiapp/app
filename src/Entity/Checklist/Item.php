@@ -177,7 +177,7 @@ class Item implements MercureEntityInterface
 	 */
 	public function getComments(): Collection
 	{
-		return $this->comments->filter(fn (Comment $comment = null) => !$comment->getThread());
+		return $this->comments->filter(fn (?Comment $comment = null) => !$comment->getThread());
 	}
 
 	public function addComment(Comment $comment): self
@@ -211,7 +211,7 @@ class Item implements MercureEntityInterface
 	#[Groups(['checklist_item.list', 'checklist_item.read', 'checklist.read', 'checklist_item_group.read'])]
 	public function getUnresolvedCommentCount(): int
 	{
-		return $this->comments->filter(fn (Comment $comment = null) => !$comment->isResolved() && !$comment->getThread())->count();
+		return $this->comments->filter(fn (?Comment $comment = null) => !$comment->isResolved() && !$comment->getThread())->count();
 	}
 
 	public function getMercureSerializationGroup(): string
