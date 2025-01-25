@@ -22,7 +22,7 @@ export class UserComment extends LitElement {
 				:host([highlighted]) { border-color: var(--color-blue-50); outline: 2px solid var(--color-blue-50); }
 
 				.header { display: flex; justify-content: space-between; gap: 1em; }
-				.avatar { flex-shrink: 0; width: 2.5em; height: 2.5em; object-fit: cover; border-radius: 50%; }
+				user-avatar { width: 2.5em; }
 				.heading { flex: 1; align-self: center; white-space: nowrap; overflow: hidden; }
 				.author { font-size: 1.05em; font-weight: 700; text-overflow: ellipsis; }
 				.date { font-size: .8em; color: var(--color-gray-dark); }
@@ -122,7 +122,7 @@ export class UserComment extends LitElement {
 			${fontAwesomeImport}
 
 			<div class="header">
-				<img src=${this.authorAvatarUrl} alt="" class="avatar">
+				<user-avatar url=${this.authorAvatarUrl} round></user-avatar>
 				<div class="heading">
 					<div class="author">${this.authorName}</div>
 					<div class="date">${timeago.format(this.dateCreated)}</div>
