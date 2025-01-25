@@ -253,6 +253,18 @@ class Project implements MercureEntityInterface
 		return $this->ownerUser;
 	}
 
+	/**
+	 * Shortcut for `setOwnerUser` / `setOwnerOrganization` that sets the
+	 * new owner and unsets the previous one.
+	 */
+	public function setOwner(User|Organization $owner): self
+	{
+		$this->ownerUser = $owner instanceof User ? $owner : null;
+		$this->ownerOrganization = $owner instanceof Organization ? $owner : null;
+
+		return $this;
+	}
+
 	public function setOwnerUser(?User $ownerUser): self
 	{
 		$this->ownerUser = $ownerUser;
@@ -280,7 +292,7 @@ class Project implements MercureEntityInterface
 	/**
 	 * @return User|null the user who owns this project (or who owns the organization that owns this project)
 	 */
-	public function getTopLevelOwner(): User|null
+	public function getTopLevelOwner(): ?User
 	{
 		if ($organization = $this->getOwnerOrganization()) {
 			return $organization->getOwner();
@@ -352,7 +364,7 @@ class Project implements MercureEntityInterface
 	public function getActiveRecommendations(): ArrayCollection
 	{
 		$recommendations = $this->recommendations->filter(
-			function (Recommendation $recommendation = null) {
+			function (?Recommendation $recommendation = null) {
 				return !$recommendation->getIsCompleted()
 							 && !$recommendation->isIgnored()
 							 && !$recommendation->getRelatedPage()->getIsIgnored();
@@ -510,7 +522,7 @@ class Project implements MercureEntityInterface
 	 */
 	public function getComments(): Collection
 	{
-		return $this->comments->filter(fn (Comment $comment = null) => !$comment->getThread());
+		return $this->comments->filter(fn (?Comment $comment = null) => !$comment->getThread());
 	}
 
 	public function getCommentCount(): int
@@ -520,7 +532,7 @@ class Project implements MercureEntityInterface
 
 	public function getUnresolvedCommentCount(): int
 	{
-		return $this->comments->filter(fn (Comment $comment = null) => !$comment->isResolved() && !$comment->getThread())->count();
+		return $this->comments->filter(fn (?Comment $comment = null) => !$comment->isResolved() && !$comment->getThread())->count();
 	}
 
 	/**

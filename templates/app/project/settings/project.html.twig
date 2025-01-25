@@ -22,6 +22,15 @@
 				{{ form_row(form.name) }}
 				{{ form_row(form.url) }}
 
+				{% if form.owner is defined %}
+					{{ form_row(form.owner) }}
+				{% else %}
+					<fieldset>
+						<nb-input label="Project ownership" value="{{ project.owner.name }}" class="medium" readonly></nb-input>
+						<p class="help-text">{% trans with {'%team%': project.owner.name} %}project_settings.project.form.field.owner.not_granted{% endtrans %}</p>
+					</fieldset>
+				{% endif %}
+
 				{{ submit_button|raw }}
 			</div>
 
@@ -39,9 +48,14 @@
 
 			<div id="delete">
 				<h2>{% trans %}project_settings.project.tabs.delete{% endtrans %}</h2>
-				<p>{% trans %}project_settings.project.delete.warning_text{% endtrans %}</p>
-				{{ form_row(form.deleteConfirmation) }}
-				{{ form_row(form.delete) }}
+
+				{% if form.delete is defined %}
+					<p>{% trans %}project_settings.project.delete.warning_text{% endtrans %}</p>
+					{{ form_row(form.deleteConfirmation) }}
+					{{ form_row(form.delete) }}
+				{% else %}
+					<p>{% trans with {'%team%': project.owner.name} %}project_settings.project.delete.not_granted{% endtrans %}</p>
+				{% endif %}
 			</div>
 		</tabbed-container>
 	{{ form_end(form) }}

@@ -12,3 +12,4 @@ fieldset .error::after { content: '\f06a'; display: flex; justify-content: cente
 /* Help text */
 form .help-text { margin-bottom: .5rem; font-size: .9em; color: var(--color-gray-dark); }
 form nb-checkbox + .help-text { padding-left: 35px; }
+fieldset:has(nb-radio-list) + .help-text { margin-top: .5rem; }
