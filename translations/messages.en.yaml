@@ -1140,8 +1140,6 @@ email:
                 <li><strong>Submit and track bug reports</strong> within your projects and teams.</li>
                 <li>Monitor your website's health and core vitals over time <i>(coming soon!)</i>;</li>
             </ul>
-        socials: >
-            <p>To follow the development and upcoming features, you can follow Koalati on <a href="https://twitter.com/koalatiweb">Twitter</a> or on <a href="https://facebook.com/koalatiweb">Facebook</a>.</p>
 
     trial_ending_soon:
         subject: Your free trial is about to end!
