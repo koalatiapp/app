@@ -10,6 +10,7 @@ use App\Form\Project\ProjectSettingsType;
 use App\Message\FaviconRequest;
 use App\Message\ScreenshotRequest;
 use App\Message\SitemapRequest;
+use App\Security\OrganizationVoter;
 use App\Security\ProjectVoter;
 use App\Util\Testing\AvailableToolsFetcher;
 use App\Util\Url;
@@ -121,6 +122,11 @@ class ProjectSettingsController extends AbstractProjectController
 				if ($form->has('owner')) {
 					$ownerValue = $form->get('owner')->getData();
 					$owner = is_numeric($ownerValue) && isset($availableOrganizationsById[$ownerValue]) ? $availableOrganizationsById[$ownerValue] : $this->getUser();
+
+					if ($owner !== $this->getUser()) {
+						$this->denyAccessUnlessGranted(OrganizationVoter::VIEW, $owner);
+					}
+
 					$project->setOwner($owner);
 				}
 
