@@ -27,6 +27,8 @@ api_platform:
         pagination_client_enabled: true
         pagination_items_per_page: 50
         pagination_maximum_items_per_page: 100
+    eager_loading:
+        force_eager: false
     collection:
         pagination:
             enabled_parameter_name: pagination
