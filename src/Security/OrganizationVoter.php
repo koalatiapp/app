@@ -15,6 +15,7 @@ class OrganizationVoter extends Voter
 	final public const PARTICIPATE = 'participate';
 	final public const EDIT = 'edit';
 	final public const CREATE = 'create';
+	final public const DELETE = 'delete';
 
 	/**
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -38,7 +39,7 @@ class OrganizationVoter extends Voter
 	 */
 	protected function voteOnAttribute(string $attribute, mixed $organization, TokenInterface $token): bool
 	{
-		if (!in_array($attribute, [self::VIEW, self::PARTICIPATE, self::EDIT, self::CREATE])) {
+		if (!in_array($attribute, [self::VIEW, self::PARTICIPATE, self::EDIT, self::CREATE, self::DELETE])) {
 			throw new \Exception("Undefined organization voter attribute: $attribute");
 		}
 
@@ -65,6 +66,7 @@ class OrganizationVoter extends Voter
 			self::VIEW => OrganizationMember::ROLE_VALUES[OrganizationMember::ROLE_VISITOR],
 			self::PARTICIPATE => OrganizationMember::ROLE_VALUES[OrganizationMember::ROLE_MEMBER],
 			self::EDIT => OrganizationMember::ROLE_VALUES[OrganizationMember::ROLE_ADMIN],
+			self::DELETE => OrganizationMember::ROLE_VALUES[OrganizationMember::ROLE_OWNER],
 		};
 
 		return $roleValue >= $requiredRoleValue;
