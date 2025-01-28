@@ -59,11 +59,6 @@ class OrganizationVoter extends Voter
 			return false;
 		}
 
-		$organizationPlan = $this->planManager->getPlanFromEntity($organization);
-		if ($organizationPlan->getMaxTeamOwned() == 0 && $attribute != self::VIEW) {
-			return false;
-		}
-
 		$roleValue = $member->calculateRoleValue();
 
 		$requiredRoleValue = match ($attribute) {
