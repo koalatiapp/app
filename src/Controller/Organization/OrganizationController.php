@@ -107,7 +107,7 @@ class OrganizationController extends AbstractController
 				$hasOtherAdmin = false;
 
 				foreach ($organization->getMembers() as $otherMember) {
-					if ($otherMember != $membership && $otherMember->getHighestRole() == OrganizationMember::ROLE_ADMIN) {
+					if ($otherMember != $membership && in_array($otherMember->getHighestRole(), [OrganizationMember::ROLE_OWNER, OrganizationMember::ROLE_ADMIN])) {
 						$hasOtherAdmin = true;
 						break;
 					}
