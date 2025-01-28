@@ -30,10 +30,12 @@
 			<organization-members-list organizationId="{{ organization.id|hashids_encode }}" userRole="{{ organization.getMemberFromUser(app.user).highestRole }}" light></organization-members-list>
 		</div>
 
-		<div id="deletion">
-			<h2>{% trans %}organization.settings.tabs.deletion{% endtrans %}</h2>
-			<p>{% trans %}organization.delete.warning_text{% endtrans %}</p>
-			{{ form(deletionForm) }}
-		</div>
+		{% if deletionForm %}
+			<div id="deletion">
+				<h2>{% trans %}organization.settings.tabs.deletion{% endtrans %}</h2>
+				<p>{% trans %}organization.delete.warning_text{% endtrans %}</p>
+				{{ form(deletionForm) }}
+			</div>
+		{% endif %}
 	</tabbed-container>
 {% endblock %}

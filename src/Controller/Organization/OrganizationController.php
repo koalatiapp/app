@@ -140,12 +140,16 @@ class OrganizationController extends AbstractController
 	public function settings(int $id, Request $request): Response
 	{
 		$organization = $this->organizationRepository->find($id);
+		$deletionForm = null;
+
 		$this->denyAccessUnlessGranted(OrganizationVoter::EDIT, $organization);
 
-		$deletionForm = $this->processDeletionForm($organization, $request);
+		if ($this->isGranted(OrganizationVoter::DELETE, $organization)) {
+			$deletionForm = $this->processDeletionForm($organization, $request);
 
-		if (!$deletionForm) {
-			return $this->redirectToRoute('dashboard');
+			if (!$deletionForm) {
+				return $this->redirectToRoute('dashboard');
+			}
 		}
 
 		$updateForm = $this->processUpdateForm($organization, $request);
@@ -153,7 +157,7 @@ class OrganizationController extends AbstractController
 		return $this->render('app/organization/settings.html.twig', [
 			'organization' => $organization,
 			'form' => $updateForm->createView(),
-			'deletionForm' => $deletionForm->createView(),
+			'deletionForm' => $deletionForm?->createView(),
 		]);
 	}
 
