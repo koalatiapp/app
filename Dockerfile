@@ -94,7 +94,7 @@ WORKDIR /srv/app
 
 # Allow to use development versions of Symfony
 ARG STABILITY="stable"
-ENV STABILITY ${STABILITY:-stable}
+ENV STABILITY=${STABILITY:-stable}
 
 # Allow to select skeleton version
 ARG SYMFONY_VERSION="5.4.*"
@@ -109,7 +109,7 @@ RUN composer create-project "symfony/skeleton ${SYMFONY_VERSION}" . --stability=
 COPY . .
 
 ARG APP_ENV="prod"
-ENV APP_ENV ${APP_ENV:-prod}
+ENV APP_ENV=${APP_ENV:-prod}
 RUN set -eux; \
 	mkdir -p var/cache var/log; \
 	if [ "$APP_ENV" = "prod" ]; then \

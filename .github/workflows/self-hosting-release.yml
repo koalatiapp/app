@@ -11,11 +11,11 @@ jobs:
         steps:
             - uses: actions/checkout@v2
               name: Check out code
-            - name: Install buildx
-              id: buildx
-              uses: crazy-max/ghaction-docker-buildx@v1
-              with:
-                version: latest
+            # https://github.com/docker/setup-qemu-action
+            - name: Set up QEMU
+              uses: docker/setup-qemu-action@v3
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v3
             - name: Test version number generation
               run: |
                 echo "Exact version: " koalati/app:`sed 's/^v//' <<< '${{ github.event.release.tag_name }}'`
