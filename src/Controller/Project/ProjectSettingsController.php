@@ -5,10 +5,12 @@ namespace App\Controller\Project;
 use App\Activity\ActivityLogger;
 use App\Controller\Trait\SuggestUpgradeControllerTrait;
 use App\Entity\Project;
+use App\Form\Project\NewProjectType;
 use App\Form\Project\ProjectSettingsType;
 use App\Message\FaviconRequest;
 use App\Message\ScreenshotRequest;
 use App\Message\SitemapRequest;
+use App\Security\OrganizationVoter;
 use App\Security\ProjectVoter;
 use App\Util\Testing\AvailableToolsFetcher;
 use App\Util\Url;
@@ -65,25 +67,41 @@ class ProjectSettingsController extends AbstractProjectController
 		return $this->render('app/project/settings/automated-testing.html.twig', ['project' => $project, 'tools' => $availableToolsFetcher->getTools()]);
 	}
 
+	/**
+	 * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+	 */
 	#[Route(path: '/project/{id}/settings', name: 'project_settings')]
 	public function projectSettings(int $id, Request $request, Url $urlHelper): Response
 	{
 		$project = $this->getProject($id);
 		$originalProject = clone $project;
+		$availableOrganizationsById = [];
 
 		if (!$this->isGranted(ProjectVoter::EDIT, $project)) {
 			return $this->suggestPlanUpgrade('upgrade_suggestion.project');
 		}
 
+		$formOptions = [
+			'available_owners' => NewProjectType::getDefaultAvailableOwners(),
+		];
+
+		foreach ($this->getUser()->getOrganizationLinks() as $organizationLink) {
+			$organization = $organizationLink->getOrganization();
+			$formOptions['available_owners'][$organization->getId()] = $organization->getId();
+			$availableOrganizationsById[$organization->getId()] = $organization;
+		}
+
 		/**
-		 * @var \Symfony\Component\Form\Form $form
+		 * @var Form $form
 		 */
-		$form = $this->createForm(ProjectSettingsType::class, $project);
+		$form = $this->createForm(ProjectSettingsType::class, $project, $formOptions);
 		$form->handleRequest($request);
 
 		if ($form->isSubmitted()) {
 			// Handle deletion first without regular form validation
 			if ($this->isRequestingDeletion($form, $request)) {
+				$this->denyAccessUnlessGranted(ProjectVoter::DELETE, $project);
+
 				if ($form->get('deleteConfirmation')->getData() === true) {
 					$projectName = $project->getName();
 					$this->entityManager->remove($project);
@@ -100,14 +118,26 @@ class ProjectSettingsController extends AbstractProjectController
 			}
 			// Handle the good old form settings form regularly
 			elseif ($form->isValid()) {
+				// Manage ownership changes if applicable
+				if ($form->has('owner')) {
+					$ownerValue = $form->get('owner')->getData();
+					$owner = is_numeric($ownerValue) && isset($availableOrganizationsById[$ownerValue]) ? $availableOrganizationsById[$ownerValue] : $this->getUser();
+
+					if ($owner !== $this->getUser()) {
+						$this->denyAccessUnlessGranted(OrganizationVoter::VIEW, $owner);
+					}
+
+					$project->setOwner($owner);
+				}
+
 				$this->processChanges($form, $project, $originalProject, $urlHelper);
 			}
 		}
 
 		return $this->render('app/project/settings/project.html.twig', [
-				'project' => $project,
-				'form' => $form->createView(),
-			]);
+			'project' => $project,
+			'form' => $form->createView(),
+		]);
 	}
 
 	private function processChanges(Form $form, Project $project, Project $originalProject, Url $urlHelper): void
@@ -123,6 +153,7 @@ class ProjectSettingsController extends AbstractProjectController
 
 		if ($form->isValid()) {
 			$project->setUrl($websiteUrl);
+
 			$this->entityManager->persist($project);
 			$this->entityManager->flush();
 

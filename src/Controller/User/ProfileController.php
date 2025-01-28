@@ -33,7 +33,7 @@ class ProfileController extends AbstractController
 		}
 
 		return $this->render('app/user/profile.html.twig', [
-				'form' => $form->createView(),
-			]);
+			'form' => $form->createView(),
+		]);
 	}
 }

@@ -28,7 +28,7 @@ export class NbRadioList extends LitElement {
 				input:not(:checked):hover + label { color: var(--color-blue-80); }
 
 				@media (prefers-color-scheme: dark) {
-
+					input { box-shadow: 0 0 0px 2px var(--color-blue-50); }
 				}
 			`
 		];

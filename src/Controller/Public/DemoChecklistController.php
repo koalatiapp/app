@@ -46,7 +46,7 @@ class DemoChecklistController extends AbstractController
 		});
 
 		return $this->render('public/checklist_demo.html.twig', [
-				"serializedItemGroups" => $serializedItemGroups,
-			]);
+			"serializedItemGroups" => $serializedItemGroups,
+		]);
 	}
 }

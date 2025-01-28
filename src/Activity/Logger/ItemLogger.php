@@ -4,7 +4,6 @@ namespace App\Activity\Logger;
 
 use App\Activity\AbstractEntityActivityLogger;
 use App\Entity\Checklist\Item;
-use App\Entity\Testing\Recommendation;
 
 /**
  * @extends AbstractEntityActivityLogger<Item>
@@ -28,6 +27,9 @@ class ItemLogger extends AbstractEntityActivityLogger
 		}
 	}
 
+	/**
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+	 */
 	public function postRemove(object &$item): void
 	{
 	}

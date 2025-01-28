@@ -76,8 +76,6 @@ class UrlTest extends WebTestCase
 	/**
 	 * Standardizes an URL, ensuring the "https(s)://" protocol is defined.
 	 *
-	 * @param bool $forceHttps when $forceHttps is set to true, the URL will be changed to use HTTPS
-	 *
 	 * @covers \Url::standardize
 	 */
 	public function testStandardize()

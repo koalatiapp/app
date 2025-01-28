@@ -5,7 +5,6 @@ namespace App\Util\Sitemap;
 use App\Util\Sitemap\Exception\CrawlerException;
 use App\Util\Sitemap\Exception\CrawlerPageMaximumException;
 use App\Util\Sitemap\Exception\CrawlerTimeoutException;
-use Exception;
 use Symfony\Component\DomCrawler\Crawler as DomCrawler;
 use VDB\Spider\Discoverer\XPathExpressionDiscoverer;
 use VDB\Spider\Event\SpiderEvents;
@@ -36,17 +35,17 @@ class Crawler
 
 	private readonly Spider $spider;
 
-	public function __construct(string $websiteUrl, callable $pageFoundCallback = null, bool $usePageCanonicalUrls)
+	public function __construct(string $websiteUrl, bool $usePageCanonicalUrls, ?callable $pageFoundCallback = null)
 	{
-		$this->spider = $this->initializeSpider($websiteUrl, $pageFoundCallback, $usePageCanonicalUrls);
+		$this->spider = $this->initializeSpider($websiteUrl, $usePageCanonicalUrls, $pageFoundCallback);
 	}
 
-	protected function initializeSpider(string $websiteUrl, callable $pageFoundCallback = null, bool $usePageCanonicalUrls): Spider
+	protected function initializeSpider(string $websiteUrl, bool $usePageCanonicalUrls, ?callable $pageFoundCallback = null): Spider
 	{
 		$startTime = microtime(true);
 		$spider = new Spider($websiteUrl);
 		/**
-		 * @var \VDB\Spider\QueueManager\InMemoryQueueManager
+		 * @var InMemoryQueueManager
 		 */
 		$queueManager = $spider->getQueueManager();
 		$spider->getDiscovererSet()->set(new XPathExpressionDiscoverer('//a'));
@@ -120,7 +119,7 @@ class Crawler
 
 				try {
 					$title = $crawler->filterXpath('//title')->text();
-				} catch (Exception) {
+				} catch (\Exception) {
 					$title = null;
 				}
 

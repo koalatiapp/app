@@ -16,7 +16,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 class UpdateDispatcher
 {
 	/**
-	 * @var array<int,\Symfony\Component\Mercure\Update>
+	 * @var array<int,Update>
 	 */
 	private array $pendingUpdates = [];
 
@@ -106,7 +106,7 @@ class UpdateDispatcher
 	 *
 	 * @param string $type One of the `App\Mercure\UpdateType::` constants
 	 *
-	 * @return array<int,\Symfony\Component\Mercure\Update>
+	 * @return array<int,Update>
 	 */
 	private function generateUpdates(MercureEntityInterface $entity, string $type): array
 	{

@@ -3,7 +3,6 @@
 namespace App\Util;
 
 use App\Repository\OrganizationInvitationRepository;
-use Exception;
 use Hashids\HashidsInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -39,7 +38,7 @@ class InvitationValidator
 
 		try {
 			$route = $this->router->match($targetRequest->getPathInfo());
-		} catch (Exception) {
+		} catch (\Exception) {
 			return false;
 		}
 

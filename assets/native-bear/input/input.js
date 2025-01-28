@@ -18,6 +18,7 @@ export class NbInput extends LitElement {
 				.input:hover { box-shadow: 0 2px 10px 0 rgba(var(--shadow-rgb), .15); }
 				.input:focus { border-color: var(--color-blue); box-shadow: 0 2px 10px 0 rgba(var(--shadow-rgb), .15); }
 				.input::placeholder { color: var(--color-gray); }
+				.input[readonly] { color: var(--color-gray-dark); background-color: var(--color-gray-lighter); }
 
 				textarea { resize: vertical; }
 

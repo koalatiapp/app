@@ -53,7 +53,7 @@ class TestingRequestHandler
 
 		$maxActivePageCount = $plan->getMaxActivePagesPerProject();
 		$pages = $this->getPagesToTest($message, $project);
-		$pageUrls = $pages->map(fn (Page $page = null) => $page->getUrl())->toArray();
+		$pageUrls = $pages->map(fn (?Page $page = null) => $page->getUrl())->toArray();
 		$priority = $project->getPriority();
 		$tools = $this->getToolsToUse($message, $project);
 
@@ -135,7 +135,7 @@ class TestingRequestHandler
 
 		// If the testing request specifies pages to test, filter pages using this specification
 		if ($message->getPageIds()) {
-			return $pages->filter(fn (Page $page = null) => in_array($page->getId(), $message->getPageIds()));
+			return $pages->filter(fn (?Page $page = null) => in_array($page->getId(), $message->getPageIds()));
 		}
 
 		return $pages;

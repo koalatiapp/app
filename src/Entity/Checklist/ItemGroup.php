@@ -114,7 +114,7 @@ class ItemGroup
 	 */
 	public function getCompletedItems(): Collection
 	{
-		return $this->getItems()->filter(fn (Item $item = null) => $item->getIsCompleted());
+		return $this->getItems()->filter(fn (?Item $item = null) => $item->getIsCompleted());
 	}
 
 	public function getCompletionPercentage(): float
@@ -128,6 +128,6 @@ class ItemGroup
 	#[Groups(['checklist.read', 'checklist_item_group.read'])]
 	public function isCompleted(): bool
 	{
-		return (bool) $this->getItems()->filter(fn (Item $item = null) => !$item->getIsCompleted())->count();
+		return (bool) $this->getItems()->filter(fn (?Item $item = null) => !$item->getIsCompleted())->count();
 	}
 }

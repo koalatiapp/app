@@ -173,7 +173,7 @@ class Checklist
 	 */
 	public function getCompletedItems(): Collection
 	{
-		return $this->getItems()->filter(fn (Item $item = null) => $item->getIsCompleted());
+		return $this->getItems()->filter(fn (?Item $item = null) => $item->getIsCompleted());
 	}
 
 	#[Groups(['checklist.read'])]
@@ -188,6 +188,6 @@ class Checklist
 	#[Groups(['checklist.read'])]
 	public function isCompleted(): bool
 	{
-		return !$this->getItems()->filter(fn (Item $item = null) => !$item->getIsCompleted())->count();
+		return !$this->getItems()->filter(fn (?Item $item = null) => !$item->getIsCompleted())->count();
 	}
 }

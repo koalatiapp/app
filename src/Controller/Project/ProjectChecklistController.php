@@ -44,8 +44,8 @@ class ProjectChecklistController extends AbstractProjectController
 		}
 
 		return $this->render('app/project/checklist/index.html.twig', [
-				'project' => $project,
-			]);
+			'project' => $project,
+		]);
 	}
 
 	#[Route(path: '/project/{id}/checklist/step-by-step', name: 'project_checklist_detailed')]
@@ -58,7 +58,7 @@ class ProjectChecklistController extends AbstractProjectController
 		}
 
 		return $this->render('app/project/checklist/index.html.twig', [
-				'project' => $project,
-			]);
+			'project' => $project,
+		]);
 	}
 }

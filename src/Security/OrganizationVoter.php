@@ -70,7 +70,6 @@ class OrganizationVoter extends Voter
 			self::VIEW => OrganizationMember::ROLE_VALUES[OrganizationMember::ROLE_VISITOR],
 			self::PARTICIPATE => OrganizationMember::ROLE_VALUES[OrganizationMember::ROLE_MEMBER],
 			self::EDIT => OrganizationMember::ROLE_VALUES[OrganizationMember::ROLE_ADMIN],
-			default => false
 		};
 
 		return $roleValue >= $requiredRoleValue;

@@ -11,29 +11,22 @@ use App\Util\Testing\RecommendationGroup;
 use Doctrine\ORM\EntityManagerInterface;
 use Hashids\HashidsInterface;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\Messenger\MessageBusInterface;
 
+/**
+ * @implements ProcessorInterface<RecommendationGroup, ?RecommendationGroup>
+ */
 class RecommendationGroupProcessor implements ProcessorInterface
 {
 	public function __construct(
 		protected Security $security,
-		protected ProcessorInterface $persistProcessor,
-		protected ProcessorInterface $removeProcessor,
 		protected EntityManagerInterface $entityManager,
 		protected HashidsInterface $idHasher,
-		protected MessageBusInterface $bus,
 		protected UpdateDispatcher $mercureUpdateDispatcher,
 	) {
 	}
 
 	/**
-	 * {@inheritDoc}
-	 *
-	 * @param RecommendationGroup $data
-	 * @param array<string,mixed> $uriVariables
-	 * @param array<mixed>        $context
-	 *
-	 * @return RecommendationGroup|null
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	public function process($data, Operation $operation, array $uriVariables = [], array $context = []): ?object
 	{

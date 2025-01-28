@@ -300,7 +300,7 @@ class Recommendation
 		);
 
 		$recommendation = $this;
-		$matchingIgnoreEntries = $ignoreEntries->filter(function (IgnoreEntry $entry = null) use ($recommendation) {
+		$matchingIgnoreEntries = $ignoreEntries->filter(function (?IgnoreEntry $entry = null) use ($recommendation) {
 			return $entry->getRecommendationUniqueName() == $recommendation->getUniqueName()
 				&& $entry->getTest() == $recommendation->getParentResult()->getUniqueName()
 				&& $entry->getTool() == $recommendation->getParentResult()->getParentResponse()->getTool();

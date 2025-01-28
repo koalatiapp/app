@@ -77,7 +77,7 @@ class OrganizationController extends AbstractController
 	}
 
 	#[Route(path: '/{id}', name: 'dashboard', defaults: ['id' => null])]
-	public function dashboard(int $id = null): Response
+	public function dashboard(?int $id = null): Response
 	{
 		if ($this->getUser()->getOrganizationLinks()->isEmpty()) {
 			return $this->redirectToRoute('organization_create');
@@ -86,9 +86,9 @@ class OrganizationController extends AbstractController
 		$organization = $id ? $this->organizationRepository->find($id) : $this->getDefaultOrganization();
 
 		return $this->render('app/organization/dashboard.html.twig', [
-				'organization' => $organization,
-				'usageManager' => $this->usageManager->withUser($organization->getOwner()),
-			]);
+			'organization' => $organization,
+			'usageManager' => $this->usageManager->withUser($organization->getOwner()),
+		]);
 	}
 
 	#[Route(path: '/{id}/leave', name: 'leave')]
@@ -131,9 +131,9 @@ class OrganizationController extends AbstractController
 		}
 
 		return $this->render('app/organization/leave.html.twig', [
-				'organization' => $organization,
-				'form' => $form->createView(),
-			]);
+			'organization' => $organization,
+			'form' => $form->createView(),
+		]);
 	}
 
 	#[Route(path: '/{id}/settings', name: 'settings')]
@@ -151,10 +151,10 @@ class OrganizationController extends AbstractController
 		$updateForm = $this->processUpdateForm($organization, $request);
 
 		return $this->render('app/organization/settings.html.twig', [
-				'organization' => $organization,
-				'form' => $updateForm->createView(),
-				'deletionForm' => $deletionForm->createView(),
-			]);
+			'organization' => $organization,
+			'form' => $updateForm->createView(),
+			'deletionForm' => $deletionForm->createView(),
+		]);
 	}
 
 	private function processDeletionForm(Organization $organization, Request $request): ?FormInterface

@@ -3,7 +3,6 @@
 namespace App\Util;
 
 use App\Enum\Framework;
-use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -32,9 +31,9 @@ class StackDetector
 			}
 
 			// Wordpress
-			if (str_contains($generator, "wordpress") ||
+			if (str_contains($generator, "wordpress")
 				// A single wp-* resource could be from an external source; 2 or more is most likely a Wordpress site though.
-				$headNode->children("[href*='wp-content'], [src*='wp-content'], [href*='wp-includes'], [src*='wp-includes']")->count() > 1) {
+				|| $headNode->children("[href*='wp-content'], [src*='wp-content'], [href*='wp-includes'], [src*='wp-includes']")->count() > 1) {
 				return Framework::WORDPRESS;
 			}
 
@@ -79,7 +78,7 @@ class StackDetector
 			$response->getHeaders();
 			$response->getContent();
 			$cachedResponses[$url] = $response;
-		} catch (Exception) {
+		} catch (\Exception) {
 			$cachedResponses[$url] = null;
 		}
 

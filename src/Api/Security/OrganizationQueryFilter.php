@@ -16,11 +16,11 @@ class OrganizationQueryFilter implements QueryCollectionExtensionInterface
 	use SecurityAwareTrait;
 
 	/**
-	 * {@inheritDoc}
-	 *
 	 * @param array<mixed> $context
+	 *
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
-	public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, Operation $operation = null, array $context = []): void
+	public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, ?Operation $operation = null, array $context = []): void
 	{
 		if ($resourceClass != Organization::class) {
 			return;

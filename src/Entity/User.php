@@ -98,19 +98,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
 	protected Collection $projectLinks;
 
 	/**
-	 * @var \Doctrine\Common\Collections\Collection<int, ChecklistTemplate>
+	 * @var Collection<int, ChecklistTemplate>
 	 */
 	#[ORM\OneToMany(targetEntity: ChecklistTemplate::class, mappedBy: 'ownerUser')]
 	protected ?Collection $checklistTemplates;
 
 	/**
-	 * @var \Doctrine\Common\Collections\Collection<int, IgnoreEntry>
+	 * @var Collection<int, IgnoreEntry>
 	 */
 	#[ORM\OneToMany(targetEntity: IgnoreEntry::class, mappedBy: 'targetUser')]
 	protected ?Collection $ignoreEntries;
 
 	/**
-	 * @var \Doctrine\Common\Collections\Collection<int, UserMetadata>
+	 * @var Collection<int, UserMetadata>
 	 */
 	#[ORM\OneToMany(targetEntity: UserMetadata::class, mappedBy: 'user', orphanRemoval: true, cascade: ['persist'])]
 	protected Collection $metadata;
@@ -378,7 +378,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
 
 	public function getAvatarUrl(int $size = 80): string
 	{
-		$gravatarApi = new GravatarApi(['default' => 'retro']);
+		$gravatarApi = new GravatarApi(default: 'retro');
 
 		return $gravatarApi->getUrl($this->getEmail(), $size);
 	}

@@ -8,7 +8,6 @@ use App\Entity\Organization;
 use App\Entity\Project;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
-use InvalidArgumentException;
 use Symfony\Bundle\SecurityBundle\Security;
 
 /**
@@ -30,7 +29,7 @@ abstract class AbstractEntityActivityLogger implements EntityActivityLoggerInter
 	 *
 	 * @param array<string,mixed>|null $data
 	 */
-	protected function log(string $type, Organization $organization = null, Project $project = null, object $target = null, array $data = null): void
+	protected function log(string $type, ?Organization $organization = null, ?Project $project = null, ?object $target = null, ?array $data = null): void
 	{
 		/** @var ?User */
 		$user = $this->security->getUser();
@@ -54,7 +53,7 @@ abstract class AbstractEntityActivityLogger implements EntityActivityLoggerInter
 		if ($target) {
 			try {
 				$log->setTarget($this->iriConverter->getIriFromResource($target));
-			} catch (InvalidArgumentException) {
+			} catch (\InvalidArgumentException) {
 				// This is not a valid target. Just leave it null.
 			}
 		}

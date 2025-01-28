@@ -12,7 +12,7 @@ class Builder
 	 * Array of locations for the sitemap.
 	 * The location's URL is used as a key to prevent duplicates.
 	 *
-	 * @var array<string, \App\Util\Sitemap\Location>
+	 * @var array<string, Location>
 	 */
 	private array $locations = [];
 
@@ -25,7 +25,7 @@ class Builder
 	/**
 	 * Returns the locations of the sitemap.
 	 *
-	 * @return array<string, \App\Util\Sitemap\Location>
+	 * @return array<string, Location>
 	 */
 	public function getLocations(): array
 	{
@@ -73,7 +73,7 @@ class Builder
 
 		// Crawl the website for a more complete sitemap
 		try {
-			$crawler = new Crawler($websiteUrl, $pageFoundCallback, $usePageCanonicalUrls);
+			$crawler = new Crawler($websiteUrl, $usePageCanonicalUrls, $pageFoundCallback);
 			$crawler->crawl();
 		} catch (CrawlerException $exception) {
 			// Oh well, let's hope the sitemap was good enough...

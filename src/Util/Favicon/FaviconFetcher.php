@@ -3,7 +3,6 @@
 namespace App\Util\Favicon;
 
 use App\Util\Favicon\Driver\FaviconDriverInterface;
-use Throwable;
 
 class FaviconFetcher implements FaviconFetcherInterface
 {
@@ -20,7 +19,7 @@ class FaviconFetcher implements FaviconFetcherInterface
 		foreach ($this->drivers as $driver) {
 			try {
 				return $driver->fetch($url);
-			} catch (Throwable) {
+			} catch (\Throwable) {
 				// Oh well, no icon from this driver.
 			}
 		}

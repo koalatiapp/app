@@ -40,21 +40,21 @@ class DashboardController extends AbstractController
 		}
 
 		return $this->render('app/dashboard/projects.html.twig', [
-				'projects' => $projects,
-			]);
+			'projects' => $projects,
+		]);
 	}
 
 	#[Route(path: '/inbox', name: 'inbox')]
 	public function inbox(): Response
 	{
 		return $this->render('app/dashboard/index.html.twig', [
-			]);
+		]);
 	}
 
 	#[Route(path: '/whats-new', name: 'koalati_news')]
 	public function whatsNew(): Response
 	{
 		return $this->render('app/dashboard/index.html.twig', [
-			]);
+		]);
 	}
 }

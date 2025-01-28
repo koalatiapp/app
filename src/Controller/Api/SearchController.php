@@ -23,8 +23,8 @@ class SearchController extends AbstractController
 		$results = $searchEngine->search($query, $this->getUser());
 
 		return $this->apiSuccess([
-				'query' => $query,
-				'results' => $results,
-			]);
+			'query' => $query,
+			'results' => $results,
+		]);
 	}
 }

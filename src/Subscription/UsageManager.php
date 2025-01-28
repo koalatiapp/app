@@ -6,7 +6,6 @@ use App\Entity\ProjectActivityRecord;
 use App\Entity\User;
 use App\Repository\ProjectActivityRecordRepository;
 use App\Subscription\Model\CurrentUsageCycle;
-use DateTimeInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Contracts\Cache\ItemInterface;

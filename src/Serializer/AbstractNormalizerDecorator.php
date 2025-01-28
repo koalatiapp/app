@@ -22,8 +22,10 @@ abstract class AbstractNormalizerDecorator implements NormalizerInterface, Denor
 		/**
 		 * @var iterable<EntityExtensionInterface>
 		 */
-		#[TaggedIterator('app.serializer.entity_extension')] private iterable $entityExtensions,
-		#[MapDecorated] NormalizerInterface $inner,
+		#[TaggedIterator('app.serializer.entity_extension')]
+		private iterable $entityExtensions,
+		#[MapDecorated]
+		NormalizerInterface $inner,
 	) {
 		if (!$inner instanceof DenormalizerInterface) {
 			throw new \InvalidArgumentException(sprintf('The decorated normalizer must implement the %s.', DenormalizerInterface::class));
@@ -64,7 +66,7 @@ abstract class AbstractNormalizerDecorator implements NormalizerInterface, Denor
 		return $this->decorated->supportsDenormalization($data, $type, $format);
 	}
 
-	public function denormalize($data, string $type, string $format = null, array $context = []): mixed
+	public function denormalize($data, string $type, ?string $format = null, array $context = []): mixed
 	{
 		// If $data is a JSON-string, it should've been decoded automatically but somehow hasn't (see KOALATI-APP-A2 in Sentry)
 		// Might be an issue in api-platform itself, but either way: we'll try to restore things to a proper state ourselves

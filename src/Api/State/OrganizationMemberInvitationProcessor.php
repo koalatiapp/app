@@ -4,12 +4,12 @@ namespace App\Api\State;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
+use App\Activity\ActivityLogger;
 use App\Api\Dto\OrganizationMemberInvitation;
 use App\Entity\Organization;
 use App\Entity\OrganizationInvitation;
 use App\Entity\User;
 use App\Security\OrganizationVoter;
-use App\Activity\ActivityLogger;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -20,6 +20,9 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * @implements ProcessorInterface<OrganizationMemberInvitation, null>
+ */
 class OrganizationMemberInvitationProcessor implements ProcessorInterface
 {
 	public function __construct(
@@ -32,11 +35,7 @@ class OrganizationMemberInvitationProcessor implements ProcessorInterface
 	}
 
 	/**
-	 * {@inheritDoc}
-	 *
-	 * @param OrganizationMemberInvitation $data
-	 * @param array<string,mixed>          $uriVariables
-	 * @param array<mixed>                 $context
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	public function process($data, Operation $operation, array $uriVariables = [], array $context = []): ?object
 	{
@@ -102,9 +101,9 @@ class OrganizationMemberInvitationProcessor implements ProcessorInterface
 		$email = (new TemplatedEmail())
 				->to(new Address($invitation->getEmail(), $invitation->getFirstName()))
 				->subject($this->translator->trans('email.organization_invitation.subject', [
-						'%inviter%' => $invitation->getInviter()->getFullName(),
-						'%organization%' => $invitation->getOrganization(),
-					]))
+					'%inviter%' => $invitation->getInviter()->getFullName(),
+					'%organization%' => $invitation->getOrganization(),
+				]))
 				->htmlTemplate('email/organization_invitation.html.twig')
 				->context(['invitation' => $invitation]);
 		$this->mailer->send($email);

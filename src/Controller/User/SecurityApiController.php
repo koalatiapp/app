@@ -12,6 +12,6 @@ class SecurityApiController extends AbstractController
 	public function apiSettings(): Response
 	{
 		return $this->render('app/user/security/api_settings.html.twig', [
-			]);
+		]);
 	}
 }

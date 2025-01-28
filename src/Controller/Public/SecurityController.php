@@ -36,10 +36,10 @@ class SecurityController extends AbstractController
 		$lastUsername = $authenticationUtils->getLastUsername();
 
 		return $this->render('public/security/login.html.twig', [
-				'last_username' => $lastUsername,
-				'error' => $error,
-				'signup_allowed' => $signupAllowed,
-			]);
+			'last_username' => $lastUsername,
+			'error' => $error,
+			'signup_allowed' => $signupAllowed,
+		]);
 	}
 
 	#[Route(path: '/logout', name: 'logout')]

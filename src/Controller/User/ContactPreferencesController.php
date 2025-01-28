@@ -2,7 +2,6 @@
 
 namespace App\Controller\User;
 
-use App\Activity\ActivityLogger;
 use App\Controller\AbstractController;
 use App\Form\User\UserProfileType;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,7 +25,7 @@ class ContactPreferencesController extends AbstractController
 		}
 
 		return $this->render('app/user/profile.html.twig', [
-				'form' => $form->createView(),
-			]);
+			'form' => $form->createView(),
+		]);
 	}
 }

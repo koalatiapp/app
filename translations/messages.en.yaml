@@ -863,6 +863,10 @@ project_settings:
                     label: Website or page URL
                     placeholder: www.domain.com
                     error_unreachable: This URL is invalid or unreachable.
+                owner:
+                    label: Project owner
+                    help_text: Changing project ownership does not affect past testing quota usage and does not delete any content.
+                    not_granted: Only administrators of "%team%" can change this project's ownership.
                 ignore:
                     label: Manage ignored recommendations
                 use_canonical_page_urls:
@@ -875,6 +879,7 @@ project_settings:
             confirmation_label: I am certain that I want to delete the project "%name%".
             button_label: Delete this project
             error_confirmation: You must check this box to proceed with the deletion of this project.
+            not_granted: Only administrators of "%team%" can change delete this project.
         flash:
             updated_successfully: Your project "%name%" has been updated successfully!
             deleted_successfully: Your project "%name%" has been deleted successfully!
@@ -1135,8 +1140,6 @@ email:
                 <li><strong>Submit and track bug reports</strong> within your projects and teams.</li>
                 <li>Monitor your website's health and core vitals over time <i>(coming soon!)</i>;</li>
             </ul>
-        socials: >
-            <p>To follow the development and upcoming features, you can follow Koalati on <a href="https://twitter.com/koalatiweb">Twitter</a> or on <a href="https://facebook.com/koalatiweb">Facebook</a>.</p>
 
     trial_ending_soon:
         subject: Your free trial is about to end!

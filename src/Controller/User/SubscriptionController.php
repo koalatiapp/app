@@ -40,28 +40,28 @@ class SubscriptionController extends AbstractController
 		$user = $this->getUser();
 		$plan = $this->planManager->getPlanFromEntity($user);
 		$plans = [
-				$this->planManager->getPlanFromUniqueName(SoloPlan::UNIQUE_NAME),
-				$this->planManager->getPlanFromUniqueName(SmallTeamPlan::UNIQUE_NAME),
-				$this->planManager->getPlanFromUniqueName(BusinessPlan::UNIQUE_NAME),
-				$this->planManager->getPlanFromUniqueName(SoloAnnualPlan::UNIQUE_NAME),
-				$this->planManager->getPlanFromUniqueName(SmallTeamAnnualPlan::UNIQUE_NAME),
-				$this->planManager->getPlanFromUniqueName(BusinessAnnualPlan::UNIQUE_NAME),
-			];
+			$this->planManager->getPlanFromUniqueName(SoloPlan::UNIQUE_NAME),
+			$this->planManager->getPlanFromUniqueName(SmallTeamPlan::UNIQUE_NAME),
+			$this->planManager->getPlanFromUniqueName(BusinessPlan::UNIQUE_NAME),
+			$this->planManager->getPlanFromUniqueName(SoloAnnualPlan::UNIQUE_NAME),
+			$this->planManager->getPlanFromUniqueName(SmallTeamAnnualPlan::UNIQUE_NAME),
+			$this->planManager->getPlanFromUniqueName(BusinessAnnualPlan::UNIQUE_NAME),
+		];
 
 		$upcomingPlan = null;
 
-		if ($user->getUpcomingSubscriptionPlan() &&
-				$user->getSubscriptionPlan() != $user->getUpcomingSubscriptionPlan() &&
-				$user->getSubscriptionChangeDate() >= new \DateTime()) {
+		if ($user->getUpcomingSubscriptionPlan()
+				&& $user->getSubscriptionPlan() != $user->getUpcomingSubscriptionPlan()
+				&& $user->getSubscriptionChangeDate() >= new \DateTime()) {
 			$upcomingPlan = $this->planManager->getPlanFromUniqueName($user->getUpcomingSubscriptionPlan());
 		}
 
 		return $this->render('app/user/subscription/subscription.html.twig', [
-				'currentPlan' => $plan,
-				'upcomingPlan' => $upcomingPlan,
-				'upcomingPlanChangeDate' => $user->getSubscriptionChangeDate(),
-				'plans' => $plans,
-			]);
+			'currentPlan' => $plan,
+			'upcomingPlan' => $upcomingPlan,
+			'upcomingPlanChangeDate' => $user->getSubscriptionChangeDate(),
+			'plans' => $plans,
+		]);
 	}
 
 	#[Route(path: '/account/subscription/quota', name: 'manage_subscription_quota')]
@@ -84,8 +84,8 @@ class SubscriptionController extends AbstractController
 		}
 
 		return $this->render('app/user/subscription/quota.html.twig', [
-				"form" => $form->createView(),
-				"usageManager" => $usageManager,
-			]);
+			"form" => $form->createView(),
+			"usageManager" => $usageManager,
+		]);
 	}
 }
