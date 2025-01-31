@@ -113,13 +113,13 @@ jobs:
               run: sudo docker cp $(docker compose ps -q php):/srv/app/var/log var
             - name: Save log artifacts
               if: always()
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v4
               with:
                 name: logs
                 path: var/log
             - name: Save testing artifacts
               if: always()
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v4
               with:
                 name: test-results
                 path: test-results
