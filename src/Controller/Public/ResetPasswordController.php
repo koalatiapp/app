@@ -93,6 +93,7 @@ class ResetPasswordController extends AbstractController
 		}
 
 		try {
+			/** @var User */
 			$user = $this->resetPasswordHelper->validateTokenAndFetchUser($token);
 		} catch (ResetPasswordExceptionInterface $e) {
 			$this->addFlash('reset_password_error', sprintf(
@@ -118,6 +119,9 @@ class ResetPasswordController extends AbstractController
 			);
 
 			$user->setPassword($encodedPassword);
+			// If you went through the password reset process, your email is verified
+			$user->setIsVerified(true);
+
 			$this->entityManager->flush();
 
 			// The session is cleaned up after the password has been changed.
