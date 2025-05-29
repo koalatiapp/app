@@ -10,9 +10,9 @@ jobs:
         runs-on: ubuntu-22.04
         steps:
             - name: Checkout
-              uses: actions/checkout@v2
+              uses: actions/checkout@v4
             - name: Cache Composer dependencies
-              uses: actions/cache@v2
+              uses: actions/cache@v4
               with:
                   path: /tmp/composer-cache
                   key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
@@ -42,10 +42,10 @@ jobs:
 
     build:
         name: Build and test
-        runs-on: ubuntu-20.04
+        runs-on: ubuntu-22.04
         steps:
             - name: Checkout
-              uses: actions/checkout@v2
+              uses: actions/checkout@v4
             - name: Setup PHP
               uses: shivammathur/setup-php@v2
               with:
