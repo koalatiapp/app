@@ -22,3 +22,8 @@ framework:
 
     serializer:
         name_converter: 'serializer.name_converter.camel_case_to_snake_case'
+
+    http_client:
+        default_options:
+            headers:
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 (compatible; KoalatiBot; +https://www.koalati.com/)'

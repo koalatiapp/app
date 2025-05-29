@@ -7,19 +7,19 @@ on:
 jobs:
     coding-standards:
         name: Coding standards
-        runs-on: ubuntu-20.04
+        runs-on: ubuntu-22.04
         steps:
             - name: Checkout
-              uses: actions/checkout@v2
+              uses: actions/checkout@v4
             - name: Cache Composer dependencies
-              uses: actions/cache@v2
+              uses: actions/cache@v4
               with:
                   path: /tmp/composer-cache
                   key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
             - name: Install PHP dependencies (composer install)
               uses: php-actions/composer@v6
               with:
-                php_version: 8.3
+                php_version: "8.3"
                 php_extensions: xsl bcmath pcntl
             - name: Use Node.js 18.x
               uses: actions/setup-node@v1
@@ -42,10 +42,10 @@ jobs:
 
     build:
         name: Build and test
-        runs-on: ubuntu-20.04
+        runs-on: ubuntu-22.04
         steps:
             - name: Checkout
-              uses: actions/checkout@v2
+              uses: actions/checkout@v4
             - name: Setup PHP
               uses: shivammathur/setup-php@v2
               with:
