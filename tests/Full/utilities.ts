@@ -1,4 +1,5 @@
 import { Page } from "@playwright/test"
+import TestApiClient from "./test-api-client";
 
 const login = async (page: Page, email: string = "name@email.com", password: string = "123456") => {
 	await page.goto("https://localhost/");
@@ -14,39 +15,23 @@ const login = async (page: Page, email: string = "name@email.com", password: str
  * @returns {string} ID of the newly created project
  */
 const createProject = async (page: Page, name: string = "Sample website", url: string = "https://sample.koalati.com") => {
-	// Go to project creation page through quick actions
-	await page.hover("#quick-actions .toggle");
-	await page.click("text=New project");
-	await page.waitForSelector("text=Give your project a name");
+	const api = new TestApiClient(page);
+	const project = await api.post("/api/projects", {
+		name,
+		url
+	});
 
-	// Fill in the project creation form
-	await page.fill("text=Give your project a name", name);
-	await page.fill("text=Enter your website's URL", url);
-	await page.click("nb-button:has-text('Create project')");
+	await page.goto(`https://localhost/project/${project.id}/`);
 
-	// Wait for confirmation message
-	await page.waitForSelector("text=has been created successfully")
-	await page.waitForURL(/^http.+\/project\/[a-zA-Z0-9]+\/.*/);
-
-	const projectId = page.url().replace(/.+\/project\/([a-zA-Z0-9]+)\//, "$1");
-
-	return projectId;
+	return project.id;
 };
 
 /**
  * Deletes the project with the provided ID.
  */
 const deleteProject = async (page: Page, projectId: string) => {
-	// Go to the project's settings in the deletion tab
-	await page.goto(`https://localhost/project/${projectId}/settings#delete`);
-	await page.waitForSelector("text=I am certain that I want to delete the project");
-
-	// Delete the project
-	await page.click("text=I am certain that I want to delete the project");
-	await page.click("text=Delete this project");
-
-	// Wait for confirmation message
-	await page.waitForSelector("text=has been deleted successfully")
+	const api = new TestApiClient(page);
+	await api.delete(`/api/projects/${projectId}`);
 };
 
 export { login, createProject, deleteProject };
